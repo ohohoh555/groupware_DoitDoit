@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doit.gw.mapper.emp.EmpMapperImpl">
+	
+	<!-- 로그인 -->
+	<select id="login" resultType="EmpVo" parameterType="java.lang.String">
+		SELECT * FROM EMP WHERE EMP_ID = #{emp_id}
+	</select>
+	
+	<select id="selEmpAll" resultType="EmpVo">
+		SELECT EMP_ID, EMP_NAME, 
+		CASE DEPT_NO WHEN '01' THEN '인사부'
+			 WHEN '02' THEN '관리부'
+			 WHEN '03' THEN '개발부'
+			 WHEN '04' THEN '영업부' END AS DEPT_NO, 
+		CASE RANK_NO WHEN '01' THEN '사원'
+             WHEN '02' THEN '대리'
+             WHEN '03' THEN '과장'
+             WHEN '04' THEN '차장'
+             WHEN '05' THEN '부장'
+             WHEN '06' THEN '대표' END AS RANK_NO
+		FROM EMP
+	</select>
+	
+	<insert id="insEmp" parameterType="java.util.Map">
+		<![CDATA[
+		INSERT ALL 
+		INSERT INTO EMP(
+		EMP_ID, 
+		EMP_PASSWORD, EMP_NAME,EMP_EMAIL,
+		DEPT_NO, RANK_NO, EMP_ADDRESS, 
+		EMP_NFC
+		)
+		VALUES(
+		TO_CHAR(SYSDATE,'YYYYMMDD')||
+		CASE WHEN EMP_SEQ.NEXTVAL <10 THEN '0'||EMP_SEQ.NEXTVAL
+		ELSE ''||EMP_SEQ.NEXTVAL END ,
+		'@'||TO_CHAR(SYSDATE,'YYYYMMDD'), #{emp_name}, #{emp_email}, 
+		#{dept_no}, #{rank_no}, #{emp_address}, 
+		#{emp_nfc}
+		)
+		   INTO ANNUAL (EMP_ID)
+		   VALUES (TO_CHAR(SYSDATE,'YYYYMMDD')||
+		   CASE WHEN EMP_SEQ.NEXTVAL <10 THEN '0'||EMP_SEQ.NEXTVAL
+		   ELSE ''||EMP_SEQ.NEXTVAL END )
+		   SELECT * FROM DUAL
+		]]>
+	</insert>
+	
+	<select id="pwdCheck" resultType="EmpVo">
+		SELECT EMP_PASSWORD, EMP_ID FROM EMP WHERE EMP_ID = (SELECT MAX(EMP_ID) FROM EMP)
+	</select>
+	
+	<update id="pwdUpdate" parameterType="EmpVo">
+		UPDATE EMP SET EMP_PASSWORD = #{emp_password} WHERE EMP_ID = #{emp_id}
+	</update>
+</mapper>

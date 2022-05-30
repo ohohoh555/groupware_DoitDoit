@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="com.doit.gw.vo.emp.EmpVo" alias="EmpVo"/>
+		<typeAlias type="com.doit.gw.vo.resv.ReservationVo" alias="ReservationVo"/>
+		<typeAlias type="com.doit.gw.vo.chat.ChatFileVo" alias="ChatFileVo"/>
+		<typeAlias type="com.doit.gw.vo.chat.ChatJoinVo" alias="ChatJoinVo"/>
+		<typeAlias type="com.doit.gw.vo.chat.ChatRoomVo" alias="ChatRoomVo"/>
+		<typeAlias type="com.doit.gw.vo.chat.ChatVo" alias="ChatVo"/>
+		<typeAlias type="com.doit.gw.vo.entr.EntrBoardVo" alias="EntrBoardVo"/>
+		<typeAlias type="com.doit.gw.vo.ann.AnnualVo" alias="AnnualVo"/>
+		<typeAlias type="com.doit.gw.vo.ann.AnnAddVo" alias="AnnAddVo"/>
+		<typeAlias type="com.doit.gw.vo.ann.AnnUseVo" alias="AnnUseVo"/>
+		<typeAlias type="com.doit.gw.vo.sign.SignVo" alias="SignVo"/>
+		<typeAlias type="com.doit.gw.vo.appro.DocFormVo" alias="DocFormVo"/>
+		<typeAlias type="com.doit.gw.vo.appro.ApproVo" alias="ApproVo"/>
+		<typeAlias type="com.doit.gw.vo.appro.ApproLineVo" alias="ApproLineVo"/>
+	</typeAliases>
+	
+	
+	
+	<mappers>
+		<mapper resource="sqls/annual_statement.xml"/>
+		<mapper resource="sqls/appro_statement.xml"/>
+		<mapper resource="sqls/approLine_statement.xml"/>
+		<mapper resource="sqls/cald_statement.xml"/>
+		<mapper resource="sqls/chat_statement.xml"/>
+		<mapper resource="sqls/docForm_statement.xml"/>
+		<mapper resource="sqls/entr_statement.xml"/>
+		<mapper resource="sqls/member_statement.xml"/>
+		<mapper resource="sqls/resv_statement.xml"/>
+		<mapper resource="sqls/sign_statement.xml"/>
+	</mappers>
+
+
+</configuration>
