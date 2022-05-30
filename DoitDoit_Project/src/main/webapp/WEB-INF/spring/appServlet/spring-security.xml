@@ -34,7 +34,13 @@
 			password-parameter="password"
 		/>
 		
+		<security:logout invalidate-session="true" 
+		logout-url="/logout.do" 
+		logout-success-url="/loginPage.do?logout" delete-cookies="JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE"/>
+		
 		<security:csrf disabled="true"/>
+		
+		<security:remember-me key="doit" token-validity-seconds="3600" remember-me-parameter="remember-me"/>
 	</security:http>
 
 </beans>

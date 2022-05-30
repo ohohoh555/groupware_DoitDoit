@@ -2,9 +2,6 @@ package com.doit.gw.comm.emp;
 
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +33,11 @@ public class SecurityProvider implements AuthenticationProvider {
 			throw new BadCredentialsException(username);
 		}
 		
-		
 		UsernamePasswordAuthenticationToken result =
-				new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
+				new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("dept_no", user.getDept_no());
-		map.put("rank_no", user.getRank_no());
-		map.put("emp_name", user.getEmp_name());
-		
-		result.setDetails(map);
-		logger.info("담긴 값 : " + result);
+		logger.info("result : " + result);
+
 		return result;
 	}
 
