@@ -176,7 +176,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -285,6 +285,13 @@
 		    <artifactId>commons-lang3</artifactId>
 		    <version>3.9</version>
 		</dependency>
+		
+		<!-- json구조의 직렬화된 데이터를 Java객체로 역직렬화/직렬화해주는 라이브러리 -->
+		<dependency>
+	    <groupId>com.google.code.gson</groupId>
+	    <artifactId>gson</artifactId>
+	    <version>2.8.5</version>
+	</dependency>
 		
 	</dependencies>
 	<build>
