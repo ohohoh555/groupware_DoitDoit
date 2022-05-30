@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>로그인 페이지</title>
 	<link rel="stylesheet" type="text/css" href="./css/loginPage.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 <body>
 	<!-- 베리 페리 색상 코드 : #6667AB -->
@@ -16,16 +17,16 @@
             <div class="loginAlert">
                 <span>${msg}</span>
             </div>
-            <input id="loginId" name="username" type="text" placeholder="계정" required="required">
+            <label class="switch-button">
+				<input name="remember-me" type="checkbox" value="true">
+			    <span class="onoff-switch"></span>
+			</label>
+			<span class="rememberMe">Remember-Me</span>
+            <input id="loginId" name="username" type="text" placeholder="계정" required="required" pattern="[0-9]+">
             <input id="loginPw" name="password" type="password" placeholder="비밀번호" required="required">
             <input id="loginBtn" type="submit" value="로그인">
             <input id="nfcBtn" type="button" onclick="nfcRead()" value="NFC 읽기">
         </form>
     </div>
-    <script type="text/javascript">
-		function nfcRead(){
-			window.open("./nfcRead.do","_blank", "width=500, height=600")
-		}
-    </script>
 </body>
 </html>

@@ -30,13 +30,13 @@ public class EmpController {
 		List<EmpVo> lists = service.selEmpAll();
 		logger.info("lists : " + lists);
 		model.addAttribute("lists", lists);
-		return "selEmpAll";
+		return "emp/selEmpAll";
 	}
 	
 	@RequestMapping(value = "/insEmpPage.do", method = RequestMethod.GET)
 	public String insEmpPage() {
 		logger.info("EmpController insEmpPage");
-		return "insEmpPage";
+		return "emp/insEmpPage";
 	}
 	
 	@RequestMapping(value = "/insEmp.do", method = RequestMethod.POST)
@@ -49,8 +49,8 @@ public class EmpController {
 		map.put("rank_no", vo.getRank_no());
 		map.put("emp_address", vo.getEmp_address());
 		map.put("emp_nfc", vo.getEmp_nfc());
-		logger.info("map 에 담기긴 하냐" + map);
+		logger.info("map 에 담긴 정보" + map);
 		service.insEmp(map);
-		return "redirect:/selAllEmp.do";
+		return "redirect:emp/selAllEmp.do";
 	}
 }
