@@ -25,9 +25,9 @@
                 <li><span>연차현황</span><img class="menuIcon" src="./img/apro_32.png" alt=""></li>
                 </sec:authorize>
                 <sec:authorize access="hasAnyRole('ROLE_ADMIN_BOARD','ROLE_ADMIN_INSA')">
-                <li onclick="location.href='./selAllEmp.do'"><span>회원조회</span><img class="menuIcon" src="./img/calendar_32.png" alt=""></li>
+                <li onclick="location.href='./selAllEmp.do'"><span>회원조회</span><img class="menuIcon" src="./img/user_set32.png" alt=""></li>
                 <li><span>연차관리</span><img class="menuIcon" src="./img/calendar_32.png" alt=""></li>
-                <li><span>게시판관리</span><img class="menuIcon" src="./img/calendar_32.png" alt=""></li>
+                <li><span>게시판관리</span><img class="menuIcon" src="./img/board_set32.png" alt=""></li>
                 </sec:authorize>
             </ul>
         </nav>

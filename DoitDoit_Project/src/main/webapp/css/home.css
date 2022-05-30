@@ -117,6 +117,14 @@ header{
     width: 100%;
     height: 75px;
     background: #393a68;
+    text-align: right;
+    line-height: 75px;
+}
+
+header > a{
+	width: 32px;
+	height: 32px;
+	margin-right: 15px;
 }
 
 #content{
@@ -167,24 +175,27 @@ aside{
     height: 100%;
     background: #efefef;
     float: right;
+	position: relative;
 }
 
 #profile{
     width: 300px;
     height: 350px;
-    border: 5px solid #fff;
-    border-radius: 15px 15px 0 0;
     margin: 25px auto 0;
+    position: absolute;
+    left: 15px;
+    z-index: 10;
+    background: #6667AB;
 }
 
 #chat{
     width:300px;
     height: 350px;
-    border-right: 5px solid #fff;
-    border-bottom: 5px solid #fff;
-    border-left: 5px solid #fff;
-    border-radius: 0 0 15px 15px;
-    margin: 0 auto; 
+    margin: 0 auto;
+    position: absolute;
+    left: 15px;
+    top: 25px;
+    background: #3d3e6d;
 }
 
 #adminContent{
@@ -203,12 +214,12 @@ aside{
 #frmContent{
 	width: 80%;
 	height: 80%;
+	padding: 60px;
 	margin: 30px auto;
-	border: 1px solid black;
+	border: 1px solid #ccc;
 }
 
 #frmTop{
-	background: red;
 	height: 45%;
 }
 
@@ -233,13 +244,17 @@ aside{
 }
 
 #frmMiddle{
-	background: blue;
-	height: 45%
+	height: 45%;
+}
+
+#frmMiddle > input{
+	width: 700px;
+	height: 30px;
+	margin: 20px auto;
 }
 
 #frmBottom{
-	background: yellow;
-	height: 10%;	
+	height: 10%;
+	text-align: right;
 }
-
 

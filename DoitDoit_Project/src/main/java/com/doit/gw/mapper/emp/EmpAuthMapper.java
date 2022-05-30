@@ -14,6 +14,7 @@ public class EmpAuthMapper {
 	
 	private final String NS = "com.doit.gw.mapper.emp.EmpMapperImpl.";
 	 
+	// 시큐리티 로그인 로직
     public EmpVo login(String username) {
         return sqlSession.selectOne(NS + "login", username);
     }
