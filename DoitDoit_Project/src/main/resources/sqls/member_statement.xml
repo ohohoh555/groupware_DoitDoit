@@ -24,7 +24,6 @@
 	
 	<insert id="insEmp" parameterType="java.util.Map">
 		<![CDATA[
-		INSERT ALL 
 		INSERT INTO EMP(
 		EMP_ID, 
 		EMP_PASSWORD, EMP_NAME,EMP_EMAIL,
@@ -39,11 +38,6 @@
 		#{dept_no}, #{rank_no}, #{emp_address}, 
 		#{emp_nfc}
 		)
-		   INTO ANNUAL (EMP_ID)
-		   VALUES (TO_CHAR(SYSDATE,'YYYYMMDD')||
-		   CASE WHEN EMP_SEQ.NEXTVAL <10 THEN '0'||EMP_SEQ.NEXTVAL
-		   ELSE ''||EMP_SEQ.NEXTVAL END )
-		   SELECT * FROM DUAL
 		]]>
 	</insert>
 	

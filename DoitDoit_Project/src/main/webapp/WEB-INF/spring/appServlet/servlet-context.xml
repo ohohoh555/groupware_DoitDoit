@@ -27,6 +27,8 @@
 	</beans:bean>
 	
 	<mvc:default-servlet-handler/>
-	<context:component-scan base-package="com.doit.gw" />
+	<context:component-scan base-package="com.doit." />
+	<task:annotation-driven scheduler="scheduler"/>
+	<task:scheduler id="scheduler" pool-size="10"/>	
 	
 </beans:beans>
