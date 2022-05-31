@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>공지게시글 상세보기</title>
+<title>게시글 상세보기(관리자)</title>
 <link rel="stylesheet" type="text/css" href="./css/home.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
@@ -16,7 +16,6 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 </head>
 <body>
-
 	<div id="container">
         <%@include file="../comm/nav.jsp" %>
         <main>
@@ -31,9 +30,10 @@
 						<thead>
 							<tr>
 								<th colspan="2">
-								작성자 : ${entrOne.emp_name} &nbsp; &nbsp;/ &nbsp; &nbsp;
-								조회수 : ${entrOne.eboard_readcount} &nbsp; &nbsp;/ &nbsp;&nbsp; 
-								등록일자 : ${entrOne.eboard_regdate}
+								작성자 : ${entrOne.emp_name} &nbsp; &nbsp;/ &nbsp; &nbsp;    
+								조회수 : ${entrOne.eboard_readcount} &nbsp; &nbsp;/ &nbsp; &nbsp;    
+								등록일자 : ${entrOne.eboard_regdate}  &nbsp; &nbsp;/ &nbsp; &nbsp;
+								숨김여부 : ${entrOne.eboard_delflag}
 								</th>
 							</tr>
 						</thead>
@@ -53,14 +53,16 @@
 						</tbody>
 					</table>
 <%-- 					  </sec:authorize> --%>
-					   <sec:authorize access="isAuthenticated()">
-				        <sec:authentication property="principal.emp_id" var="emp_id"/>
-           					<c:if test="${emp_id eq entrOne.emp_id}">
-		           				<button>수정</button>
-								<button onclick="hideOne(${entrOne.eboard_no})">삭제</button>
-           					</c:if>
- 			           </sec:authorize> 
-					<button onclick="javascript:history.back(-1)">확인</button>
+					<c:choose>
+						<c:when test="${entrOne.eboard_delflag eq 'N'}">
+							<button>숨김처리</button>
+						</c:when>
+						<c:when test="${entrOne.eboard_delflag eq 'Y'}">
+							<button>보임처리</button>
+						</c:when>
+					</c:choose>
+						<button>완전삭제</button>
+						<button onclick="javascript:history.back(-1)">확인</button>
 
 					</div> <!-- rContent-full 끝 -->
                 </div>
@@ -69,21 +71,5 @@
             </div><!-- content 끝 -->
         </main>
     </div><!-- container 끝 -->
-    
-    
-    
-<script type="text/javascript">
-function hideOne(eboard_no){
-	console.log("hideOne 사용자 숨김",eboard_no);
-	var con = confirm("선택된 글을 삭제합니다. (복구는 관리자를 통해서만 가능합니다.)");
-	if(con){
-		location.href="./delflag.do?eboard_no="+eboard_no;
-	}else{
-		alert("글 삭제가 취소되었습니다.");
-	}
-
-}
-
-</script>
 </body>
 </html>

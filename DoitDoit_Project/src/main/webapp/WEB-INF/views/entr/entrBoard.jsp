@@ -23,10 +23,11 @@
             <div id="content">
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
-					<div class="rContent-normal-top">
-						<h5>공지게시판</h5>
+					<div class="rContent-full">
+						<h3>&lt;&lt;공지게시판&gt;&gt;</h3>
+						<hr>
 						<table id="FildokTable" class="cell-border">
-							<thead>
+							<thead style="display: none;">
 								<tr>
 									<th>No.</th>
 									<th>분류</th>
@@ -41,16 +42,22 @@
 									<tr>
 										<td>★</td>
 										<td>[필독]</td>
-										<td>${fVo.eboard_title}</td>
+										<td><a href="./OneBoard.do?eboard_no=${fVo.eboard_no}">${fVo.eboard_title}</a></td>
 										<td>${fVo.emp_name}</td>
 										<td>${fVo.eboard_regdate}</td>
 										<td>${fVo.eboard_readcount}</td>
 									</tr>
 								</c:forEach>
 							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="6" style="text-align: center;">&lt;&lt;[필독]게시글 전체보기&gt;&gt;</td>
+								</tr>
+							</tfoot>
 						</table>
-					</div>
-					<div class="rContent-normal-bottom">
+						
+						<hr>
+
 						<table id="EntrTable" class="cell-border">
 							<thead>
 								<tr>
@@ -74,32 +81,22 @@
 									</tr>
 								</c:forEach>
 							</tbody>
+
 						</table>
 						<div>
 							<button onclick="javascript:location.href='./entrBoard.do'">전체</button>
 							<button value="101" onclick="cgoryAction(this.value)">일반</button>
 							<button value="103" onclick="cgoryAction(this.value)">인사</button>
 							<button value="302" onclick="cgoryAction(this.value)">일정</button>
+							<button onclick="insertBoard()">글쓰기</button>
 						</div>
 					</div>
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
-            <sec:authorize access="isAuthenticated()">
-            	아이디 : <sec:authentication property="principal"/> ${principal} <br>
-            	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
-            	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>
-            	이름 : <sec:authentication property="Details" var="info"/>${info.emp_name}<br>
-            	권한 : <sec:authentication property="Authorities"/> ${Authorities} <br>
-            </sec:authorize>
             </div>
         </main>
     </div>
-
-
-
-
-
 
 
 
@@ -132,7 +129,7 @@ $(document).ready(function(){
 		searching: false,
 		ordering: false,
 		info: false,
-		paging:false
+		paging:false,
 	});
 		
 });
@@ -152,8 +149,11 @@ function cgoryAction(val){
 				    columns: [
 				        { data: 'eboard_no' },
 				        { data: 'cgory_no' },
-				       // { data: 'eboard_title',render: function(data){ return '<a href="./OneBoard.do?eboard_no='+ data.eboard_no +'">'+data.eboard_title+'</a>'}; },
-				        { data: 'eboard_title'},
+				        { data: 'eboard_title',
+				        	render: function (data,type,row,meta) {
+				        	      return '<a href="./OneBoard.do?eboard_no='+row.eboard_no+'">'+data+'</a>';
+				        	    }
+				        },
 				        { data: 'emp_name' },
 				        { data: 'eboard_regdate' },
 				        { data: 'eboard_readcount'}
@@ -183,6 +183,11 @@ function cgoryAction(val){
 	});
 }
 
+
+function insertBoard(){
+	console.log("insertBoard 글쓰기 작동");
+	location.href ="./insertBoard.do"
+}
 
 </script>
 

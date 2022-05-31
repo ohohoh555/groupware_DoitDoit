@@ -57,4 +57,9 @@ public class EntrMapperImpl implements IEntrMapper {
 		return sqlSession.selectList(NS+"selEboardCgoryAdmin", map);
 	}
 
+	@Override
+	public int updEboardDelflagUser(String eboard_no) {
+		return sqlSession.update(NS+"updEboardDelflagUser", eboard_no);
+	}
+
 }

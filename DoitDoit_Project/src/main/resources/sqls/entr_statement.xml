@@ -75,12 +75,18 @@
 			ORDER BY EBOARD_REGDATE DESC
 	</select>
 	
+	<!-- 관리자 공지게시판 카테고리별 조회 -->
 	<select id="selEboardCgoryAdmin" parameterType="java.util.Map" resultType="EntrBoardVo">
 		SELECT EBOARD_NO , GUBUN_NO, CGORY_NO, 
 			EMP_ID,EMP_NAME, EBOARD_TITLE,
-			EBOARD_READCOUNT, EBOARD_REGDATE
+			EBOARD_READCOUNT, EBOARD_REGDATE,EBOARD_DELFLAG
 		FROM ENTRBOARD
 		WHERE CGORY_NO = #{cgory_no}
 	</select>
+	
+	<!-- 사용자 게시글 숨김처리  -->
+	<update id="updEboardDelflagUser" parameterType="java.lang.String">
+		UPDATE ENTRBOARD SET EBOARD_DELFLAG = 'Y' WHERE EBOARD_NO = #{eboard_no}
+	</update>
 
 </mapper>

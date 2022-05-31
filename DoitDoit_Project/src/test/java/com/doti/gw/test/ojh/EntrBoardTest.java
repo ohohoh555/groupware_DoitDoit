@@ -90,7 +90,7 @@ public class EntrBoardTest {
 	/*
 	 * 관리자 공지게시판 카테고리별 조회
 	 */
-	@Test
+//	@Test
 	public void selEboardCgoryAdminTest() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cgory_no", 102);
@@ -99,4 +99,13 @@ public class EntrBoardTest {
 		assertNotNull(lists);
 	}
 	
+	/*
+	 * 사용자 게시글 삭제처리
+	 */
+	@Test
+	public void updEboardDelflagUserTest() {
+		String seq = "66";
+		int cnt = service.updEboardDelflagUser(seq);
+		System.out.println(cnt>0?"삭제성공":"삭제실패");
+	}
 }
