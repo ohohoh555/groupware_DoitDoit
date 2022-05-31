@@ -18,3 +18,12 @@
     			$("nav").css({left:"-150px",transition:"all 0.5s"})
     		}
     	}
+
+	function chatOn(){
+    		cnt ++;
+    		if(cnt % 2 == 1){
+    			$("#chat").css({top:"350px",transition:"all 0.5s"})
+    		}else{
+    			$("#chat").css({top:"25px",transition:"all 0.5s"})
+    		}
+    	}

@@ -1,4 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.">
+<mapper namespace="com.doit.gw.mapper.entr.EntrMapperImpl">
+
+
+	<!-- 사원 게시글 전체조회 -->
+	<select id="selEboardAllUser" resultType="EntrBoardVo">
+		SELECT EBOARD_NO, GUBUN_NO, CGORY_NO, 
+			EMP_ID,EMP_NAME, EBOARD_TITLE,
+			EBOARD_READCOUNT, EBOARD_REGDATE
+		FROM ENTRBOARD
+		WHERE CGORY_NO !=301 AND CGORY_NO !=102 AND EBOARD_DELFLAG ='N' 
+		ORDER BY EBOARD_REGDATE DESC
+	</select>
+	
+	<!-- 사원 게시글 카테고리별 조회 -->
+	<select id="selEboardCgoryUser"  parameterType="java.util.Map"  resultType="EntrBoardVo">
+		SELECT EBOARD_NO , GUBUN_NO, CGORY_NO, 
+			EMP_ID,EMP_NAME, EBOARD_TITLE,
+			EBOARD_READCOUNT, EBOARD_REGDATE
+		FROM ENTRBOARD
+		WHERE CGORY_NO = #{cgory_no} AND EBOARD_DELFLAG ='N'
+		ORDER BY EBOARD_REGDATE DESC
+	</select>
+
+	<!-- 필독 게시글 3개 조회 -->
+	<select id="selEboardFildocThree" resultType="EntrBoardVo">
+		SELECT ROW_NUM,
+		EBOARD_NO, GUBUN_NO, CGORY_NO, 
+		EMP_ID,EMP_NAME, EBOARD_TITLE,
+		EBOARD_READCOUNT, EBOARD_REGDATE
+		FROM (
+			SELECT ROW_NUMBER() OVER(ORDER BY EBOARD_REGDATE DESC) ROW_NUM,
+			EBOARD_NO, GUBUN_NO, CGORY_NO, 
+			EMP_ID,EMP_NAME, EBOARD_TITLE,
+			EBOARD_READCOUNT, EBOARD_REGDATE
+			FROM ENTRBOARD WHERE CGORY_NO = 102 AND EBOARD_DELFLAG ='N')
+			WHERE ROW_NUM BETWEEN 1 AND 3
+	</select>
+	
+	<!-- 필독 게시글 전체조회 -->
+	<select id="selEboardFildocAll" resultType="EntrBoardVo">
+		SELECT EBOARD_NO, GUBUN_NO, CGORY_NO, 
+		EMP_ID,EMP_NAME, EBOARD_TITLE,
+		EBOARD_READCOUNT, EBOARD_REGDATE
+		FROM ENTRBOARD 
+		WHERE CGORY_NO = 102 AND EBOARD_DELFLAG ='N'
+		ORDER BY EBOARD_REGDATE DESC
+	</select>
+	
+	<!-- 공지게시글 상세조회 -->
+	<select id="selEboardDetail" parameterType="java.lang.String" resultType="EntrBoardVo">
+		SELECT EBOARD_NO , GUBUN_NO, CGORY_NO,
+			EMP_ID ,EMP_NAME, EBOARD_TITLE,
+			EBOARD_CONTENT,EBOARD_READCOUNT, EBOARD_REGDATE, 
+			EBOARD_DELFLAG, CALD_START, CALD_END
+		FROM ENTRBOARD e LEFT JOIN CALENDAR c ON e.CALD_ID = c.CALD_ID 
+		WHERE EBOARD_NO = #{eboard_no}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updEboardReadCnt" parameterType="java.lang.String">
+		 UPDATE ENTRBOARD 
+		 SET EBOARD_READCOUNT = (SELECT EBOARD_READCOUNT FROM ENTRBOARD WHERE EBOARD_NO = #{eboard_no})+1
+ 			WHERE EBOARD_NO = #{eboard_no}
+	</update>
+	
+	<!-- 관리자 공지게시판 전체조회 -->
+	<select id="selEboardAllAdmin" resultType="EntrBoardVo">
+		SELECT EBOARD_NO , GUBUN_NO, CGORY_NO,
+				EMP_ID ,EMP_NAME, EBOARD_TITLE,
+				EBOARD_READCOUNT, EBOARD_REGDATE, EBOARD_DELFLAG
+			FROM ENTRBOARD     
+			WHERE CGORY_NO !=301
+			ORDER BY EBOARD_REGDATE DESC
+	</select>
+	
+	<select id="selEboardCgoryAdmin" parameterType="java.util.Map" resultType="EntrBoardVo">
+		SELECT EBOARD_NO , GUBUN_NO, CGORY_NO, 
+			EMP_ID,EMP_NAME, EBOARD_TITLE,
+			EBOARD_READCOUNT, EBOARD_REGDATE
+		FROM ENTRBOARD
+		WHERE CGORY_NO = #{cgory_no}
+	</select>
+
 </mapper>

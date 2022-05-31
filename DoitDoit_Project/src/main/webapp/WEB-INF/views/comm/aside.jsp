@@ -2,7 +2,9 @@
     pageEncoding="UTF-8"%>
 <body>
 	<aside>
-    	<div id="profile"></div>
+    	<div id="profile">
+    		<img onclick="chatOn()" class="menuIcon" src="./img/menuBar.png" alt="">
+    	</div>
     	<div id="chat"></div>
   	</aside>
 </body>

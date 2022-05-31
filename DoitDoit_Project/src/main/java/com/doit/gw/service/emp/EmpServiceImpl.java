@@ -24,12 +24,6 @@ public class EmpServiceImpl implements IEmpService{
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	public EmpVo login(String id) {
-		logger.info("MemberServiceImpl login 전달 받은 ID : " + id);
-		return mapper.login(id);
-	}
-	
-	@Override
 	public List<EmpVo> selEmpAll() {
 		logger.info("MemberServiceImpl selEmpAll 회원전체조회");
 		return mapper.selEmpAll();
