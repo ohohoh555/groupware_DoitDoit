@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.doit.gw.vo.emp.EmpVo;
 
@@ -18,6 +19,9 @@ public class SecurityProvider implements AuthenticationProvider {
 
 	@Autowired
 	private UserDetailsService uds;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -29,8 +33,20 @@ public class SecurityProvider implements AuthenticationProvider {
 		
 		EmpVo user = (EmpVo)uds.loadUserByUsername(username);
 		
+		System.out.println(password);
+		System.out.println(user.getPassword());
+		
 		if(!user.isEnabled()) {
 			throw new BadCredentialsException(username);
+		}else {
+			logger.info("활성화 되어있음");
+		}
+		
+		if(!passwordEncoder.matches(password, user.getPassword())) {
+			logger.info("비밀번호 불일치");
+			throw new BadCredentialsException(username);
+		}else {
+			logger.info("비밀번호 일치");
 		}
 		
 		UsernamePasswordAuthenticationToken result =

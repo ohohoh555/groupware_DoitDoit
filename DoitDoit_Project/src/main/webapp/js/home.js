@@ -6,8 +6,6 @@
      }).mouseout(function(){
          $(".subMenu").css({display:"none"});
      })
-
-    	
     })
     
     function menuOn(){
@@ -27,3 +25,5 @@
     			$("#chat").css({top:"25px",transition:"all 0.5s"})
     		}
     	}
+
+	

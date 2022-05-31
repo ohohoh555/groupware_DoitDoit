@@ -29,7 +29,7 @@ public class LoginController {
 	
 	@RequestMapping(value = "/gohome.do", method = RequestMethod.GET)
 	public String gohome(Authentication user, Model model){
-		System.out.println("232323232323 :" + user.getPrincipal());
+		System.out.println("Principal 객체 :" + user.getPrincipal());
 		EmpVo eVo = (EmpVo)user.getPrincipal();
 		
 		if(eVo.getEmp_auth().equals("ROLE_ADMIN_INSA") || eVo.getEmp_auth().equals("ROLE_ADMIN_BOARD")) {
