@@ -35,15 +35,21 @@ public class LoginController {
 		if(eVo.getEmp_auth().equals("ROLE_ADMIN_INSA") || eVo.getEmp_auth().equals("ROLE_ADMIN_BOARD")) {
 			logger.info("LoginController gohome");
 			return "home";
-		}
-		
-		if(eVo.getEmp_phone() == null) {
-			logger.info("LoginController sendMsg");
-			return "emp/sendMsg";
 		}else {
-			logger.info("LoginController gohome");
 			return "home";
 		}
+		
+		// 사용자의 정보에 휴대폰 번호가 등록되어 있지 않을 경우
+		// 문자 발송 페이지로 이동 2022.05.31
+		// 다른분들 작업때문에 임시로 주석 처리
+		
+//		if(eVo.getEmp_phone() == null) {
+//			logger.info("LoginController sendMsg");
+//			return "emp/sendMsg";
+//		}else {
+//			logger.info("LoginController gohome");
+//			return "home";
+//		}
 
 	}
 	
