@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.doit.gw.service.ann.IAnnService;
 import com.doit.gw.service.emp.IEmpService;
 import com.doit.gw.vo.emp.EmpVo;
 
@@ -20,6 +21,10 @@ public class EmpController {
 	
 	@Autowired
 	private IEmpService service;
+	
+	//연차 등록을 위한 service
+	@Autowired
+	private IAnnService annService;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -51,6 +56,8 @@ public class EmpController {
 		map.put("emp_nfc", vo.getEmp_nfc());
 		logger.info("map 에 담긴 정보" + map);
 		service.insEmp(map);
-		return "redirect:emp/selAllEmp.do";
+		//연차 등록
+		annService.insAnnual();
+		return "redirect:/selAllEmp.do";
 	}
 }

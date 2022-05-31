@@ -1,4 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.">
+<mapper namespace="com.doit.gw.mapper.ann.AnnMapperImpl">
+
+	<!-- 연차 등록(사원등록시) -->
+	<insert id="insAnnual">
+		INSERT INTO ANNUAL (EMP_ID)
+			VALUES ((SELECT MAX(EMP_ID) FROM EMP WHERE EMP_AUTH = 'ROLE_USER'))
+	</insert>
+
+
+	<!-- 매년 1월 1일 -->
+	<!-- 생성 내역 삭제 -->	
+	<delete id="delAnnAddReset">
+		DELETE FROM ANN_ADD
+	</delete>
+	<!-- 사용 내역 삭제 -->	
+	<delete id="delAnnUseReset">
+		DELETE FROM ANN_USE
+	</delete>	
+	<!-- 모든 연차 초기화 -->	
+	<update id="updAnnualReset">
+		UPDATE ANNUAL SET ANN_ADD = 0, ANN_USE = 0, ANN_REST = 0
+	</update>
+	<!-- 입사일 올해 이전 사원 조회 -->
+	<select id="selEmpYear" parameterType="java.lang.String" resultType="EmpVo">
+		<![CDATA[
+			SELECT EMP_ID FROM EMP 
+			WHERE EMP_REGDATE < #{date}
+			AND EMP_AUTH = 'ROLE_USER'
+		]]>		
+	</select>
+	<!-- 입사일 올해 이전 사원 연차(15개) 부여(insert) -->
+	<insert id="insAnnAddYear" parameterType="java.lang.String">
+		INSERT INTO ANN_ADD (ANN_ADD_NO, ANN_ADD_CONTENT, ANN_ADD_DAYS, EMP_ID)
+		VALUES (SEQ_ANN_ADD.NEXTVAL, '연차', 15, #{emp_id})
+	</insert>	
+	<!-- 입사일 올해 이전 사원 연차(15개) 부여(update) -->
+	<update id="updAnnualYear" parameterType="java.util.Map">
+		UPDATE ANNUAL SET ANN_ADD = ANN_ADD + 15, ANN_REST = ANN_REST +15
+		WHERE EMP_ID IN 
+		<foreach collection="emp_ids" item="emp_id" open="(" close=")" separator=",">
+			#{emp_id}
+		</foreach>
+	</update>	
+	
+	
+	
 </mapper>
