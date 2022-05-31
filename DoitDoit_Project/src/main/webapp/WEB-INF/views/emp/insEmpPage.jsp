@@ -50,7 +50,7 @@ href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
             			<div id="frmMiddle">
             				<input type="text" name="emp_address" placeholder="자택주소">
             				<input type="text" name="emp_nfc" placeholder="nfc">
-            				<button class="btn btn-info">NFC 읽기</button>
+            				<input type="button" value="NFC 읽기" class="btn btn-info">
             			</div>
             			<div id="frmBottom">
             				<input class="btn btn-danger" type="submit" value="등록">

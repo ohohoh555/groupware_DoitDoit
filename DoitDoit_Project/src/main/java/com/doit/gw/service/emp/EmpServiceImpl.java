@@ -40,4 +40,12 @@ public class EmpServiceImpl implements IEmpService{
 		mapper.pwdUpdate(vo);
 		return n;
 	}
+	
+	@Override
+	public List<EmpVo> selEmpDetail(String emp_id) {
+		logger.info("MemberServiceImpl selEmpDetail 회원 상세 조회");
+		logger.info("전달 받은 emp_id : " + emp_id);
+		
+		return mapper.selEmpDetail(emp_id);
+	}
 }

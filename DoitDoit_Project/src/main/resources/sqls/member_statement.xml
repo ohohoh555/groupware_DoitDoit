@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.doit.gw.mapper.emp.EmpMapperImpl">
 	
-	<!-- 로그인 -->
+	<!-- 로그인 쿼리 -->
 	<select id="login" resultType="EmpVo" parameterType="java.lang.String">
 		SELECT * FROM EMP WHERE EMP_ID = #{emp_id}
 	</select>
-	
+		
+	<!-- 회원 전체조회 쿼리 -->
 	<select id="selEmpAll" resultType="EmpVo">
 		SELECT EMP_ID, EMP_NAME, 
 		CASE DEPT_NO WHEN '01' THEN '인사부'
@@ -22,6 +23,7 @@
 		FROM EMP
 	</select>
 	
+	<!-- 회원 등록 쿼리 -->
 	<insert id="insEmp" parameterType="java.util.Map">
 		<![CDATA[
 		INSERT INTO EMP(
@@ -41,11 +43,30 @@
 		]]>
 	</insert>
 	
+	<!-- 비밀번호 확인 쿼리 (회원등록 시, 비밀번호 확인해서 암호화를 위함) -->
 	<select id="pwdCheck" resultType="EmpVo">
 		SELECT EMP_PASSWORD, EMP_ID FROM EMP WHERE EMP_ID = (SELECT MAX(EMP_ID) FROM EMP)
 	</select>
 	
+	<!-- 비밀번호 수정 쿼리 (회원등록 시, 암호화된 비밀번호로 수정을 위함) -->
 	<update id="pwdUpdate" parameterType="EmpVo">
 		UPDATE EMP SET EMP_PASSWORD = #{emp_password} WHERE EMP_ID = #{emp_id}
 	</update>
+	
+	<!-- 회원 상세 조회 -->
+	<select id="selEmpDetail" parameterType="java.lang.String" resultType="EmpVo">
+		SELECT EMP_ID, EMP_NAME, EMP_EMAIL,
+		CASE DEPT_NO WHEN '01' THEN '인사부'
+			 WHEN '02' THEN '관리부'
+			 WHEN '03' THEN '개발부'
+			 WHEN '04' THEN '영업부' END AS DEPT_NO, 
+		CASE RANK_NO WHEN '01' THEN '사원'
+             WHEN '02' THEN '대리'
+             WHEN '03' THEN '과장'
+             WHEN '04' THEN '차장'
+             WHEN '05' THEN '부장'
+             WHEN '06' THEN '대표' END AS RANK_NO,
+        TO_CHAR(EMP_REGDATE,'YYYY-MM-DD') AS EMP_REGDATE, EMP_ADDRESS, EMP_NFC
+		FROM EMP WHERE EMP_ID = #{emp_id}
+	</select>
 </mapper>

@@ -19,7 +19,7 @@
 	<security:authentication-manager>
 		<security:authentication-provider ref="securityProvider"/>
 		<security:authentication-provider user-service-ref="userService">
-			<security:password-encoder ref="passwordEncoder"/>
+<!-- 			<security:password-encoder ref="passwordEncoder"/> -->
 		</security:authentication-provider>
 	</security:authentication-manager>
 	

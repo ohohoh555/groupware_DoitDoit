@@ -30,7 +30,6 @@ public class EmpController {
 	
 	@RequestMapping(value = "/selAllEmp.do", method = RequestMethod.GET)
 	public String selEmpAll(Model model) {
-		
 		logger.info("EmpController selEmpAll 회원 전체 조회");
 		List<EmpVo> lists = service.selEmpAll();
 		logger.info("lists : " + lists);
@@ -59,5 +58,13 @@ public class EmpController {
 		//연차 등록
 		annService.insAnnual();
 		return "redirect:/selAllEmp.do";
+	}
+	
+	@RequestMapping(value = "/selEmpDetail.do", method = RequestMethod.GET)
+	public String selEmpDetail(String emp_id, Model model) {
+		logger.info("전달 받은 emp_id : " + emp_id);
+		List<EmpVo> lists = service.selEmpDetail(emp_id);
+		model.addAttribute("lists", lists);
+		return "emp/selEmpDetail";
 	}
 }

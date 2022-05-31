@@ -35,13 +35,13 @@ href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
             			</tr>
             		</thead>
             		<tbody>
-            			<c:forEach var="mVo" items="${lists}" varStatus="vs">
+            			<c:forEach var="empVo" items="${lists}" varStatus="vs">
             				<tr>
             					<td>${vs.count}</td>
-            					<td>${mVo.emp_id}</td>
-            					<td><a href="#">${mVo.emp_name}</a></td>
-            					<td>${mVo.dept_no}</td>
-            					<td>${mVo.rank_no}</td>
+            					<td>${empVo.emp_id}</td>
+            					<td><a href="./selEmpDetail.do?emp_id=${empVo.emp_id}">${empVo.emp_name}</a></td>
+            					<td>${empVo.dept_no}</td>
+            					<td>${empVo.rank_no}</td>
             				</tr>
             			</c:forEach>
             		</tbody>

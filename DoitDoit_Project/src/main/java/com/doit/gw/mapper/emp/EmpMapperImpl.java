@@ -46,4 +46,10 @@ public class EmpMapperImpl implements IEmpMapper {
 		return sqlSession.update(NS+"pwdUpdate",vo);
 	}
 	
+	// 회원 상세 조회
+	@Override
+	public List<EmpVo> selEmpDetail(String emp_id) {
+		return sqlSession.selectList(NS+"selEmpDetail", emp_id);
+	}
+	
 }
