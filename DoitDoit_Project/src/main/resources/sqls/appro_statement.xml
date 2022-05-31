@@ -1,4 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.">
+<mapper namespace="com.doit.gw.mapper.appro.ApproMapperImpl">
+<!-- 문서상신 인서트 -->
+ 	<insert id="insApproval" parameterType="ApproVo">
+		<selectKey resultType="java.lang.Integer" keyProperty="appro_line_no" order="BEFORE">
+		SELECT SEQ_APPROVAL_LINE.NEXTVAL FROM DUAL
+		</selectKey>
+ 	<![CDATA[ 
+ 	INSERT INTO ADMIN.APPROVAL
+(APPRO_NO, APPRO_LINE_NO, DOC_FORM_NO, 
+EMP_ID, APPRO_EMPNAME, APPRO_TITLE, 
+APPRO_CONTENT,  APPRO_STATUS, APPRO_STATUS_NO, 
+APPRO_TYPE, APPRO_REFER)
+VALUES('DOIT-'||TO_CHAR(SYSDATE,'YYYYMMDD')||CASE WHEN SEQ_APPROVAL.NEXTVAL <10 THEN '0'||SEQ_APPROVAL.NEXTVAL ELSE ''||SEQ_APPROVAL.NEXTVAL END, #{appro_line_no},#{doc_form_no}
+,#{emp_id}, (SELECT EMP_NAME FROM EMP e WHERE EMP_ID = #{emp_id}),#{appro_title},
+ #{appro_content}, '결재대기', 1, '상신', #{appro_refer})
+ 	]]>
+ 	</insert>
+  	
+<!-- 결재선 JSON 인서트 -->
+<insert id="insApproLine" parameterType="ApproVo">
+INSERT INTO APPROVAL_LINE
+(APPRO_LINE_NO, APPRO_LINE)
+VALUES(#{appro_line_no},#{appro_line})
+</insert> 	
+ 
+<!-- 임시저장 인서트 -->
+<insert id="insApproDraft" parameterType="ApproVo">
+<selectKey resultType="java.lang.Integer" keyProperty="appro_line_no" order="BEFORE">
+		SELECT SEQ_APPROVAL_LINE.NEXTVAL FROM DUAL
+		</selectKey>
+	<![CDATA[ 
+INSERT INTO APPROVAL
+(APPRO_NO, APPRO_LINE_NO, DOC_FORM_NO, 
+EMP_ID, APPRO_EMPNAME, APPRO_TITLE, 
+APPRO_CONTENT, APPRO_STATUS, APPRO_STATUS_NO,
+APPRO_TYPE, APPRO_REFER)
+VALUES('DOIT-'||TO_CHAR(SYSDATE,'YYYYMMDD')||CASE WHEN SEQ_APPROVAL.NEXTVAL <10 THEN '0'||SEQ_APPROVAL.NEXTVAL ELSE ''||SEQ_APPROVAL.NEXTVAL END, #{appro_line_no} , #{doc_form_no}, 
+#{emp_id}, (SELECT EMP_NAME FROM EMP e WHERE EMP_ID = #{emp_id}), #{appro_title}, 
+#{appro_content}, '임시저장',4, '',#{appro_refer})
+ 	]]>
+</insert>
+
+ <!-- 문서조회 -->
+<select id="selAllDocument" parameterType="java.lang.Integer" resultType="java.util.Map">
+
+SELECT a.APPRO_NO ,a.APPRO_LINE_NO ,ap.EMP_ID , ap.APPRO_STATUS , ap.APPRO_INFO ,TO_NUMBER(ROW_NUMBER) RM 
+FROM APPROVAL_LINE al ,(SELECT APPRO_NO,APPRO_LINE_NO  FROM APPROVAL a) a ,JSON_TABLE(APPRO_LINE, '$.approval[*]'
+	COLUMNS(
+			ROW_NUMBER FOR ORDINALITY,
+			EMP_ID VARCHAR2(100)  PATH '$.EMP_ID',
+			APPRO_INFO VARCHAR2(100) PATH '$.APPRO_NAME',
+			APPRO_STATUS VARCHAR2(100) PATH '$.APPRO_STATUS')) AS ap
+WHERE al.APPRO_LINE_NO = a.APPRO_LINE_NO AND ap.EMP_ID = #{emp_id}
+
+</select>
+
+<select id="selOneDocument" parameterType="java.lang.String" resultType="java.util.Map">
+SELECT APPRO_NO, APPRO_LINE_NO, DOC_FORM_NO, EMP_ID, APPRO_EMPNAME, APPRO_TITLE, APPRO_CONTENT, APPRO_REGDATE, APPRO_STATUS, APPRO_STATUS_NO, APPRO_TYPE, APPRO_REFER, APPRO_RETURNREASON
+	FROM ADMIN.APPROVAL
+		WHERE APPRO_NO = #{appro_no}
+</select>
+ 	
 </mapper>

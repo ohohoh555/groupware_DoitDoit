@@ -16,7 +16,8 @@
 		<typeAlias type="com.doit.gw.vo.sign.SignVo" alias="SignVo"/>
 		<typeAlias type="com.doit.gw.vo.appro.DocFormVo" alias="DocFormVo"/>
 		<typeAlias type="com.doit.gw.vo.appro.ApproVo" alias="ApproVo"/>
-		<typeAlias type="com.doit.gw.vo.appro.ApproLineVo" alias="ApproLineVo"/>
+		<typeAlias type="com.doit.gw.vo.appro.ApproEmpVo" alias="ApproEmpVo"/>
+		<typeAlias type="com.doit.gw.vo.appro.ApproDeptVo" alias="ApproDeptVo"/>
 	</typeAliases>
 	
 	
