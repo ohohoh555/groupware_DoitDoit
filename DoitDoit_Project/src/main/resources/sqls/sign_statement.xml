@@ -1,4 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.">
+<mapper namespace="com.doit.gw.mapper.sign.SignMapperImpl">
+
+<!-- 서명 이미지 등록 -->
+<insert id="insSign" parameterType="SignVo">
+INSERT INTO ADMIN.SIGN(SIGN_NO, EMP_ID, SIGN_NAME, SIGN_IMG)
+	VALUES(SEQ_SIGN.NEXTVAL, #{emp_id}, #{sign_name}, #{sign_img})
+</insert>
+
+<!-- 서명 이미지 조회 -->
+<select id="selSign" resultType="java.util.Map" parameterType="java.lang.Integer">
+SELECT SIGN_NO, EMP_ID, SIGN_REGDATE, SIGN_NAME, SIGN_IMG
+	FROM ADMIN.SIGN
+		WHERE SIGN_NAME IS NOT NULL AND EMP_ID = #{emp_id}		
+</select>
+
+<!-- 서명 삭제 버튼 클릭시 -->
+<update id="updSign" parameterType="SignVo">
+UPDATE SIGN
+	SET SIGN_IMG = '' , SIGN_NAME = ''
+		WHERE EMP_ID = #{emp_id} AND SIGN_NAME = #{sign_name}
+</update>
+
+<!-- 기본 디폴트 서명이미지로 초기화 -->
+<update id="updDefaultSign" parameterType="SignVo">
+UPDATE SIGN 
+	SET SIGN_IMG = (SELECT SIGN_IMG FROM SIGN s WHERE DOIT_EMP_ID = 1004),
+		SIGN_NAME = (SELECT SIGN_NAME FROM SIGN s WHERE DOIT_EMP_ID = 1004)
+	WHERE EMP_ID = #{emp_id}
+</update>
+
 </mapper>

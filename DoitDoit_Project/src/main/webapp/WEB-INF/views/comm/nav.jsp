@@ -9,9 +9,9 @@
                 <li>
                     <span>전자결재</span><img class="menuIcon" src="./img/pencil_32.png" alt="">
                     <ul class="subMenu">
-                        <li><span>문서작성</span></li>
-                        <li><span>문서함</span></li>
-                        <li><span>전자서명</span></li>
+                        <li><span onclick="location.href='./docWriteForm.do;'">문서작성</span></li>
+                        <li><span onclick="location.href='./approMain.do;'">문서함</span></li>
+                        <li><span onclick="location.href='./signMain.do;'">전자서명</span></li>
                     </ul>
                 </li>
                 <li><span>캘린더</span><img class="menuIcon" src="./img/calendar_32.png" alt=""></li>

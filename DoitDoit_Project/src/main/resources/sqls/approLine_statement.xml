@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.">
+<mapper namespace="com.doit.gw.mapper.appro.ApproLineMapperImpl">
+
+<select id="selEmp" resultType="ApproEmpVo">
+SELECT EMP_ID, EMP_NAME || ' - ' || (SELECT RANK_NAME FROM "RANK" r WHERE r.RANK_NO =e.RANK_NO) AS EMP_NAME , DEPT_NO, RANK_NO 
+	FROM EMP e 
+		ORDER BY RANK_NO DESC			
+</select>
+<select id="selDept" resultType="ApproDeptVo">
+SELECT DEPT_NO, DEPT_NAME
+	FROM DEPT
+</select>
+	
+<select id="selRank" parameterType="java.lang.String" resultType="java.lang.String">
+SELECT RANK_NO
+	FROM EMP
+		WHERE DEPT_NO = #{dept_no}		
+</select>
+
 </mapper>
