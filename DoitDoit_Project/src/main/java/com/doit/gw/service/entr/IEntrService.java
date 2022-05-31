@@ -12,6 +12,7 @@ public interface IEntrService {
 	public List<EntrBoardVo> selEboardFildocThree();
 	public List<EntrBoardVo> selEboardFildocAll();
 	public EntrBoardVo selEboardDetail(String eboard_no);
+	public int updEboardDelflagUser(String eboard_no);
 	
 	public List<EntrBoardVo> selEboardAllAdmin();
 	public List<EntrBoardVo> selEboardCgoryAdmin(Map<String, Object> map);

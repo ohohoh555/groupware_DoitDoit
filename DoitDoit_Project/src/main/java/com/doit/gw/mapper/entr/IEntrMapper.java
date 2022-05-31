@@ -14,6 +14,8 @@ public interface IEntrMapper {
 	public List<EntrBoardVo> selEboardFildocThree();
 	public List<EntrBoardVo> selEboardFildocAll();
 	public EntrBoardVo selEboardDetail(String eboard_no);
+	public int updEboardDelflagUser(String eboard_no);
+	
 	public int updEboardReadCnt(String eboard_no);
 	
 	public List<EntrBoardVo> selEboardAllAdmin();

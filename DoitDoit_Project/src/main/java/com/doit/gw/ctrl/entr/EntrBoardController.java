@@ -1,5 +1,6 @@
 package com.doit.gw.ctrl.entr;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @Controller
-public class EntrBoardCtrl {
+public class EntrBoardController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -30,7 +31,7 @@ public class EntrBoardCtrl {
 	
 	@RequestMapping(value="/entrBoard.do", method = RequestMethod.GET)
 	public String entrBoard(Model model) {
-		logger.info("EntrBoardCtrl entrBoard 공지게시판으로 이동");
+		logger.info("EntrBoardController entrBoard 공지게시판으로 이동");
 		List<EntrBoardVo> eList = service.selEboardAllUser();
 		List<EntrBoardVo> fList = service.selEboardFildocThree();
 		
@@ -44,7 +45,7 @@ public class EntrBoardCtrl {
 					produces = "application/json; charset=UTF-8")
 	@ResponseBody
 	public String cgoryBoard(@RequestParam Map<String,Object>map) {
-		logger.info("EntrBoardCtrl cgoryBoard 공지게시판 카테고리별 조회 : {}", map);
+		logger.info("EntrBoardController cgoryBoard 공지게시판 카테고리별 조회 : {}", map);
 		List<EntrBoardVo> eList = service.selEboardCgoryUser(map);
 		
 		Gson data = new GsonBuilder().create();
@@ -54,7 +55,7 @@ public class EntrBoardCtrl {
 	
 	@RequestMapping(value = "/OneBoard.do", method = RequestMethod.GET)
 	public String OneBoard(String eboard_no, Model model) {
-		logger.info("EntrBoardCtrl OneBoard 공지게시글 상세조회 : {}", eboard_no);
+		logger.info("EntrBoardController OneBoard 공지게시글 상세조회 : {}", eboard_no);
 		EntrBoardVo entrOne = service.selEboardDetail(eboard_no);
 		model.addAttribute("entrOne", entrOne);
 		return "/entr/entrDetail";
@@ -62,7 +63,7 @@ public class EntrBoardCtrl {
 	
 	@RequestMapping(value = "/entrBoardAdmin.do", method = RequestMethod.GET)
 	public String entrBoardAdmin() {
-		logger.info("EntrBoardCtrl entrBoardAdmin 관리자 게시판관리 이동");
+		logger.info("EntrBoardController entrBoardAdmin 관리자 게시판관리 이동");
 		return "/admin/entrBoardAdmin";
 	}
 	
@@ -74,14 +75,36 @@ public class EntrBoardCtrl {
 		return data;
 	}
 	
-//	@RequestMapping(value = "/selEboardCgoryAdmin.do", method = RequestMethod.POST,
-//					produces = "application/json; charset=UTF-8")
-//	@ResponseBody
-//	public String selEboardCgoryAdmin(@RequestBody Map<String, Object> map) {
-//		logger.info("EntrBoardCtrl selEboardCgoryAdmin 관리자 공지게시판 카테고리별 조회 : {}", map);
-//		List<EntrBoardVo> lists = service.selEboardCgoryAdmin(map);
-//		Gson data = new GsonBuilder().create();
-//		return data.toJson(lists);
-//	}
+	@RequestMapping(value = "/selEboardCgoryAdmin.do", method = RequestMethod.GET,
+					produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String selEboardCgoryAdmin(@RequestParam Map<String, Object> map) {
+		logger.info("EntrBoardController selEboardCgoryAdmin 관리자 공지게시판 카테고리별 조회 : {}", map);
+		List<EntrBoardVo> lists = service.selEboardCgoryAdmin(map);
+		Gson data = new GsonBuilder().create();
+		return data.toJson(lists);
+	}
+	
+	@RequestMapping(value = "/OneBoardAdmin.do", method = RequestMethod.GET)
+	public String OneBoardAdmin(String eboard_no, Model model) {
+		logger.info("EntrBoardController OneBoardAdmin 관리자 공지게시글 상세조회 : {}",eboard_no);
+		EntrBoardVo entrOne = service.selEboardDetail(eboard_no);
+		model.addAttribute("entrOne", entrOne);
+		return "/admin/oneBoardAdmin";
+	}
+	
+	@RequestMapping(value = "/delflag.do", method = RequestMethod.GET)
+	public String delflag(String eboard_no) {
+		logger.info("EntrBoardController delflag 사용자 게시글 삭제처리 : {}", eboard_no);
+		int cnt = service.updEboardDelflagUser(eboard_no);
+		logger.info("EntrBoardController delflag 삭제갯수 : {} 개", cnt);
+		return "redirect:/entrBoard.do";
+	}
+	
+	@RequestMapping(value = "/insertBoard.do", method = RequestMethod.GET)
+	public String insertBoard() {
+		logger.info("EntrBoardController insertBoard 글쓰기 페이지로 이동");
+		return "/entr/entrInsert";
+	}
 
 }

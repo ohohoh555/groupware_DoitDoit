@@ -63,6 +63,12 @@ public class EntrServiceImpl implements IEntrService {
 		return mapper.selEboardCgoryAdmin(map);
 	}
 
+	@Override
+	public int updEboardDelflagUser(String eboard_no) {
+		logger.info("EntrServiceImpl updEboardDelflagUser 사용자 게시글 삭제처리 : {}", eboard_no);
+		return mapper.updEboardDelflagUser(eboard_no);
+	}
+
 	
 
 }
