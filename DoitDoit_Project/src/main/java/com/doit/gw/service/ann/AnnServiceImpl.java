@@ -60,6 +60,23 @@ public class AnnServiceImpl implements IAnnService {
 		logger.info("AnnServiceImpl updAnnualYear 올해 이전에 입사한 사원 연차(15개)부여(update) : {}", map);
 		return mapper.updAnnualYear(map);
 	}
-	
+
+	@Override
+	public List<EmpVo> selEmpMonth(Map<String, Object> map) {
+		logger.info("AnnServiceImpl selEmpMonth 올해 입사한 사원 조회 : {}", map);
+		return mapper.selEmpMonth(map);
+	}
+
+	@Override
+	public int insAnnAddMonth(String emp_id) {
+		logger.info("AnnServiceImpl insAnnAddMonth 올해 입사한 사원 만근시 연차(1개) 부여(insert) : {}", emp_id);
+		return mapper.insAnnAddMonth(emp_id);
+	}
+
+	@Override
+	public int updAnnualMonth(Map<String, String[]> emp_ids) {
+		logger.info("AnnServiceImpl insAnnAddMonth 올해 입사한 사원 만근시 연차(1개) 부여(update) : {}", emp_ids);
+		return mapper.updAnnualMonth(emp_ids);
+	}
 	
 }
