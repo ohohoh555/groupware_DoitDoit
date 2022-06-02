@@ -164,6 +164,12 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
 					<div class="rContent-full">
+						<sec:authorize access="isAuthenticated()">
+					        <sec:authentication property="principal" var="principal"/>
+					        <input type="hidden" value="${principal.emp_id}" id="pr_emp_id" name="pr_emp_id"> 
+					        <input type="hidden" value="${principal.emp_name}" id="pr_user_name" name="pr_emp_name">
+ 			           </sec:authorize> 
+ 			           <input type="hidden" value="${room_id}" id="room_id">
 						<div style="width: 800px; height: 796px;">
 							<div id="dragdrop" class="chatGroup">
 								<div class="roomInfo">
@@ -184,7 +190,7 @@
 								<div class="insChat">
 									<div class="inputArea">
 										<div>
-											<textarea rows="5" cols="25"></textarea>					
+											<textarea rows="5" cols="25" id="chatCon"></textarea>					
 											<button id="btnSend">전송</button>									
 										</div>
 										<div>

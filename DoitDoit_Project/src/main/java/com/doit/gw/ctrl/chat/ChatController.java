@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.vo.chat.ChatVo;
 
@@ -50,10 +54,12 @@ public class ChatController {
 			logger.info("멤버 있음 {}",listMem);
 		}else {
 			listMem = new ArrayList<String>();
+			logger.info("멤버 없음 {}",listMem);
 		}
 		
-		if (!listMem.contains(cVo.getEmp_id())) {
+		if(!listMem.contains(cVo.getEmp_id())) {
 			listMem.add(cVo.getEmp_id());
+			logger.info("멤버 추가 {}",listMem);
 			mapMem.put(cVo.getRoom_id(), listMem);
 		}
 	
@@ -78,9 +84,28 @@ public class ChatController {
 	
 	//채팅 메시지
     @MessageMapping(value = "/chat/message")
-    public void chatMessage(ChatVo cVo){
-    	logger.info("@ChatController message() : {}", cVo);
-        template.convertAndSend("/sub/chat/room/" + cVo.getRoom_id(), cVo);
+    public void chatMessage(@RequestParam Map<String, String> map){
+    	logger.info("@ChatController message() : {}", map);
+    	
+    	String html = "";
+    	html += "<span class=\"Name\">"+map.get("user_name")+"</span>";
+    	html += "<span class=\"msg\">"+map.get("chat_con")+"</span>";
+    	
+    	if(mapChat.get(map.get("room_id")) != null) {
+			listChat = mapChat.get(map.get("room_id()"));
+			logger.info("해당 방의 채팅 있음 {}",listChat);
+		}else {
+			listChat = new ArrayList<ChatVo>();
+			logger.info("해당 방의 채팅 없음 {}",listChat);
+		}
+    	
+    	ChatVo vo = new ChatVo(null, map.get("room_id"), map.get("emp_id"), html, null, "T");
+    	listChat.add(vo);
+    	
+    	logger.info("보낼 채팅 {}",listChat);
+    	
+    	logger.info("보낼 html {}", html);
+        template.convertAndSend("/sub/chat/room/" + map.get("room_id"), html);
     }
     
     //파일 메시지
@@ -90,4 +115,10 @@ public class ChatController {
     	    	
     	Decoder decoder = Base64.getDecoder();
     }
+    
+    @RequestMapping(value = "/saveChat.do", method = RequestMethod.POST)
+    @ResponseBody
+    public void name(String room_id) {
+		
+	}
 }

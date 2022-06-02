@@ -5,7 +5,9 @@ $(document).ready(function(){
 		$(this).find(".subMenu").css({display:"block"});
 	}).mouseout(function(){
         $(".subMenu").css({display:"none"});
-    })
+    });
+    
+    
 })
 	    
 function menuOn(){
@@ -29,8 +31,9 @@ function chatOn(){
 				$("#chatRoom").html("");
 				for(var i = 0; i < rooms.length; i++){
 					var html; 
-					html = "<div>";
-					html += 	"<a href=./chatRoom.do?room_Id="+rooms[i].room_id+">";
+					html = "<div onclick=\"toChatRoom("+rooms[i].room_id+")\">";
+					html += 	"<a href=\"#\">";
+//					html += 	"<a href=./chatRoom.do?room_Id="+rooms[i].room_id+">";
 					html += 		"<div class=\"roomName\">";
 					html += 			"<div>";
 					html += 				"<span style=\"font-size: 10px; color: white;\">"+rooms[i].room_name+"</span>";
@@ -58,4 +61,19 @@ function chatOn(){
 	}else{
 		$("#chat").css({top:"25px",transition:"all 0.5s"})
 	}
+}
+
+function toChatRoom(room_id){
+	console.log(room_id);
+	$.ajax({
+		type : "POST",
+		url: "./saveChat.do",
+		data: "room_id="+room_id,
+		success: function(){
+			window.location.href= "./chatRoom.do?room_Id="+room_id;
+		},
+		error: function(){
+			alert('통신 에러');
+		}
+	});
 }

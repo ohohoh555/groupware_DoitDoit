@@ -1,6 +1,7 @@
 var stomp;
 var room_id;
-var username;
+var emp_id;
+var user_name;
 var chatCon;
 
 // 파일 중복 업로드 방지용 맵을 선언한다.
@@ -13,36 +14,36 @@ var k = 0;
 $(document).ready(function() {
 	
 	console.log("js실행");
-	var sock = new SockJS("/DoitDoitChat/stompSocket");
+	var sock = new SockJS("/DoitDoit_Project/stompSocket");
 	console.log(sock);
 	
-	room_id = $("#roomId").val();
-	console.log("roomId", room_id);
-	username = $("#empId").val();
-	console.log("empId", username);
+	//방 id
+	room_id = $("#room_id").val();
+	console.log("room_id", room_id);
+	// emp_id
+	emp_id = $("#pr_emp_id").val();
+	console.log("emp_id", emp_id);
+	// emp 성함
+	user_name = $("#pr_user_name").val();
+	console.log("user_name",user_name);
 	
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
 		console.log("STOMP Connection")
 	
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
-		// 태팅방
+		// 채팅방
 		stomp.subscribe("/sub/chat/room/" + room_id, function(chat) {
 			console.log(chat);
 			var content = JSON.parse(chat.body);
 			
 			var message = content.chat_con;
-			var writer = content.emp_id;
-			var html = '';
 			
-			html += "<tr>";
-			html += "<td>"+writer+"</td><td>"+message+"</td><td>220528</td>";
-			html += "</tr>"
 			
 			$("table>tbody").append(html);
 		});
 		
-		roomEnter(room_id,username);
+		roomEnter(room_id,emp_id);
 		
 		stomp.subscribe("/sub/chatMem/room/" + room_id, function(member){
 			var mems = member.body;
@@ -66,16 +67,16 @@ $(document).ready(function() {
 		
 	});
 	// 채팅입력
-	$("#chatSend").on("click",function(){
+	$("#btnSend").on("click",function(){
 		chatCon = $("#chatCon");
 		console.log("chatCon", chatCon);
 		console.log("send",chatCon.val());
 		
-		chatSend(room_id,chatCon,username);
+		chatSend(room_id,chatCon,emp_id,user_name);
 	});
 	
 	$(window).on("beforeunload",function(){
-		roomOut(room_id, username);
+		roomOut(room_id, empId);
 	});
 	
 	//drag & drop
@@ -107,19 +108,6 @@ $(document).ready(function() {
 		// DIV에 DROP 이벤트가 발생 했을 때 다음을 호출한다.
 		handleFileUpload(files);
 	});
-
-	$(document).on('dragenter', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	});
-	$(document).on('dragover', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	});
-	$(document).on('drop', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	});
 	
 	function handleFileUpload(files) {
 		console.log("handle에 ",files);
@@ -143,13 +131,13 @@ $(document).ready(function() {
 function enterkey(){
 	if(window.event.keyCode == 13){
 		chatCon = document.getElementById("chatCon");
-		chatSend(room_id,chatCon,username);
+		chatSend(room_id,chatCon,empId);
 	}
 }
 
-function chatSend(room_id,chatCon,username){
+function chatSend(room_id,chatCon,empId){
 	if(chatCon.val != ""){
-		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: chatCon.val(), emp_id: username }));
+		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: chatCon.val(), emp_id: emp_id, user_name: user_name}));
 		chatCon.value = '';
 	}else{
 		alert('채팅을 입력해 주세요');
@@ -158,19 +146,18 @@ function chatSend(room_id,chatCon,username){
 
 //채팅방 입장 시 
 function roomEnter(room_id,username){
-	stomp.send('/pub/chat/enter', {}, JSON.stringify({ room_id: room_id, emp_id: username }));
+	stomp.send('/pub/chat/enter', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
 }
 
 //채팅방 닫기 실행 시
 function roomOut(room_id, username){
-	stomp.send('/pub/chat/out', {}, JSON.stringify({ room_id: room_id, emp_id: username }));
+	stomp.send('/pub/chat/out', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
 }
 
 function sendFileToServer(fd) {
-	
-	//FormData()에 room_id와 username 추가
+	//FormData()에 room_id와 empId 추가
 	fd.append('room_id',room_id);
-	fd.append('username',username);
+	fd.append('emp_id',emp_id);
 	
 	var uploadURL = "./saveFile.do"; 
 	$.ajax({
