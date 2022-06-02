@@ -19,4 +19,8 @@ public interface IEntrService {
 	public List<EntrBoardVo> selEboardAllAdmin();
 	public List<EntrBoardVo> selEboardCgoryAdmin(Map<String, Object> map);
 	public int updEboardDelfAdmin(List<String> eboard_nos);
+	public int delEboardRoot(String eboard_no);
+	
+	
+	
 }

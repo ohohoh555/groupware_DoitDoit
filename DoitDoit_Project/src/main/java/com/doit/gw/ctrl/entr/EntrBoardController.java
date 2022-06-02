@@ -140,5 +140,13 @@ public class EntrBoardController {
 		
 		return "redirect:/OneBoardAdmin.do?eboard_no="+eboard_no;
 	}
+	
+	@RequestMapping(value = "/deletOne.do", method = RequestMethod.GET)
+	public String deletOne(String eboard_no) {
+		logger.info("@deletOne 관리자 상세조회에서 게시글 완전삭제: {}",eboard_no );
+		int cnt = service.delEboardRoot(eboard_no);
+		logger.info("@deletOne 삭제된 게시글 갯수 : {}", cnt);
+		return "redirect:/entrBoardAdmin.do";
+	}
 
 }

@@ -82,6 +82,12 @@ public class EntrServiceImpl implements IEntrService {
 		return mapper.updEboardDelfAdmin(eboard_nos);
 	}
 
+	@Override
+	public int delEboardRoot(String eboard_no) {
+		logger.info("@delEboardRoot 관리자 게시글 완전삭제 : {}", eboard_no);
+		return mapper.delEboardRoot(eboard_no);
+	}
+
 	
 
 }
