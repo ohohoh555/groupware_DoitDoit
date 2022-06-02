@@ -22,6 +22,15 @@ public interface IAnnMapper {
 	//올해 이전 입사한 사원 연차(15개) 부여(insert)
 	public int insAnnAddYear(String emp_id);
 	//올해 이전 입사한 사원 연차(15개) 부여(update)
-	public int updAnnualYear(Map<String, String[]> map);	
+	public int updAnnualYear(Map<String, String[]> emp_ids);
+	
+	//===매월 1일
+	//올해 입사한 사원 조회
+	public List<EmpVo> selEmpMonth(Map<String, Object> map);
+	//올해 입사한 사원 만근시 연차(1개) 부여(insert)
+	public int insAnnAddMonth(String emp_id);
+	//올해 입사한 사원 만근시 연차(1개) 부여(update)
+	public int updAnnualMonth(Map<String, String[]> emp_ids);
+	
 	
 }

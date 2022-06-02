@@ -48,8 +48,23 @@ public class AnnMapperImpl implements IAnnMapper {
 	}
 
 	@Override
-	public int updAnnualYear(Map<String, String[]> map) {
-		return sqlSession.update(NS+"updAnnualYear", map);
+	public int updAnnualYear(Map<String, String[]> emp_ids) {
+		return sqlSession.update(NS+"updAnnualYear", emp_ids);
+	}
+
+	@Override
+	public List<EmpVo> selEmpMonth(Map<String, Object> map) {
+		return sqlSession.selectList(NS+"selEmpMonth", map);
+	}
+
+	@Override
+	public int insAnnAddMonth(String emp_id) {
+		return sqlSession.insert(NS+"insAnnAddMonth", emp_id);
+	}
+
+	@Override
+	public int updAnnualMonth(Map<String, String[]> emp_ids) {
+		return sqlSession.update(NS+"updAnnualMonth", emp_ids);
 	}
 
 }
