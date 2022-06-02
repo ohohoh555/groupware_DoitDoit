@@ -156,7 +156,7 @@
 								</div>
 								<div id="chatList"> <!-- chatWrap -->
 									<div id="chatLog">
-						                <div class=${emp_id == chatList.emp_id?"myMsg":"anotherMsg"}>
+						                <div class="anotherMsg">
 						                    <span class="Name">Jo</span>
 						                    <span class="msg">Hello, Nice to meet you.</span>
 						                </div>
