@@ -26,7 +26,7 @@
             		<div class="profile"></div>
             		<c:forEach items="${lists}" var="empVo">
             		<div class="inputUser">
-            			<input type="text" value="${empVo.emp_id}">
+            			<input type="text" id="emp_id" value="${empVo.emp_id}">
             			<input type="text" value="${empVo.emp_name}">
             			<input type="text" value="${empVo.emp_email}">
             			<input type="text" value="${empVo.dept_no}">
@@ -38,10 +38,32 @@
             			<input type="text" value="${empVo.emp_nfc}">
             		</div>
             		</c:forEach>
-            		<div class="buttonArea"></div>
+            		<div class="buttonArea">
+            			<input type="submit" value="수정">
+            			<input type="button" value="비밀번호 초기화" onclick="resetPassword()">
+            			<input type="button" value="뒤로가기" onclick="history.back(-1)">
+            		</div>
             	</form>
             </div>
         </main>
     </div>
+    <script type="text/javascript">
+    	var emp_id = $("#emp_id").val();
+    	
+    	function resetPassword(){
+    		console.log(emp_id);
+    	}
+    
+    	$.ajax({
+    		url:"./resetPassword.do",
+    		data:emp_id,
+    		success:function(){
+    			
+    		},
+    		error:function(){
+    			
+    		}
+    	})
+    </script>
 </body>
 </html>
