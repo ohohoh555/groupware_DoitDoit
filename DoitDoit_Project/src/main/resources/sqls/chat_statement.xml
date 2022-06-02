@@ -3,7 +3,7 @@
 <mapper namespace="com.doit.gw.mapper.chat.ChatDaoImpl">
 	<!-- 자신의 방 목록 -->
 	<select id="selRoom" parameterType="java.lang.String" resultType="ChatJoinVo">
-		SELECT ch.ROOM_ID, ROOM_NAME, CHAT_TIME, CHAT_ID, CHAT_TYPE ,EMP_ID,CHAT_CON
+		SELECT ch.ROOM_ID, ROOM_NAME, CHAT_TIME, CHAT_ID, CHAT_TYPE ,EMP_ID,CHAT_CON, CHAT_TYPE
     		FROM CHAT_ROOM cr,
 	        	JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
 	            	COLUMNS (

@@ -32,9 +32,17 @@ function chatOn(){
 					html = "<div>";
 					html += 	"<a href=./chatRoom.do?room_Id="+rooms[i].room_id+">";
 					html += 		"<div class=\"roomName\">";
-					html += 			"<span style=\"font-size: 10px; color: white;\">"+rooms[i].room_name+"</span>";
-					html +=				"<span style=\"color: #FCFCFC;\">"+rooms[i].chat_con+"</span>";
-					html +=				"<span style=\"color: #EAEAEA;\">"+rooms[i].chat_time+"</span>";
+					html += 			"<div>";
+					html += 				"<span style=\"font-size: 10px; color: white;\">"+rooms[i].room_name+"</span>";
+					html += 			"</div>";
+					html += 			"<div>"
+					if(rooms[i].chat_type == "T"){
+						html +=				"<span style=\"color: #FCFCFC;\">"+rooms[i].chat_con+"</span>";
+					}else{
+						html +=				"<span style=\"color: #FCFCFC;\">파일이 전송 되었습니다.</span>";
+					}
+					html +=					"<span style=\"color: #EAEAEA;\">"+rooms[i].chat_time+"</span>";
+					html +=				"</div>";
 					html += 		"</div>";	
 					html += 	"</a>";
 					html += "</div>";	
