@@ -50,8 +50,6 @@ public class ChatServiceImpl implements IChatService{
 		
 		int m = dao.insFile(map);
 		int n = dao.insChat(map);
-		logger.info("???? {} ????", n);
-		logger.info("???? {} ????", m);
 		
 		return (n > 0 && m > 0)?1:0;
 	}

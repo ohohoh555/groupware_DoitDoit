@@ -18,7 +18,7 @@
     		WHERE IDS = #{emp_id}
     		AND cr.ROOM_ID = ch.ROOM_ID
     		AND mx = 1
-    		ORDER BY CHAT_ID
+    		ORDER BY CHAT_TIME DESC
 	</select>
 	
 	<!-- 채팅 조회 -->
