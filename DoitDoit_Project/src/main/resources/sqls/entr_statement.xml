@@ -100,6 +100,16 @@
 					#{eboard_content}, 0, SYSDATE, 'N')
 	</insert>
 	
+	<insert id="insEboardAttach" parameterType="java.util.Map">
+			INSERT INTO FILELIST
+				(FLIST_SEQ, EBOARD_GUBUN, EBOARD_NO , 
+				FLIST_UUID, FLIST_ORIGINNAME, FLIST_SIZE, 
+				FLIST_UPLOADPATH)
+			VALUES(SEQ_FILELIST.NEXTVAL, '100',(SELECT MAX(EBOARD_NO) FROM ENTRBOARD e2 WHERE CGORY_NO = #{cgory_no}) , 
+			#{flist_uuid}, #{originname}, #{flist_size}, 
+			#{flist_uploadpath})
+	</insert>
+	
 	<!-- 관리자 게시글 보임/숨김처리 -->
 	<update id="updEboardDelfAdmin" parameterType="java.util.List">
 		UPDATE ENTRBOARD SET EBOARD_DELFLAG =  
