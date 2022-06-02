@@ -23,7 +23,7 @@
 	
 	/* 채팅, 파일 */
 	.chatGroup{
-		width:290px;
+		width:310px;
 		height:100%;
 		background-color: #6D6AB7;
 		border: 1px solid black;
@@ -31,7 +31,7 @@
 	
 	/* 참가 리스트 layout */
 	.memberList{
-		width:220px;
+		width:180px;
 		height: 100%;
 	}
 	
@@ -93,9 +93,9 @@
 	}
 	
 	#chatLog {
-	    height: 585px;
+	    height: 565px;
 	    overflow-y: auto;
-	    padding: 10px;
+	    padding: 0px 10px;
 	}
 	
 	.myMsg {
@@ -110,11 +110,17 @@
 	}
 	
 	.msg {
+		height:100%;
 	    display: inline-block;
 	    border-radius: 15px;
 	    padding: 7px 15px;
 	    margin-bottom: 10px;
 	    margin-top: 5px;
+	}
+	
+	.issue{
+		text-align: center;
+		margin-bottom: 5px;
 	}
 	
 	.anotherMsg > .msg {
@@ -126,9 +132,18 @@
 	    color: #fff;
 	}
 	
+	.issue > .msg{
+		background-color: #8C8C8C;
+	    color: #fff;
+	}
+	
 	.msg{
 		max-width: 200px;
 		white-space: pre-wrap;
+	}
+	
+	.msg > img{
+		margin: 0px auto;
 	}
 	
 	.Name {
@@ -155,29 +170,15 @@
 									채팅방 정보
 								</div>
 								<div id="chatList"> <!-- chatWrap -->
+									<c:forEach items="${chatList }" var="i">
+										
+									</c:forEach>
 									<div id="chatLog">
-						                <div class="anotherMsg">
-						                    <span class="Name">Jo</span>
-						                    <span class="msg">Hello, Nice to meet you.</span>
-						                </div>
-						                <div class="myMsg">
-						                	<span class="Name">Kim</span>
-						                    <span class="msg">Nice to meet you, too.</span>
-						                </div>
-						                <div class="myMsg">
-						                	<span class="Name">Kim</span>
-						                    <span class="msg">ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</span>
-						                </div>
-						                <div class="myMsg">
-						                	<span class="Name">Kim</span>
-						               		<span class="msg">
-							                	<img alt="" src="./images/propile.png" width="200px">
-						               		</span>
-						                </div>
-						                <div class="anotherMsg">
-						                    <span class="Name">Jo</span>
-						                    <span class="msg">Okay, bye.</span>
-						                </div>
+										<c:forEach items="${chatList }" var="i">
+						                	<div class=${i.emp_id==0?"issue":(emp_id==i.emp_id?"myMsg":"anotherMsg")}>
+												${i.chat_con}
+						                	</div>						             	
+										</c:forEach>
 					            	</div>
 								</div>
 								<div class="insChat">
