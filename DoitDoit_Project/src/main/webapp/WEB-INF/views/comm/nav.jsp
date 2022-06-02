@@ -20,7 +20,7 @@
                     <span>게시판</span><img class="menuIcon" src="./img/board_32.png" alt="">
                     <ul class="subMenu">
                         <li onclick="location.href='./entrBoard.do'"><span>공지게시판</span></li>
-                        <li><span>자료게시판</span></li>
+                        <li onclick="location.href='./jaryoBoard.do'"><span>자료게시판</span></li>
                     </ul>
                 </li>
                 <li><span>연차현황</span><img class="menuIcon" src="./img/apro_32.png" alt=""></li>

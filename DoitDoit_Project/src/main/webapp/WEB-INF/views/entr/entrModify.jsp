@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>글쓰기 페이지</title>
+<title>글 수정</title>
 <link rel="stylesheet" type="text/css" href="./css/home.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
@@ -15,6 +15,7 @@
 <script type="text/javascript" src="./dist/ckeditor/ckeditor.js"></script>
 </head>
 <body>
+${eVo}
 	<div id="container">
         <%@include file="../comm/nav.jsp" %>
         <main>
@@ -35,7 +36,7 @@
 								<tr>
 									<td>분류</td>
 									<td>
-										<select name="cgory_no" class="form-control" style="width: 100px;" onchange="selectCgory(this.value)">
+										<select name="cgory_no" class="form-control" style="width: 100px;" onchange="selectCgory(this.value)" >
 											<option value="101">일반</option>
 											<option value="102">필독</option>
 											<option value="103">인사</option>
@@ -46,21 +47,21 @@
 								</tr>
 								<tr>
 									<td>제목</td>
-									<td><input type="text" name="eboard_title" id="title" class="form-control"></td>
+									<td><input type="text" name="eboard_title" id="title" class="form-control" value="${eVo.eboard_title}"></td>
 								</tr>
 								<tr>
 									<td>내용</td>
 									<td>
-										<textarea name ="eboard_content" id="content"></textarea>
+										<textarea name ="eboard_content" id="content">${eVo.eboard_content}</textarea>
 									</td>
 								</tr>
 							</tbody>
 							<tfoot>
 								<tr>
 									<td colspan="3">
-										<input type="reset" class="btn btn-default" value="초기화" onclick="resetContent()">
-										<input type="submit" class="btn btn-default" value="등록" onclick="insertAction()" >
-										<input type="button" class="btn btn-default" value="돌아가기" onclick="javascript:history.back(-1)">
+										<input type="button" class="btn btn-default" value="초기화" >
+										<input type="submit" class="btn btn-default" value="수정완료" >
+										<input type="button" class="btn btn-default" value="취소" onclick="cancleModify()">
 									</td>
 								</tr>
 							</tfoot>
@@ -74,8 +75,7 @@
             </div>
         </main>
     </div>
-
-
+    
 <script type="text/javascript">
 CKEDITOR.replace( 'eboard_content' ,{
 	//language: 'en', //에디터의 언어 설정
@@ -91,81 +91,14 @@ CKEDITOR.replace( 'eboard_content' ,{
 	}
 );
 
-CKEDITOR.on('dialogDefinition', function( ev ){
-	var dialog = ev.data.definition.dialog;
-	var dialogName = ev.data.name;
-    var dialogDefinition = ev.data.definition;
-  
-    switch (dialogName) {
-        case 'image': 
-        	
-			dialogDefinition.removeContents('advanced'); // 자세히탭 제거
-			dialogDefinition.removeContents('Link'); // 링크탭 제거
-            
-            dialog.on('show', function (obj) {
-        		this.selectPage('Upload'); //업로드탭으로 시작
-            });
-			
-            break;
-    }
-});
-
-function resetContent(){
-	CKEDITOR.instances.content.setData("");
-}
-
-function insertAction(){
-	var insertFrm = document.getElementById("insertFrm");
-	insertFrm.action ="./insertFrm.do";
-	
-	
-	var title = document.getElementById("title").value;
-	var content = CKEDITOR.instances.content.getData();
-	console.log(title, content, title.length);
-	
-	if(title==""){
-		alert("제목은 필수로 입력해주세요");
-		title.focus();
-		return false;
-	}else if(title.length < 2){
-		alert("제목은 2글자 이상 입력해주세요");
-		return false;
-	}else if(content ==""){
-		alert("내용을 필수로 입력해주세요");
-		return false;
-	}else{
-		insertFrm.submit();
+function cancleModify(){
+	console.log("cancleModify 수정취소");
+	var con = confirm("글 수정을 취소하시겠습니까? (작업중인 내용이 모두 사라집니다.)");
+	if(con){
+		history.back();
 	}
 }
 
-
-function selectCgory(val){
-	console.log("selectCgory 작동", val);
-	
-	var html = "";
-	html +="<tr id='trDate'><td>날짜</td>";
-	html +="<td>시작:<input type='date' class='form-control' style='width: 150px;'>";
-	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";
-	html +="종료:<input type='date' class='form-control' style='width: 150px;'>";
-	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";
-	html +="</td></tr>";
-	
-	if(val == 101){
-		$("#cgoryEtc").empty();
-		$("#trDate").remove();
-	}else if(val == 102){
-		$("#cgoryEtc").empty();
-		$("#trDate").remove();
-		$("#cgoryEtc").text("필독게시물은 게시판 상단에 별도 표기됩니다.");
-	}else if(val == 103){
-		$("#cgoryEtc").empty();
-		$("#trDate").remove();
-	}else{
-		$("#cgoryEtc").empty();
-		$("#trDate").remove();
-		$("#insertTbl >tbody > tr").eq(0).after(html);
-	}
-}
 </script>
 </body>
 </html>

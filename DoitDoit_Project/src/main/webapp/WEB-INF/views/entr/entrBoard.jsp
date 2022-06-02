@@ -26,7 +26,7 @@
 					<div class="rContent-full">
 						<h3>&lt;&lt;공지게시판&gt;&gt;</h3>
 						<hr>
-						<table id="FildokTable" class="cell-border">
+						<table id="FildokTable" class="stripe">
 							<thead style="display: none;">
 								<tr>
 									<th>No.</th>
@@ -58,7 +58,7 @@
 						
 						<hr>
 
-						<table id="EntrTable" class="cell-border">
+						<table id="EntrTable" class="stripe">
 							<thead>
 								<tr>
 									<th>No.</th>
@@ -84,11 +84,11 @@
 
 						</table>
 						<div>
-							<button onclick="javascript:location.href='./entrBoard.do'">전체</button>
-							<button value="101" onclick="cgoryAction(this.value)">일반</button>
-							<button value="103" onclick="cgoryAction(this.value)">인사</button>
-							<button value="302" onclick="cgoryAction(this.value)">일정</button>
-							<button onclick="insertBoard()">글쓰기</button>
+							<button onclick="javascript:location.href='./entrBoard.do'" class="btn btn-default">전체</button>
+							<button value="101" onclick="cgoryAction(this.value)" class="btn btn-default">일반</button>
+							<button value="103" onclick="cgoryAction(this.value)" class="btn btn-default">인사</button>
+							<button value="302" onclick="cgoryAction(this.value)"class="btn btn-default"> 일정</button>
+							<button onclick="insertBoard()" class="btn btn-success">글쓰기</button>
 						</div>
 					</div>
                 </div>
@@ -119,7 +119,8 @@ $(document).ready(function(){
             }
         },
         lengthMenu: [ 5, 10, 15],
-        displayLength: 5
+        displayLength: 5,
+        order:[ [ 4, "desc"]]
 
 	});
 	
@@ -130,6 +131,7 @@ $(document).ready(function(){
 		ordering: false,
 		info: false,
 		paging:false,
+		order:[ [ 4, "desc"]]
 	});
 		
 });
@@ -174,7 +176,8 @@ function cgoryAction(val){
 				            }
 				        },
 				     lengthMenu: [ 5, 10, 15],
-				     displayLength: 5
+				     displayLength: 5,
+				     order:[ [ 4, "desc"]]
 				});
 			},
 			error:function(){
