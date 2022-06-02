@@ -68,4 +68,15 @@
 		</foreach>		
 	</update>	
 	
+	
+	<!-- 관리자 연차 조회 -->
+	<select id="selAnnualAdmin" parameterType="java.lang.String" resultType="AnnualVo">
+		SELECT DEPT_NAME, "RANK_NAME", EMP_ID, 
+			   EMP_NAME, ANN_ADD, ANN_USE, ANN_REST  
+			FROM ANNUAL JOIN EMP USING(EMP_ID) JOIN DEPT USING(DEPT_NO) JOIN "RANK" USING("RANK_NO")
+			WHERE DEPT_NO = #{dept_no}
+			AND STATE_NO = '01'
+			ORDER BY RANK_NO DESC, EMP_ID	
+	</select>
+	
 </mapper>
