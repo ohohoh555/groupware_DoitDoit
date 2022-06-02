@@ -88,5 +88,32 @@
 	<update id="updEboardDelflagUser" parameterType="java.lang.String">
 		UPDATE ENTRBOARD SET EBOARD_DELFLAG = 'Y' WHERE EBOARD_NO = #{eboard_no}
 	</update>
+	
+	<!-- 사용자 공지게시판 게시글 입력 (일반,필독,인사)-->
+	<insert id="insEboardRoot" parameterType="EntrBoardVo">
+		INSERT INTO ENTRBOARD
+					(EBOARD_NO, GUBUN_NO, CGORY_NO,  
+					EMP_ID, EMP_NAME, EBOARD_TITLE, 
+					EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, EBOARD_DELFLAG)
+			VALUES((SELECT MAX(EBOARD_NO)+1 FROM ENTRBOARD), '100', #{cgory_no}, 
+					#{emp_id},#{emp_name} , #{eboard_title}, 
+					#{eboard_content}, 0, SYSDATE, 'N')
+	</insert>
+	
+	<!-- 관리자 게시글 보임/숨김처리 -->
+	<update id="updEboardDelfAdmin" parameterType="java.util.List">
+		UPDATE ENTRBOARD SET EBOARD_DELFLAG =  
+		CASE EBOARD_DELFLAG  WHEN 'N' THEN 'Y' ELSE 'N' END
+			WHERE EBOARD_NO IN
+		<foreach collection="list" item="eboard_no" open="(" separator="," close=")">
+			#{eboard_no}
+		</foreach>
+	</update>
+	
+	<!-- 관리자 게시글 DB삭제  -->
+	<delete id="delEboardRoot" parameterType="java.lang.String">
+		DELETE FROM ENTRBOARD e 
+ 		 WHERE e.EBOARD_NO = #{eboard_no}
+	</delete>
 
 </mapper>

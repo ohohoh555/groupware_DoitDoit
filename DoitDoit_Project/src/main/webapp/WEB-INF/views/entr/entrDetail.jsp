@@ -22,12 +22,11 @@
         <main>
             <%@include file="../comm/header.jsp" %>
             <div id="content">
-<%--             <sec:authorize access="hasRole('ROLE_USER')"> --%>
 		 
                 <div id="rContent">
 					<div class="rContent-full">
 					
-					<table class="table table-bordered">
+					<table class="table table-striped">
 						<thead>
 							<tr>
 								<th colspan="2">
@@ -52,16 +51,16 @@
 							</tr>
 						</tbody>
 					</table>
-<%-- 					  </sec:authorize> --%>
-					   <sec:authorize access="isAuthenticated()">
-				        <sec:authentication property="principal.emp_id" var="emp_id"/>
-           					<c:if test="${emp_id eq entrOne.emp_id}">
-		           				<button>수정</button>
-								<button onclick="hideOne(${entrOne.eboard_no})">삭제</button>
-           					</c:if>
- 			           </sec:authorize> 
-					<button onclick="javascript:history.back(-1)">확인</button>
-
+						<div style="text-align: center;">
+						   <sec:authorize access="isAuthenticated()">
+					        <sec:authentication property="principal.emp_id" var="emp_id"/>
+	           					<c:if test="${emp_id eq entrOne.emp_id}">
+			           				<button onclick="modifyOne(${entrOne.eboard_no})" class="btn btn-default">수정</button>
+									<button onclick="hideOne(${entrOne.eboard_no})" class="btn btn-default">삭제</button>
+	           					</c:if>
+	 			           </sec:authorize> 
+						<button onclick="javascript:history.back(-1)" class="btn btn-default">확인</button>
+						</div>
 					</div> <!-- rContent-full 끝 -->
                 </div>
             <%@include file="../comm/aside.jsp" %>   
@@ -74,14 +73,18 @@
     
 <script type="text/javascript">
 function hideOne(eboard_no){
-	console.log("hideOne 사용자 숨김",eboard_no);
+	console.log("hideOne 사용자 글숨김",eboard_no);
 	var con = confirm("선택된 글을 삭제합니다. (복구는 관리자를 통해서만 가능합니다.)");
 	if(con){
 		location.href="./delflag.do?eboard_no="+eboard_no;
 	}else{
 		alert("글 삭제가 취소되었습니다.");
 	}
+}
 
+function modifyOne(eboard_no){
+	console.log("modifyOne 사용자 글수정",eboard_no);
+	location.href="./modify.do?eboard_no="+eboard_no;
 }
 
 </script>

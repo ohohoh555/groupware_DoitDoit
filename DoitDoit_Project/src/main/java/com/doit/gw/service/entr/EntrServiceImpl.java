@@ -1,5 +1,6 @@
 package com.doit.gw.service.entr;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,52 +22,70 @@ public class EntrServiceImpl implements IEntrService {
 
 	@Override
 	public List<EntrBoardVo> selEboardAllUser() {
-		logger.info("EntrServiceImpl selEboardAllUser 사원 게시글 전체조회");
+		logger.info("@selEboardAllUser 사원 게시글 전체조회");
 		return mapper.selEboardAllUser();
 	}
 
 	@Override
 	public List<EntrBoardVo> selEboardCgoryUser(Map<String, Object> map) {
-		logger.info("EntrServiceImpl selEboardCgoryUser 사원 게시글 카테고리별 조회 : {}", map);
+		logger.info("@selEboardCgoryUser 사원 게시글 카테고리별 조회 : {}", map);
 		return mapper.selEboardCgoryUser(map);
 	}
 
 	@Override
 	public List<EntrBoardVo> selEboardFildocThree() {
-		logger.info("EntrServiceImpl selEboardFildocThree 필독 게시글 3개 조회 ");
+		logger.info("@selEboardFildocThree 필독 게시글 3개 조회 ");
 		return mapper.selEboardFildocThree();
 	}
 
 	@Override
 	public List<EntrBoardVo> selEboardFildocAll() {
-		logger.info("EntrServiceImpl selEboardFildocAll 필독 게시글 전체조회 ");
+		logger.info("@selEboardFildocAll 필독 게시글 전체조회 ");
 		return mapper.selEboardFildocAll();
 	}
 
 	@Override
 	public EntrBoardVo selEboardDetail(String eboard_no) {
-		logger.info("EntrServiceImpl selEboardDetail 공지게시글 상세조회 : 글번호 {}", eboard_no);
+		logger.info("@selEboardDetail 공지게시글 상세조회 : 글번호 {}", eboard_no);
 		int cnt=mapper.updEboardReadCnt(eboard_no);
-		logger.info("EntrServiceImpl updEboardReadCnt 상세조회시 조회수 증가 : 성공 {}",cnt);
+		logger.info("@updEboardReadCnt 상세조회시 조회수 증가 : 성공 {}",cnt);
 		return mapper.selEboardDetail(eboard_no);
 	}
 
 	@Override
 	public List<EntrBoardVo> selEboardAllAdmin() {
-		logger.info("EntrServiceImpl selEboardAllAdmin 관리자 공지게시판 전체조회");
+		logger.info("@selEboardAllAdmin 관리자 공지게시판 전체조회");
 		return mapper.selEboardAllAdmin();
 	}
 
 	@Override
 	public List<EntrBoardVo> selEboardCgoryAdmin(Map<String, Object> map) {
-		logger.info("EntrServiceImpl selEboardCgoryAdmin 관리자 카테고리별 조회 : {}", map);
+		logger.info("@selEboardCgoryAdmin 관리자 카테고리별 조회 : {}", map);
 		return mapper.selEboardCgoryAdmin(map);
 	}
 
 	@Override
 	public int updEboardDelflagUser(String eboard_no) {
-		logger.info("EntrServiceImpl updEboardDelflagUser 사용자 게시글 삭제처리 : {}", eboard_no);
+		logger.info("@updEboardDelflagUser 사용자 게시글 삭제처리 : {}", eboard_no);
 		return mapper.updEboardDelflagUser(eboard_no);
+	}
+
+	@Override
+	public int insEboardRoot(EntrBoardVo eVo) {
+		logger.info("@insEboardRoot 사용자 게시글 입력 : {}", eVo);
+		return mapper.insEboardRoot(eVo);
+	}
+
+	@Override
+	public int updEboardDelfAdmin(List<String> eboard_nos) {
+		logger.info("@updEboardDelfAdmin 관리자 게시글 숨김/보임처리 : {}", eboard_nos.toString());
+		return mapper.updEboardDelfAdmin(eboard_nos);
+	}
+
+	@Override
+	public int delEboardRoot(String eboard_no) {
+		logger.info("@delEboardRoot 관리자 게시글 완전삭제 : {}", eboard_no);
+		return mapper.delEboardRoot(eboard_no);
 	}
 
 	

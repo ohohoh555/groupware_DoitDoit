@@ -26,8 +26,8 @@
 	<select id="selEmpYear" parameterType="java.lang.String" resultType="EmpVo">
 		<![CDATA[
 			SELECT EMP_ID FROM EMP 
-			WHERE EMP_REGDATE < #{date}
-			AND EMP_AUTH = 'ROLE_USER'
+				WHERE EMP_REGDATE < #{date}
+				AND EMP_AUTH = 'ROLE_USER'
 		]]>		
 	</select>
 	<!-- 입사일 올해 이전 사원 연차(15개) 부여(insert) -->
@@ -38,12 +38,34 @@
 	<!-- 입사일 올해 이전 사원 연차(15개) 부여(update) -->
 	<update id="updAnnualYear" parameterType="java.util.Map">
 		UPDATE ANNUAL SET ANN_ADD = ANN_ADD + 15, ANN_REST = ANN_REST +15
-		WHERE EMP_ID IN 
+			WHERE EMP_ID IN 
 		<foreach collection="emp_ids" item="emp_id" open="(" close=")" separator=",">
 			#{emp_id}
 		</foreach>
 	</update>	
 	
 	
+	<!-- 매월 1일 -->
+	<!-- 입사일 올해인 사원 조회 -->
+	<select id="selEmpMonth" parameterType="java.util.Map" resultType="EmpVo">
+		SELECT EMP_ID  
+			FROM ANNUAL JOIN EMP USING(EMP_ID)
+			WHERE EMP_REGDATE >= #{date} 
+			AND ANN_WORK_DAYS = #{days}
+			AND EMP_AUTH = 'ROLE_USER'			
+	</select>
+	<!-- 입사일 올해인 사원 만근시 연차(1개) 부여(insert) -->
+	<insert id="insAnnAddMonth" parameterType="java.lang.String">
+		INSERT INTO ANN_ADD (ANN_ADD_NO, ANN_ADD_CONTENT, ANN_ADD_DAYS, EMP_ID)
+		VALUES (SEQ_ANN_ADD.NEXTVAL, '만근', 1, #{emp_id})
+	</insert>	
+	<!-- 입사일 올해인 사원 만근시 연차(1개) 부여(update) -->
+	<update id="updAnnualMonth" parameterType="java.util.Map">
+		UPDATE ANNUAL SET ANN_ADD = ANN_ADD + 1, ANN_REST = ANN_REST +1, ANN_WORK_DAYS = 0
+			WHERE EMP_ID IN 
+		<foreach collection="emp_ids" item="emp_id" open="(" close=")" separator=",">
+			#{emp_id}
+		</foreach>		
+	</update>	
 	
 </mapper>

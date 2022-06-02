@@ -23,29 +23,32 @@
             <sec:authorize access="hasAnyRole('ROLE_ADMIN_BOARD','ROLE_ADMIN_INSA')">
                 <div id="rContent">
 					<div class="rContent-full">
-						<h1>공지게시판</h1>
+						<h1>&lt;&lt;공지게시판&gt;&gt;</h1>
 						<div>
-							<button onclick="javascript:location.href='./entrBoardAdmin.do'">전체</button>
-							<button value="101" onclick="cgoryBoard(this.value)">일반</button>
-							<button value="102" onclick="cgoryBoard(this.value)">필독</button>
-							<button value="103" onclick="cgoryBoard(this.value)">인사</button>
-							<button value="302" onclick="cgoryBoard(this.value)">일정</button>
+							<button onclick="javascript:location.href='./entrBoardAdmin.do'" class="btn btn-default">전체</button>
+							<button value="101" onclick="cgoryBoard(this.value)" class="btn btn-default">일반</button>
+							<button value="102" onclick="cgoryBoard(this.value)" class="btn btn-default">필독</button>
+							<button value="103" onclick="cgoryBoard(this.value)" class="btn btn-default">인사</button>
+							<button value="302" onclick="cgoryBoard(this.value)" class="btn btn-default">일정</button>
 						</div>
-						<hr>
-						<button></button>
-						<table id="entrTable">
+						
+						<form action="#" method="post" id="delFrm" onsubmit="return ChangDel()">
+						<input type="submit" class="btn btn-success" value="숨김/보임" >
+					<hr>
+						<table id="entrTable" class="stripe">
 							<thead>
 								<tr>
-									<th><input type="checkbox" id="allChk" onclick="allSelect(this.checked)"></th>
+									<th><input type="checkbox" name="allchk" id="allChk" onclick="allSelect(this.checked)"></th>
 									<th>분류</th>
 									<th>제목</th>
 									<th>작성자</th>
 									<th>등록일</th>
-									<th>숨김여부</th>
+									<th>숨김</th>
 									<th>조회</th>
 								</tr>
 							</thead>
 						</table>
+						</form>
 					</div>
                 </div>
             <%@include file="../comm/aside.jsp" %>    
@@ -56,8 +59,11 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#entrTable").DataTable({
+		aoColumnDefs: [
+	          { 'bSortable': false, 'aTargets': [0,1] }
+	       ],
 	     lengthMenu: [ 5, 10, 15],
-	     displayLength: 10,
+	     displayLength: 5,
 	  	"language": {
             "emptyTable": "게시글이 없어요.",  //게시글이 없을 경우
             "lengthMenu": "페이지당 _MENU_ 개씩 보기",  // 페이징 개수
@@ -95,25 +101,8 @@ $(document).ready(function(){
         ]
 		
 		
-	});
-	
-	
-var chks = document.getElementsByName("chk");
-	
-	var allChk = document.getElementById("allChk");
-	for(let i=0; i<chks.length;i++){
-		chks[i].onclick = function(){
-			if(chkCount(chks)==chks.length){
-				allChk.checked = true;
-			}else{
-				allChk.checked = false;
-			}
-		}
-	}	
-	
-	
-	
-});
+	});	
+}); //$(document).ready(function() 끝
 
 
 function cgoryBoard(val){
@@ -177,6 +166,36 @@ function allSelect(bool){
 }
 
 
+function ChangDel(){
+	//선택한 체크박스의 갯수 가져오기
+	var chks = $("input:checkbox[name='chk']:checked");
+	console.log(chks.length);
+	
+	//선택한 체크박스의 값 가져오기
+	var chksVal = '';
+    $('input[type="checkbox"]:checked').each(function (index) {
+        if (index != 0) {
+        	chksVal += ', ';
+        }
+        chksVal += $(this).val();
+    });
+    
+    
+	
+	if(chks.length > 0){
+		document.getElementById("delFrm").action = "./changeDel.do";
+		var con = confirm("선택한 글의 숨김여부를 변경하시겠습니까? 선택한 글 번호: " +chksVal);
+		if(con){
+			alert("선택한 글의 숨김여부가 변경되었습니다.");
+			return true;
+		}
+		return false;
+	}else{
+		alert("하나이상의 글을 선택해주세요");
+		return false;
+	}
+
+}
 
 </script>
 </body>

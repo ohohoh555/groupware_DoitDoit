@@ -24,7 +24,7 @@
                 <div id="rContent">
 					<div class="rContent-full">
 					<h3>글쓰기</h3>
- 			           <form id="insertFrm" >
+ 			           <form id="insertFrm" onsubmit="return insertAction()" method="post">
  			           <sec:authorize access="isAuthenticated()">
 					        <sec:authentication property="principal" var="principal"/>
 					        <input type="text" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
@@ -59,7 +59,7 @@
 								<tr>
 									<td colspan="3">
 										<input type="reset" class="btn btn-default" value="초기화" onclick="resetContent()">
-										<input type="button" class="btn btn-default" value="등록" onclick="insertAction()" >
+										<input type="submit" class="btn btn-default" value="등록" onclick="insertAction()" >
 										<input type="button" class="btn btn-default" value="돌아가기" onclick="javascript:history.back(-1)">
 									</td>
 								</tr>
@@ -116,7 +116,7 @@ function resetContent(){
 
 function insertAction(){
 	var insertFrm = document.getElementById("insertFrm");
-	insertFrm.acton ="./insertFrm.do";
+	insertFrm.action ="./insertFrm.do";
 	
 	
 	var title = document.getElementById("title").value;
@@ -124,16 +124,17 @@ function insertAction(){
 	console.log(title, content, title.length);
 	
 	if(title==""){
-		alert("제목을 입력해주세요");
+		alert("제목은 필수로 입력해주세요");
+		title.focus();
 		return false;
 	}else if(title.length < 2){
 		alert("제목은 2글자 이상 입력해주세요");
 		return false;
 	}else if(content ==""){
-		alert("내용을 입력해주세요");
+		alert("내용을 필수로 입력해주세요");
 		return false;
 	}else{
-		alert("성공");
+		insertFrm.submit();
 	}
 }
 
@@ -143,7 +144,7 @@ function selectCgory(val){
 	
 	var html = "";
 	html +="<tr id='trDate'><td>날짜</td>";
-	html +="<td style='float: left;'>시작:<input type='date' class='form-control' style='width: 150px;'>";
+	html +="<td>시작:<input type='date' class='form-control' style='width: 150px;'>";
 	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";
 	html +="종료:<input type='date' class='form-control' style='width: 150px;'>";
 	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";

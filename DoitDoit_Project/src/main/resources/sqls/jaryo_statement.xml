@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doit.gw.mapper.entr.JaryoMapperImpl">
+
+	<!-- 사용자 자료게시판 전체조회 -->
+	<select id="selJaryoAllUser" resultType="FileListVo">
+		SELECT e.EBOARD_NO, e.GUBUN_NO , e.CGORY_NO, e.EMP_ID, e.EMP_NAME,
+			e.EBOARD_REGDATE, e.EBOARD_DELFLAG, f.FLIST_SEQ, f.FLIST_ORIGINNAME, f.FLIST_SIZE, f.FLIST_UPLOADPATH 
+		FROM ENTRBOARD e LEFT JOIN FILELIST f 
+		ON e.EBOARD_NO = f.EBOARD_NO 
+		WHERE e.CGORY_NO = '201' AND e.EBOARD_DELFLAG = 'N'
+	</select>
+	
+	<!-- 사용자 자료글 입력  -->
+	<insert id="insJaryoRoot" parameterType="FileListVo">
+		INSERT INTO ENTRBOARD
+				(EBOARD_NO, GUBUN_NO , CGORY_NO, 
+				EMP_ID, EMP_NAME, EBOARD_TITLE, 
+				EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, 
+				EBOARD_DELFLAG)
+		VALUES(SEQ_ENTRBOARD.NEXTVAL, '200', '201', 
+					#{emp_id}, #{emp_name}, '', 
+					'', 0, SYSDATE, 
+					'N')
+	</insert>
+	
+	<!-- 사용자 자료글 입력시 파일 등록 -->
+	<insert id="insJaryoAttach" parameterType="FileListVo">
+		INSERT INTO FILELIST
+			(FLIST_SEQ, GUBUN_NO, EBOARD_NO , 
+			FLIST_UUID, FLIST_ORIGINNAME, FLIST_SIZE, 
+			FLIST_UPLOADPATH)
+		VALUES(SEQ_FILELIST.NEXTVAL, '200',(SELECT MAX(EBOARD_NO) FROM ENTRBOARD e2 WHERE CGORY_NO = '201') , 
+			#{flist_uuid}, #{flist_originname}, #{flist_size}, 
+			#{flist_uploadpath})
+	</insert>
+
+</mapper>
