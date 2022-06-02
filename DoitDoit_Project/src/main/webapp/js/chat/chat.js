@@ -29,22 +29,48 @@ $(document).ready(function() {
 	
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
-		console.log("STOMP Connection")
-	
+		console.log("STOMP Connection");
+		
+		//들어 갔을 때 스크롤 밑으로 내리기
+		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
-		// 채팅방
+		// 메세지 받기
 		stomp.subscribe("/sub/chat/room/" + room_id, function(chat) {
 			console.log(chat);
 			var content = JSON.parse(chat.body);
+			var clas;
 			
-			var message = content.chat_con;
+			//누구 메세지 인지 판단
+			if(content.emp_id == 0){
+				clas = "msg";
+			}else if(content.emp_id == emp_id){
+				clas = "myMsg";
+				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+			}else{
+				clas = "anotherMsg";
+			}
 			
+			console.log(content.chat_con);
 			
-			$("table>tbody").append(html);
+			//append 새로운 메시지
+			var html = '';
+			html += "<div class=\""+clas+"\">";
+			html += 	content.chat_con;
+			html += "</div>"; 
+			console.log(html);
+			console.log($("#chatLog:last-child"));
+			$("#chatLog:last-child").append(html);
+			
+			//scrollbar가 내려 갔을시 추가 되는 스크롤 자동으로 내려줌
+			if($('#chatLog').scrollTop()){
+				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+			}
 		});
 		
 		roomEnter(room_id,emp_id);
 		
+		//들어 왔을떄
 		stomp.subscribe("/sub/chatMem/room/" + room_id, function(member){
 			var mems = member.body;
 			mems = mems.replaceAll('"', '');
@@ -62,15 +88,13 @@ $(document).ready(function() {
 				html += "</div>";
 			}
 			
-			$("#chat_memList").html(html);
+			aboutChatRoom(mems);
 		});
 		
 	});
 	// 채팅입력
 	$("#btnSend").on("click",function(){
 		chatCon = $("#chatCon");
-		console.log("chatCon", chatCon);
-		console.log("send",chatCon.val());
 		
 		chatSend(room_id,chatCon,emp_id,user_name);
 	});
@@ -135,10 +159,10 @@ function enterkey(){
 	}
 }
 
-function chatSend(room_id,chatCon,empId){
+function chatSend(room_id,chatCon){
 	if(chatCon.val != ""){
 		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: chatCon.val(), emp_id: emp_id, user_name: user_name}));
-		chatCon.value = '';
+		chatCon.val('');
 	}else{
 		alert('채팅을 입력해 주세요');
 	}
@@ -152,6 +176,14 @@ function roomEnter(room_id,username){
 //채팅방 닫기 실행 시
 function roomOut(room_id, username){
 	stomp.send('/pub/chat/out', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
+}
+
+//채팅방에 있는지 없는지 판단
+function aboutChatRoom(mems){
+	console.log($(".members").children().attr("id"));
+	for(var i = 0; i < mems.length;){
+		
+	}
 }
 
 function sendFileToServer(fd) {

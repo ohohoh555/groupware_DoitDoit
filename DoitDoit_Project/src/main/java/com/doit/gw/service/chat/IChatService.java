@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.doit.gw.vo.chat.ChatJoinVo;
 import com.doit.gw.vo.chat.ChatVo;
+import com.doit.gw.vo.emp.EmpVo;
 
 
 public interface IChatService {
@@ -14,7 +15,7 @@ public interface IChatService {
 	//채팅 조회
 	public List<ChatVo> selChat(Map<String, String> map);
 	//채팅멤버 조회
-	public List<String> selRoomMem(String room_id);
+	public List<Map<String, String>> selRoomMem(String room_id);
 	//채팅 입력
 	public int insChat(Map<String, String> map);
 	//파일 입력

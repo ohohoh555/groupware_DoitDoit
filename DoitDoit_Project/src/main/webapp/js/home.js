@@ -31,7 +31,7 @@ function chatOn(){
 				$("#chatRoom").html("");
 				for(var i = 0; i < rooms.length; i++){
 					var html; 
-					html = "<div onclick=\"toChatRoom("+rooms[i].room_id+")\">";
+					html = "<div onclick=\"toChatRoom('"+rooms[i].room_id+"')\">";
 					html += 	"<a href=\"#\">";
 //					html += 	"<a href=./chatRoom.do?room_Id="+rooms[i].room_id+">";
 					html += 		"<div class=\"roomName\">";

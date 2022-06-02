@@ -34,7 +34,7 @@ public class ChatDaoImpl implements IChatDao{
 	}
 
 	@Override
-	public List<String> selRoomMem(String room_id) {
+	public List<Map<String, String>> selRoomMem(String room_id) {
 		return sqlSession.selectList(NS+"selRoomMem",room_id);
 	}
 
