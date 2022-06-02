@@ -10,6 +10,7 @@
 		<typeAlias type="com.doit.gw.vo.chat.ChatRoomVo" alias="ChatRoomVo"/>
 		<typeAlias type="com.doit.gw.vo.chat.ChatVo" alias="ChatVo"/>
 		<typeAlias type="com.doit.gw.vo.entr.EntrBoardVo" alias="EntrBoardVo"/>
+		<typeAlias type="com.doit.gw.vo.entr.FileListVo" alias="FileListVo"/>
 		<typeAlias type="com.doit.gw.vo.ann.AnnualVo" alias="AnnualVo"/>
 		<typeAlias type="com.doit.gw.vo.ann.AnnAddVo" alias="AnnAddVo"/>
 		<typeAlias type="com.doit.gw.vo.ann.AnnUseVo" alias="AnnUseVo"/>
@@ -18,6 +19,7 @@
 		<typeAlias type="com.doit.gw.vo.appro.ApproVo" alias="ApproVo"/>
 		<typeAlias type="com.doit.gw.vo.appro.ApproEmpVo" alias="ApproEmpVo"/>
 		<typeAlias type="com.doit.gw.vo.appro.ApproDeptVo" alias="ApproDeptVo"/>
+		
 	</typeAliases>
 	
 	
@@ -33,6 +35,7 @@
 		<mapper resource="sqls/member_statement.xml"/>
 		<mapper resource="sqls/resv_statement.xml"/>
 		<mapper resource="sqls/sign_statement.xml"/>
+		<mapper resource="sqls/jaryo_statement.xml"/>
 	</mappers>
 
 

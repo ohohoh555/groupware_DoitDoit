@@ -21,8 +21,6 @@
         <main>
             <%@include file="../comm/header.jsp" %>
             <div id="content">
-<%--             <sec:authorize access="hasRole('ROLE_USER')"> --%>
-		 
                 <div id="rContent">
 					<div class="rContent-full">
 					
@@ -52,18 +50,18 @@
 							</tr>
 						</tbody>
 					</table>
-<%-- 					  </sec:authorize> --%>
-					<c:choose>
-						<c:when test="${entrOne.eboard_delflag eq 'N'}">
-							<button>숨김처리</button>
-						</c:when>
-						<c:when test="${entrOne.eboard_delflag eq 'Y'}">
-							<button>보임처리</button>
-						</c:when>
-					</c:choose>
-						<button>완전삭제</button>
-						<button onclick="javascript:history.back(-1)">확인</button>
-
+						<div style="text-align: center;">
+							<c:choose>
+								<c:when test="${entrOne.eboard_delflag eq 'N'}">
+									<button onclick="changeDelOne(${entrOne.eboard_no})" class="btn btn-default">숨김처리</button>
+								</c:when>
+								<c:when test="${entrOne.eboard_delflag eq 'Y'}">
+									<button onclick="changeDelOne(${entrOne.eboard_no})" class="btn btn-default">보임처리</button>
+								</c:when>
+							</c:choose>
+								<button class="btn btn-default">완전삭제</button>
+								<button onclick="javascript:location.href='./entrBoardAdmin.do'" class="btn btn-default">목록</button>
+						</div>
 					</div> <!-- rContent-full 끝 -->
                 </div>
             <%@include file="../comm/aside.jsp" %>   
@@ -71,5 +69,16 @@
             </div><!-- content 끝 -->
         </main>
     </div><!-- container 끝 -->
+    
+    
+    
+<script type="text/javascript">
+function changeDelOne(eboard_no){
+	alert("해당 글의 숨김여부를 변경하였습니다.");
+	location.href="./changeDelOne.do?eboard_no="+eboard_no;
+}
+
+
+</script>    
 </body>
 </html>

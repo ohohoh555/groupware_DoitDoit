@@ -1,5 +1,6 @@
 package com.doit.gw.mapper.entr;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,16 @@ public class EntrMapperImpl implements IEntrMapper {
 	@Override
 	public int updEboardDelflagUser(String eboard_no) {
 		return sqlSession.update(NS+"updEboardDelflagUser", eboard_no);
+	}
+
+	@Override
+	public int insEboardRoot(EntrBoardVo eVo) {
+		return sqlSession.insert(NS+"insEboardRoot", eVo);
+	}
+
+	@Override
+	public int updEboardDelfAdmin(List<String> eboard_nos) {
+		return sqlSession.update(NS+"updEboardDelfAdmin", eboard_nos);
 	}
 
 }

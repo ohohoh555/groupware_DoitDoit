@@ -2,6 +2,7 @@ package com.doti.gw.test.ojh;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,6 @@ public class EntrBoardTest {
 	@Autowired
 	private IEntrService service;
 
-	
-	/*
-	 * 사원 게시글 전체조회 테스트
-	 */
 //	@Test
 	public void selEboardAllUserTest() {
 		List<EntrBoardVo> lists = service.selEboardAllUser();
@@ -33,9 +30,7 @@ public class EntrBoardTest {
 		assertNotNull(lists);
 	}
 	
-	/*
-	 * 사원 게시글 카테고리별 조회
-	 */
+
 //	@Test
 	public void selEboardCgoryUserTest() {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -46,9 +41,7 @@ public class EntrBoardTest {
 		assertNotNull(lists);
 	}
 	
-	/*
-	 * 필독 게시글 3개 조회
-	 */
+
 //	@Test
 	public void selEboardFildocThreeTest() {
 		List<EntrBoardVo> lists = service.selEboardFildocThree();
@@ -56,9 +49,7 @@ public class EntrBoardTest {
 		assertNotNull(lists);
 	}
 	
-	/*
-	 * 필독 게시글 전체조회
-	 */
+
 //	@Test
 	public void selEboardFildocAllTest() {
 		List<EntrBoardVo> lists = service.selEboardFildocAll();
@@ -66,9 +57,7 @@ public class EntrBoardTest {
 		assertNotNull(lists);
 	}
 	
-	/*
-	 * 공지게시글 상세조회
-	 */
+
 //	@Test
 	public void selEboardDetailTest() {
 		String eboard_no = "1";
@@ -77,9 +66,7 @@ public class EntrBoardTest {
 		assertNotNull(entrOne );
 	}
 	
-	/*
-	 * 관리자 공지게시판 전체조회
-	 */
+
 //	@Test
 	public void selEboardAllAdminTest() {
 		List<EntrBoardVo> lists = service.selEboardAllAdmin();
@@ -87,9 +74,7 @@ public class EntrBoardTest {
 		assertNotNull(lists);
 	}
 	
-	/*
-	 * 관리자 공지게시판 카테고리별 조회
-	 */
+
 //	@Test
 	public void selEboardCgoryAdminTest() {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -99,13 +84,35 @@ public class EntrBoardTest {
 		assertNotNull(lists);
 	}
 	
-	/*
-	 * 사용자 게시글 삭제처리
-	 */
-	@Test
+
+//	@Test
 	public void updEboardDelflagUserTest() {
 		String seq = "66";
 		int cnt = service.updEboardDelflagUser(seq);
 		System.out.println(cnt>0?"삭제성공":"삭제실패");
+	}
+	
+//	@Test
+	public void insEboardRootTest() {
+		EntrBoardVo eVo = new EntrBoardVo();
+		eVo.setCgory_no("101");
+		eVo.setEmp_id("2022053000");
+		eVo.setEmp_name("오지혜");
+		eVo.setEboard_title("입력테스트");
+		eVo.setEboard_content("<p>일반 게시글 입력 테스트 중</p>");
+		
+		int cnt = service.insEboardRoot(eVo);
+		System.out.println(cnt>0?"입력성공":"입력실패");
+	}
+	
+	@Test
+	public void updEboardDelfAdminTest() {
+		List<String> eboard_nos = new ArrayList<String>();
+		eboard_nos.add("61");
+		eboard_nos.add("18");
+		eboard_nos.add("3");
+		
+		int cnt = service.updEboardDelfAdmin(eboard_nos);
+		System.out.println(cnt>0?"성공":"실패");
 	}
 }
