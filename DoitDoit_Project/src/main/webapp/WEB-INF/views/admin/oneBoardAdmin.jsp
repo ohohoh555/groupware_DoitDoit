@@ -59,7 +59,7 @@
 									<button onclick="changeDelOne(${entrOne.eboard_no})" class="btn btn-default">보임처리</button>
 								</c:when>
 							</c:choose>
-								<button class="btn btn-default">완전삭제</button>
+								<button onclick="deletOne(${entrOne.eboard_no})"   class="btn btn-default">완전삭제</button>
 								<button onclick="javascript:location.href='./entrBoardAdmin.do'" class="btn btn-default">목록</button>
 						</div>
 					</div> <!-- rContent-full 끝 -->
@@ -78,6 +78,12 @@ function changeDelOne(eboard_no){
 	location.href="./changeDelOne.do?eboard_no="+eboard_no;
 }
 
+function deletOne(eboard_no){
+	var con = confirm("해당 글을 완전히 삭제하시겠습니까? (DB에서 삭제되어 복구가 불가능합니다.)");
+	if(con){
+		location.href = "./deletOne.do?eboard_no="+eboard_no;
+	}
+}
 
 </script>    
 </body>

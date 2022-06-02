@@ -1,6 +1,5 @@
 package com.doit.gw.mapper.entr;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,5 +22,6 @@ public interface IEntrMapper {
 	public List<EntrBoardVo> selEboardAllAdmin();
 	public List<EntrBoardVo> selEboardCgoryAdmin(Map<String, Object> map);
 	public int updEboardDelfAdmin(List<String> eboard_nos);
+	public int delEboardRoot(String eboard_no);
 
 }

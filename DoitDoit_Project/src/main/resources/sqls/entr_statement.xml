@@ -109,5 +109,11 @@
 			#{eboard_no}
 		</foreach>
 	</update>
+	
+	<!-- 관리자 게시글 DB삭제  -->
+	<delete id="delEboardRoot" parameterType="java.lang.String">
+		DELETE FROM ENTRBOARD e 
+ 		 WHERE e.EBOARD_NO = #{eboard_no}
+	</delete>
 
 </mapper>

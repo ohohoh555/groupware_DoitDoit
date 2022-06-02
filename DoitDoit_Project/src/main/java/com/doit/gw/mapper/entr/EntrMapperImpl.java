@@ -73,4 +73,9 @@ public class EntrMapperImpl implements IEntrMapper {
 		return sqlSession.update(NS+"updEboardDelfAdmin", eboard_nos);
 	}
 
+	@Override
+	public int delEboardRoot(String eboard_no) {
+		return sqlSession.delete(NS+"delEboardRoot", eboard_no);
+	}
+
 }
