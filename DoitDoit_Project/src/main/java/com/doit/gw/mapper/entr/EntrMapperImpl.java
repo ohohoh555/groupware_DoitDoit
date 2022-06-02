@@ -78,4 +78,9 @@ public class EntrMapperImpl implements IEntrMapper {
 		return sqlSession.delete(NS+"delEboardRoot", eboard_no);
 	}
 
+	@Override
+	public int insEboardAttach(Map<String, Object> map) {
+		return sqlSession.insert(NS+"insEboardAttach", map);
+	}
+
 }
