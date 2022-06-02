@@ -17,6 +17,7 @@ public class ReservationVo implements Serializable {
 	private String RESV_ROOM_TITLE;
 	private String RESV_ROOM_EVENTCOLOR;
 	
+	
 	public ReservationVo() {
 	}
 
