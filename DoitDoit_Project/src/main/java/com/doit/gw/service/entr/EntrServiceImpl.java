@@ -88,6 +88,12 @@ public class EntrServiceImpl implements IEntrService {
 		return mapper.delEboardRoot(eboard_no);
 	}
 
+	@Override
+	public int insEboardAttach(Map<String, Object> map) {
+		logger.info("@insEboardAttach 게시글 입력시 첨부파일 저장: {}",map);
+		return mapper.insEboardAttach(map);
+	}
+
 	
 
 }
