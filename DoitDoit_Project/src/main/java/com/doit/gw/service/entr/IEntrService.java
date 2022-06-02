@@ -15,6 +15,7 @@ public interface IEntrService {
 	public EntrBoardVo selEboardDetail(String eboard_no);
 	public int updEboardDelflagUser(String eboard_no);
 	public int insEboardRoot(EntrBoardVo eVo);
+	public int insEboardAttach(Map<String, Object>map);
 	
 	public List<EntrBoardVo> selEboardAllAdmin();
 	public List<EntrBoardVo> selEboardCgoryAdmin(Map<String, Object> map);
