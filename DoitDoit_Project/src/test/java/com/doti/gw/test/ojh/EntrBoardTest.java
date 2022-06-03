@@ -105,7 +105,7 @@ public class EntrBoardTest {
 		System.out.println(cnt>0?"입력성공":"입력실패");
 	}
 	
-	@Test
+//	@Test
 	public void updEboardDelfAdminTest() {
 		List<String> eboard_nos = new ArrayList<String>();
 		eboard_nos.add("61");
@@ -113,6 +113,19 @@ public class EntrBoardTest {
 		eboard_nos.add("3");
 		
 		int cnt = service.updEboardDelfAdmin(eboard_nos);
+		System.out.println(cnt>0?"성공":"실패");
+	}
+	
+	@Test
+	public void insEboardAttachTest() {
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("cgory_no", 101);
+		map.put("flist_uuid", "283cbf48-7ab0-4d71-8c8d-d66076bfb038");
+		map.put("originname", "image-20220602152921-1.jpeg");
+		map.put("flist_size", "102713");
+		map.put("flist_uploadpath", "C:\\Users\\user\\git\\groupware_doit\\DoitDoit_Project\\src\\main\\resources\\back\\2022\\06\\");
+		
+		int cnt = service.insEboardAttach(map);
 		System.out.println(cnt>0?"성공":"실패");
 	}
 }

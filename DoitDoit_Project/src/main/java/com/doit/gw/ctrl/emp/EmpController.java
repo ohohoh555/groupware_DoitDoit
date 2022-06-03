@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.service.ann.IAnnService;
 import com.doit.gw.service.emp.IEmpService;
@@ -66,5 +67,12 @@ public class EmpController {
 		List<EmpVo> lists = service.selEmpDetail(emp_id);
 		model.addAttribute("lists", lists);
 		return "emp/selEmpDetail";
+	}
+	
+	@RequestMapping(value = "/resetPassword.do", method = RequestMethod.GET)
+	@ResponseBody
+	public String resetPassword(String emp_id) {
+		logger.info("dfdfd : " + emp_id);
+		return emp_id;
 	}
 }

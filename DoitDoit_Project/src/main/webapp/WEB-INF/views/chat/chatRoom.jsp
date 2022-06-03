@@ -23,24 +23,24 @@
 	
 	/* 채팅, 파일 */
 	.chatGroup{
-		width:290px;
+		width:310px;
 		height:100%;
-		background-color: #6D6AB7;
+		background-color: #B5B2FF;
 		border: 1px solid black;
 	}
 	
 	/* 참가 리스트 layout */
 	.memberList{
-		width:220px;
+		width:180px;
 		height: 100%;
 	}
 	
 	/* memberList 안에 */
 	.members{
-		margin-top: 1px;
+		padding-top: 10px;
 		width: 100%;
 		height: 722px;
-		background-color: #B5B2FF;
+		background: #3d3e6d;
 	}
 	
 	/* 각 영역 상단 부분 */
@@ -93,9 +93,9 @@
 	}
 	
 	#chatLog {
-	    height: 585px;
+	    height: 565px;
 	    overflow-y: auto;
-	    padding: 10px;
+	    padding: 0px 10px;
 	}
 	
 	.myMsg {
@@ -110,11 +110,17 @@
 	}
 	
 	.msg {
+		height:100%;
 	    display: inline-block;
 	    border-radius: 15px;
 	    padding: 7px 15px;
 	    margin-bottom: 10px;
 	    margin-top: 5px;
+	}
+	
+	.issue{
+		text-align: center;
+		margin-bottom: 5px;
 	}
 	
 	.anotherMsg > .msg {
@@ -126,9 +132,18 @@
 	    color: #fff;
 	}
 	
+	.issue > .msg{
+		background-color: #8C8C8C;
+	    color: #fff;
+	}
+	
 	.msg{
 		max-width: 200px;
 		white-space: pre-wrap;
+	}
+	
+	.msg > img{
+		margin: 0px auto;
 	}
 	
 	.Name {
@@ -149,41 +164,33 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
 					<div class="rContent-full">
+						<sec:authorize access="isAuthenticated()">
+					        <sec:authentication property="principal" var="principal"/>
+					        <input type="hidden" value="${principal.emp_id}" id="pr_emp_id" name="pr_emp_id"> 
+					        <input type="hidden" value="${principal.emp_name}" id="pr_user_name" name="pr_emp_name">
+ 			           </sec:authorize> 
+ 			           <input type="hidden" value="${room_id}" id="room_id">
 						<div style="width: 800px; height: 796px;">
 							<div id="dragdrop" class="chatGroup">
 								<div class="roomInfo">
 									채팅방 정보
 								</div>
 								<div id="chatList"> <!-- chatWrap -->
+									<c:forEach items="${chatList }" var="i">
+										
+									</c:forEach>
 									<div id="chatLog">
-						                <div class="anotherMsg">
-						                    <span class="Name">Jo</span>
-						                    <span class="msg">Hello, Nice to meet you.</span>
-						                </div>
-						                <div class="myMsg">
-						                	<span class="Name">Kim</span>
-						                    <span class="msg">Nice to meet you, too.</span>
-						                </div>
-						                <div class="myMsg">
-						                	<span class="Name">Kim</span>
-						                    <span class="msg">ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</span>
-						                </div>
-						                <div class="myMsg">
-						                	<span class="Name">Kim</span>
-						               		<span class="msg">
-							                	<img alt="" src="./images/propile.png" width="200px">
-						               		</span>
-						                </div>
-						                <div class="anotherMsg">
-						                    <span class="Name">Jo</span>
-						                    <span class="msg">Okay, bye.</span>
-						                </div>
+										<c:forEach items="${chatList }" var="i">
+						                	<div class=${i.emp_id==0?"issue":(emp_id==i.emp_id?"myMsg":"anotherMsg")}>
+												${i.chat_con}
+						                	</div>						             	
+										</c:forEach>
 					            	</div>
 								</div>
 								<div class="insChat">
 									<div class="inputArea">
 										<div>
-											<textarea rows="5" cols="25"></textarea>					
+											<textarea rows="5" cols="25" id="chatCon"></textarea>					
 											<button id="btnSend">전송</button>									
 										</div>
 										<div>
@@ -201,7 +208,16 @@
 									채팅방 참가 멤버
 								</div>
 								<div id="members" class="members">
-								
+									<c:forEach items="${room_mem_list }" var="i">
+										<div id="${i.EMP_ID }" style="width: 20px; height: 20px">
+										
+										</div>
+										<div>
+											<span style="font-size: 20px; color: white; padding-left: 5px">${i.EMP_NAME }</span>
+											<span style="font-size: 15px; color: white; padding-left: 5px">${i.RANK_NAME }</span>
+										</div>
+										<hr style="color:white;">
+									</c:forEach>
 								</div>
 							</div>
 							<!-- 사진, 파일 -->
