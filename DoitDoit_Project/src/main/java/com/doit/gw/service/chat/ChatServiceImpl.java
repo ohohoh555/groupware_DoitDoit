@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.doit.gw.mapper.chat.IChatDao;
 import com.doit.gw.vo.chat.ChatJoinVo;
 import com.doit.gw.vo.chat.ChatVo;
+import com.doit.gw.vo.emp.EmpVo;
 
 @Service
 public class ChatServiceImpl implements IChatService{
@@ -33,7 +34,7 @@ public class ChatServiceImpl implements IChatService{
 	}
 
 	@Override
-	public List<String> selRoomMem(String room_id) {
+	public List<Map<String, String>> selRoomMem(String room_id) {
 		logger.info("$$$$$ selRoomMem {} $$$$$", room_id);
 		return dao.selRoomMem(room_id);
 	}

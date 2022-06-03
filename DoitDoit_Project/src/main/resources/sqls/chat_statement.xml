@@ -23,35 +23,44 @@
 	
 	<!-- 채팅 조회 -->
 	<select id="selChat" parameterType="java.util.Map" resultType="ChatVo">
-		SELECT CHAT_ID,EMP_ID, CHAT_CON,CHAT_TIME,CHAT_TYPE
+		SELECT CHAT_ID, EMP_ID, CHAT_CON,CHAT_TIME,CHAT_TYPE
     		FROM CHAT 
         	WHERE ROOM_ID = #{room_id}  
         	AND CHAT_TIME >= (
                 SELECT TO_DATE(jt.JDATE,'YYYYMMDDHH24MISS')
                     FROM CHAT_ROOM,
-                    JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
-                        COLUMNS (
-                            IDS VARCHAR(20) PATH '$.id',
-                            JDATE VARCHAR(30) PATH '$.join'
-                        )
-                    ) AS jt
-                    WHERE IDS = #{emp_id} AND ROOM_ID = #{room_id}
+	                    JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
+	                        COLUMNS (
+	                            IDS VARCHAR(20) PATH '$.id',
+	                            JDATE VARCHAR(30) PATH '$.join'
+	                        )
+	                    ) AS jt
+                    WHERE IDS = #{emp_id} 
+                    AND ROOM_ID = #{room_id}
         		)
         	ORDER BY CHAT_TIME ASC
 	</select>
 	
 	<!-- 채팅방 멤버 조회 -->
-	<select id="selRoomMem" parameterType="java.lang.String" resultType="java.lang.String">
-		SELECT jt.IDS AS EMP_ID  
-    		FROM CHAT_ROOM,
-    			JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
-        		COLUMNS (
-            		IDS VARCHAR(20) PATH '$.id',
-            		JDATE VARCHAR(30) PATH '$.join'
-        		)
-    		) AS jt
-    		WHERE ROOM_ID = #{room_id}
-    		ORDER BY TO_DATE(jt.JDATE,'YYYYMMDDHH24MISS'), IDS DESC
+	<select id="selRoomMem" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT EMP_ID, EMP_NAME, e.RANK_NO, RANK_NAME
+			FROM CHAT_ROOM,
+				JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
+					COLUMNS (
+					 	IDS VARCHAR(20) PATH '$.id',
+					 	JDATE VARCHAR(30) PATH '$.join'
+					)
+				) AS jt,
+				(SELECT EMP_ID,EMP_NAME, RANK_NO 
+		          	FROM EMP
+		         ) e,
+		         (SELECT RANK_NAME,RANK_NO
+		         	FROM "RANK"
+		         ) r
+			WHERE ROOM_ID = #{room_id}
+			AND jt.IDS = e.EMP_ID
+			AND e.RANK_NO = r.RANK_NO
+			ORDER BY 3 DESC, TO_DATE(jt.JDATE,'YYYYMMDDHH24MISS') DESC
 	</select>
 	
 	<!-- 채팅 입력 -->
@@ -60,7 +69,7 @@
 			SELECT SEQ_CHAT.NEXTVAL FROM DUAL
 		</selectKey>
 		INSERT INTO CHAT (CHAT_ID,ROOM_ID,EMP_ID,CHAT_CON,CHAT_TIME,CHAT_TYPE) 
-    		VALUES (#{seq},#{room_id},#{emp_id},TO_CLOB(#{chat_con}),SYSDATE,#{chat_type})
+    		VALUES (#{seq},#{room_id},#{emp_id},TO_CLOB(#{chat_con}),TO_DATE(#{chat_time},'YYYYMMDDHH24MISS'),#{chat_type})
 	</insert>
 	
 	<!-- 파일 입력 -->
