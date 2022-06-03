@@ -180,10 +180,8 @@ function roomOut(room_id, username){
 
 //채팅방에 있는지 없는지 판단
 function aboutChatRoom(mems){
-	console.log($(".members").children().attr("id"));
-	for(var i = 0; i < mems.length;){
-		
-	}
+	console.log("aboutChatRoom");
+	console.log($("#members > div > div").eq(0).html());
 }
 
 function sendFileToServer(fd) {
