@@ -53,6 +53,15 @@ public class EmpServiceImpl implements IEmpService{
 	@Override
 	public int resetPassword(String emp_id) {
 		logger.info("MemberServiceImpl resetPassword 비밀번호 초기화");
-		return mapper.resetPassword(emp_id);
+		mapper.resetPassword(emp_id);
+		String pwd = mapper.resetPwdCheck(emp_id);
+		logger.info("초기화된 비밀번호 : " + pwd);
+		String rPwd = password.encode(pwd);
+		logger.info("초기화 후 암호화 된 비밀번호 : " + rPwd);
+		EmpVo eVo = new EmpVo();
+		eVo.setEmp_id(emp_id);
+		eVo.setEmp_password(rPwd);
+		
+		return mapper.pwdUpdate(eVo);
 	}
 }

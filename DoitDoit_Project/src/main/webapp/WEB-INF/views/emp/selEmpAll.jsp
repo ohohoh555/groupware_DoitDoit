@@ -23,7 +23,7 @@ href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
             <%@include file="../comm/header.jsp" %>
             <div id="content">
             	<div id="adminContent">
-            	<input id="insEmpBtn" type="button" value="회원등록" class="btn btn-info" onclick="location.href='./insEmpPage.do'">
+            	<input id="insEmpBtn" type="button" value="회원등록" class="btn btn-default" onclick="location.href='./insEmpPage.do'">
             	<table id="dataTable" class="stripe">
             		<thead>
             			<tr>
