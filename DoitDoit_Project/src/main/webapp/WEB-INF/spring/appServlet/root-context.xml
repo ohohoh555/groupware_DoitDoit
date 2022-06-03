@@ -17,10 +17,14 @@
 		<property name="url" value="${url}"/>
 		<property name="username" value="${user}"/>
 		<property name="password" value="${pw}"/>
-		<property name="maxActive" value="6"/>
-		<property name="minIdle" value="4"/>
-		<property name="maxIdle" value="10"/>
-		<property name="timeBetweenEvictionRunsMillis" value="25000"></property>
+		<property name="validationQuery" value="SELECT 1 FROM dual"/>
+		<property name="testOnBorrow" value="false"/>
+		<property name="testOnReturn" value="false"/>
+		<property name="testWhileIdle" value="true"/>		
+		<property name="timeBetweenEvictionRunsMillis" value="60000"/>
+		<property name="numTestsPerEvictionRun" value="3"/>
+		<property name="minEvictableIdleTimeMillis" value="1"/>
+		<property name="maxWait" value="3000"></property>
 	</bean>
 	
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
