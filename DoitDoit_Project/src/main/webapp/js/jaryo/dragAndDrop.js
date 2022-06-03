@@ -37,16 +37,20 @@
 	function submitFile(){
 		// 추가적으로 보낼 파라미터가 있으면 formData에 넣어준다.
 		// 예를들어 , 게시판의 경우 게시글 제목 , 게시글 내용 등등
-		fd.append('title',$('#title').val());
-		fd.append('content',$('#content').val());
+//		fd.append('title',$('#title').val());
+//		fd.append('content',$('#content').val());
+		fd.append('emp_id',$("#emp_id").val());
+		fd.append('emp_name',$("#emp_name").val());
+
+
 		// ajax로 이루어진 파일 전송 함수를 수행시킨다.
 		sendFileToServer(fd);
 	}
 	
 	// 파일 전송 함수이다.
 	function sendFileToServer(formData) {
-		var uploadURL = "./saveFile.do"; 
-		var extraData = {}; // Extra Data.
+		var uploadURL = "./saveJaryo.do"; 
+	//	var extraData = {}; // Extra Data.
 		jQuery.ajax({
 			type : "POST",
 			url : uploadURL,

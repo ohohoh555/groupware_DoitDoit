@@ -4,7 +4,25 @@
 	
 	<!-- 로그인 쿼리 -->
 	<select id="login" resultType="EmpVo" parameterType="java.lang.String">
-		SELECT * FROM EMP WHERE EMP_ID = #{emp_id}
+		SELECT EMP_ID, EMP_PASSWORD, EMP_NAME, 
+		CASE RANK_NO WHEN '01' THEN '사원'
+             WHEN '02' THEN '대리'
+             WHEN '03' THEN '과장'
+             WHEN '04' THEN '차장'
+             WHEN '05' THEN '부장'
+             WHEN '06' THEN '대표' END AS RANK_NO, 
+		CASE DEPT_NO WHEN '01' THEN '인사부'
+			 WHEN '02' THEN '관리부'
+			 WHEN '03' THEN '개발부'
+			 WHEN '04' THEN '영업부' END AS DEPT_NO, 
+		CASE STATE_NO WHEN '01' THEN '재직'
+			WHEN '02' THEN '휴직'
+			WHEN '03' THEN '퇴사' END AS STATE_NO, 
+		EMP_ADDRESS, EMP_PHONE, EMP_AUTH, 
+		EMP_EMAIL, EMP_NFC, EMP_REGDATE, 
+		SIGN_NAME
+		FROM EMP
+ 		WHERE EMP_ID = #{emp_id}
 	</select>
 		
 	<!-- 회원 전체조회 쿼리 -->
@@ -72,6 +90,11 @@
 	
 	<update id="resetPassword" parameterType="EmpVo">
 		UPDATE EMP SET EMP_PASSWORD = '@'||TO_CHAR(SYSDATE,'YYYYMMDD'), 
-		EMP_PHONE = NULL WHERE EMP_ID = #{emp_id};
+		EMP_PHONE = NULL WHERE EMP_ID = #{emp_id}
 	</update>
+	
+	<select id="resetPwdCheck" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT EMP_PASSWORD FROM EMP WHERE EMP_ID = #{emp_id}
+	</select>
+
 </mapper>

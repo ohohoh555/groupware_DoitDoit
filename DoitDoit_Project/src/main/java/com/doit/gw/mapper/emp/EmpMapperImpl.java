@@ -57,4 +57,9 @@ public class EmpMapperImpl implements IEmpMapper {
 	public int resetPassword(String emp_id) {
 		return sqlSession.update(NS+"resetPassword",emp_id);
 	}
+	
+	@Override
+	public String resetPwdCheck(String emp_id) {
+		return sqlSession.selectOne(NS+"resetPwdCheck", emp_id);
+	}
 }

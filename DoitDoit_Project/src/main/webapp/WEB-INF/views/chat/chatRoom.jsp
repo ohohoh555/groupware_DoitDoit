@@ -176,9 +176,6 @@
 									채팅방 정보
 								</div>
 								<div id="chatList"> <!-- chatWrap -->
-									<c:forEach items="${chatList }" var="i">
-										
-									</c:forEach>
 									<div id="chatLog">
 										<c:forEach items="${chatList }" var="i">
 						                	<div class=${i.emp_id==0?"issue":(emp_id==i.emp_id?"myMsg":"anotherMsg")}>
@@ -209,14 +206,16 @@
 								</div>
 								<div id="members" class="members">
 									<c:forEach items="${room_mem_list }" var="i">
-										<div id="${i.EMP_ID }" style="width: 20px; height: 20px">
-										
+										<div id="${i.EMP_ID }">
+											<div>
+											
+											</div>
+											<div>
+												<span style="font-size: 20px; color: white; padding-left: 5px">${i.EMP_NAME }</span>
+												<span style="font-size: 15px; color: white; padding-left: 5px">${i.RANK_NAME }</span>
+											</div>
+											<hr style="color:white;">
 										</div>
-										<div>
-											<span style="font-size: 20px; color: white; padding-left: 5px">${i.EMP_NAME }</span>
-											<span style="font-size: 15px; color: white; padding-left: 5px">${i.RANK_NAME }</span>
-										</div>
-										<hr style="color:white;">
 									</c:forEach>
 								</div>
 							</div>

@@ -127,6 +127,10 @@ header > a{
 	margin-right: 15px;
 }
 
+header > #headerLogo{
+	margin-right: 400px;
+}
+
 #content{
     width: 100%;
     height: 825px;
@@ -186,6 +190,42 @@ aside{
     left: 15px;
     z-index: 10;
     background: #6667AB;
+}
+
+#proHeader{
+	width: 100%;
+	height: 50px;
+}
+
+#proBody{
+	width: 100%;
+	height: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#profileCont{
+	width: 180px;
+	height: 180px;
+	border-radius: 50%;
+/* 	background: #fff; */
+	background-image: url("http://placeimg.com/180/180/woman");
+}
+#proFoot{
+	width: 100%;
+	height: 100px;
+	line-height: 30px;
+	text-align: center;
+	font-size: 15pt;
+}
+
+#proFoot > p{
+	color: pink;
+}
+
+#proFoot > p > b{
+	color: orange;
 }
 
 #chat{
@@ -256,5 +296,20 @@ aside{
 #frmBottom{
 	height: 10%;
 	text-align: right;
+}
+
+input[type=text] {
+  width: 700px;
+  height: 45px;
+  font-size: 20px;
+  border: 0;
+  outline: none;
+  padding-left: 10px;
+  background-color: #8e8fc1;
+}
+
+#selDetailFrm{
+	width: 700px;
+	margin: 20px auto;
 }
 

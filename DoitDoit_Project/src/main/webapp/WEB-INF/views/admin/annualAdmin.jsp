@@ -10,12 +10,12 @@
 <link rel="stylesheet" type="text/css" href="./css/home.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/i18n/defaults-ko_KR.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/i18n/defaults-ko_KR.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/home.js"></script>
+<script type="text/javascript" src="./js/ann/annual.js"></script>
 </head>
 <body>
 	<div id="container">
@@ -24,33 +24,34 @@
             <%@include file="../comm/header.jsp" %>
             <div id="content">
             	<div id="adminContent">
-            	<label class="form-label">부서</label>
-            	<form action="./annualAdmin.do" method="post">
-	            	<select name="dept_no" onchange="this.form.submit()">
-	            		<option disabled selected>==선택==</option>
-	            		<option value="01">인사부</option>
-	            		<option value="02">관리부</option>
-	            		<option value="03">개발부</option>
-	            		<option value="04">영업부</option>
-	            	</select>
-            	</form>
+            		<label class="form-label">부서</label>
+		            <select name="dept_no" onchange="javascript:location.href='./annualAdmin.do?dept_no='+$('select option:selected').val();">
+		            	<option ${dept_no == null?'disabled selected':'disabled'}>==선택==</option>
+		            	<option value="01" ${dept_no eq '01'?'selected="selected"':''}>인사부</option>
+		            	<option value="02" ${dept_no eq '02'?'selected':''}>관리부</option>
+		            	<option value="03" ${dept_no eq '03'?'selected':''}>개발부</option>
+		            	<option value="04" ${dept_no eq '04'?'selected':''}>영업부</option>
+		            </select>
+<!-- 		            </form> -->
             	<hr style="border: solid 1px #6667AB;">
-            	<table id="annualTable" class="stripe">
+            	<table id="annualTable" class="table table-bordered" style="text-align: center;">
             		<thead>
             			<tr>
-            				<th>NO</th>
-            				<th>부서</th>
-            				<th>사원번호</th>
-            				<th>이름</th>
-            				<th>직급</th>
-            				<th>발생연차</th>
-            				<th>사용연차</th>
-            				<th>잔여연차</th>
+            				<th  style="text-align: center;" data-orderable="false"><input type="checkbox" id="chkAll" onclick="checkAll(this.checked)"></th>
+            				<th  style="text-align: center;">NO</th>
+            				<th  style="text-align: center;" data-orderable="false">부서</th>
+            				<th  style="text-align: center;">사원번호</th>
+            				<th  style="text-align: center;">이름</th>
+            				<th  style="text-align: center;" data-orderable="false">직급</th>
+            				<th  style="text-align: center;" data-orderable="false">발생연차</th>
+            				<th  style="text-align: center;" data-orderable="false">사용연차</th>
+            				<th  style="text-align: center;" data-orderable="false">잔여연차</th>
             			</tr>
             		</thead>
-            		<tbody>
+            		<tbody >
             			<c:forEach var="annualVo" items="${lists}" varStatus="vs">
             				<tr>
+            					<td><input type="checkbox" name="chk" value="${annualVo.emp_id}" onclick="checkEmp()"></td>
             					<td>${vs.count}</td>
             					<td>${annualVo.dept_name}</td>
             					<td>${annualVo.emp_id}</td>
@@ -63,48 +64,45 @@
             			</c:forEach>
             		</tbody>
             	</table>
+            	<hr style="border: solid 1px #6667AB;">
+	            <button class="btn btn-default" style="float: right;" onclick="annAdd()">연차 부여</button>
             	</div>  
             </div>
         </main>
     </div>
-<script type="text/javascript">
-$(document).ready( function () {
-    $('#annualTable').DataTable({
-		//https://datatables.net/reference/option/language
-		// DataTable은 기본적으로 영어로 표시되기 때문에 별도로 language를 통해서 변경해줘야 함
-    	"language": { 
-            "emptyTable": "선택된 부서가 없습니다.",
-            "info": "현재 _START_ - _END_ / _TOTAL_건",
-            "infoEmpty": "데이터 없음",
-            "infoFiltered": "( _MAX_건의 데이터에서 필터링됨 )",
-            "search": "검색: ",
-            "zeroRecords": "일치하는 데이터가 없어요.",
-            "loadingRecords": "로딩중...",
-            "processing":     "잠시만 기다려 주세요...",
-            "paginate": {
-                "next": "다음",
-                "previous": "이전"
-            }
-        },
-        lengthChange: true, // 표시 건수기능 숨기기
-//         lengthMenu: true,
-        searching: true, // 검색 기능 숨기기
-        ordering: true, // 정렬 기능 숨기기
-        info: true, // 정보 표시 숨기기
-        paging:true, // 페이징 기능 숨기기
-        order: [ [ 3, "asc" ], [ 1, "desc"] ], //초기표기시 정렬, 만약 정렬을 안하겠다 => order: []
-   		columnDefs: [{ "targets": "1", "width": "50px" }], //열의 넓이 조절 
-		lengthMenu: false, //표시건수 
-//      displayLength: 50, //기본표시건수 설정
-        pagingType: "simple_numbers" // 페이징 타입 설정 : simple, simple_numbers, full_numbers 등
     
-    });
-} );
-function selDept() {
-	var selDept = $("select option:selected").val();
-	console.log(selDept);
-}
-</script>
     
+	<!-- 연차 모달 -->
+	<div class="modal fade" id="annual" role="dialog">
+	  <div class="modal-dialog modal-md">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title" style="text-align: center;">연차 부여</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form method="post" id="frmWriter">
+	        	<table class="table table-bordered" style="height: 300px;">
+	        		<tr>
+		       			<th style="text-align: center; color: white; background-color: #6667AB">사원</th>
+		       			<td>
+			      			<input type="text" id="emp_id" name="emp_id" readonly>
+		       			</td>
+	        		</tr>
+	        		<tr>
+	        			<th style="text-align: center; color: white; background-color: #6667AB">연차 내용</th>
+	        			<td>
+			      			<textarea rows="" cols="40"></textarea>
+	        			</td>
+	        		</tr>
+	        	</table>
+	       	</form>
+	      </div>
+		  <div class="modal-footer">
+		    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div><!-- 모달 영역 끝 -->
 </body>
 </html>
