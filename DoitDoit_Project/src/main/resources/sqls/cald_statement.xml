@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.">
+<mapper namespace="com.doit.gw.mapper.cald.CalendarMapperImpl">
 
 <insert id="insGongji_Entr" parameterType="java.util.Map">
-	INSERT INTO GD.ENTRBOARD
+	INSERT INTO ADMIN.ENTRBOARD
 	(
 		EBOARD_NO, CGORY_NO, GUBUN_NO,
 		EMP_ID, CALD_ID, EMP_NAME,
@@ -15,25 +15,25 @@
 		ENTRYBOARD_SEQ.NEXTVAL, '302', '300',
 		#{emp_id}, (SELECT MAX(CALD_ID) FROM CALENDAR), #{emp_name},
 		#{eboard_title}, #{eboard_content}, 0,
-		SYSDATE	, 'N'
+		CURRENT_DATE, 'N'
 	)
 </insert>
 
 <insert id="insGongji_Cald" parameterType="java.util.Map">
-	INSERT INTO GD.CALENDAR
+	INSERT INTO ADMIN.CALENDAR
 	(
 		CALD_ID, CALD_START,
 		CALD_END, CALD_COLOR
 	)
 	VALUES
 	(
-		CALENDAR_SEQ.NEXTVAL, TO_DATE(#{cald_start}, 'YYYY/MM/DD HH24:MI'),
+		SEQ_CALENDAR.NEXTVAL, TO_DATE(#{cald_start}, 'YYYY/MM/DD HH24:MI'),
 		TO_DATE(#{cald_end}, 'YYYY/MM/DD HH24:MI'),#{cald_color}
 	)
 </insert>
 
 <insert id="insCald" parameterType="java.util.Map">
-	INSERT INTO GD.ENTRBOARD
+	INSERT INTO ADMIN.ENTRBOARD
 	(
 		EBOARD_NO, CGORY_NO, GUBUN_NO,
 		EMP_ID, CALD_ID, EMP_NAME,
@@ -43,42 +43,42 @@
 	VALUES
 	(
 		ENTRYBOARD_SEQ.NEXTVAL, '301', '300',
-		#{emp_id}, (SELECT MAX(CALD_ID) FROM CALENDAR), #{emp_name},
+		#{emp_id}, (SELECT MAX(CALD_ID) FROM CALENDAR), (SELECT EMP_ID FROM ADMIN.EMP WHERE EMP_ID=#{emp_id}),
 		#{eboard_title}, #{eboard_content}, 0,
-		SYSDATE	, 'N'
+		CURRENT_DATE	, 'N'
 	)
 </insert>
 
 <select id="selCaldAll" parameterType="java.lang.String" resultType="EntrBoardVo">
 	SELECT CALD_ID , EMP_ID , EMP_NAME , EBOARD_TITLE , EBOARD_CONTENT, CALD_START, CALD_END, EBOARD_DELFLAG, NVL(CALD_COLOR,'#f36B6B') AS CALD_COLOR
-		FROM ENTRBOARD e LEFT JOIN CALENDAR c 
+		FROM ADMIN.ENTRBOARD e LEFT JOIN ADMIN.CALENDAR c 
 			USING(CALD_ID)
-			WHERE GUBUN_NO = 300 AND EMP_ID = #{emp_id} AND EBOARD_DELFLAG = 'N';
+			WHERE GUBUN_NO = 300 AND EMP_ID = #{emp_id} AND EBOARD_DELFLAG = 'N'
 </select>
 
 <update id="updCaldDate" parameterType="java.util.Map">
-	<![CDATA[UPDATE CALENDAR 
+	<![CDATA[UPDATE ADMIN.CALENDAR 
 				SET CALD_START  = TO_DATE(#{cald_start},'YYYY/MM/DD HH24:MI'), 
 					CALD_END  = TO_DATE(#{cald_end},'YYYY/MM/DD HH24:MI')
 					WHERE CALD_ID=#{cald_id}
-					AND TO_CHAR(SYSDATE, 'YYYYMMDDHH24MI')<=TO_CHAR(CALD_END,'YYYYMMDDHH24MI')]]>
+					AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=TO_CHAR(CALD_END,'YYYYMMDDHH24MI')]]>
 </update>
 
 <update id="updCaldContent" parameterType="java.util.Map">
-	UPDATE ENTRBOARD
+	UPDATE ADMIN.ENTRBOARD
 		SET EBOARD_CONTENT = #{eboard_content}
 		WHERE CALD_ID=#{cald_id}
 		AND CGORY_NO=302
 </update>	
 
 <delete id="delCaldDate" parameterType="java.lang.String">
-	<![CDATA[DELETE FROM CALENDAR c 
+	<![CDATA[DELETE FROM ADMIN.CALENDAR c 
 				WHERE CALD_ID = #{cald_id}
-				AND TO_CHAR(SYSDATE, 'YYYYMMDDHH24MI')<=TO_CHAR(CALD_END,'YYYYMMDDHH24MI')]]>
+				AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=TO_CHAR(CALD_END,'YYYYMMDDHH24MI')]]>
 </delete>
 
 <delete id="delCaldContent" parameterType="java.lang.String">
-	DELETE FROM ENTRBOARD e 
+	DELETE FROM ADMIN.ENTRBOARD e 
 		WHERE CALD_ID = #{cald_id}
 </delete>
 

@@ -6,109 +6,101 @@ public class ReservationVo implements Serializable {
 
 	private static final long serialVersionUID = 7221595323689017924L;
 	
-	private String RESV_ID;
-	private String EMP_ID;
-	private String RESV_TITLE;
-	private String RESV_WRITER;
-	private String RESV_DESCRIPTION;
-	private String RESV_START;
-	private String RESV_END;
-	private String RESV_ROOM_ID;
-	private String RESV_ROOM_TITLE;
-	private String RESV_ROOM_EVENTCOLOR;
-	
-	
-	public ReservationVo() {
+	private String resv_id;
+	private String emp_id;
+	private String resv_title;
+	private String resv_writer;
+	private String resv_description;
+	private String resv_start;
+	private String resv_end;
+	private String resv_room_id;
+	private String resv_room_title;
+	private String resv_room_eventcolor;
+	public String getResv_id() {
+		return resv_id;
 	}
-
-	public String getRESV_ID() {
-		return RESV_ID;
+	public void setResv_id(String resv_id) {
+		this.resv_id = resv_id;
 	}
-
-	public void setRESV_ID(String rESV_ID) {
-		RESV_ID = rESV_ID;
+	public String getEmp_id() {
+		return emp_id;
 	}
-
-	public String getEMP_ID() {
-		return EMP_ID;
+	public void setEmp_id(String emp_id) {
+		this.emp_id = emp_id;
 	}
-
-	public void setEMP_ID(String eMP_ID) {
-		EMP_ID = eMP_ID;
+	public String getResv_title() {
+		return resv_title;
 	}
-
-	public String getRESV_TITLE() {
-		return RESV_TITLE;
+	public void setResv_title(String resv_title) {
+		this.resv_title = resv_title;
 	}
-
-	public void setRESV_TITLE(String rESV_TITLE) {
-		RESV_TITLE = rESV_TITLE;
+	public String getResv_writer() {
+		return resv_writer;
 	}
-
-	public String getRESV_WRITER() {
-		return RESV_WRITER;
+	public void setResv_writer(String resv_writer) {
+		this.resv_writer = resv_writer;
 	}
-
-	public void setRESV_WRITER(String rESV_WRITER) {
-		RESV_WRITER = rESV_WRITER;
+	public String getResv_description() {
+		return resv_description;
 	}
-
-	public String getRESV_DESCRIPTION() {
-		return RESV_DESCRIPTION;
+	public void setResv_description(String resv_description) {
+		this.resv_description = resv_description;
 	}
-
-	public void setRESV_DESCRIPTION(String rESV_DESCRIPTION) {
-		RESV_DESCRIPTION = rESV_DESCRIPTION;
+	public String getResv_start() {
+		return resv_start;
 	}
-
-	public String getRESV_START() {
-		return RESV_START;
+	public void setResv_start(String resv_start) {
+		this.resv_start = resv_start;
 	}
-
-	public void setRESV_START(String rESV_START) {
-		RESV_START = rESV_START;
+	public String getResv_end() {
+		return resv_end;
 	}
-
-	public String getRESV_END() {
-		return RESV_END;
+	public void setResv_end(String resv_end) {
+		this.resv_end = resv_end;
 	}
-
-	public void setRESV_END(String rESV_END) {
-		RESV_END = rESV_END;
+	public String getResv_room_id() {
+		return resv_room_id;
 	}
-
-	public String getRESV_ROOM_ID() {
-		return RESV_ROOM_ID;
+	public void setResv_room_id(String resv_room_id) {
+		this.resv_room_id = resv_room_id;
 	}
-
-	public void setRESV_ROOM_ID(String rESV_ROOM_ID) {
-		RESV_ROOM_ID = rESV_ROOM_ID;
+	public String getResv_room_title() {
+		return resv_room_title;
 	}
-
-	public String getRESV_ROOM_TITLE() {
-		return RESV_ROOM_TITLE;
+	public void setResv_room_title(String resv_room_title) {
+		this.resv_room_title = resv_room_title;
 	}
-
-	public void setRESV_ROOM_TITLE(String rESV_ROOM_TITLE) {
-		RESV_ROOM_TITLE = rESV_ROOM_TITLE;
+	public String getResv_room_eventcolor() {
+		return resv_room_eventcolor;
 	}
-
-	public String getRESV_ROOM_EVENTCOLOR() {
-		return RESV_ROOM_EVENTCOLOR;
+	public void setResv_room_eventcolor(String resv_room_eventcolor) {
+		this.resv_room_eventcolor = resv_room_eventcolor;
 	}
-
-	public void setRESV_ROOM_EVENTCOLOR(String rESV_ROOM_EVENTCOLOR) {
-		RESV_ROOM_EVENTCOLOR = rESV_ROOM_EVENTCOLOR;
-	}
-
 	@Override
 	public String toString() {
-		return "ReservationVo [RESV_ID=" + RESV_ID + ", EMP_ID=" + EMP_ID + ", RESV_TITLE=" + RESV_TITLE
-				+ ", RESV_WRITER=" + RESV_WRITER + ", RESV_DESCRIPTION=" + RESV_DESCRIPTION + ", RESV_START="
-				+ RESV_START + ", RESV_END=" + RESV_END + ", RESV_ROOM_ID=" + RESV_ROOM_ID + ", RESV_ROOM_TITLE="
-				+ RESV_ROOM_TITLE + ", RESV_ROOM_EVENTCOLOR=" + RESV_ROOM_EVENTCOLOR + "]";
+		return "ReservationVo [resv_id=" + resv_id + ", emp_id=" + emp_id + ", resv_title=" + resv_title
+				+ ", resv_writer=" + resv_writer + ", resv_description=" + resv_description + ", resv_start="
+				+ resv_start + ", resv_end=" + resv_end + ", resv_room_id=" + resv_room_id + ", resv_room_title="
+				+ resv_room_title + ", resv_room_eventcolor=" + resv_room_eventcolor + "]";
+	}
+	public ReservationVo(String resv_id, String emp_id, String resv_title, String resv_writer, String resv_description,
+			String resv_start, String resv_end, String resv_room_id, String resv_room_title,
+			String resv_room_eventcolor) {
+		this.resv_id = resv_id;
+		this.emp_id = emp_id;
+		this.resv_title = resv_title;
+		this.resv_writer = resv_writer;
+		this.resv_description = resv_description;
+		this.resv_start = resv_start;
+		this.resv_end = resv_end;
+		this.resv_room_id = resv_room_id;
+		this.resv_room_title = resv_room_title;
+		this.resv_room_eventcolor = resv_room_eventcolor;
+	}
+	public ReservationVo() {
 	}
 	
 	
-
+	
+	
 }
