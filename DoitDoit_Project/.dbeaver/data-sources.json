@@ -32,10 +32,12 @@
 				"handlers": {}
 			}
 		},
-		"oracle_thin-181238de989-64adef6cdb897c48": {
+
+
+		"oracle_thin-18123844e45-83114068bcf3cba": {
 			"provider": "oracle",
 			"driver": "oracle_thin",
-			"name": "localhost",
+			"name": "GD",
 			"save-password": true,
 			"read-only": false,
 			"configuration": {
@@ -43,7 +45,8 @@
 				"port": "1521",
 				"database": "XE",
 				"url": "jdbc:oracle:thin:@//localhost:1521/XE",
-				"home": "C:\\OracleXE213_Win64\\dbhomeXE",
+
+				"home": "C:\\app\\JSYOU\\product\\21c\\dbhomeXE",
 				"type": "dev",
 				"provider-properties": {
 					"show-only-one-schema@": "false",

@@ -78,6 +78,6 @@ public class ChatVo implements Serializable{
 	@Override
 	public String toString() {
 		return "ChatVo [chat_id=" + chat_id + ", room_id=" + room_id + ", emp_id=" + emp_id + ", chat_con=" + chat_con
-				+ "]";
+				+ ", chat_time=" + chat_time + ", chat_type=" + chat_type + "]";
 	}
 }

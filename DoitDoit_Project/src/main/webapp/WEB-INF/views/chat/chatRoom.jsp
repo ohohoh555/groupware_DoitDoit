@@ -25,7 +25,7 @@
 	.chatGroup{
 		width:310px;
 		height:100%;
-		background-color: #6D6AB7;
+		background-color: #B5B2FF;
 		border: 1px solid black;
 	}
 	
@@ -37,10 +37,10 @@
 	
 	/* memberList 안에 */
 	.members{
-		margin-top: 1px;
+		padding-top: 10px;
 		width: 100%;
 		height: 722px;
-		background-color: #B5B2FF;
+		background: #3d3e6d;
 	}
 	
 	/* 각 영역 상단 부분 */
@@ -164,6 +164,12 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
 					<div class="rContent-full">
+						<sec:authorize access="isAuthenticated()">
+					        <sec:authentication property="principal" var="principal"/>
+					        <input type="hidden" value="${principal.emp_id}" id="pr_emp_id" name="pr_emp_id"> 
+					        <input type="hidden" value="${principal.emp_name}" id="pr_user_name" name="pr_emp_name">
+ 			           </sec:authorize> 
+ 			           <input type="hidden" value="${room_id}" id="room_id">
 						<div style="width: 800px; height: 796px;">
 							<div id="dragdrop" class="chatGroup">
 								<div class="roomInfo">
@@ -184,7 +190,7 @@
 								<div class="insChat">
 									<div class="inputArea">
 										<div>
-											<textarea rows="5" cols="25"></textarea>					
+											<textarea rows="5" cols="25" id="chatCon"></textarea>					
 											<button id="btnSend">전송</button>									
 										</div>
 										<div>
@@ -202,7 +208,16 @@
 									채팅방 참가 멤버
 								</div>
 								<div id="members" class="members">
-								
+									<c:forEach items="${room_mem_list }" var="i">
+										<div id="${i.EMP_ID }" style="width: 20px; height: 20px">
+										
+										</div>
+										<div>
+											<span style="font-size: 20px; color: white; padding-left: 5px">${i.EMP_NAME }</span>
+											<span style="font-size: 15px; color: white; padding-left: 5px">${i.RANK_NAME }</span>
+										</div>
+										<hr style="color:white;">
+									</c:forEach>
 								</div>
 							</div>
 							<!-- 사진, 파일 -->

@@ -3,6 +3,7 @@ package com.doit.gw.service.ann;
 import java.util.List;
 import java.util.Map;
 
+import com.doit.gw.vo.ann.AnnualVo;
 import com.doit.gw.vo.emp.EmpVo;
 
 public interface IAnnService {
@@ -31,5 +32,8 @@ public interface IAnnService {
 	public int insAnnAddMonth(String emp_id);
 	//올해 입사한 사원 만근시 연차(1개) 부여(update)
 	public int updAnnualMonth(Map<String, String[]> emp_ids);	
+	
+	//관리자 연차 조회
+	public List<AnnualVo> selAnnualAdmin(String dept_no);	
 	
 }

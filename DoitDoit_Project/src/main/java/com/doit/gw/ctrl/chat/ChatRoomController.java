@@ -51,11 +51,18 @@ public class ChatRoomController {
     	map.put("room_id", room_Id);
     	map.put("emp_id", emp_id);
     	
+    	//채팅 조회
     	List<ChatVo> chatList = service.selChat(map);
     	
     	model.addAttribute("room_id",room_Id);
     	model.addAttribute("emp_id", emp_id);
     	model.addAttribute("chatList", chatList);
+    	
+    	//멤버 출력
+    	List<Map<String, String>> roomMemList = service.selRoomMem(room_Id);
+    	logger.info("{}",roomMemList);
+    	model.addAttribute("room_mem_list", roomMemList);
+    	
     	return "chat/chatRoom";
     }
 }
