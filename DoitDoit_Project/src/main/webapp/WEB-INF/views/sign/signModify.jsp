@@ -5,14 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>서명관리 화면</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+<%@include file="../comm/setting.jsp" %>
 
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 <style type="text/css">
 .signLists{
 	width: 550px;
@@ -76,14 +72,15 @@
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
-          <%--   <sec:authorize access="isAuthenticated()">
+         <%--    <sec:authorize access="isAuthenticated()">
             	아이디 : <sec:authentication property="principal" var="emp_id"/> ${principal} <br>
             	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
             	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>
             	이름 : <sec:authentication property="Details" var="info"/>${info.emp_name}<br>
             	권한 : <sec:authentication property="Authorities"/> ${Authorities} <br>
             </sec:authorize> --%>
-            <input type="hidden" id="emp_id" value="${emp_id}">
+            <input type="hidden"  id="emp_id" value="${emp_id}">
+            <input type="hidden"  id=defaultsign value="기본서명.png">
             </div>
         </main>
     </div>
@@ -111,7 +108,7 @@ window.onload = function signList(){
 			
 			for(let j=0; j< names.length; j++){
 				$("#names").append('<td><input type="hidden" value="'+names[j]+'"></td>');
-				$("#buttons").append('<td style="text-align: center; "><input type="button" class="btn btn-info -sm" value="삭제"></td>');
+				$("#buttons").append('<td style="text-align: center; "><input type="button" id="removebtn" class="btn btn-info -sm" value="삭제"><input type="hidden" value="'+names[j]+'"></td>');
 			}
 			for(let i=0; i< images.length; i++){
 				$("#images").append('<td><img style="width: 150px; height: 150px;" src="'+images[i]+'"></td>');
@@ -122,6 +119,30 @@ window.onload = function signList(){
 	});
 }
 
+$(document).on("click","#removebtn",function (){ 
+	var namesign = $(this).next().val();
+	var n = new String(namesign);
+	console.log(namesign,typeof namesign);
+	var design = document.getElementById("defaultsign").value;
+	console.log(design,typeof design);
+	var d = new String(design);
+	console.log(d === n);
+	if(namesign === '기본서명.png'){
+	console.log($(this).next().val());
+	console.log("같다");
+	}
+});
+
+/* btn.onclick = function(){
+	console.log("click 동작 시작");
+	$(this).next().val();
+	console.log($(this).next().val());
+}; */
+/* function remove(){
+	console.log("서명 삭제 시작");
+	var btn = document.getElementById("removebtn").next();
+	console.log(btn);
+} */
 
 </script>
 </html>

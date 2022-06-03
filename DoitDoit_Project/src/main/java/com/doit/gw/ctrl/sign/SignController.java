@@ -17,9 +17,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +37,7 @@ import com.doit.gw.vo.sign.SignVo;
 @Controller
 public class SignController {
 	
+
 	@Autowired
 	private ISignService service;
 	
@@ -55,10 +53,8 @@ public class SignController {
 	
 	//서명관리 화면으로 이동 
 	@RequestMapping(value = "/signModify.do",method = RequestMethod.GET)
-	public String signModify(Principal principal,Model model) {
+	public String signModify() {
 		logger.info("============== SignController signModify으로 이동! ==============");
-		String emp_id = principal.getName();
-		model.addAttribute("emp_id", emp_id);
 		return "/sign/signModify";
 	}
 	
@@ -188,12 +184,12 @@ public class SignController {
 	//결재칸에 기안자 서명이미지 보여주기 
 	@RequestMapping(value = "/viewImg.do",method = RequestMethod.GET)
 	@ResponseBody
-	public String viewImg(Principal principal) {
+	public String viewImg(int emp_id) {
 		logger.info("============== SignController viewImg 시작! ==============");
-		String emp_id = principal.getName();
-		int int_emp_id = Integer.parseInt(emp_id);
+		
+		logger.info("[emp_id의 값] : {}",emp_id);
 		//DB에 있는 blob이미지 select
-		List<Map<String, Object>> lists = service.selSign(int_emp_id);
+		List<Map<String, Object>> lists = service.selSign(emp_id);
 		logger.info("[lists의 값] : {}",lists);
 		
 		//여러개의 사인 이미지 중에 최근에 등록한 이미지를 보여줌
@@ -235,10 +231,9 @@ public class SignController {
 		return bytes;
 	}
 	
-	
 	//서명이미지 전체조회
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/signList.do",method = RequestMethod.GET)
+	@RequestMapping(value = "/signList.do",method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
 	@ResponseBody
 	public String signList(Principal principal) {
 		logger.info("============== SignController signList 시작! ==============");
@@ -258,7 +253,6 @@ public class SignController {
 					if(blobArr.length >0 && blobArr != null) {
 						String base64Encode = Base64Utils.encodeToString(blobArr);
 						base64Encode = "data:image/png;base64," + base64Encode;
-				//		logger.info("[base64Encode값 확인] : {}",base64Encode);
 						images.add(base64Encode);
 					}
 				}
@@ -268,7 +262,5 @@ public class SignController {
 				logger.info("[images 값 확인] : {}",images.toString());
 				
 				return obj.toJSONString();
-			
-//		return "";
 	}
 }

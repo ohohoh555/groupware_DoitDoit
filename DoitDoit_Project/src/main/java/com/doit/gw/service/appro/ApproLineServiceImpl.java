@@ -31,4 +31,10 @@ public class ApproLineServiceImpl implements IApproLineService {
 		return mapper.selDept();
 	}
 
+	@Override
+	public ApproEmpVo selEmpInfo(int emp_id) {
+		logger.info("===== ApproLineServiceImpl selEmpInfo 실행 =====");
+		return mapper.selEmpInfo(emp_id);
+	}
+
 }

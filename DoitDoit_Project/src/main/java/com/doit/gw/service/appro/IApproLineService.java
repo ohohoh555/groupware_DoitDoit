@@ -9,5 +9,5 @@ public interface IApproLineService {
 	
 	public List<ApproEmpVo> selEmp();
 	public List<ApproDeptVo> selDept();
-
+	public ApproEmpVo selEmpInfo(int emp_id);
 }

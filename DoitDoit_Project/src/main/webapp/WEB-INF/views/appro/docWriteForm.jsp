@@ -9,19 +9,14 @@
 <head>
 <meta charset="UTF-8">
 <title>문서작성 화면</title>
+<%@include file="../comm/setting.jsp" %>
 <script type="text/javascript" src="./dist/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<script type="text/javascript" src="./js/home.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
 <script type="text/javascript" src="./js/appro/jsTreeScript.js"></script>	
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 <style type="text/css">
 #docForm{
 	width: 800px;
@@ -89,17 +84,18 @@ String today = sf.format(now);
 		<input type="hidden" id="doc_form_no" name="doc_form_no">
 		<input type="hidden" id="selList" name="appro_line">
 	</div>
+
 	<div id="docForm">
 		<div class="head">
 		<div class="left">
 		<table>
 		<tr>
 		<td class="tableForm">기안자</td>	
-		<td width="150px;" height="25px;">&nbsp;&nbsp;</td>	
+		<td width="150px;" height="25px;" style="text-align: center;">${eVo.emp_name }</td>	
 		</tr>
 		<tr>
 		<td class="tableForm">기안부서</td>	
-		<td width="150px;" height="25px;">&nbsp;&nbsp;</td>	
+		<td width="150px;" height="25px;"style="text-align: center;">${eVo.dept_name }</td>	
 		</tr>
 		<tr>
 		<td class="tableForm">기안일</td>	
@@ -120,11 +116,11 @@ String today = sf.format(now);
 		<td class="tableForm">기안자</td>
 		</tr>
 		<tr id="sign">
-		<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src=""><input type="hidden" id="imagename" value="100" name="doit_emp_id"></td>
+		<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src=""><input type="hidden" id="imagename" value="${emp_id}" name="emp_id"></td>
 		</tr>
 		
 		<tr id="name">
-		<td style="text-align: center;">기안자 이름</td>
+		<td style="text-align: center;">${eVo.emp_name }</td>
 		</tr>
 		
 		</table>
@@ -200,12 +196,13 @@ String today = sf.format(now);
 
 window.onload = function viewImg(){
 	console.log("뷰이미지 셀렉트 함수 시작");
-	var doit_emp_id = document.getElementById("imagename").value;
+	var emp_id = document.getElementById("imagename").value;
+	console.log("emp_id :",emp_id);
 //	console.log(doit_emp_id);
 	$.ajax({
 		url :"./viewImg.do?",
 		data : {
-			"doit_emp_id" : doit_emp_id
+			"emp_id" : emp_id
 		},
 		type : "GET",
 		async : true ,
