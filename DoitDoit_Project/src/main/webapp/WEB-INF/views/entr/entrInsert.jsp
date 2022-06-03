@@ -7,11 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>글쓰기 페이지</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
+<%@include file="../comm/setting.jsp" %>
 <script type="text/javascript" src="./dist/ckeditor/ckeditor.js"></script>
 </head>
 <body>

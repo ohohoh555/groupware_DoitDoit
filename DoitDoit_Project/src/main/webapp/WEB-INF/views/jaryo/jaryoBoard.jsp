@@ -6,13 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>자료게시판(사용자)</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+<%@include file="../comm/setting.jsp" %>
 <link rel="stylesheet" type="text/css" href="./css/jaryo/dragAndDrop.css">
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 <script type="text/javascript" src="./js/jaryo/Map.js"></script>
 <script type="text/javascript" src="./js/jaryo/dragAndDrop.js"></script>
 </head>
@@ -26,10 +21,14 @@
                 <div id="rContent">
 					<div class="rContent-full">
 						<h3>&lt;&lt;자료게시판&gt;&gt;</h3>
+						<sec:authorize access="isAuthenticated()">
+					        <sec:authentication property="principal" var="principal"/>
+					        <input type="text" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
+					        <input type="text" value="${principal.emp_name}" id="emp_name" name="emp_name">
+ 			           </sec:authorize> 
 						<div>
 							<div class="div1">
-								<input type="button" class='menu btn btn-default' value='파일 업로드'
-									onclick="slideDown()">
+								<input type="button" class='menu btn btn-default' value='파일 업로드' onclick="slideDown()">
 								<div id="fileUpload" class="dragAndDropDiv hide10">
 									<table id='fileTable' class='fileList table-bordered'>
 										<tr>
