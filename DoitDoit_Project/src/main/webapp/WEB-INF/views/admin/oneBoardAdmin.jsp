@@ -37,9 +37,20 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>분류</td>
-								<td>${entrOne.cgory_no}</td>
+								<td width="100px;">분류</td>
+								<c:choose>
+									<c:when test="${entrOne.cgory_no=='101'}"><td>일반</td></c:when>
+									<c:when test="${entrOne.cgory_no=='102'}"><td>필독</td></c:when>
+									<c:when test="${entrOne.cgory_no=='103'}"><td>인사</td></c:when>
+									<c:when test="${entrOne.cgory_no=='302'}"><td>일정</td></c:when>
+								</c:choose>
 							</tr>
+							<c:if test="${entrOne.cgory_no =='302'}">
+								<tr>
+									<td>일시</td>
+									<td>${entrOne.cald_start} ~ ${entrOne.cald_end}</td>
+								</tr>
+							</c:if>
 							<tr>
 								<td>제목</td>
 								<td>${entrOne.eboard_title}</td>
@@ -64,8 +75,6 @@
 						</div>
 					</div> <!-- rContent-full 끝 -->
                 </div>
-            <%@include file="../comm/aside.jsp" %>   
-
             </div><!-- content 끝 -->
         </main>
     </div><!-- container 끝 -->

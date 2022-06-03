@@ -50,8 +50,7 @@
 						</table>
 						</form>
 					</div>
-                </div>
-            <%@include file="../comm/aside.jsp" %>    
+                </div> 
             </sec:authorize>
             </div>
         </main>

@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
+import com.doit.gw.vo.entr.FileListVo;
+
 @Controller
 public class FileUploadController {
 	
@@ -35,7 +37,7 @@ public class FileUploadController {
 	public void editorFileUpload(HttpServletRequest request, HttpServletResponse response,
 										@RequestParam MultipartFile upload) {
 		
-		logger.info("@editorFileUpload ");
+		logger.info("@editorFileUpload 공지게시글 입력시 파일업로드");
 		
 		//랜덤문자 생성
 		UUID uid = UUID.randomUUID();
@@ -172,10 +174,10 @@ public class FileUploadController {
 	
 	
 	
-	@RequestMapping(value = "/saveFile.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+	@RequestMapping(value = "/saveJaryo.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
 	@ResponseBody
-	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request) throws FileNotFoundException {
-		logger.info("Welcome! saveFile 파일저장하기");
+	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, FileListVo fVo) throws FileNotFoundException {
+		logger.info("@saveJaryo 자료글 저장하기 : {}", fVo);
 		
 		String serverPath = WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/");
 		
@@ -189,16 +191,19 @@ public class FileUploadController {
 		
 
 		while(itr.hasNext()) { // 받은파일을 모두
+			UUID uid = UUID.randomUUID(); //유효아이디 생성
 			MultipartFile mpFile=multipartRequest.getFile(itr.next());
-			String originFileName=mpFile.getOriginalFilename(); // 파일명
-			String fileFullPath = backPath+originFileName; 
-			System.out.println("파일 이름 : "+originFileName);
+			String originFileName=mpFile.getOriginalFilename(); // 실제 파일명 
+			String saveFileName=uid+"_"+originFileName;
+			
+			String fileFullPath = backPath+saveFileName; 
+			System.out.println("파일 저장이름 : "+saveFileName);
 			System.out.println("파일 전체 경로 : "+fileFullPath);
+			System.out.println("파일 서버 경로 : "+serverPath);
 			
-			
-			
-
+			File file = new File(serverPath+saveFileName);
 			try {
+				file.createNewFile(); //서버에 파일 복사하기
 				mpFile.transferTo(new File(fileFullPath));//파일 폴더에 저장
 
 			} catch (Exception e) {
