@@ -26,7 +26,7 @@
             		<div class="profile"></div>
             		<c:forEach items="${lists}" var="empVo">
             		<div class="inputUser">
-            			<input type="text" id="emp_id" value="${empVo.emp_id}">
+            			<input type="text" id="emp_id" name="emp_id" value="${empVo.emp_id}">
             			<input type="text" value="${empVo.emp_name}">
             			<input type="text" value="${empVo.emp_email}">
             			<input type="text" value="${empVo.dept_no}">
@@ -57,8 +57,9 @@
     	$.ajax({
     		url:"./resetPassword.do",
     		data:emp_id,
-    		success:function(){
-    			
+    		method:"GET",
+    		success:function(data){
+    			console.log(data);
     		},
     		error:function(){
     			
