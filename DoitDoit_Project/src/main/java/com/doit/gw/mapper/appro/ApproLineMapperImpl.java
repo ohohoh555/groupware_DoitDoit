@@ -26,5 +26,10 @@ public class ApproLineMapperImpl implements IApproLineMapper {
 		return sqlSession.selectList(NS+"selDept");
 	}
 
+	@Override
+	public ApproEmpVo selEmpInfo(int emp_id) {
+		return sqlSession.selectOne(NS+"selEmpInfo",emp_id);
+	}
+
 
 }

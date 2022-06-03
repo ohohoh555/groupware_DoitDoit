@@ -18,13 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.service.appro.IApproLineService;
 import com.doit.gw.vo.appro.ApproEmpVo;
-import com.doit.gw.vo.emp.EmpVo;
 import com.doit.gw.vo.appro.ApproDeptVo;
 
 
 @Controller
 public class ApproLineController {
-	
+
 	@Autowired
 	private IApproLineService service;
 
@@ -32,8 +31,16 @@ public class ApproLineController {
 
 	//문서작성 폼으로 이동
 	@RequestMapping(value = "/docWriteForm.do",method = RequestMethod.GET)
-	public String docWriteForm() {
+	public String docWriteForm(Principal principal,Model model) {
 		logger.info("============== ApproController docWriteForm으로 이동! ==============");
+		String emp_id = principal.getName();
+		ApproEmpVo eVo = service.selEmpInfo(Integer.parseInt(emp_id));
+		logger.info(" emp_id : {} ",emp_id);
+		logger.info(" eVo : {} ",eVo);
+		
+//		EmpVo empVo = empService.login(emp_id);
+		model.addAttribute("emp_id", emp_id);
+		model.addAttribute("eVo", eVo);
 		return"/appro/docWriteForm";
 	}
 	
@@ -80,7 +87,7 @@ public class ApproLineController {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	@ResponseBody
 	@RequestMapping(value = "/gyuljae.do", method = RequestMethod.POST,  produces = "application/text; charset=UTF-8;")
 	public String gyuljae(@RequestParam List<String> emps) {

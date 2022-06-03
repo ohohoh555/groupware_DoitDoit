@@ -1,11 +1,13 @@
 	package com.doit.gw.ctrl.appro;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.service.appro.IApproService;
 import com.doit.gw.service.appro.IDocFormService;
-import com.doit.gw.service.emp.EmpServiceImpl;
-import com.doit.gw.service.emp.IEmpService;
 import com.doit.gw.vo.appro.ApproVo;
 import com.doit.gw.vo.appro.DocFormVo;
-import com.doit.gw.vo.emp.EmpVo;
 
 @Controller
 public class ApproController {
-	
 	@Autowired
 	private IApproService service;
 	
@@ -57,14 +55,14 @@ public class ApproController {
 	
 	//기안문서 작성 인서트
 	@RequestMapping(value = "/approval.do",method = RequestMethod.POST)
-	public String insApproval(ApproVo aVo,@RequestParam(value = "appro_line") String appro_line,Principal principal) {
+	public String insApproval(ApproVo aVo,@RequestParam(value = "appro_line") String appro_line,int emp_id) {
 		logger.info("============== ApproController insApproval 시작! ==============");
 		logger.info("[aVo 값] : {}" ,aVo);
 		logger.info("[appro_line 값] : {}" ,appro_line);
 		
-		String emp_id = principal.getName();
-		int int_emp_id = Integer.parseInt(emp_id);
-		aVo.setEmp_id(int_emp_id);
+	//	String emp_id = principal.getName();
+	//	int int_emp_id = Integer.parseInt(emp_id);
+		aVo.setEmp_id(emp_id);
 		
 		//기안문서 insert
 		ApproVo approVo = service.insApproval(aVo);
@@ -90,68 +88,162 @@ public class ApproController {
 		return "/appro/approMain";
 	}
 	
-	//결재예정문서 조회
+	//결재문서 조회(기안자)
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@RequestMapping(value = "/myDocList.do", method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
+	public String selMyDocument(String emp_id) {
+		logger.info("ApprovalController selMyDocument 실행");
+		int int_emp_id = Integer.parseInt(emp_id);
+		logger.info("[int_emp_id 값] : {}" ,int_emp_id);
+		List<ApproVo> List = service.selMyDocument(int_emp_id);
+		logger.info("[List size 값] : {}" ,List.size());
+		JSONObject json = new JSONObject();
+		JSONArray jArr = new JSONArray();
+		for (int i = 0; i < List.size(); i++) {
+			JSONObject obj = new JSONObject();
+			ApproVo aVo = List.get(i);
+			obj.put("appro_no", aVo.getAppro_no());
+		//	obj.put("appro_line_no",aVo.getAppro_line_no());
+		//	obj.put("appro_line",aVo.getAppro_line());
+			obj.put("appro_status",aVo.getAppro_status());
+		//	obj.put("appro_status_no",aVo.getAppro_status_no());
+			obj.put("emp_id",aVo.getEmp_id());
+			obj.put("appro_empname",aVo.getAppro_empname());
+			obj.put("appro_title",aVo.getAppro_title());
+		//	obj.put("appro_content",aVo.getAppro_content());
+			obj.put("appro_regdate",aVo.getAppro_regdate());
+			obj.put("appro_type",aVo.getAppro_type());
+		//	obj.put("appro_refer",aVo.getAppro_refer());
+		//	obj.put("appro_returnreason",aVo.getAppro_returnreason());
+			jArr.add(obj);
+		}
+		json.put("lists",jArr);
+		return json.toString();
+	}
+	
+	
+	//결재문서 조회 (결재자)
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/docAllList.do", method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
 	@ResponseBody
-	public String selAllDocument(Principal principal,String emp_id) {
+	public String selAllDocument(String emp_id) {
 		logger.info("ApprovalController selAllDocument 실행");
-//		String emp_id = principal.getName();
 		int int_emp_id = Integer.parseInt(emp_id);
 		logger.info("[int_emp_id 값] : {}" ,int_emp_id);
 		List<Map<String, Object>> List = service.selAllDocument(int_emp_id);
-		logger.info("[List 첫번째 값] : {}" ,List.get(0));
+		logger.info("[List 값] : {}" ,List);
 		logger.info("[List size 값] : {}" ,List.size());
 		
-		List<Object> approLists = new ArrayList<Object>();
-		JSONArray jsonArr = new JSONArray();
+		JSONObject obj = new JSONObject();
+		JSONArray jArr = new JSONArray();
+		ApproVo aVo = new ApproVo();
+		
 		for(int i=0; i<List.size(); i++) {
-			Map<String, Object> map = List.get(i); //
-//			map.get("APPRO_NO"); //문서번호 뽑아오기
+			Map<String, Object> map = List.get(i); 
 			String rm = ""+ map.get("RM"); //결재순위ROW_NUMBER 
 			String status = (String)map.get("APPRO_STATUS");//문서 상태 뽑아오기 (W:대기,Y:결재,N:반려)
+			String appro_no = (String)map.get("APPRO_NO");
 			logger.info("[rm 값] : {}" ,rm);
 			logger.info("[status 값] : {}" ,status);
 			logger.info("[status 값 true여부] : {}" ,!status.equals("N")?"true":"flase");
+			logger.info("[appro_no 값] : {}" ,appro_no);
+			
+			List<Map<String, Object>> LineList = service.selLineList(appro_no);//문서번호 별 결재자 리스트 뽑아내기 
+			
 			if(!status.equals("N")) { //대기 상태이라면
+				JSONObject jsonVo = new JSONObject();
 				if(rm.equals("1")) {
 					if(status.equals("W")) {
-						String appro_no = (String)map.get("APPRO_NO");
-						logger.info("[appro_no 값] : {}" ,appro_no);
-						jsonArr.add(service.selOneDocument(appro_no));
+						aVo = service.selOneDocument(appro_no);
+						logger.info("[aVo 값] : {}" ,aVo.toString());
+						jsonVo.put("appro_no", aVo.getAppro_no());
+						jsonVo.put("appro_status", aVo.getAppro_status());
+						jsonVo.put("appro_title", aVo.getAppro_title());
+						jsonVo.put("emp_id", aVo.getEmp_id());
+						jsonVo.put("appro_empname", aVo.getAppro_empname());
+						jsonVo.put("appro_regdate", aVo.getAppro_regdate());
+						jArr.add(jsonVo);
 					}
-					break;
 				}else if(rm.equals("2")) {
-					if(status.equals("W")) {
-						String appro_no = (String)map.get("APPRO_NO");
-						logger.info("[appro_no 값] : {}" ,appro_no);
-						jsonArr.add(service.selOneDocument(appro_no));
-//						approLists.add(service.selOneDocument(appro_no));
+					Map<String, Object> first = LineList.get(0);
+					logger.info("[first 값] : {}" ,first);
+					String firstStatus = (String)first.get("APPRO_STATUS");
+					logger.info("[firstStatus 값] : {}" ,firstStatus);
+					if(firstStatus.equals("Y")) {//첫 결재자가 결재를 했다면
+						if(status.equals("W")) {
+							aVo = service.selOneDocument(appro_no);
+							logger.info("[aVo 값] : {}" ,aVo.toString());
+							jsonVo.put("appro_no", aVo.getAppro_no());
+							jsonVo.put("appro_status", aVo.getAppro_status());
+							jsonVo.put("appro_title", aVo.getAppro_title());
+							jsonVo.put("emp_id", aVo.getEmp_id());
+							jsonVo.put("appro_empname", aVo.getAppro_empname());
+							jsonVo.put("appro_regdate", aVo.getAppro_regdate());
+							jArr.add(jsonVo);
+						}
 					}
-					break;
 				}else if(rm.equals("3")) {
-					if(status.equals("W")) {
-						String appro_no = (String)map.get("APPRO_NO");
-						logger.info("[appro_no 값] : {}" ,appro_no);
-						jsonArr.add(service.selOneDocument(appro_no));
-//						approLists.add(service.selOneDocument(appro_no));
+					Map<String, Object> second = LineList.get(1);
+					logger.info("[second 값] : {}" ,second);
+					String secondStatus = (String)second.get("APPRO_STATUS");
+					logger.info("[secondStatus 값] : {}" ,secondStatus);
+					if(secondStatus.equals("Y")) {//두번째 결재자가 결재를 했다면
+						if(status.equals("W")) {
+							aVo = service.selOneDocument(appro_no);
+							logger.info("[aVo 값] : {}" ,aVo.toString());
+							jsonVo.put("appro_no", aVo.getAppro_no());
+							jsonVo.put("appro_status", aVo.getAppro_status());
+							jsonVo.put("appro_title", aVo.getAppro_title());
+							jsonVo.put("emp_id", aVo.getEmp_id());
+							jsonVo.put("appro_empname", aVo.getAppro_empname());
+							jsonVo.put("appro_regdate", aVo.getAppro_regdate());
+							jArr.add(jsonVo);						
+						}
 					}
-					break;
 				}else if(rm.equals("4")) {
-					if(status.equals("W")) {
-						String appro_no = (String)map.get("APPRO_NO");
-						logger.info("[appro_no 값] : {}" ,appro_no);
-						jsonArr.add(service.selOneDocument(appro_no));
-//						approLists.add(service.selOneDocument(appro_no));
+					Map<String, Object> third = LineList.get(2);
+					logger.info("[Third 값] : {}" ,third);
+					String thirdStatus = (String)third.get("APPRO_STATUS");
+					logger.info("[secondStatus 값] : {}" ,thirdStatus);
+					if(thirdStatus.equals("Y")) {//두번째 결재자가 결재를 했다면
+						if(status.equals("W")) {
+							aVo = service.selOneDocument(appro_no);
+							logger.info("[aVo 값] : {}" ,aVo.toString());
+							jsonVo.put("appro_no", aVo.getAppro_no());
+							jsonVo.put("appro_status", aVo.getAppro_status());
+							jsonVo.put("appro_title", aVo.getAppro_title());
+							jsonVo.put("emp_id", aVo.getEmp_id());
+							jsonVo.put("appro_empname", aVo.getAppro_empname());
+							jsonVo.put("appro_regdate", aVo.getAppro_regdate());
+							jArr.add(jsonVo);
+						}
 					}
-					break;
 				}
-//				logger.info("[approLists 값] : {}" ,approLists.toArray());
-				logger.info("[jsonArr 값] : {}" ,jsonArr.toJSONString());
+				obj.put("lists", jArr);
+				logger.info("[obj 최종 값] : {}" , obj.toString());
 			}
-			
-			
 		}
-		
-		return jsonArr.toJSONString();
+		return obj.toString();
+	}
+	
+	//문서 상세조회
+	@RequestMapping(value = "/selDocDetail.do",method = RequestMethod.GET)
+	public String selDocDetail(String appro_no,Model model,int emp_id) {
+		logger.info("ApprovalController selDocDetail 실행");
+		logger.info("[appro_no 값] : {}" ,appro_no);
+		logger.info("[emp_id 값] : {}" ,emp_id);
+		ApproVo aVo = service.selOneDocument(appro_no);
+//		JSONParser jsonParser = new JSONParser();
+//		try {
+//			JSONObject obj = (JSONObject)jsonParser.parse(aVo.getAppro_line());
+//		//	aVo.setAppro_line(obj.toJSONString());
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+		logger.info("[aVo 값] : {}" ,aVo);
+		model.addAttribute("aVo", aVo);
+		model.addAttribute("loginEmp_id", emp_id);
+		return "/appro/docDetail";
 	}
 }

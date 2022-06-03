@@ -7,20 +7,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 	<title>::: 사인패드 :::</title>
-
 	<script src="./js/sign/jquery-1.11.3.min.js" type="text/javascript"></script>
 	<script src="./js/sign/signature_pad.min.js" type="text/javascript"></script>
 	
 	<link rel="stylesheet" href="./css/sign/sign.css">
-	<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
-	
 </head>
+<%@include file="../comm/setting.jsp" %>
 
 <body>
 <div id="container">
@@ -50,7 +42,13 @@
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
-             
+        <%--    <sec:authorize access="isAuthenticated()">
+            	아이디 : <sec:authentication property="principal"/> ${principal} <br>
+            	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
+            	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>
+            	이름 : <sec:authentication property="Details" var="info"/>${info.emp_name}<br>
+            	권한 : <sec:authentication property="Authorities"/> ${Authorities} <br>
+            </sec:authorize>	 --%>
             </div>
         </main>
     </div>

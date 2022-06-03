@@ -3,7 +3,7 @@
 <mapper namespace="com.doit.gw.mapper.appro.ApproLineMapperImpl">
 
 <select id="selEmp" resultType="ApproEmpVo">
-SELECT EMP_ID, EMP_NAME || ' - ' || (SELECT RANK_NAME FROM "RANK" r WHERE r.RANK_NO =e.RANK_NO) AS EMP_NAME , DEPT_NO, RANK_NO 
+SELECT EMP_ID, EMP_NAME || ' - ' || (SELECT RANK_NAME FROM "RANK" r WHERE r.RANK_NO =e.RANK_NO) AS EMP_NAME , DEPT_NO, e.RANK_NO 
 	FROM EMP e 
 		ORDER BY RANK_NO DESC			
 </select>
@@ -11,11 +11,12 @@ SELECT EMP_ID, EMP_NAME || ' - ' || (SELECT RANK_NAME FROM "RANK" r WHERE r.RANK
 SELECT DEPT_NO, DEPT_NAME
 	FROM DEPT
 </select>
-	
-<select id="selRank" parameterType="java.lang.String" resultType="java.lang.String">
-SELECT RANK_NO
-	FROM EMP
-		WHERE DEPT_NO = #{dept_no}		
+
+<select id="selEmpInfo" parameterType="java.lang.Integer" resultType="ApproEmpVo">
+SELECT EMP_ID ,EMP_NAME ,RANK_NO ,e.DEPT_NO , d.DEPT_NAME 
+	FROM EMP e JOIN  DEPT d 
+	ON e.DEPT_NO = d.DEPT_NO 
+		WHERE e.EMP_ID  = #{emp_id}	
 </select>
 
 </mapper>
