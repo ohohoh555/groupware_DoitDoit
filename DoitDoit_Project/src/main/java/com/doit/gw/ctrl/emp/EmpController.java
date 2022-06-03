@@ -73,6 +73,6 @@ public class EmpController {
 	@ResponseBody
 	public String resetPassword(String emp_id) {
 		logger.info("dfdfd : " + emp_id);
-		return null;
+		return emp_id;
 	}
 }
