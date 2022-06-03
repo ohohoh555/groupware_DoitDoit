@@ -1,12 +1,14 @@
 package com.doit.gw.ctrl.entr;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
 @Controller
@@ -165,6 +168,44 @@ public class FileUploadController {
 		response.setContentType("application/octet-stream");
 
 		return bytes; 
+	}
+	
+	
+	
+	@RequestMapping(value = "/saveFile.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request) throws FileNotFoundException {
+		logger.info("Welcome! saveFile 파일저장하기");
+		
+		String serverPath = WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/");
+		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY\\MM\\");
+		String nowFormat = now.format(formatter); 
+		
+		String backPath = "C:\\Users\\user\\git\\groupware_doit\\DoitDoit_Project\\src\\main\\resources\\back\\"+nowFormat;
+		
+		Iterator<String> itr =multipartRequest.getFileNames();
+		
+
+		while(itr.hasNext()) { // 받은파일을 모두
+			MultipartFile mpFile=multipartRequest.getFile(itr.next());
+			String originFileName=mpFile.getOriginalFilename(); // 파일명
+			String fileFullPath = backPath+originFileName; 
+			System.out.println("파일 이름 : "+originFileName);
+			System.out.println("파일 전체 경로 : "+fileFullPath);
+			
+			
+			
+
+			try {
+				mpFile.transferTo(new File(fileFullPath));//파일 폴더에 저장
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return "업로드 성공";
 	}
 
 }

@@ -49,6 +49,20 @@
 									<td><input type="text" name="eboard_title" id="title" class="form-control"></td>
 								</tr>
 								<tr>
+									<td>일시</td>
+									<td>
+										<div style="float: left;">
+										<label>시작:</label>
+										<input type='datetime-local' class='form-control' name="cald_start" id="cald_start" style='width: 200px;' disabled>
+										</div>
+
+										<div style="margin-left: 10px;">
+										<label>종료:</label>
+										<input type='datetime-local' class='form-control' name="cald_end" id="cald_end"" style='width: 200px;' disabled>
+										</div>
+									</td>
+								</tr>
+								<tr>
 									<td>내용</td>
 									<td>
 										<textarea name ="eboard_content" id="content"></textarea>
@@ -86,7 +100,7 @@ CKEDITOR.replace( 'eboard_content' ,{
 	filebrowserUploadUrl: "fileupload.do",
 	uploadUrl:"fileupload.do",
      width : '750px',  // 입력창의 넓이, 넓이는 config.js 에서 % 로 제어
-     height : '350px' 
+     height : '200px' 
 
 	}
 );
@@ -142,28 +156,47 @@ function insertAction(){
 function selectCgory(val){
 	console.log("selectCgory 작동", val);
 	
-	var html = "";
-	html +="<tr id='trDate'><td>날짜</td>";
-	html +="<td>시작:<input type='date' class='form-control' style='width: 150px;'>";
-	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";
-	html +="종료:<input type='date' class='form-control' style='width: 150px;'>";
-	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";
-	html +="</td></tr>";
+// 	var html = "";
+// 	html +="<tr id='trDate'><td>일시</td>";
+// 	html +="<td>시작:<input type='date' class='form-control' style='width: 150px;'>";
+// 	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";
+// 	html +="종료:<input type='date' class='form-control' style='width: 150px;'>";
+// 	html +="<input type='time' class='form-control' style='width: 150px;'>";
+// 	html +="</td></tr>";
+
+	var cald_start = document.getElementById("cald_start");
+	var cald_end = document.getElementById("cald_end");
+
+	cald_start.disabled = true;
+	cald_end.disabled = true;
+
 	
 	if(val == 101){
 		$("#cgoryEtc").empty();
-		$("#trDate").remove();
+//		$("#trDate").remove();
+		cald_start.disabled = true;
+		cald_end.disabled = true;
+
 	}else if(val == 102){
 		$("#cgoryEtc").empty();
-		$("#trDate").remove();
+//		$("#trDate").remove();
+		cald_start.disabled = true;
+		cald_end.disabled = true;
+
 		$("#cgoryEtc").text("필독게시물은 게시판 상단에 별도 표기됩니다.");
 	}else if(val == 103){
 		$("#cgoryEtc").empty();
-		$("#trDate").remove();
+//		$("#trDate").remove();
+		cald_start.disabled = true;
+		cald_end.disabled = true;
+
 	}else{
 		$("#cgoryEtc").empty();
 		$("#trDate").remove();
-		$("#insertTbl >tbody > tr").eq(0).after(html);
+// 		$("#insertTbl >tbody > tr").eq(0).after(html);
+		cald_start.disabled = false;
+		cald_end.disabled = false;
+
 	}
 }
 </script>

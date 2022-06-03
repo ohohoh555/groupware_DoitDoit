@@ -116,7 +116,7 @@ public class EntrBoardTest {
 		System.out.println(cnt>0?"성공":"실패");
 	}
 	
-	
+	@Test
 	public void insEboardAttachTest() {
 		Map<String, Object>map = new HashMap<String, Object>();
 		map.put("cgory_no", 101);
@@ -125,5 +125,7 @@ public class EntrBoardTest {
 		map.put("flist_size", "102713");
 		map.put("flist_uploadpath", "C:\\Users\\user\\git\\groupware_doit\\DoitDoit_Project\\src\\main\\resources\\back\\2022\\06\\");
 		
+		int cnt = service.insEboardAttach(map);
+		System.out.println(cnt>0?"성공":"실패");
 	}
 }

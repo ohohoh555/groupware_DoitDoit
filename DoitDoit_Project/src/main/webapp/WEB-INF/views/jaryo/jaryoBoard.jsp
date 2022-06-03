@@ -44,7 +44,19 @@
 								<input type="button" class="btn btn-default" value="등록" onclick="submitFile()">
 							</div>
 						</div>
-					</div>
+						<div>
+							<table id="jaryoTable" class="stripe">
+								<thead>
+									<tr>
+										<th>번호</th>
+										<th>파일명</th>
+										<th>크기</th>
+										<th>등록일자</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div><!-- rContent-full 끝 -->
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
@@ -52,5 +64,45 @@
             </div>
         </main>
     </div>
+    
+    
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#jaryoTable").DataTable({
+		lengthMenu: [ 5, 10, 15],
+	     displayLength: 5,
+	     lengthChange: false,
+		  	"language": {
+	            "emptyTable": "자료가 없어요.",
+	            "lengthMenu": "페이지당 _MENU_ 개씩 보기",  // 페이징 개수
+	            "info": "현재 _START_ - _END_ / _TOTAL_건",  // 시작 - 끝 / 전체페이지 
+	            "infoEmpty": "자료 없음",   // info부분이 비었을 경우 
+	            "infoFiltered": "( _MAX_건의 게시글에서 필터링됨 )",
+	            "search": "검색: ",
+	            "zeroRecords": "일치하는 게시글이 없어요.",  //검색시 필터링된 게시글이 없을 경우
+	            "loadingRecords": "로딩중...",
+	            "processing":     "잠시만 기다려 주세요...",
+	            "paginate": {
+	                "next": "다음",
+	                "previous": "이전"
+	            }
+	        }, 
+	        
+	      
+	        ajax:{
+	        	url:"./selJaryoAllUser.do",
+	        	type:"post",
+	        	dataSrc:""
+	        },
+	        columns:[
+	        	{data:"eboard_no"},
+	        	{data:"flist_originname"},
+	        	{data:"flist_size"},
+	        	{data:"eboard_regdate"},
+	        ]
+	});
+});
+
+</script>   
 </body>
 </html>

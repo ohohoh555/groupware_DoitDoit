@@ -32,6 +32,8 @@
 				"handlers": {}
 			}
 		},
+
+
 		"oracle_thin-18123844e45-83114068bcf3cba": {
 			"provider": "oracle",
 			"driver": "oracle_thin",
@@ -43,6 +45,7 @@
 				"port": "1521",
 				"database": "XE",
 				"url": "jdbc:oracle:thin:@//localhost:1521/XE",
+
 				"home": "C:\\app\\JSYOU\\product\\21c\\dbhomeXE",
 				"type": "dev",
 				"provider-properties": {
