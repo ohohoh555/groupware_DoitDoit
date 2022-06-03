@@ -11,7 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.doit.gw.vo.emp.EmpVo;
 
@@ -21,7 +21,7 @@ public class SecurityProvider implements AuthenticationProvider {
 	private UserDetailsService uds;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -44,17 +44,16 @@ public class SecurityProvider implements AuthenticationProvider {
 		
 		if(!passwordEncoder.matches(password, user.getPassword())) {
 			logger.info("비밀번호 불일치");
-			throw new BadCredentialsException(username);
+			throw new BadCredentialsException("비밀번호 불일치");
 		}else {
 			logger.info("비밀번호 일치");
-		}
-		
-		UsernamePasswordAuthenticationToken result =
-				new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
-		
-		logger.info("result : " + result);
+			UsernamePasswordAuthenticationToken result =
+					new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
+			
+			logger.info("result : " + result);
 
-		return result;
+			return result;
+		}
 	}
 
 	@Override
