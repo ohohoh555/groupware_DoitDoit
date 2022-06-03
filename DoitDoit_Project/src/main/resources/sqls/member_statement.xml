@@ -33,10 +33,10 @@
 		EMP_NFC
 		)
 		VALUES(
-		TO_CHAR(SYSDATE,'YYYYMMDD')||
+		TO_CHAR(CURRENT_DATE,'YYYYMMDD')||
 		CASE WHEN EMP_SEQ.NEXTVAL <10 THEN '0'||EMP_SEQ.NEXTVAL
 		ELSE ''||EMP_SEQ.NEXTVAL END ,
-		'@'||TO_CHAR(SYSDATE,'YYYYMMDD'), #{emp_name}, #{emp_email}, 
+		'@'||TO_CHAR(CURRENT_DATE,'YYYYMMDD'), #{emp_name}, #{emp_email}, 
 		#{dept_no}, #{rank_no}, #{emp_address}, 
 		#{emp_nfc}
 		)
@@ -69,4 +69,9 @@
         TO_CHAR(EMP_REGDATE,'YYYY-MM-DD') AS EMP_REGDATE, EMP_ADDRESS, EMP_NFC
 		FROM EMP WHERE EMP_ID = #{emp_id}
 	</select>
+	
+	<update id="resetPassword" parameterType="EmpVo">
+		UPDATE EMP SET EMP_PASSWORD = '@'||TO_CHAR(SYSDATE,'YYYYMMDD'), 
+		EMP_PHONE = NULL WHERE EMP_ID = #{emp_id};
+	</update>
 </mapper>

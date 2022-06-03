@@ -48,4 +48,11 @@ public class EmpServiceImpl implements IEmpService{
 		
 		return mapper.selEmpDetail(emp_id);
 	}
+	
+	// 비밀번호 초기화
+	@Override
+	public int resetPassword(String emp_id) {
+		logger.info("MemberServiceImpl resetPassword 비밀번호 초기화");
+		return mapper.resetPassword(emp_id);
+	}
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.doit.gw.mapper.ann.IAnnMapper;
+import com.doit.gw.vo.ann.AnnualVo;
 import com.doit.gw.vo.emp.EmpVo;
 
 @Service
@@ -78,5 +79,11 @@ public class AnnServiceImpl implements IAnnService {
 		logger.info("AnnServiceImpl insAnnAddMonth 올해 입사한 사원 만근시 연차(1개) 부여(update) : {}", emp_ids);
 		return mapper.updAnnualMonth(emp_ids);
 	}
-	
+
+	@Override
+	public List<AnnualVo> selAnnualAdmin(String dept_no) {
+		logger.info("AnnServiceImpl selAnnualAdmin 관리자 연차 조회 : {}", dept_no);
+		return mapper.selAnnualAdmin(dept_no);
+	}
+
 }

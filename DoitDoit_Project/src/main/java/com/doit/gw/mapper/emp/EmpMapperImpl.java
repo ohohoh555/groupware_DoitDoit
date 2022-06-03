@@ -52,4 +52,9 @@ public class EmpMapperImpl implements IEmpMapper {
 		return sqlSession.selectList(NS+"selEmpDetail", emp_id);
 	}
 	
+	// 비밀번호 초기화
+	@Override
+	public int resetPassword(String emp_id) {
+		return sqlSession.update(NS+"resetPassword",emp_id);
+	}
 }

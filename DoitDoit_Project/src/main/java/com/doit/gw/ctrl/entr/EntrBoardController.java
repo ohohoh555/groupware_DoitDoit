@@ -109,8 +109,20 @@ public class EntrBoardController {
 	@RequestMapping(value = "/insertFrm.do", method = RequestMethod.POST)
 	public String insertFrm(EntrBoardVo eVo) {
 		logger.info("@insertFrm 새글입력 및 저장 : {}", eVo);
-		int cnt = service.insEboardRoot(eVo);
-		logger.info("@insertFrm 새글 입력에 성공한 횟수 : {}", cnt);
+		String Cgory_no = eVo.getCgory_no();
+		String cald_start=eVo.getCald_start();
+		String cald_end = eVo.getCald_end();
+		int cnt=0;
+		if(Cgory_no.equals("302")) {
+			eVo.setCald_start(cald_start.replace("T", " "));
+			eVo.setCald_end(cald_end.replace("T", " "));
+			cnt = service.insEboardCald(eVo);
+			logger.info("@insertFrm 일정 등록 성공한 횟수: {}", cnt);
+		}else {
+			cnt = service.insEboardRoot(eVo);
+			logger.info("@insertFrm 새글 입력에 성공한 횟수 : {}", cnt);
+		}
+
 		return "redirect:/entrBoard.do";
 	}
 	
@@ -139,6 +151,23 @@ public class EntrBoardController {
 		logger.info("@changeDelOne 숨김/보임 처리 성공횟수: {}",cnt);
 		
 		return "redirect:/OneBoardAdmin.do?eboard_no="+eboard_no;
+	}
+	
+	@RequestMapping(value = "/deletOne.do", method = RequestMethod.GET)
+	public String deletOne(String eboard_no) {
+		logger.info("@deletOne 관리자 상세조회에서 게시글 완전삭제: {}",eboard_no );
+		int cnt = service.delEboardRoot(eboard_no);
+		logger.info("@deletOne 삭제된 게시글 갯수 : {}", cnt);
+		return "redirect:/entrBoardAdmin.do";
+	}
+	
+	@RequestMapping(value = "/FildocAll.do", method = RequestMethod.GET,
+					produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public List<EntrBoardVo> FildocAll(){
+		logger.info("@FildocAll 공지게시판 필독전체보기 클릭");
+		List<EntrBoardVo> data= service.selEboardFildocAll();
+		return data;
 	}
 
 }

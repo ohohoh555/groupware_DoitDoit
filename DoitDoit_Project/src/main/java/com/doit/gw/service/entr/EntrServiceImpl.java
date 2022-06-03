@@ -82,6 +82,27 @@ public class EntrServiceImpl implements IEntrService {
 		return mapper.updEboardDelfAdmin(eboard_nos);
 	}
 
+	@Override
+	public int delEboardRoot(String eboard_no) {
+		logger.info("@delEboardRoot 관리자 게시글 완전삭제 : {}", eboard_no);
+		return mapper.delEboardRoot(eboard_no);
+	}
+
+	@Override
+	public int insEboardAttach(Map<String, Object> map) {
+		logger.info("@insEboardAttach 게시글 입력시 첨부파일 저장: {}",map);
+		return mapper.insEboardAttach(map);
+	}
+
+	@Override
+	public int insEboardCald(EntrBoardVo eVo) {
+		logger.info("@insEboardCald 사용자 일정 게시글 입력 : {}",eVo);
+		int cnt = mapper.insEboardCald(eVo);
+		logger.info("@캘린더에 일정 먼저 등록 성공 : {}", cnt);
+		return mapper.insCaldRoot(eVo);
+	}
+
+
 	
 
 }

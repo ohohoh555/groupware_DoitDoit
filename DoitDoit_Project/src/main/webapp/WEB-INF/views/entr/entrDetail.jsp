@@ -16,7 +16,6 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 </head>
 <body>
-
 	<div id="container">
         <%@include file="../comm/nav.jsp" %>
         <main>
@@ -25,7 +24,6 @@
 		 
                 <div id="rContent">
 					<div class="rContent-full">
-					
 					<table class="table table-striped">
 						<thead>
 							<tr>
@@ -45,6 +43,12 @@
 								<td>제목</td>
 								<td>${entrOne.eboard_title}</td>
 							</tr>
+							<c:if test="${entrOne.cgory_no =='302'}">
+							<tr>
+								<td>일시</td>
+								<td>${entrOne.cald_start} ~ ${entrOne.cald_end}</td>
+							</tr>
+							</c:if>
 							<tr>
 								<td>내용</td>
 								<td>${entrOne.eboard_content}</td>

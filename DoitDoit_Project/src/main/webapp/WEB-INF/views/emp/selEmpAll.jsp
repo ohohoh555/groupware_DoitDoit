@@ -70,7 +70,8 @@ $(document).ready( function () {
                 "previous": "이전"
             }
         },
-        
+        scrollY : "400px",
+        scrollCollapse: true,
         lengthChange: true, // 표시 건수기능 숨기기
         searching: true, // 검색 기능 숨기기
         ordering: true, // 정렬 기능 숨기기

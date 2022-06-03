@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.doit.gw.vo.ann.AnnualVo;
 import com.doit.gw.vo.emp.EmpVo;
 
 @Repository
@@ -65,6 +66,11 @@ public class AnnMapperImpl implements IAnnMapper {
 	@Override
 	public int updAnnualMonth(Map<String, String[]> emp_ids) {
 		return sqlSession.update(NS+"updAnnualMonth", emp_ids);
+	}
+
+	@Override
+	public List<AnnualVo> selAnnualAdmin(String dept_no) {
+		return sqlSession.selectList(NS+"selAnnualAdmin", dept_no);
 	}
 
 }

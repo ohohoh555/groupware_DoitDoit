@@ -7,9 +7,9 @@
 	<select id="selEboardAllUser" resultType="EntrBoardVo">
 		SELECT EBOARD_NO, GUBUN_NO, CGORY_NO, 
 			EMP_ID,EMP_NAME, EBOARD_TITLE,
-			EBOARD_READCOUNT, EBOARD_REGDATE
+			EBOARD_READCOUNT, TO_CHAR(EBOARD_REGDATE, 'YYYY-MM-DD') EBOARD_REGDATE
 		FROM ENTRBOARD
-		WHERE CGORY_NO !=301 AND CGORY_NO !=102 AND EBOARD_DELFLAG ='N' 
+		WHERE EBOARD_DELFLAG ='N'AND CGORY_NO IN(101,102,103,302) 
 		ORDER BY EBOARD_REGDATE DESC
 	</select>
 	
@@ -28,7 +28,7 @@
 		SELECT ROW_NUM,
 		EBOARD_NO, GUBUN_NO, CGORY_NO, 
 		EMP_ID,EMP_NAME, EBOARD_TITLE,
-		EBOARD_READCOUNT, EBOARD_REGDATE
+		EBOARD_READCOUNT, TO_CHAR(EBOARD_REGDATE, 'YYYY-MM-DD') EBOARD_REGDATE
 		FROM (
 			SELECT ROW_NUMBER() OVER(ORDER BY EBOARD_REGDATE DESC) ROW_NUM,
 			EBOARD_NO, GUBUN_NO, CGORY_NO, 
@@ -51,7 +51,7 @@
 	<!-- 공지게시글 상세조회 -->
 	<select id="selEboardDetail" parameterType="java.lang.String" resultType="EntrBoardVo">
 		SELECT EBOARD_NO , GUBUN_NO, CGORY_NO,
-			EMP_ID ,EMP_NAME, EBOARD_TITLE,
+			EMP_ID ,e.CALD_ID,EMP_NAME, EBOARD_TITLE,
 			EBOARD_CONTENT,EBOARD_READCOUNT, EBOARD_REGDATE, 
 			EBOARD_DELFLAG, CALD_START, CALD_END
 		FROM ENTRBOARD e LEFT JOIN CALENDAR c ON e.CALD_ID = c.CALD_ID 
@@ -93,11 +93,42 @@
 	<insert id="insEboardRoot" parameterType="EntrBoardVo">
 		INSERT INTO ENTRBOARD
 					(EBOARD_NO, GUBUN_NO, CGORY_NO,  
-					EMP_ID, EMP_NAME, EBOARD_TITLE, 
+					EMP_ID,EMP_NAME, EBOARD_TITLE, 
 					EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, EBOARD_DELFLAG)
 			VALUES((SELECT MAX(EBOARD_NO)+1 FROM ENTRBOARD), '100', #{cgory_no}, 
 					#{emp_id},#{emp_name} , #{eboard_title}, 
 					#{eboard_content}, 0, SYSDATE, 'N')
+	</insert>
+	
+	<!-- 사용자 공지게시판 게시글 입력2 (일정)-->
+	<insert id="insEboardCald" parameterType="EntrBoardVo">
+	INSERT INTO CALENDAR
+		(CALD_ID, CALD_START,CALD_END, CALD_COLOR)
+	VALUES
+		((SELECT MAX(CALD_ID)+1 FROM CALENDAR), TO_DATE(#{cald_start},'YYYY/MM/DD HH24:MI'),
+			TO_DATE(#{cald_end},'YYYY/MM/DD HH24:MI'),'red')
+	</insert>
+	<insert id="insCaldRoot" parameterType="EntrBoardVo">
+		INSERT INTO ENTRBOARD
+					(EBOARD_NO, GUBUN_NO, CGORY_NO,  
+					EMP_ID,CALD_ID,EMP_NAME, EBOARD_TITLE, 
+					EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, EBOARD_DELFLAG)
+			VALUES((SELECT MAX(EBOARD_NO)+1 FROM ENTRBOARD), '100', #{cgory_no}, 
+					#{emp_id},(SELECT MAX(CALD_ID) FROM CALENDAR) ,#{emp_name} , #{eboard_title}, 
+					#{eboard_content}, 0, SYSDATE, 'N')
+	
+	
+	</insert>
+	
+	<!-- 사용자 게시글 입력시 업로드 파일이 있을 경우 파일정보 저장 -->
+	<insert id="insEboardAttach" parameterType="java.util.Map">
+			INSERT INTO FILELIST
+				(FLIST_SEQ, GUBUN_NO, EBOARD_NO , 
+				FLIST_UUID, FLIST_ORIGINNAME, FLIST_SIZE, 
+				FLIST_UPLOADPATH)
+			VALUES(SEQ_FILELIST.NEXTVAL, '100',(SELECT MAX(EBOARD_NO) FROM ENTRBOARD e2 WHERE CGORY_NO = #{cgory_no}) , 
+			#{flist_uuid}, #{originname}, #{flist_size}, 
+			#{flist_uploadpath})
 	</insert>
 	
 	<!-- 관리자 게시글 보임/숨김처리 -->
@@ -109,5 +140,11 @@
 			#{eboard_no}
 		</foreach>
 	</update>
+	
+	<!-- 관리자 게시글 DB삭제  -->
+	<delete id="delEboardRoot" parameterType="java.lang.String">
+		DELETE FROM ENTRBOARD e 
+ 		 WHERE e.EBOARD_NO = #{eboard_no}
+	</delete>
 
 </mapper>
