@@ -51,7 +51,7 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="6" style="text-align: center;">&lt;&lt;[필독]게시글 전체보기&gt;&gt;</td>
+									<td colspan="6" style="text-align: center;"><ul><li onclick="fildokAll()">&lt;&lt;[필독]게시글 전체보기&gt;&gt;</li></ul></td>
 								</tr>
 							</tfoot>
 						</table>
@@ -65,7 +65,7 @@
 									<th>분류</th>
 									<th>제목</th>
 									<th>작성자</th>
-									<th>등록일</th>
+									<th width="80px;">등록일</th>
 									<th>조회</th>
 								</tr>
 							</thead>
@@ -190,6 +190,41 @@ function cgoryAction(val){
 function insertBoard(){
 	console.log("insertBoard 글쓰기 작동");
 	location.href ="./insertBoard.do"
+}
+
+function fildokAll(){
+	console.log("필독 전체보기 작동");
+	$("#FildokTable").DataTable().destroy();
+	
+	$.ajax({
+		url:"./FildocAll.do",
+		type:"get",
+		success:function(data){
+			console.log(data);
+			$("#FildokTable").DataTable({
+				data:data,
+				columns: [
+					{data:"eboard_no", render: function (data,type,row,meta) {return "★"}},
+					{data:"cgory_no", render: function (data,type,row,meta) {return "필독"}},
+					{data:"eboard_title"},
+					{data:"emp_name"},
+					{data:"eboard_regdate"},
+					{data:"eboard_readcount"}
+				],
+				lengthChange: false,
+				searching: false,
+				ordering: false,
+				info: false,
+				paging:false,
+				order:[ [ 4, "desc"]]
+			});
+		},
+		error:function(){
+			alert("필독전체보기 통신에러");
+		}
+		
+		
+	});
 }
 
 </script>

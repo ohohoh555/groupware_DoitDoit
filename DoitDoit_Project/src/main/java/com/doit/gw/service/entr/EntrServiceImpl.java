@@ -94,6 +94,15 @@ public class EntrServiceImpl implements IEntrService {
 		return mapper.insEboardAttach(map);
 	}
 
+	@Override
+	public int insEboardCald(EntrBoardVo eVo) {
+		logger.info("@insEboardCald 사용자 일정 게시글 입력 : {}",eVo);
+		int cnt = mapper.insEboardCald(eVo);
+		logger.info("@캘린더에 일정 먼저 등록 성공 : {}", cnt);
+		return mapper.insCaldRoot(eVo);
+	}
+
+
 	
 
 }

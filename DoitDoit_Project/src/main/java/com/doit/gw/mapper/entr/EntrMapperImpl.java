@@ -83,4 +83,14 @@ public class EntrMapperImpl implements IEntrMapper {
 		return sqlSession.insert(NS+"insEboardAttach", map);
 	}
 
+	@Override
+	public int insEboardCald(EntrBoardVo eVo) {
+		return sqlSession.insert(NS+"insEboardCald",  eVo);
+	}
+
+	@Override
+	public int insCaldRoot(EntrBoardVo eVo) {
+		return sqlSession.insert(NS+"insCaldRoot", eVo);
+	}
+
 }
