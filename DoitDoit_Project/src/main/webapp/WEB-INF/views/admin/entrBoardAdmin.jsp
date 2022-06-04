@@ -144,6 +144,8 @@ function cgoryBoard(val){
 		                "previous": "이전"
 		            }
 		        },
+		        lengthMenu: [ 5, 10, 15],
+		        displayLength: 5
 				
 			});
 		},

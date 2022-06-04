@@ -20,14 +20,14 @@
                 <div id="rContent">
 					<div class="rContent-full">
 					<h3>글수정</h3>
- 			           <form id="insertFrm" onsubmit="return modifyAction()" method="post">
+ 			   
  			           <sec:authorize access="isAuthenticated()">
 					        <sec:authentication property="principal" var="principal"/>
-					        <input type="text" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
-					        <input type="text" value="${principal.emp_name}" id="emp_name" name="emp_name">
+					        <input type="hidden" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
+					        <input type="hidden" value="${principal.emp_name}" id="emp_name" name="emp_name">
  			           </sec:authorize> 
  			           		<input type="hidden" value="${eVo.eboard_content}" id="originContent" >
-						<table class="table table-bordered" id="insertTbl">
+						<table class="table table-bordered" id="modifyTbl">
 							<tbody>
 								<tr>
 									<td>분류</td>
@@ -48,32 +48,44 @@
 									<td>
 										<div style="float: left;">
 										<label>시작:</label>
-										<input type='datetime-local' class='form-control' name="cald_start" id="cald_start" style='width: 200px;' value="${eVo.cald_start}">
+										<input type='datetime-local' class='form-control' id="cald_start" style='width: 200px;' value="${eVo.cald_start}">
 										</div>
 
 										<div style="margin-left: 10px;">
 										<label>종료:</label>
-										<input type='datetime-local' class='form-control' name="cald_end" id="cald_end"" style='width: 200px;' value="${eVo.cald_end}">
+										<input type='datetime-local' class='form-control' id="cald_end"" style='width: 200px;' value="${eVo.cald_end}">
 										</div>
 									</td>
 								</tr>
 								</c:if>
 								<tr>
 									<td>제목</td>
-									<td><input type="text" name="eboard_title" id="title" class="form-control" value="${eVo.eboard_title}" disabled></td>
+									<td><input type="text" id="eboard_title" class="form-control" value="${eVo.eboard_title}" disabled></td>
 								</tr>
+								<c:choose>
+								<c:when test="${eVo.cgory_no =='302'}">
+									<tr>
+										<td>내용</td>
+										<td>
+											<textarea rows="5" cols="10" id="cald_content" class="form-control" style="resize: none;">${eVo.eboard_content}</textarea>
+										</td>
+									</tr>
+								</c:when>
+							<c:otherwise>
 								<tr>
 									<td>내용</td>
 									<td>
-										<textarea name ="eboard_content" id="content">${eVo.eboard_content}</textarea>
+									<textarea name ="eboard_content" id="content">${eVo.eboard_content}</textarea>
 									</td>
 								</tr>
+							</c:otherwise>
+								</c:choose>
 							</tbody>
 							<tfoot>
 								<tr>
 									<td colspan="3">
 										<input type="button" class="btn btn-default" value="초기화" onclick="resetOrigin()">
-										<input type="submit" class="btn btn-default" value="수정완료" >
+										<input type="submit" class="btn btn-default" value="수정완료" onclick="modifyAction()">
 										<input type="button" class="btn btn-default" value="취소" onclick="cancleModify()">
 									</td>
 								</tr>
@@ -113,6 +125,8 @@ function cancleModify(){
 }
 
 function modifyAction(){
+	var originContent=document.getElementById("originContent").value;
+	
 	
 }
 
