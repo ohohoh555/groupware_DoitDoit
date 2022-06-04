@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.doit.gw.service.ann.IAnnService;
 import com.doit.gw.vo.ann.AnnualVo;
@@ -23,7 +24,7 @@ public class AnnualController {
 	@Autowired
 	private IAnnService service;
 	
-	@RequestMapping(value = "/annualAdmin.do", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/annualAdmin.do", method = RequestMethod.GET)
 	public String annualAdmin(String dept_no, Model model) {
 		logger.info("AnnualController annualAdmin : {}", dept_no);
 		if(dept_no != null) {
@@ -31,6 +32,7 @@ public class AnnualController {
 			logger.info("AnnualController annualAdmin : {}",  annLists);
 			model.addAttribute("lists", annLists);
 		}
+		model.addAttribute("dept_no", dept_no);
 		return "/admin/annualAdmin";
 	}
 	

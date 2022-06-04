@@ -50,8 +50,7 @@
 						</table>
 						</form>
 					</div>
-                </div>
-            <%@include file="../comm/aside.jsp" %>    
+                </div> 
             </sec:authorize>
             </div>
         </main>
@@ -145,6 +144,8 @@ function cgoryBoard(val){
 		                "previous": "이전"
 		            }
 		        },
+		        lengthMenu: [ 5, 10, 15],
+		        displayLength: 5
 				
 			});
 		},

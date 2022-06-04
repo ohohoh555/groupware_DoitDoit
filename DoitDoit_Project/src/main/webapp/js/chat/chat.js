@@ -12,7 +12,7 @@ var fd = new FormData();
 var k = 0;
 
 $(document).ready(function() {
-	
+
 	console.log("js실행");
 	var sock = new SockJS("/DoitDoit_Project/stompSocket");
 	console.log(sock);
@@ -149,39 +149,49 @@ $(document).ready(function() {
 		}
 		sendFileToServer(fd);
 	}
+
+ 
+
 });
 
 
 function enterkey(){
-	if(window.event.keyCode == 13){
-		chatCon = document.getElementById("chatCon");
-		chatSend(room_id,chatCon,empId);
-	}
+   if(window.event.keyCode == 13){
+      chatCon = document.getElementById("chatCon");
+      chatSend(room_id,chatCon,empId);
+   }
 }
 
 //채팅 컨트롤러로 보내는 영역
 function chatSend(room_id,chatCon){
+
 	if(chatCon.val != ""){
 		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: chatCon.val(), emp_id: emp_id, user_name: user_name, type: "T"}));
 		chatCon.val('');
 	}else{
 		alert('채팅을 입력해 주세요');
 	}
+
 }
 
 //채팅방 입장 시 
 function roomEnter(room_id,username){
-	stomp.send('/pub/chat/enter', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
+   stomp.send('/pub/chat/enter', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
 }
 
 //채팅방 닫기 실행 시
 function roomOut(room_id, username){
-	stomp.send('/pub/chat/out', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
+   stomp.send('/pub/chat/out', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
 }
 
 //채팅방에 있는지 없는지 판단
 function aboutChatRoom(mems){
+//우연이꺼로 고친...(아마 선생님이 고친 부분인듯)
+//   console.log("aboutChatRoom");
+//   console.log($("#members > div > div").eq(0).html());
+
 	console.log("aboutChatRoom");
+
 	var emps = $("#members").children();
 	for(var i = 0; i < emps.length; i++){
 		if($.inArray(emps.eq(i).attr("id"), mems) > -1){
@@ -192,10 +202,15 @@ function aboutChatRoom(mems){
 			console.log("없음");
 		}
 	}
+
+
+
+
 }
 
 //ajax로 파일 입력
 function sendFileToServer(fd) {
+
 	//FormData()에 room_id와 empId 추가
 	fd.append('room_id',room_id);
 	fd.append('user_name',user_name);
@@ -218,4 +233,7 @@ function sendFileToServer(fd) {
 			alert("파일업로드 실패");
 		}
 	});
+
+  
+
 }

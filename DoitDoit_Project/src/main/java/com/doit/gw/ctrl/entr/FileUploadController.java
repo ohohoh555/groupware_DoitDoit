@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
+import com.doit.gw.vo.entr.FileListVo;
+
 @Controller
 public class FileUploadController {
 	
@@ -35,7 +37,7 @@ public class FileUploadController {
 	public void editorFileUpload(HttpServletRequest request, HttpServletResponse response,
 										@RequestParam MultipartFile upload) {
 		
-		logger.info("@editorFileUpload ");
+		logger.info("@editorFileUpload 공지게시글 입력시 파일업로드");
 		
 		//랜덤문자 생성
 		UUID uid = UUID.randomUUID();
@@ -144,7 +146,7 @@ public class FileUploadController {
 								@RequestParam(value="fileName") String fileName,
 								HttpServletRequest request, HttpServletResponse response) throws IOException {
 		byte[] bytes=null;
-		logger.info("Welcome! HomeController download : {} {}",  uid, fileName);
+		logger.info("@download : {} {}",  uid, fileName);
 		
 		//서버에 저장된 이미지 경로 
 		String path=WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/") ;
@@ -172,40 +174,6 @@ public class FileUploadController {
 	
 	
 	
-	@RequestMapping(value = "/saveFile.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
-	@ResponseBody
-	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request) throws FileNotFoundException {
-		logger.info("Welcome! saveFile 파일저장하기");
-		
-		String serverPath = WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/");
-		
-		LocalDate now = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY\\MM\\");
-		String nowFormat = now.format(formatter); 
-		
-		String backPath = "C:\\Users\\user\\git\\groupware_doit\\DoitDoit_Project\\src\\main\\resources\\back\\"+nowFormat;
-		
-		Iterator<String> itr =multipartRequest.getFileNames();
-		
 
-		while(itr.hasNext()) { // 받은파일을 모두
-			MultipartFile mpFile=multipartRequest.getFile(itr.next());
-			String originFileName=mpFile.getOriginalFilename(); // 파일명
-			String fileFullPath = backPath+originFileName; 
-			System.out.println("파일 이름 : "+originFileName);
-			System.out.println("파일 전체 경로 : "+fileFullPath);
-			
-			
-			
-
-			try {
-				mpFile.transferTo(new File(fileFullPath));//파일 폴더에 저장
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return "업로드 성공";
-	}
 
 }

@@ -1,44 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib  uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>문서함 메인 화면</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
-<style type="text/css">
-.signImg1{
-	width: 200px;
-    height: 200px;
-  	background-image: url(./img/sign/sign01.png);
-    background-size: 60%;
-    background-repeat: no-repeat;
-    background-position: center;
-    border:2px solid  #6667AB;
-    border-radius: 100%;
-    margin: 50px 0 0 50px;
-}
-.signImg2{
-	width: 200px;
-    height: 200px;
-  	background-image: url(./img/sign/sign02.png);
-    background-size: 60%;
-    background-repeat: no-repeat;
-    background-position: center;
-    border:2px solid  #6667AB;
-    border-radius: 100%;
-    margin: 50px 50px;
-    
-}
-</style>
 </head>
+<%@include file="../comm/setting.jsp" %>
 
 <body>
 	<div id="container">
@@ -49,10 +19,48 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
                     <div id="resent" class="rContent-full">
-                    <div class="rContent-normal-top" style="width: 600px; height: 100px; margin-top: 10%;">
-                    	<h2 style="text-align: center;">결재예정문서조회</h2>
-                    	<input type="hidden" id="empId" value="${emp_id}">
+                    
+                    <div class="rContent-normal-top" style="width: 780px; height: 300px; margin-top: 10px;">
+                    <fieldset style="width:770px;">
+						<legend style="margin-bottom : 3px;">결재 대기 문서</legend>
+                    	<input type="button" onclick="myDoc()" value="상신">
+                    	<input type="button" onclick="allDoc()" value="송신">
+                    	<input type="hidden" id="emp_id" value="${emp_id}">
+					</fieldset>
+                    <div style="width: 774px; height: 235px; border: 1px solid black;margin-left:1px;">
+                    <table id="approList" class="cell-border dataTable">
+                    <thead>
+                    <tr>
+                    <th>No.</th>
+                    <th>문서번호</th>
+                    <th>결재상태</th>
+                    <th>제목</th>
+                    <th>기안자</th>
+                    <th>기안일</th>
+                    </tr>
+                    </thead>
+                    <tbody id="myDocList" >
+                    
+                   <%--  <c:forEach var="lists" items="${aList}"> --%>
+            <%--         </c:forEach> --%>
+                    </tbody>
+                    </table>
                     </div>
+                    </div>
+                    
+                     <div class="rContent-normal-bottom" style="width: 780px; height: 460px;">
+                      <fieldset style="width:770px;">
+						<legend style="margin-bottom : 3px;">결재 문서 조회</legend>
+							<select>
+								<option>==== 선택 ====</option>
+								<option>결재대기</option>
+								<option>반려</option>
+								<option>임시저장</option>
+								<option>결재완료</option>
+							</select>
+                    	<input type="button" onclick="()" value="선택">
+					</fieldset>
+                     </div>
                     <!-- 
                     <div class="rContent-normal-bottom" style="width: 600px; height: 500px;">
 	                    <div style="float: left; cursor: pointer;" onclick="location.href='./signpadForm.do';"  >
@@ -82,32 +90,96 @@
 </body>
 <script type="text/javascript">
 window.onload = function approDocList(){
+	myDoc();
+}
+function myDoc(){
 	console.log("아작스 실행전");
-	var empId = document.getElementById("empId").value;
-	console.log(empId);
+	var emp_id = document.getElementById("emp_id").value;
+	console.log(emp_id);
 	$.ajax({
-		url : "./docAllList.do",
+		url : "./myDocList.do",
 		type : "GET",
-		data : "emp_id="+empId,
+		data : "emp_id="+emp_id,
 		async : true,
 		success : function(data){
 			console.log("ajax성공");
-			console.log(data);
-			console.log(data.length);
-			/* 
-			for(let i=0; i<data.length; i++){
-			console.log(data[i].APPRO_NO); //문서번호
-			console.log(data[i].APPRO_EMPNAME); //결재자
-			console.log(data[i].APPRO_TITLE); //문서제목
-			console.log(data[i].APPRO_REGDATE); //문서 기안일
-			console.log(data[i].APPRO_STATUS); //결재대기
-			console.log(data[i].APPRO_TYPE); //문서상태 (상신,송신)
+//			console.log(data);
+			var tbody = document.getElementById("myDocList")	//제거하고자 하는 엘리먼트
+			while ( tbody.hasChildNodes() )
+			{
+				tbody.removeChild(tbody.firstChild );       
+			}
+			var json = JSON.parse(data);
+			console.log(json);
+			console.log(json.lists);
 			
-				
-			} */
-		//	[[{APPRO_LINE_NO=2, APPRO_EMPNAME=이정민, EMP_ID=2022052800, APPRO_TITLE=더미데이터 값 입력테스트, DOC_FORM_NO=DOC0001, APPRO_STATUS_NO=1, APPRO_NO=DOIT-2022052502, APPRO_REGDATE=2022-05-25 08:44:16.0, APPRO_STATUS=결재대기, APPRO_TYPE=상신, APPRO_CONTENT=oracle.sql.CLOB@331eaf3}]]
-		}
+			var lists = json.lists;
+			console.log(lists[0]);
+			for(let i=0; i<lists.length; i++){
+				if(lists[i].appro_status == '결재대기'){
+					console.log(lists[i].appro_status);
+					console.log(lists[i].appro_status == '결재대기');
+				html = '';
+				html += '<tr>';
+				html += '<td>'+(i+1)+'</td>';
+				html += '<td><a href="./selDocDetail.do?emp_id='+emp_id+'&appro_no='+lists[i].appro_no+'">'+lists[i].appro_no+'</td>';
+				html += '<td>'+lists[i].appro_status+'</td>';
+				html += '<td>'+lists[i].appro_title+'</td>';
+				html += '<td>'+lists[i].appro_empname+'</td>'
+				html += '<td>'+lists[i].appro_regdate+'</td>';
+				html += '</tr>';
+				$("#myDocList").append(html);
+				} 
+			} 
+			
+		}	
 	});
 }
+
+function allDoc(){
+	console.log("아작스 실행전");
+	var emp_id = document.getElementById("emp_id").value;
+	console.log(emp_id);
+	$.ajax({
+		url : "./docAllList.do",
+		type : "GET",
+		data : "emp_id="+emp_id,
+		async : true,
+		success : function(data){
+			console.log("ajax성공");
+	//		console.log(data);
+
+			var tbody = document.getElementById("myDocList")	//제거하고자 하는 엘리먼트
+			while ( tbody.hasChildNodes() )
+			{
+				tbody.removeChild(tbody.firstChild );       
+			}
+			
+			var json = JSON.parse(data);
+			console.log(json.lists);
+			
+			var lists = json.lists;
+			console.log(lists[0]);
+			for(let i=0; i<lists.length; i++){
+				if(lists[i].appro_status == '결재대기'){
+					console.log(lists[i].appro_status);
+					console.log(lists[i].appro_status == '결재대기');
+					html = '';
+					html += '<tr>';
+					html += '<td>'+(i+1)+'</td>';
+					html += '<td><a href="./selDocDetail.do?emp_id='+emp_id+'&appro_no='+lists[i].appro_no+'">'+lists[i].appro_no+'</td>';
+					html += '<td>'+lists[i].appro_status+'</td>';
+					html += '<td>'+lists[i].appro_title+'</td>';
+					html += '<td>'+lists[i].appro_empname+'</td>'
+					html += '<td>'+lists[i].appro_regdate+'</td>';
+					html += '</tr>';
+					$("#myDocList").append(html);
+				} 
+			}	
+		}
+	
+	});
+ }
+
 </script>
 </html>

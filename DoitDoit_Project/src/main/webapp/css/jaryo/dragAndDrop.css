@@ -1,10 +1,11 @@
 @charset "UTF-8";
 
 .dragAndDropDiv {
-	border: 2px solid #92AAB0;
-	width: 700px;
+	border: 2px solid #061e26;
+	background-color:white;
+	width: 795px;
 	height: 200px;
-	color: #92AAB0;
+	color: #061e26;
 	text-align: center;
 	vertical-align: middle;
 	padding: 10px 0px 10px 10px;
@@ -14,16 +15,16 @@
 }
 
 .fileList {
-	font-size: 12px;
+	font-size: 13px;
 }
 
 #tabFileName {
-	width: 470px;
-	text-align: left;
+	width: 610px;
+	text-align: center;
 }
 
 #tabFileSize {
-	width: 70px;
+	width: 100px;
 }
 
 #tabFileDel {

@@ -52,6 +52,8 @@ public class ChatController {
 
 	private static Map<String, List<String>> mapMem;
 	private static Map<String, List<ChatVo>> mapChat;
+	
+	private static int i;
 
 	public ChatController() {
 		listChat = new ArrayList<ChatVo>();
@@ -69,6 +71,7 @@ public class ChatController {
 	// 채팅방에 들어왔을때
 	@MessageMapping(value = "/chat/enter")
 	public void enter(ChatVo cVo) {
+		logger.info("d"+i++);
 		logger.info("@ChatController enter() : {}", cVo);
 
 		logger.info("^^^^ 해당 방 멤버 {} ^^^^", mapMem.get(cVo.getRoom_id()));

@@ -6,13 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>전자서명 메인 화면</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
+<%@include file="../comm/setting.jsp" %>
 <style type="text/css">
 .signImg1{
 	width: 200px;
@@ -70,11 +64,12 @@
 		                    </div>
 	                    </div>
                     </div> 
+                    
                     </div>
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
-           <%--  <sec:authorize access="isAuthenticated()">
+          <%--   <sec:authorize access="isAuthenticated()">
             	아이디 : <sec:authentication property="principal"/> ${principal} <br>
             	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
             	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>

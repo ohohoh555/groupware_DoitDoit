@@ -72,7 +72,16 @@ public class EmpController {
 	@RequestMapping(value = "/resetPassword.do", method = RequestMethod.GET)
 	@ResponseBody
 	public String resetPassword(String emp_id) {
-		logger.info("dfdfd : " + emp_id);
-		return emp_id;
+		logger.info("전달받은 emp_id : " + emp_id);
+		int n = service.resetPassword(emp_id);
+		return (n>0 ? "true":"false");
+	}
+	
+	@RequestMapping(value = "/upEmpDetail.do", method = RequestMethod.POST)
+	public String upEmpDetail(String emp_id, Model model) {
+		logger.info("EmpController upEmpDetail 회원 정보수정 이동");
+		List<EmpVo> lists = service.selEmpDetail(emp_id);
+		model.addAttribute("lists", lists);
+		return "emp/upEmpDetail";
 	}
 }

@@ -48,8 +48,8 @@ public class ChatRoomController {
 		String emp_id = principal.getName();
     	
     	Map<String, String> map = new HashMap<String, String>();
-    	map.put("room_id", room_Id);
-    	map.put("emp_id", emp_id);
+    	map.put("room_id", "3");
+    	map.put("emp_id", "2022052001");
     	
     	//채팅 조회
     	List<ChatVo> chatList = service.selChat(map);
