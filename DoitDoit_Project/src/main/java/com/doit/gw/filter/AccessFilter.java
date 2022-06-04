@@ -18,6 +18,8 @@ public class AccessFilter implements Filter{
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	private static int i;
+	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		logger.info("===== AccessFilter init() =====");
@@ -27,8 +29,9 @@ public class AccessFilter implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
-		logger.info("===== FullUrl : {} =====",(req.getRequestURL()
-				+ StringUtils.defaultIfEmpty(req.getQueryString(), null) != null?("?"+req.getQueryString()):""));
+		
+		logger.info("===== FullUrl : {} =====",(req.getRemoteAddr()
+				+ StringUtils.defaultIfEmpty(req.getQueryString(), null) != null?("?"+req.getQueryString()):"")+i++);
 		
 		chain.doFilter(request, response);
 	}

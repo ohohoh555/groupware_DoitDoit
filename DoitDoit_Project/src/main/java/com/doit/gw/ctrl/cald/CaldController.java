@@ -68,7 +68,40 @@ public class CaldController {
 		logger.info("CalendarController calendarInsert 받아온 값 : {}", map);
 		boolean isc = service.insCald(map);
 		logger.info("CalendarController calendarInsert 성공여부 : {}", isc);
-		return false;
+		return isc;
 	}
 	
+	// 업데이트
+	@RequestMapping(value = "/uadateDragAjax.do", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean updateAjax(@RequestParam Map<String, Object> map) {
+		logger.info("CalendarController updateAjax 받아온 값 : {}", map);
+		boolean isc = service.updCaldDate(map);
+		logger.info("CalendarController updateAjax boolean : {}",isc);
+		return isc;
+	}
+	
+	// 업데이트
+	@RequestMapping(value = "/uadateAjax.do", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean uadateAjax(@RequestParam Map<String, Object> map) {
+		logger.info("CalendarController updateAjax 받아온 값 : {}", map);
+		boolean isc = service.updCaldDate(map);
+		System.out.println(isc);
+		if(isc) {
+			isc = service.updCaldContent(map);
+			System.out.println(isc);
+		}
+		return isc;
+	}
+	
+	@RequestMapping(value = "/deleteAjax.do", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean deleteAjax(String cald_id) {
+		logger.info("CalendarController deleteAjax 받아온 값 : {}", cald_id);
+		boolean isc = service.delCaldDate(cald_id);
+		System.out.println(isc);
+		return isc;
+	}
+
 }

@@ -35,13 +35,29 @@ function selectAjax() {
 				events: data,
 				// 이벤트 클릭 시 동작
 				eventClick: function(info) {
-//					var modal = $("#schedule-edit");
-					// 이벤트 클릭시 모달 오픈
-					modal.modal();
+					$("#modalContent").val("");
+					$("#datetimepicker1_2").val("");
+					$("#datetimepicker2_2").val("");
+					var isc = $("#modifyButton").is(":checked");
+					console.log(isc);
 					console.log(info.event)
-//					$("#id").val(info.event.id);
-//					$("#modalTitle").val(info.event.title);
-//					$("#modalContent").attr("placeholder", info.event.extendedProps.description);
+					var modal = $("#schedule-edit");
+					var detailModal = $("#schedule-detail");
+					// 이벤트 클릭시 모달 오픈
+					if(isc){
+						modal.modal({backdrop: 'static', keyboard: false});
+						$("#id").val(info.event.id);
+						$("#modalTitle").val(info.event.title);
+						$("#modalContent").attr("placeholder", info.event.extendedProps.description);	
+					}else{
+						detailModal.modal({backdrop: 'static', keyboard: false});
+						$("#id2").val(info.event.id);
+						$("#modalTitle2").val(info.event.title);
+						$("#modalContent2").val(info.event.extendedProps.description);
+						$("#start").val(info.event._instance.range.start)
+						$("#end").val(info.event._instance.range.end)
+					}
+					
 				},
 				
 				//여러 이벤트를 가져옴
@@ -77,7 +93,7 @@ function selectAjax() {
 					console.log(info.event.id);
 					// info.event.start(Thu May 12 2022 09:30:00 GMT+0900 (한국 표준시)) 를 202205120903 형식으로 바꾸어 
 					// updateDragAjax를 통해 일정 업데이트
-//					updateDragAjax(dateFormat(info.event.start), dateFormat(info.event.end), info.event.id);
+					updateDragAjax(dateFormat(info.event.start), dateFormat(info.event.end), info.event.id);
 				}
 			});
 			
@@ -93,8 +109,8 @@ function selectAjax() {
 // 돌아오는 반환값(data)값 : boolean
 // true : 성공 / false : 실패
 function insertAjax() {
-	console.log($("#datetimepicker1").val())
-	
+	console.log(dateFormat(new Date))
+	console.log();
 	// 일정명 칸이 비었을 경우
 	if ($("#title").val() == "") {
 		alert("일정명을 입력해주세요")
@@ -118,6 +134,11 @@ function insertAjax() {
 	// 시작일이 종료일보다 클 시 아작스 강제 종료
 	// dateVal() 시작일 값과 종료일 값을 밀리세컨드로 바꿔 크기를 비교해주는 function
 	if (dateVal('datetimepicker1', 'datetimepicker2') == false) {
+		return false;
+	}
+	
+	if(dateFormat(new Date)>dateFormat($("#datetimepicker1").datetimepicker('getValue'))){
+		alert("현재 날짜 이전의 예약입니다")
 		return false;
 	}
 
@@ -151,101 +172,112 @@ function insertAjax() {
 //// 파라미터 값 : 시작일(start), 종료일(end), 아이디(id)
 //// 돌아오는 반환값(data)값 : boolean
 //// true : 성공 / false : 실패
-//function updateDragAjax(start, end, id) {
-//	console.log(start);
-//	console.log(end);
-//	console.log(id);
-//	$.ajax({
-//		url: "./uadateDragAjax.do",
-//		type: "post",
-//		data: { "start": start, "end": end, "id": id },
-//		dataType: "json",
-//		success: function(data) {
-//			console.log(data);
-//			if (data != true) {
-//				alert("잘못된 드래그 수정입니다.")
-//				return false;
-//			} else {
-//				console.log("성공")
-//			}
-//		},
-//		error: function() {
-//			alert("에러")
-//		}
-//	});
-//}
-//
-//function updateContent() {
-//	var frm = $("#modalFrm").serialize();
-//	var content = $("#modalContent");
-//	var start = $("#datetimepicker1_2");
-//	var end = $("#datetimepicker2_2");
-//
-//	if (content.val() == "") {
-//		alert("내용을 입력해주세요")
-//		content.focus();
-//		return false;
-//	}
-//
-//	if ($("#datetimepicker1_2").val() == "" || $("#datetimepicker2_2").val() == "") {
-//		alert("시간을 입력해 주세요")
-//		return false;
-//	}
-//
-//	if (dateVal('datetimepicker1_2', 'datetimepicker2_2') == false) {
-//		return false;
-//	}
-//	console.log(frm);
-//	$.ajax({
-//		url: "./uadateAjax.do",
-//		type: "post",
-//		data: frm,
-//		dataType: "json",
-//		success: function(data) {
-//			console.log(data);
-//			if (data != true) {
-//				content.val("");
-//				start.val("");
-//				end.val("");
-//				console.log("실패");
-//				$("#schedule-edit").modal("hide");
-//				return false;
-//			} else {
-//				$("#schedule-edit").modal("hide");
-//				console.log("성공")
-//				selectAjax();
-//			}
-//		},
-//		error: function() {
-//			alert("에러")
-//		}
-//	});
-//}
-//
-//function deleteContent() {
-//	var id = $("#id").val();
-//	$.ajax({
-//		url: "./deleteAjax.do",
-//		type: "post",
-//		data: { "id": id },
-//		dataType: "json",
-//		success: function(data) {
-//			console.log(data);
-//			if (data != true) {
-//				$("#schedule-edit").modal("hide");
-//				console.log("실패");
-//				return false;
-//			} else {
-//				$("#schedule-edit").modal("hide");
-//				console.log("성공")
-//				selectAjax();
-//			}
-//		},
-//		error: function() {
-//			alert("에러")
-//		}
-//	});
-//}
+function updateDragAjax(start, end, id) {
+	console.log(start);
+	console.log(end);
+	console.log(id);
+	$.ajax({
+		url: "./uadateDragAjax.do",
+		type: "post",
+		data: { "cald_start": start, "cald_end": end, "cald_id": id },
+		dataType: "json",
+		success: function(data) {
+			console.log(data);
+			if (data != true) {
+				selectAjax();
+				alert("잘못된 드래그 수정입니다.")
+				return false;
+			} else {
+				console.log("성공")
+			}
+		},
+		error: function() {
+			alert("에러")
+		}
+	});
+}
+
+function updateContent() {
+	var frm = $("#modalFrm").serialize();
+	var content = $("#modalContent");
+	var id = $("#id").val();
+	console.log(id)
+	var start = dateFormat($("#datetimepicker1_2").datetimepicker('getValue'));
+	var end = dateFormat($("#datetimepicker2_2").datetimepicker('getValue'));
+	
+	console.log(start)
+	console.log(end)
+	if (content.val() == "") {
+		alert("내용을 입력해주세요")
+		content.focus();
+		return false;
+	}
+
+	if ($("#datetimepicker1_2").val() == "" || $("#datetimepicker2_2").val() == "") {
+		alert("시간을 입력해 주세요")
+		return false;
+	}
+
+	if (dateVal('datetimepicker1_2', 'datetimepicker2_2') == false) {
+		return false;
+	}
+	console.log(frm);
+	$.ajax({
+		url: "./uadateAjax.do",
+		type: "post",
+		data: 
+		{
+			"cald_id":id,
+			"eboard_content":content.val(),
+			"cald_start":start,
+			"cald_end":end
+		},
+		dataType: "json",
+		success: function(data) {
+			console.log(data);
+			if (data != true) {
+				content.val("");
+				$("#datetimepicker1_2").val("");
+				$("#datetimepicker2_2").val("");
+				console.log("실패");
+				$("#schedule-edit").modal("hide");
+				return false;
+			} else {
+				$("#schedule-edit").modal("hide");
+				console.log("성공")
+				selectAjax();
+			}
+		},
+		error: function() {
+			alert("에러")
+		}
+	});
+}
+
+function deleteContent() {
+	var id = $("#id2").val();
+	$.ajax({
+		url: "./deleteAjax.do",
+		type: "post",
+		data: { "cald_id": id },
+		dataType: "json",
+		success: function(data) {
+			console.log(data);
+			if (data != true) {
+				$("#schedule-detail").modal("hide");
+				console.log("실패");
+				return false;
+			} else {
+				$("#schedule-detail").modal("hide");
+				console.log("성공")
+				selectAjax();
+			}
+		},
+		error: function() {
+			alert("에러")
+		}
+	});
+}
 //
 // DataTimePicaker
 function dateVal(dtp, dtp2) {
@@ -285,3 +317,8 @@ function zeroPlus(time) {
 	return time < 10 ? "0" + time : time;
 }
 
+function clear(){
+	$("#modalContent").val("");
+	$("#datetimepicker1_2").val("");
+	$("#datetimepicker2_2").val("");
+}

@@ -13,7 +13,7 @@
 	VALUES
 	(
 		ENTRYBOARD_SEQ.NEXTVAL, '302', '300',
-		#{emp_id}, (SELECT MAX(CALD_ID) FROM CALENDAR), #{emp_name},
+		#{emp_id}, (SELECT MAX(CALD_ID)+1 FROM CALENDAR), #{emp_name},
 		#{eboard_title}, #{eboard_content}, 0,
 		CURRENT_DATE, 'N'
 	)
@@ -43,7 +43,7 @@
 	VALUES
 	(
 		ENTRYBOARD_SEQ.NEXTVAL, '301', '300',
-		#{emp_id}, (SELECT MAX(CALD_ID) FROM CALENDAR), (SELECT EMP_ID FROM ADMIN.EMP WHERE EMP_ID=#{emp_id}),
+		#{emp_id}, (SELECT MAX(CALD_ID)+1 FROM CALENDAR), (SELECT EMP_ID FROM ADMIN.EMP WHERE EMP_ID=#{emp_id}),
 		#{eboard_title}, #{eboard_content}, 0,
 		CURRENT_DATE	, 'N'
 	)
@@ -61,20 +61,20 @@
 				SET CALD_START  = TO_DATE(#{cald_start},'YYYY/MM/DD HH24:MI'), 
 					CALD_END  = TO_DATE(#{cald_end},'YYYY/MM/DD HH24:MI')
 					WHERE CALD_ID=#{cald_id}
-					AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=TO_CHAR(CALD_END,'YYYYMMDDHH24MI')]]>
+					AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=#{cald_end}]]>
 </update>
 
 <update id="updCaldContent" parameterType="java.util.Map">
 	UPDATE ADMIN.ENTRBOARD
 		SET EBOARD_CONTENT = #{eboard_content}
 		WHERE CALD_ID=#{cald_id}
-		AND CGORY_NO=302
+		AND CGORY_NO=301
 </update>	
 
 <delete id="delCaldDate" parameterType="java.lang.String">
 	<![CDATA[DELETE FROM ADMIN.CALENDAR c 
 				WHERE CALD_ID = #{cald_id}
-				AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=TO_CHAR(CALD_END,'YYYYMMDDHH24MI')]]>
+				AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=#{cald_end}]]>
 </delete>
 
 <delete id="delCaldContent" parameterType="java.lang.String">
