@@ -181,8 +181,13 @@ function roomOut(room_id, username){
 
 //채팅방에 있는지 없는지 판단
 function aboutChatRoom(mems){
-   console.log("aboutChatRoom");
-   console.log($("#members > div > div").eq(0).html());
+//우연이꺼로 고친...(아마 선생님이 고친 부분인듯)
+//   console.log("aboutChatRoom");
+//   console.log($("#members > div > div").eq(0).html());
+
+	console.log("aboutChatRoom");
+	$("#members > div > div").eq(0).text("xx");
+
 }
 
 function sendFileToServer(fd) {

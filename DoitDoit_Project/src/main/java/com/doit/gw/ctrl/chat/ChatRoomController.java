@@ -54,6 +54,13 @@ public class ChatRoomController {
     	//채팅 조회
     	List<ChatVo> chatList = service.selChat(map);
     	
+    	List<ChatVo> sendChat = ChatController.getListChat(map.get("room_id"));
+    	if(sendChat != null) {
+	    	for(int i = 0; i < sendChat.size(); i++) {
+	    		chatList.add(sendChat.get(i));
+	    	}
+    	}
+    	
     	model.addAttribute("room_id",room_Id);
     	model.addAttribute("emp_id", emp_id);
     	model.addAttribute("chatList", chatList);

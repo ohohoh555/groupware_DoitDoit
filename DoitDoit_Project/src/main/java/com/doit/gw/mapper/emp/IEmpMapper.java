@@ -14,4 +14,5 @@ public interface IEmpMapper {
 	public int pwdUpdate(EmpVo vo);
 	public List<EmpVo> selEmpDetail(String emp_id);
 	public int resetPassword(String emp_id);
+	public String resetPwdCheck(String emp_id);
 }

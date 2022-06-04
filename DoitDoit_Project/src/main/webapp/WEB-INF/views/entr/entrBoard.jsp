@@ -7,15 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>공지게시판(사원)</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
+<%@include file="../comm/setting.jsp" %>
 </head>
 <body>
+
 	<div id="container">
         <%@include file="../comm/nav.jsp" %>
         <main>
@@ -27,7 +22,7 @@
 						<h3>&lt;&lt;공지게시판&gt;&gt;</h3>
 						<hr>
 						<table id="FildokTable" class="stripe">
-							<thead style="display: none;">
+							<thead>
 								<tr>
 									<th>No.</th>
 									<th>분류</th>
@@ -57,7 +52,7 @@
 						</table>
 						
 						<hr>
-
+						<div id="EntrDiv">
 						<table id="EntrTable" class="stripe">
 							<thead>
 								<tr>
@@ -83,7 +78,7 @@
 							</tbody>
 
 						</table>
-						<div>
+						
 							<button onclick="javascript:location.href='./entrBoard.do'" class="btn btn-default">전체</button>
 							<button value="101" onclick="cgoryAction(this.value)" class="btn btn-default">일반</button>
 							<button value="103" onclick="cgoryAction(this.value)" class="btn btn-default">인사</button>
@@ -205,8 +200,8 @@ function fildokAll(){
 				data:data,
 				columns: [
 					{data:"eboard_no", render: function (data,type,row,meta) {return "★"}},
-					{data:"cgory_no", render: function (data,type,row,meta) {return "필독"}},
-					{data:"eboard_title"},
+					{data:"cgory_no", render: function (data,type,row,meta) {return "[필독]"}},
+					{data:"eboard_title", render:function(data,type,row,meta){return '<a href="./OneBoardAdmin.do?eboard_no='+row.eboard_no+'">'+data+'</a>'}},
 					{data:"emp_name"},
 					{data:"eboard_regdate"},
 					{data:"eboard_readcount"}
@@ -225,6 +220,15 @@ function fildokAll(){
 		
 		
 	});
+	
+	$("#FildokTable tfoot>tr").remove();
+	$("#FildokTable>tfoot").append('<tr><td colspan="6" style="text-align: center;" onclick="fildokClose()">필독게시판 닫기</td></tr>');
+	$("#EntrDiv").remove();
+
+}
+
+function fildokClose(){
+	location.href="./entrBoard.do";
 }
 
 </script>

@@ -22,25 +22,24 @@
         <main>
             <%@include file="../comm/header.jsp" %>
             <div id="content">
-            	<form action="./upEmpDetail.do" method="POST" id="selDetailFrm">
+            	<form action="" id="selDetailFrm">
             		<div class="profile"></div>
             		<c:forEach items="${lists}" var="empVo">
             		<div class="inputUser">
             			<input type="text" id="emp_id" name="emp_id" value="${empVo.emp_id}" readonly>
-            			<input type="text" value="${empVo.emp_name}" readonly>
-            			<input type="text" value="${empVo.emp_email}" readonly>
-            			<input type="text" value="${empVo.dept_no}" readonly>
-            			<input type="text" value="${empVo.rank_no}" readonly>
-            			<input type="text" value="${empVo.emp_regdate}" readonly>
+            			<input type="text" name="emp_name" value="${empVo.emp_name}" readonly>
+            			<input type="text" name="emp_email" value="${empVo.emp_email}">
+            			<input type="text" name="dept_no" value="${empVo.dept_no}">
+            			<input type="text" name="rank_no" value="${empVo.rank_no}">
+            			<input type="text" name="emp_regdate" value="${empVo.emp_regdate}">
             		</div>
             		<div class="inputAdd">
-            			<input type="text" value="${empVo.emp_address}" readonly>
+            			<input type="text" value="${empVo.emp_address}">
             			<input type="text" value="${empVo.emp_nfc}" readonly>
             		</div>
             		</c:forEach>
             		<div class="buttonArea">
-            			<input class="btn btn-default" type="submit" value="수정하기">
-            			<input class="btn btn-default" type="button" value="비밀번호 초기화" onclick="resetPassword()">
+            			<input class="btn btn-default" type="submit" value="수정완료">
             			<input class="btn btn-default" type="button" value="뒤로가기" onclick="history.back(-1)">
             		</div>
             	</form>

@@ -7,13 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>공지게시글 상세보기</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
+<%@include file="../comm/setting.jsp" %>
 </head>
 <body>
 	<div id="container">
@@ -36,8 +30,13 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>분류</td>
-								<td>${entrOne.cgory_no}</td>
+								<td width="100px">분류</td>
+								<c:choose>
+									<c:when test="${entrOne.cgory_no=='101'}"><td>일반</td></c:when>
+									<c:when test="${entrOne.cgory_no=='102'}"><td>필독</td></c:when>
+									<c:when test="${entrOne.cgory_no=='103'}"><td>인사</td></c:when>
+									<c:when test="${entrOne.cgory_no=='302'}"><td>일정</td></c:when>
+								</c:choose>
 							</tr>
 							<tr>
 								<td>제목</td>

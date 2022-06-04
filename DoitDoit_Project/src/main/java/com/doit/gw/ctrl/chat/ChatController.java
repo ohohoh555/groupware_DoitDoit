@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +60,11 @@ public class ChatController {
 
 		mapMem = new HashMap<String, List<String>>();
 		mapChat = new HashMap<String, List<ChatVo>>();
+	}
+	
+	public static List<ChatVo> getListChat(String room_id) {
+		List<ChatVo> sendChat = mapChat.get(room_id);
+		return sendChat;
 	}
 
 	// 채팅방에 들어왔을때
@@ -209,13 +212,7 @@ public class ChatController {
 		}
 	}
 	
-	//채팅 저장 요청시 해당 채팅방의 채팅을 저장
-	@RequestMapping(value = "/saveChat.do", method = RequestMethod.POST)
-	@ResponseBody
-	public void ajaxSaveChat(String room_id) {
-		chatSave(room_id);
-	}
-	
+	//채팅 저장
 	public void chatSave(String room_id) {
 		logger.info("@ChatController chatSave {}",room_id);
 		int cnt = 0;

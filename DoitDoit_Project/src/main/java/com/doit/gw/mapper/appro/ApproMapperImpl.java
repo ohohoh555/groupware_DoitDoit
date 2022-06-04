@@ -33,13 +33,22 @@ public class ApproMapperImpl implements IApproMapper {
 	}
 
 	@Override
+	public List<ApproVo> selMyDocument(int emp_id) {
+		return sqlSession.selectList(NS+"selMyDocument",emp_id);
+	}
+
+	@Override
 	public List<Map<String, Object>> selAllDocument(int emp_id) {
 		return sqlSession.selectList(NS+"selAllDocument",emp_id);
 	}
 
 	@Override
-	public List<Map<String, Object>> selOneDocument(String appro_no) {
-		return sqlSession.selectList(NS+"selOneDocument",appro_no);
+	public ApproVo selOneDocument(String appro_no) {
+		return sqlSession.selectOne(NS+"selOneDocument",appro_no);
 	}
-	
+
+	@Override
+	public List<Map<String, Object>> selLineList(String appro_no) {
+		return sqlSession.selectList(NS+"selLineList",appro_no);
+	}
 }
