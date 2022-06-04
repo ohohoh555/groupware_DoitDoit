@@ -49,7 +49,6 @@ function chatOn(){
 					html += 	"</a>";
 					html += "</div>";	
 					html += "<hr>";		
-					console.log(html);
 					$("#chatRoom").append(html);
 				}
 			},

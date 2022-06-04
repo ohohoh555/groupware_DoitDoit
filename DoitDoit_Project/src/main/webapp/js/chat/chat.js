@@ -37,7 +37,7 @@ $(document).ready(function() {
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
 		stomp.subscribe("/sub/chat/room/" + room_id, function(chat) {
-			console.log(chat);
+			console.log("메시지 받음",chat);
 			var content = JSON.parse(chat.body);
 			var clas;
 			
@@ -50,22 +50,18 @@ $(document).ready(function() {
 			}else{
 				clas = "anotherMsg";
 			}
-			
-			console.log(content.chat_con);
-			
+						
 			//append 새로운 메시지
 			var html = '';
 			html += "<div class=\""+clas+"\">";
 			html += 	content.chat_con;
 			html += "</div>"; 
-			console.log(html);
-			console.log($("#chatLog:last-child"));
 			$("#chatLog:last-child").append(html);
 			
 			//scrollbar가 내려 갔을시 추가 되는 스크롤 자동으로 내려줌
 			if($('#chatLog').scrollTop()){
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
-			}
+			};
 		});
 		
 		roomEnter(room_id,emp_id);
@@ -99,6 +95,7 @@ $(document).ready(function() {
 		chatSend(room_id,chatCon,emp_id,user_name);
 	});
 	
+	//나갈때 이벤트 발생
 	$(window).on("beforeunload",function(){
 		roomOut(room_id, empId);
 	});
@@ -133,6 +130,7 @@ $(document).ready(function() {
 		handleFileUpload(files);
 	});
 	
+	//파일  크기 판단
 	function handleFileUpload(files) {
 		console.log("handle에 ",files);
 		// 파일의 길이만큼 반복하며 formData에 셋팅해준다.
@@ -143,6 +141,7 @@ $(document).ready(function() {
 			if((files[i].size/megaByte)>10){
 				// 중복되는 정보 확인 위해 콘솔에 찍음
 				alert(files[i].name+"은(는) \n 10메가 보다 커서 업로드가 할 수 없습니다.");
+				files[i].remove;
 			}else{
 				console.log("append", files[i]);
 				fd.append('file', files[i]);
@@ -152,6 +151,7 @@ $(document).ready(function() {
 	}
 });
 
+
 function enterkey(){
 	if(window.event.keyCode == 13){
 		chatCon = document.getElementById("chatCon");
@@ -159,9 +159,10 @@ function enterkey(){
 	}
 }
 
+//채팅 컨트롤러로 보내는 영역
 function chatSend(room_id,chatCon){
 	if(chatCon.val != ""){
-		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: chatCon.val(), emp_id: emp_id, user_name: user_name}));
+		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: chatCon.val(), emp_id: emp_id, user_name: user_name, type: "T"}));
 		chatCon.val('');
 	}else{
 		alert('채팅을 입력해 주세요');
@@ -181,28 +182,39 @@ function roomOut(room_id, username){
 //채팅방에 있는지 없는지 판단
 function aboutChatRoom(mems){
 	console.log("aboutChatRoom");
-	$("#members > div > div").eq(0).text("xx");
+	var emps = $("#members").children();
+	for(var i = 0; i < emps.length; i++){
+		if($.inArray(emps.eq(i).attr("id"), mems) > -1){
+			$("#members > div").eq(i).children().eq(0).text("O");
+			console.log("있음");
+		}else{
+			$("#members > div").eq(i).children().eq(0).text("X");
+			console.log("없음");
+		}
+	}
 }
 
+//ajax로 파일 입력
 function sendFileToServer(fd) {
 	//FormData()에 room_id와 empId 추가
 	fd.append('room_id',room_id);
+	fd.append('user_name',user_name);
 	fd.append('emp_id',emp_id);
 	
-	var uploadURL = "./saveFile.do"; 
 	$.ajax({
 		type : "POST",
 		data : fd,
-		url : uploadURL,
+		url : "./saveFile.do",
 		enctype: "multipart/form-data",
 		contentType : false, // default 값은 "application/x-www-form-urlencoded; charset=UTF-8","multipart/form-data"로 전송되도록 false 설정
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
 		cache : false, //ajax 로 통신 중 cache 가 남아서 갱신된 데이터를 받아오지 못할 경우를 대비
-		dataType:"String",
-		success : function(data) {
-			console.log("파일 업로드 성공");		
+		success : function(map){
+			console.log("map",map);
+			console.log("chat_con",map.html);
+			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html:map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
 		},
-		error:function(data){
+		error:function(){
 			alert("파일업로드 실패");
 		}
 	});

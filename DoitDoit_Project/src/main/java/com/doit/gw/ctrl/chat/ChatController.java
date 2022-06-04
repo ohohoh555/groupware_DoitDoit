@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -69,7 +70,6 @@ public class ChatController {
 	@MessageMapping(value = "/chat/enter")
 	public void enter(ChatVo cVo) {
 		logger.info("@ChatController enter() : {}", cVo);
-		logger.info("enterMem {}", mapMem.get(cVo.getRoom_id()));
 
 		logger.info("^^^^ 해당 방 멤버 {} ^^^^", mapMem.get(cVo.getRoom_id()));
 		if (mapMem.get(cVo.getRoom_id()) != null) {
@@ -112,10 +112,7 @@ public class ChatController {
 
 	// 채팅 메시지
 	@MessageMapping(value = "/chat/message")
-	public void chatMessage(@RequestParam Map<String, String> map) {
-		logger.info("@ChatController message() : {}", map);
-		logger.info("전체방의 채팅 {}",mapChat);
-		
+	public void chatMessage(@RequestParam Map<String, String> map) {		
 		if (mapChat.get(map.get("room_id")) != null) {
 			listChat = mapChat.get(map.get("room_id"));
 			logger.info("해당 방의 채팅 있음 {}", listChat);
@@ -124,54 +121,57 @@ public class ChatController {
 			logger.info("해당 방의 채팅 없음 {}", listChat);
 		}
 		
-		String html = "";
-		html += "<span class=\"Name\">"+map.get("user_name")+"</span>";
-		html += "<span class=\"msg\">"+ map.get("chat_con")+"</span>";
+		if(map.get("type").equals("T")) {
+			String html = "";
+			html += "<span class=\"Name\">"+map.get("user_name")+"</span>";
+			html += "<span class=\"msg\">"+ map.get("chat_con")+"</span>";
 
+			map.put("html", html);
+			map.put("type", "T");
+		}
+		
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		String formatedNow = now.format(formatter);
 				
-		ChatVo vo = new ChatVo(null, map.get("room_id"), map.get("emp_id"), html, formatedNow.toString(), "T");
+		ChatVo vo = new ChatVo(null, map.get("room_id"), map.get("emp_id"), map.get("html"), formatedNow.toString(), map.get("type"));
 		listChat.add(vo);
 		mapChat.put(map.get("room_id"), listChat);
 
 		logger.info("저장된 채팅 {}", mapChat);
-
-		logger.info("보낼 html {}", vo);
 		
 		template.convertAndSend("/sub/chat/room/" + map.get("room_id"), vo);
 	}
 
 	// 파일 메시지 받아서 저장
-	@RequestMapping(value = "/saveFile.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/saveFile.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public void saveFile(HttpServletRequest req, MultipartHttpServletRequest multipartRequest) throws FileNotFoundException {
+	public Map<String, String> saveFile(HttpServletRequest req, MultipartHttpServletRequest multipartRequest) throws FileNotFoundException {
 		logger.info("@ChatController fileMessage {}", multipartRequest);
 
-		Date date = new Date();
+		LocalDate date = LocalDate.now();
+		
+		Map<String, String> map = null;
 
 		List<MultipartFile> file = multipartRequest.getFiles("file");
 
 		String room_id = multipartRequest.getParameter("room_id");
-		String username = multipartRequest.getParameter("username");
-
-		logger.info("방 번호는 {} / 유저 아이디는 {}", room_id, username);
+		String user_name = multipartRequest.getParameter("user_name");
+		String emp_id = multipartRequest.getParameter("emp_id");
 
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
-
+		
 		for (int i = 0; i < file.size(); i++) {
 			ChatFileVo cFv = new ChatFileVo();
 
 			String fileName = file.get(i).getOriginalFilename();
-			System.out.println("파일 네임 " + fileName);
 
 			cFv.setFile_chat_originnm(fileName.substring(0, fileName.lastIndexOf(".")));
 			cFv.setFile_chat_type(fileName.substring(fileName.lastIndexOf(".") + 1));
 			cFv.setFile_chat_uuid(UUID.randomUUID().toString());
 			cFv.setFile_uploadpath(WebUtils.getRealPath(req.getSession().getServletContext(),
-					"/chatFile/" + (date.getMonth() + 1) + "/" + date.getDate()));
+					"/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()));
 
 			try {
 				inputStream = file.get(i).getInputStream();
@@ -186,7 +186,7 @@ public class ChatController {
 				if (newFile.exists()) {
 					newFile.createNewFile();
 				}
-
+				
 				outputStream = new FileOutputStream(newFile);
 				int read = 0;
 				byte[] b = new byte[(int) file.get(i).getSize()];
@@ -194,7 +194,16 @@ public class ChatController {
 				while ((read = inputStream.read(b)) != -1) {
 					outputStream.write(b, 0, read);
 				}
-				logger.info("저장한 ChatFileVo는 {}", cFv);
+				
+				map = new HashMap<String, String>();
+				
+				String html = "";
+				html += "<span class=\"Name\">"+user_name+"</span>";
+           		html += "<span class=\"msg\">";
+           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\" width=\"200px\">";
+            	html += "</span>";
+            	
+            	map.put("html", html);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -207,6 +216,8 @@ public class ChatController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return map;
 	}
 	
 	//채팅 저장
@@ -230,6 +241,8 @@ public class ChatController {
 				cnt += service.insChat(map);
 			}
 		}
+		
+		mapChat.remove(room_id);
 		
 		logger.info("저장 횟수는 {}",cnt);
 	}
