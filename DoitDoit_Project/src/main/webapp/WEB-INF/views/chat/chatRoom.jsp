@@ -207,13 +207,9 @@
 								<div id="members" class="members">
 									<c:forEach items="${room_mem_list }" var="i">
 										<div id="${i.EMP_ID }">
-											<div>
-											
-											</div>
-											<div>
+												<span style="font-size: 20px; color: white; padding-left: 5px"></span>.
 												<span style="font-size: 20px; color: white; padding-left: 5px">${i.EMP_NAME }</span>
 												<span style="font-size: 15px; color: white; padding-left: 5px">${i.RANK_NAME }</span>
-											</div>
 											<hr style="color:white;">
 										</div>
 									</c:forEach>
