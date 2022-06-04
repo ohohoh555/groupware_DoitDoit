@@ -12,6 +12,7 @@
 <script type="text/javascript" src="./js/jaryo/dragAndDrop.js"></script>
 </head>
 <body>
+<button></button>
 	<div id="container">
         <%@include file="../comm/nav.jsp" %>
         <main>
@@ -20,28 +21,29 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
 					<div class="rContent-full">
-						<h3>&lt;&lt;자료게시판&gt;&gt;</h3>
+						<h3>자료게시판</h3><h2></h2>
 						<sec:authorize access="isAuthenticated()">
 					        <sec:authentication property="principal" var="principal"/>
-					        <input type="text" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
-					        <input type="text" value="${principal.emp_name}" id="emp_name" name="emp_name">
+					        <input type="hidden" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
+					        <input type="hidden" value="${principal.emp_name}" id="emp_name" name="emp_name">
  			           </sec:authorize> 
 						<div>
 							<div class="div1">
-								<input type="button" class='menu btn btn-default' value='파일 업로드' onclick="slideDown()">
+								<input type="button" class='menu btn btn-success' value='파일 업로드' onclick="slideDown()">
 								<div id="fileUpload" class="dragAndDropDiv hide10">
 									<table id='fileTable' class='fileList table-bordered'>
 										<tr>
 											<td id='tabFileName'>파일명</td>
 											<td id='tabFileSize'>사이즈</td>
 											<td id='tabFileDel'>삭제</td>
-										</tr>
+										</tr>	
 									</table>
+									<div class="div2" >
+									<input type="button" class="btn btn-default" value="등록" onclick="submitFile()">
+									</div>
 								</div>
 							</div> <!-- div1 끝 -->
-							<div class="div2">
-								<input type="button" class="btn btn-default" value="등록" onclick="submitFile()">
-							</div>
+
 						</div>
 						<div>
 							<table id="jaryoTable" class="stripe">
@@ -56,51 +58,72 @@
 							</table>
 						</div>
 					</div><!-- rContent-full 끝 -->
-                </div>
-            <%@include file="../comm/aside.jsp" %>    
+                </div><!-- rContent 끝 -->
+           <%@include file="../comm/aside.jsp" %>  
             </sec:authorize>
-
-            </div>
+            </div><!-- content 끝 -->
+               
         </main>
-    </div>
+    </div> <!-- container 끝 -->
     
     
 <script type="text/javascript">
 $(document).ready(function(){
+	var emp = document.getElementById("emp_id").value;
+	var megaByte = 1024*1024;
+	console.log(emp);
 	$("#jaryoTable").DataTable({
-		lengthMenu: [ 5, 10, 15],
-	     displayLength: 5,
+	     displayLength: 10,
 	     lengthChange: false,
-		  	"language": {
-	            "emptyTable": "자료가 없어요.",
-	            "lengthMenu": "페이지당 _MENU_ 개씩 보기",  // 페이징 개수
-	            "info": "현재 _START_ - _END_ / _TOTAL_건",  // 시작 - 끝 / 전체페이지 
-	            "infoEmpty": "자료 없음",   // info부분이 비었을 경우 
-	            "infoFiltered": "( _MAX_건의 게시글에서 필터링됨 )",
-	            "search": "검색: ",
-	            "zeroRecords": "일치하는 게시글이 없어요.",  //검색시 필터링된 게시글이 없을 경우
-	            "loadingRecords": "로딩중...",
-	            "processing":     "잠시만 기다려 주세요...",
-	            "paginate": {
-	                "next": "다음",
-	                "previous": "이전"
+		 "language": {
+	        "emptyTable": "자료가 없어요.",
+	        "lengthMenu": "페이지당 _MENU_ 개씩 보기",  // 페이징 개수
+	        "info": "현재 _START_ - _END_ / _TOTAL_건",  // 시작 - 끝 / 전체페이지 
+	        "infoEmpty": "자료 없음",   // info부분이 비었을 경우 
+	        "infoFiltered": "( _MAX_건의 게시글에서 필터링됨 )",
+	        "search": "검색: ",
+	        "zeroRecords": "일치하는 게시글이 없어요.",  //검색시 필터링된 게시글이 없을 경우
+	        "loadingRecords": "자료를 불러오는 중입니다",
+	        "processing":     "잠시만 기다려 주세요...",
+	        "paginate": {
+	            "next": "다음",
+	             "previous": "이전"
 	            }
-	        }, 
+	    }, 
 	        
-	      
-	        ajax:{
-	        	url:"./selJaryoAllUser.do",
-	        	type:"post",
-	        	dataSrc:""
+	    
+	    ajax:{
+	       	url:"./selJaryoAllUser.do",
+	        type:"post",
+	        dataSrc:""
+	    },
+	    columns:[
+	        {data:"eboard_no"},
+	        {data:"flist_originname",render:function(data,type,row,meta){
+	        	if(row.emp_id==emp){
+	        		return '<a href="./download.do?uid='+row.flist_uuid+'&fileName='+data+'">'
+	        						+data+'</a>&nbsp;&nbsp;&nbsp;<button onclick="hideJaryo('+row.eboard_no+')">삭제</button>'
+	        	}else{
+	        		return '<a href="./download.do?uid='+row.flist_uuid+'&fileName='+data+'">'+data+'</a>'
+	        		}
+	
+	        	}	
 	        },
-	        columns:[
-	        	{data:"eboard_no"},
-	        	{data:"flist_originname"},
-	        	{data:"flist_size"},
-	        	{data:"eboard_regdate"},
-	        ]
+	        {data:"flist_size", render:function(data,type,row,meta){return Math.round(data/megaByte*100)/100+'MB'}},
+	        {data:"eboard_regdate"},
+	       ]
 	});
 });
+
+
+function hideJaryo(eboard_no){
+	console.log("hideJaryo 작동");
+	location.href="./jaryoDel.do?eboard_no="+eboard_no;
+}
+
+function downloadJaryo(data){
+	console.log("작동",data);
+}
 
 </script>   
 </body>

@@ -7,7 +7,7 @@
 	var k = 0;
 	
 	//파일 업로드창 열고 닫는 함수
-	function slideDown(){
+function slideDown(){
 		var uploadForm = $('.hide10');
 		console.log(uploadForm);
 		if(uploadForm.is(":visible")){
@@ -19,7 +19,7 @@
 
 	
 	// 업로드 할 파일을 제거할 때 수행되는 함수
-	function delFile(e){
+function delFile(e){
 		// tr을 삭제하기 위해
 		var tr = $(e).parent().parent();
 		// 파일 이름을 받아오기 위해 string 변수 선언
@@ -33,22 +33,31 @@
 		tr.remove();
 		alert('삭제 완료!');
 	}
-	// submit 버튼을 눌렀을 때
-	function submitFile(){
+	
+	
+// submit 버튼을 눌렀을 때
+function submitFile(){
 		// 추가적으로 보낼 파라미터가 있으면 formData에 넣어준다.
 		// 예를들어 , 게시판의 경우 게시글 제목 , 게시글 내용 등등
-//		fd.append('title',$('#title').val());
-//		fd.append('content',$('#content').val());
 		fd.append('emp_id',$("#emp_id").val());
 		fd.append('emp_name',$("#emp_name").val());
-
+		
+		var fileCnt = $(".filename").length;
+		console.log("업로드할 파일 갯수",fileCnt);
+		if(fileCnt<=0){
+			alert("하나 이상의 파일을 업로드 해주세요");
+			return false;
+		}else{
+			sendFileToServer(fd);
+		}
 
 		// ajax로 이루어진 파일 전송 함수를 수행시킨다.
-		sendFileToServer(fd);
+		
 	}
 	
-	// 파일 전송 함수이다.
-	function sendFileToServer(formData) {
+	
+// 파일 전송 함수이다.
+function sendFileToServer(formData) {
 		var uploadURL = "./saveJaryo.do"; 
 	//	var extraData = {}; // Extra Data.
 		jQuery.ajax({
@@ -61,7 +70,6 @@
 			success : function(data) {
 				alert(data);
 				$('#fileTable tr:not(:first)').remove(); //첫번째 행 제외하고 모두 삭제 
-				
 			},
 			error:function(data){
 				alert("파일업로드 실패");
@@ -70,7 +78,7 @@
 	}
 	
 	
-	$(document).ready(function() {
+$(document).ready(function() {
 
 		var objDragAndDrop = $(".dragAndDropDiv");
 		// dragenter : 마우스가 대상 객체의 위로 처음 진입할 때 발생함.
@@ -116,42 +124,42 @@
 		});
 		
 		
-		function handleFileUpload(files) {
+function handleFileUpload(files) {
 			// 파일의 길이만큼 반복하며 formData에 셋팅해준다.
-			var megaByte = 1024*1024;
-			for (var i = 0; i < files.length; i++) {
-				// containsValue : map에 value가 있는지 확인
-				if(map.containsValue(files[i].name)== false && (files[i].size/megaByte)<=10){
-					fd.append('file'+k, files[i]);
-					// 파일 중복 업로드를 방지하기 위한 설정
-					map.put('file'+k,files[i].name);
-					// 파일 이름과 정보를 추가해준다.
-					var fileList = new createFileList(); 
-					fileList.setFileNameSize(files[i].name,files[i].size);
-				}else{
-					// 중복되는 정보 확인 위해 콘솔에 찍음
-					if((files[i].size/megaByte) > 10){
-					alert(files[i].name+"은(는) \n 10메가 보다 커서 업로드가 할 수 없습니다.");
-					}
-					else{
-					console.log('파일 중복이다 파일명 = ' + files[i].name + ' / map에서 꺼냄 = '+ map.containsValue(files[i].name)  );
+	var megaByte = 1024*1024;
+	for (var i = 0; i < files.length; i++) {
+		// containsValue : map에 value가 있는지 확인
+		if(map.containsValue(files[i].name)== false && (files[i].size/megaByte)<=10){
+		fd.append('file'+k, files[i]);
+		// 파일 중복 업로드를 방지하기 위한 설정
+		map.put('file'+k,files[i].name);
+		// 파일 이름과 정보를 추가해준다.
+		var fileList = new createFileList(); 
+		fileList.setFileNameSize(files[i].name,files[i].size);
+		}else{
+		// 중복되는 정보 확인 위해 콘솔에 찍음
+		if((files[i].size/megaByte) > 10){
+		alert(files[i].name+"은(는) \n 10메가 보다 커서 업로드가 할 수 없습니다.");
+		}
+		else{
+			console.log('파일 중복이다 파일명 = ' + files[i].name + ' / map에서 꺼냄 = '+ map.containsValue(files[i].name)  );
 					}
 				}
 			}
-		}
+}
 		
-		function createFileList(obj) {
+function createFileList(obj) {
 			
-			var fileTable = $('#fileTable');
-			this.inputFileInfo = $("<tr></tr>");
-			this.filename = $("<td class='filename addTd filename'></td>")
+	var fileTable = $('#fileTable');
+	this.inputFileInfo = $("<tr></tr>");
+	this.filename = $("<td class='filename addTd filename'></td>")
 					.appendTo(this.inputFileInfo);
-			this.size = $("<td class='filesize addTd'></td>")
+	this.size = $("<td class='filesize addTd'></td>")
 					.appendTo(this.inputFileInfo);
-			this.fileCancelBtn = $("<td class='addTd'>"
+	this.fileCancelBtn = $("<td class='addTd'>"
 					+"<button class='delBtn' id='file"+k+"' onclick='delFile(this)'>취소</button>"
 					+"</td>").appendTo(this.inputFileInfo);
-			k++;
+			k++; 
 			fileTable.append(this.inputFileInfo);
 			this.setFileNameSize = function(name, size) {
 				var sizeStr = "";
@@ -173,6 +181,3 @@
 		});
 	
 	
-	function go_list() {
-		location.href = "./boardList.do";
-	}

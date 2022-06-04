@@ -4,8 +4,11 @@
 
 	<!-- 사용자 자료게시판 전체조회 -->
 	<select id="selJaryoAllUser" resultType="FileListVo">
-		SELECT e.EBOARD_NO, e.GUBUN_NO , e.CGORY_NO, e.EMP_ID, e.EMP_NAME,
-			e.EBOARD_REGDATE, e.EBOARD_DELFLAG, f.FLIST_SEQ, f.FLIST_UUID, f.FLIST_ORIGINNAME, f.FLIST_SIZE, f.FLIST_UPLOADPATH 
+		SELECT e.EBOARD_NO, e.GUBUN_NO , e.CGORY_NO, 
+				e.EMP_ID, e.EMP_NAME,TO_CHAR(e.EBOARD_REGDATE, 'YYYY-MM-DD')EBOARD_REGDATE, 
+				e.EBOARD_DELFLAG, 
+				f.FLIST_SEQ, f.FLIST_UUID, f.FLIST_ORIGINNAME, 
+				f.FLIST_SIZE, f.FLIST_UPLOADPATH 
 		FROM ENTRBOARD e LEFT JOIN FILELIST f 
 		ON e.EBOARD_NO = f.EBOARD_NO 
 		WHERE e.CGORY_NO = '201' AND e.EBOARD_DELFLAG = 'N'
@@ -18,7 +21,7 @@
 				EMP_ID, EMP_NAME, EBOARD_TITLE, 
 				EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, 
 				EBOARD_DELFLAG)
-		VALUES(SEQ_ENTRBOARD.NEXTVAL, '200', '201', 
+		VALUES((SELECT MAX(EBOARD_NO)+1 FROM ENTRBOARD), '200', '201', 
 					#{emp_id}, #{emp_name}, '', 
 					'', 0, SYSDATE, 
 					'N')
@@ -34,5 +37,9 @@
 			#{flist_uuid}, #{flist_originname}, #{flist_size}, 
 			#{flist_uploadpath})
 	</insert>
+	
+	<update id="updJaryoDelflagUser" parameterType="java.lang.String">
+		UPDATE ENTRBOARD SET EBOARD_DELFLAG = 'Y' WHERE EBOARD_NO = #{eboard_no}
+	</update>
 
 </mapper>

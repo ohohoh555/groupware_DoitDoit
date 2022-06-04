@@ -146,7 +146,7 @@ public class FileUploadController {
 								@RequestParam(value="fileName") String fileName,
 								HttpServletRequest request, HttpServletResponse response) throws IOException {
 		byte[] bytes=null;
-		logger.info("Welcome! HomeController download : {} {}",  uid, fileName);
+		logger.info("@download : {} {}",  uid, fileName);
 		
 		//서버에 저장된 이미지 경로 
 		String path=WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/") ;
@@ -174,43 +174,6 @@ public class FileUploadController {
 	
 	
 	
-	@RequestMapping(value = "/saveJaryo.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
-	@ResponseBody
-	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, FileListVo fVo) throws FileNotFoundException {
-		logger.info("@saveJaryo 자료글 저장하기 : {}", fVo);
-		
-		String serverPath = WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/");
-		
-		LocalDate now = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY\\MM\\");
-		String nowFormat = now.format(formatter); 
-		
-		String backPath = "C:\\Users\\user\\git\\groupware_doit\\DoitDoit_Project\\src\\main\\resources\\back\\"+nowFormat;
-		
-		Iterator<String> itr =multipartRequest.getFileNames();
-		
 
-		while(itr.hasNext()) { // 받은파일을 모두
-			UUID uid = UUID.randomUUID(); //유효아이디 생성
-			MultipartFile mpFile=multipartRequest.getFile(itr.next());
-			String originFileName=mpFile.getOriginalFilename(); // 실제 파일명 
-			String saveFileName=uid+"_"+originFileName;
-			
-			String fileFullPath = backPath+saveFileName; 
-			System.out.println("파일 저장이름 : "+saveFileName);
-			System.out.println("파일 전체 경로 : "+fileFullPath);
-			System.out.println("파일 서버 경로 : "+serverPath);
-			
-			File file = new File(serverPath+saveFileName);
-			try {
-				file.createNewFile(); //서버에 파일 복사하기
-				mpFile.transferTo(new File(fileFullPath));//파일 폴더에 저장
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return "업로드 성공";
-	}
 
 }
