@@ -15,7 +15,7 @@
                     </ul>
                 </li>
                 <li onclick="location.href='./moveCalendar.do'"><span>캘린더</span><img class="menuIcon" src="./img/calendar_32.png" alt=""></li>
-                <li><span>회의실</span><img class="menuIcon" src="./img/meet_32.png" alt=""></li>
+                <li onclick="location.href='./goResv.do'"><span>회의실</span><img class="menuIcon" src="./img/meet_32.png" alt=""></li>
                 <li>
                     <span>게시판</span><img class="menuIcon" src="./img/board_32.png" alt="">
                     <ul class="subMenu">

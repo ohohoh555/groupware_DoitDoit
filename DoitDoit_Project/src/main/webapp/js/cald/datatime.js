@@ -6,7 +6,6 @@ $(document).ready(function(){
 		      .addClass('xdsoft_disabled');
 		  },
 		allowTimes:[
-			'08:00','08:30',
 			'09:00','09:30',
 			'10:00','10:30',
 			'11:00','11:30',
@@ -20,7 +19,6 @@ $(document).ready(function(){
 		],
 		minDate:'-1970/01/01',
 		maxDate:'+1971/01/01',
-	// 	minTime:0,
 	});
 	
 	$("[id*=datetimepicker2]").datetimepicker({
