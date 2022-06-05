@@ -23,7 +23,12 @@
             <sec:authorize access="hasAnyRole('ROLE_ADMIN_BOARD','ROLE_ADMIN_INSA')">
                 <div id="rContent">
 					<div class="rContent-full">
-						<h1>&lt;&lt;공지게시판&gt;&gt;</h1>
+						<ul class="nav nav-tabs">
+							<li class="active" id="navGongji"><a href="./entrBoardAdmin.do">공지게시판</a></li>
+							<li id="navJaryo"><a onclick="adminJaryo()">자료게시판</a></li>
+						</ul>
+						<br>
+					<div id="boardResult">
 						<div>
 							<button onclick="javascript:location.href='./entrBoardAdmin.do'" class="btn btn-default">전체</button>
 							<button value="101" onclick="cgoryBoard(this.value)" class="btn btn-default">일반</button>
@@ -34,7 +39,7 @@
 						
 						<form action="#" method="post" id="delFrm" onsubmit="return ChangDel()">
 						<input type="submit" class="btn btn-success" value="숨김/보임" >
-					<hr>
+						<br>
 						<table id="entrTable" class="stripe">
 							<thead>
 								<tr>
@@ -49,10 +54,11 @@
 							</thead>
 						</table>
 						</form>
-					</div>
-                </div> 
+					</div>	
+					</div><!-- rContent-full 끝 -->
+                </div> <!-- rContent 끝 -->
             </sec:authorize>
-            </div>
+            </div><!-- content 끝 -->
         </main>
     </div>
 <script type="text/javascript">
@@ -196,6 +202,57 @@ function ChangDel(){
 		return false;
 	}
 
+}
+
+function adminJaryo(){
+	console.log("자료게시판 이동");
+	$("#navGongji").removeClass("active");
+	$("#navJaryo").addClass("active");
+	$("#boardResult").html("");
+	
+	$.ajax({
+		url:"./jaryoBoardAdmin.do",
+		method:"get",
+		dataType:"json",
+		success:function(msg){
+			console.log("자료게시판 아작스 성공",msg);
+			
+			var html = "";
+			html += "<table>";
+			html += "<thead>";
+			html += "<tr>";	
+			html += "<th><input type='checkbox'></th>";		
+			html += "<th>파일명</th>";		
+			html += "<th>크기</th>";		
+			html += "<th>등록자</th>";		
+			html += "<th>숨김여부</th>";		
+			html += "<th>등록일자</th>";		
+			html += "</tr>";	
+			html += "</thead>";
+			html += "<tbody>";
+			$.each(msg, function(key, value){
+				console.log(value.eboard_no);
+			
+				html += "<tr>";	
+				html += "<td><input type='checkbox'></td>";		
+				html += "<td></td>";		
+				html += "<td></td>";		
+				html += "<td></td>";		
+				html += "<td></td>";		
+				html += "<td></td>";		
+				html += "</tr>";	
+			});
+			html += "</tbody>";
+			html += "</table>";
+			
+			$("#boardResult").html(html);
+			
+		},
+		error:function(){
+			alert("자료게시판 통신실패");
+		}
+		
+	});
 }
 
 </script>

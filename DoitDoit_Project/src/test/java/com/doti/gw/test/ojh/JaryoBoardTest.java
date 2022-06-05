@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.doit.gw.service.entr.IJaryoService;
+import com.doit.gw.service.board.IJaryoService;
 import com.doit.gw.vo.entr.FileListVo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,9 +20,15 @@ public class JaryoBoardTest {
 	@Autowired
 	private IJaryoService service;
 
-	@Test
+//	@Test
 	public void selJaryoAllUserTest() {
 		List<FileListVo> list = service.selJaryoAllUser();
+		assertNotNull(list);
+	}
+	
+	@Test
+	public void selJaryoAllAdminTest() {
+		List<FileListVo> list = service.selJaryoAllAdmin();
 		assertNotNull(list);
 	}
 

@@ -1,4 +1,4 @@
-package com.doit.gw.service.entr;
+package com.doit.gw.service.board;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.doit.gw.mapper.entr.IEntrMapper;
+import com.doit.gw.mapper.board.IEntrMapper;
 import com.doit.gw.vo.entr.EntrBoardVo;
 
 @Service

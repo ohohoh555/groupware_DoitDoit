@@ -1,4 +1,4 @@
-package com.doit.gw.service.entr;
+package com.doit.gw.service.board;
 
 import java.util.List;
 
@@ -10,5 +10,6 @@ public interface IJaryoService {
 	public int insJaryo(FileListVo fVo);
 	public int updJaryoDelflagUser(String eboard_no);
 	
+	public List<FileListVo> selJaryoAllAdmin();
 	
 }

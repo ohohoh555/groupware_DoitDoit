@@ -1,6 +1,5 @@
-package com.doit.gw.mapper.entr;
+package com.doit.gw.mapper.board;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ public class EntrMapperImpl implements IEntrMapper {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	private final String NS = "com.doit.gw.mapper.entr.EntrMapperImpl.";
+	private final String NS = "com.doit.gw.mapper.board.EntrMapperImpl.";
 
 	@Override
 	public List<EntrBoardVo> selEboardAllUser() {

@@ -1,4 +1,4 @@
-package com.doit.gw.service.entr;
+package com.doit.gw.service.board;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.doit.gw.mapper.entr.IJaryoMapper;
+import com.doit.gw.mapper.board.IJaryoMapper;
 import com.doit.gw.vo.entr.FileListVo;
 
 @Service
@@ -39,6 +39,13 @@ public class JaryoServiceImpl implements IJaryoService {
 	public int updJaryoDelflagUser(String eboard_no) {
 		logger.info("@updJaryoDelflagUser 사용자 자료글 삭제 : {}", eboard_no);
 		return mapper.updJaryoDelflagUser(eboard_no);
+	}
+
+
+	@Override
+	public List<FileListVo> selJaryoAllAdmin() {
+		logger.info("@selJaryoAllAdmin 관리자 자료글 전체조회");
+		return mapper.selJaryoAllAdmin();
 	}
 
 }

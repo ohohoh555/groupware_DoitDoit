@@ -1,4 +1,4 @@
-package com.doit.gw.mapper.entr;
+package com.doit.gw.mapper.board;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class JaryoMapperImpl implements IJaryoMapper {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	private final String NS = "com.doit.gw.mapper.entr.JaryoMapperImpl.";
+	private final String NS = "com.doit.gw.mapper.board.JaryoMapperImpl.";
 
 	@Override
 	public List<FileListVo> selJaryoAllUser() {
@@ -35,6 +35,11 @@ public class JaryoMapperImpl implements IJaryoMapper {
 	@Override
 	public int updJaryoDelflagUser(String eboard_no) {
 		return sqlSession.update(NS+"updJaryoDelflagUser", eboard_no);
+	}
+
+	@Override
+	public List<FileListVo> selJaryoAllAdmin() {
+		return sqlSession.selectList(NS+"selJaryoAllAdmin");
 	}
 
 }
