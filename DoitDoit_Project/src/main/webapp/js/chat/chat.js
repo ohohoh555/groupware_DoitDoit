@@ -2,7 +2,6 @@ var stomp;
 var room_id;
 var emp_id;
 var user_name;
-var chatCon;
 
 // 파일 중복 업로드 방지용 맵을 선언한다.
 //var map = new Map(); // Map.prototype(); 객체는 언제나 함수형태로 생성
@@ -64,17 +63,15 @@ $(document).ready(function() {
 			};
 		});
 		
-		roomEnter(room_id,emp_id);
-		
 		//들어 왔을떄
 		stomp.subscribe("/sub/chatMem/room/" + room_id, function(member){
+			console.log("chatMem Enter");
 			var mems = member.body;
 			mems = mems.replaceAll('"', '');
 			mems = mems.replace('[', '');
 			mems = mems.replace(']', '');
 			mems = mems.split(",");
 			console.log(mems);
-			console.log(mems.length);
 			
 			html = '';
 			
@@ -87,17 +84,24 @@ $(document).ready(function() {
 			aboutChatRoom(mems);
 		});
 		
+		roomEnter(room_id,emp_id);
 	});
 	// 채팅입력
 	$("#btnSend").on("click",function(){
-		chatCon = $("#chatCon");
-		
-		chatSend(room_id,chatCon,emp_id,user_name);
+		chatSend();
+	});
+	
+	//엔터키
+	$("#chatCon").keydown(function(key){
+		if(key.keyCode == 13){
+      		chatSend();
+   		}
 	});
 	
 	//나갈때 이벤트 발생
 	$(window).on("beforeunload",function(){
 		roomOut(room_id, empId);
+		stomp.disconnect();
 	});
 	
 	//drag & drop
@@ -149,34 +153,23 @@ $(document).ready(function() {
 		}
 		sendFileToServer(fd);
 	}
-
- 
-
 });
 
-
-function enterkey(){
-   if(window.event.keyCode == 13){
-      chatCon = document.getElementById("chatCon");
-      chatSend(room_id,chatCon,empId);
-   }
-}
-
 //채팅 컨트롤러로 보내는 영역
-function chatSend(room_id,chatCon){
-
-	if(chatCon.val != ""){
-		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: chatCon.val(), emp_id: emp_id, user_name: user_name, type: "T"}));
-		chatCon.val('');
+function chatSend(){
+	if($("#chatCon").val().trim() != ""){			
+		stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, chat_con: $("#chatCon").val(), emp_id: emp_id, user_name: user_name, type: "T"}));
+		$("#chatCon").val("");
 	}else{
 		alert('채팅을 입력해 주세요');
+		$("#chatCon").val("");
 	}
-
 }
 
 //채팅방 입장 시 
 function roomEnter(room_id,username){
-   stomp.send('/pub/chat/enter', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
+	console.log("roomEnter");
+	stomp.send('/pub/chat/enter', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
 }
 
 //채팅방 닫기 실행 시
@@ -186,12 +179,6 @@ function roomOut(room_id, username){
 
 //채팅방에 있는지 없는지 판단
 function aboutChatRoom(mems){
-//우연이꺼로 고친...(아마 선생님이 고친 부분인듯)
-//   console.log("aboutChatRoom");
-//   console.log($("#members > div > div").eq(0).html());
-
-	console.log("aboutChatRoom");
-
 	var emps = $("#members").children();
 	for(var i = 0; i < emps.length; i++){
 		if($.inArray(emps.eq(i).attr("id"), mems) > -1){
@@ -202,19 +189,15 @@ function aboutChatRoom(mems){
 			console.log("없음");
 		}
 	}
-
-
-
-
 }
 
 //ajax로 파일 입력
 function sendFileToServer(fd) {
 
-	//FormData()에 room_id와 empId 추가
-	fd.append('room_id',room_id);
-	fd.append('user_name',user_name);
-	fd.append('emp_id',emp_id);
+//	//FormData()에 room_id와 empId 추가
+//	fd.append('room_id',room_id);
+//	fd.append('user_name',user_name);
+//	fd.append('emp_id',emp_id);
 	
 	$.ajax({
 		type : "POST",
@@ -225,15 +208,10 @@ function sendFileToServer(fd) {
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
 		cache : false, //ajax 로 통신 중 cache 가 남아서 갱신된 데이터를 받아오지 못할 경우를 대비
 		success : function(map){
-			console.log("map",map);
-			console.log("chat_con",map.html);
 			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html:map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
 		},
 		error:function(){
 			alert("파일업로드 실패");
 		}
 	});
-
-  
-
 }

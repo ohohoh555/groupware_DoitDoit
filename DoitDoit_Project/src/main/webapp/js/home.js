@@ -6,10 +6,10 @@ $(document).ready(function(){
 	}).mouseout(function(){
         $(".subMenu").css({display:"none"});
     });
-    
-    
-})
-	    
+
+	$(".mod-body").load("./chatJstree.do");
+});
+
 function menuOn(){
 	cnt ++;
 	if(cnt % 2 == 1){
@@ -18,7 +18,7 @@ function menuOn(){
 		$("nav").css({left:"-150px",transition:"all 0.5s"})
 	}
 }
-	
+
 function chatOn(){
 	cnt ++;
 	if(cnt % 2 == 1){
@@ -27,12 +27,11 @@ function chatOn(){
 			type : "GET",
 			url:"./roomList.do",
 			success:function(rooms){
-				console.log(rooms);
 				$("#chatRoom").html("");
 				for(var i = 0; i < rooms.length; i++){
 					var html; 
 					html = "<div onclick=\"toChatRoom('"+rooms[i].room_id+"')\">";
-					html += 	"<a href=./chatRoom.do?room_Id="+rooms[i].room_id+">";
+					html += 	"<a href=./chatRoom.do?room_id="+rooms[i].room_id+">";
 					html += 		"<div class=\"roomName\">";
 					html += 			"<div>";
 					html += 				"<span style=\"font-size: 10px; color: white;\">"+rooms[i].room_name+"</span>";

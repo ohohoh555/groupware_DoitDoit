@@ -238,6 +238,20 @@ aside{
     background: #3d3e6d;
 }
 
+/* 채팅 목록 */
+#chat > div:first-child{
+	height: 320px;
+    overflow:hidden; 
+    overflow-y: scroll;
+    padding: 5px;
+}
+
+/* 채팅 초대 부분 */
+#chat > div:nth-child(2){
+	background-color:#6667AB;
+	height: 30px;
+}
+
 #adminContent{
 	border: 5px solid #6667AB;
 	border-radius: 15px;
@@ -313,3 +327,7 @@ input[type=text] {
 	margin: 20px auto;
 }
 
+.mod-body{
+  	position: relative;
+  	padding: 15px;
+}
