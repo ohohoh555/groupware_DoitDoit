@@ -1,4 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.">
+<mapper namespace="com.doit.gw.mapper.resv.ReservationMapperImpl">
+
+<insert id="insResvRoom" parameterType="java.util.Map">
+	INSERT INTO ADMIN.RESERVATION
+	(
+		RESV_ID, EMP_ID, RESV_ROOM_ID,
+		RESV_TITLE, RESV_WRITER, RESV_DESCRIPTION,
+		RESV_START, RESV_END
+	)
+	VALUES
+	(
+		RESERVATION_SEQ.NEXTVAL, #{emp_id}, #{resv_room_id},
+		#{resv_title}, #{resv_writer}, #{resv_description},
+		TO_DATE(#{resv_start},'YYYY/MM/DD HH24:MI'), TO_DATE(#{resv_end},'YYYY/MM/DD HH24:MI')
+	)
+</insert>
+
+<select id="selResvRoom" resultType="ReservationVo">
+	SELECT RESV_ROOM_ID ,RESV_ROOM_TITLE ,RESV_ROOM_EVENTCOLOR  
+		FROM RESERVATION_ROOM r
+</select>
+
+<select id="selResvAll" parameterType="java.lang.String" resultType="ReservationVo">
+	<![CDATA[SELECT RESV_ID , EMP_ID , RESV_ROOM_ID , RESV_TITLE , RESV_WRITER , RESV_DESCRIPTION , RESV_START ,RESV_END 
+				FROM RESERVATION r 
+					WHERE TO_CHAR(CURRENT_DATE, 'YYYYMMDD')<=TO_CHAR(RESV_START,'YYYYMMDD')]]>
+</select>
+
+<update id="updResv" parameterType="java.util.Map">
+	<![CDATA[UPDATE RESERVATION 
+				SET RESV_START=TO_DATE(#{resv_start},'YYYY/MM/DD HH24:MI'),
+					RESV_END=TO_DATE(#{resv_end},'YYYY/MM/DD HH24:MI'),
+					RESV_DESCRIPTION=#{resv_description}
+					WHERE RESV_ID = #{resv_id}
+					AND EMP_ID = #{emp_id}
+					AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=#{resv_end}]]>
+</update>
+
+<update id="updResvDate" parameterType="java.util.Map">
+<![CDATA[UPDATE RESERVATION 
+				SET RESV_START=TO_DATE(#{resv_start},'YYYY/MM/DD HH24:MI'),
+					RESV_END=TO_DATE(#{resv_end},'YYYY/MM/DD HH24:MI')
+					WHERE RESV_ID = #{resv_id} 
+					AND EMP_ID=#{emp_id}
+					AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=#{resv_end}]]>
+</update>
+
+<delete id="delResv" parameterType="java.util.Map">
+	<![CDATA[DELETE FROM RESERVATION 
+				WHERE RESV_ID = #{resv_id}
+				AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=#{resv_end}
+				AND EMP_ID=#{emp_id}]]>
+</delete>	
+
 </mapper>
