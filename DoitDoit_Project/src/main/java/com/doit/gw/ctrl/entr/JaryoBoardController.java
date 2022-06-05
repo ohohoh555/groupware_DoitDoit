@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
-import com.doit.gw.service.entr.IJaryoService;
+import com.doit.gw.service.board.IJaryoService;
 import com.doit.gw.vo.entr.FileListVo;
 
 @Controller

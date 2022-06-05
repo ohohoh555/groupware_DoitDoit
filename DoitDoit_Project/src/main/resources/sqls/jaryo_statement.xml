@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doit.gw.mapper.entr.JaryoMapperImpl">
+<mapper namespace="com.doit.gw.mapper.board.JaryoMapperImpl">
 
 	<!-- 사용자 자료게시판 전체조회 -->
 	<select id="selJaryoAllUser" resultType="FileListVo">
@@ -41,5 +41,15 @@
 	<update id="updJaryoDelflagUser" parameterType="java.lang.String">
 		UPDATE ENTRBOARD SET EBOARD_DELFLAG = 'Y' WHERE EBOARD_NO = #{eboard_no}
 	</update>
+	
+	<select id="selJaryoAllAdmin" resultType="FileListVo"> 
+		SELECT e.EBOARD_NO, e.GUBUN_NO, e.CGORY_NO, 
+			e.EMP_ID, e.EMP_NAME,e.EBOARD_REGDATE, 
+			e.EBOARD_DELFLAG, f.FLIST_SEQ, f.FLIST_ORIGINNAME, 
+			f.FLIST_SIZE, f.FLIST_UPLOADPATH 
+		FROM ENTRBOARD e LEFT JOIN FILELIST f 
+			ON e.EBOARD_NO = f.EBOARD_NO 
+			WHERE e.CGORY_NO = '201'
+	</select>
 
 </mapper>

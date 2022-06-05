@@ -1,4 +1,4 @@
-package com.doit.gw.mapper.entr;
+package com.doit.gw.mapper.board;
 
 import java.util.List;
 
@@ -11,5 +11,7 @@ public interface IJaryoMapper {
 	public int insJaryoAttach(FileListVo fVo);
 	
 	public int updJaryoDelflagUser(String eboard_no);
+	
+	public List<FileListVo> selJaryoAllAdmin();
 
 }
