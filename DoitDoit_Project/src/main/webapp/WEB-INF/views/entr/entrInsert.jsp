@@ -21,7 +21,7 @@
                 <div id="rContent">
 					<div class="rContent-full">
 					<h3>글쓰기</h3>
- 			           <form id="insertFrm" onsubmit="return insertAction()" method="post">
+ 			           <form id="insertFrm" method="post" onsubmit="return insertAction()">
  			           <sec:authorize access="isAuthenticated()">
 					        <sec:authentication property="principal" var="principal"/>
 					        <input type="hidden" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
@@ -62,7 +62,7 @@
 								<tr>
 									<td>내용</td>
 									<td>
-										<textarea name ="eboard_content" id="content"></textarea>
+										<textarea name ="eboard_content" id="eboard_content"></textarea>
 									</td>
 								</tr>
 							</tbody>
@@ -70,7 +70,7 @@
 								<tr>
 									<td colspan="3">
 										<input type="reset" class="btn btn-default" value="초기화" onclick="resetContent()">
-										<input type="submit" class="btn btn-default" value="등록" onclick="insertAction()" >
+										<input type="submit" class="btn btn-default" value="등록" >
 										<input type="button" class="btn btn-default" value="돌아가기" onclick="javascript:history.back(-1)">
 									</td>
 								</tr>

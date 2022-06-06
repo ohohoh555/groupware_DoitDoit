@@ -20,19 +20,22 @@
                 <div id="rContent">
 					<div class="rContent-full">
 					<h3>글수정</h3>
- 			   
+ 			   		<form id="modifyFrm" method="post" onsubmit="return modifyAction()" action="./modifyFrm.do">
  			           <sec:authorize access="isAuthenticated()">
 					        <sec:authentication property="principal" var="principal"/>
 					        <input type="hidden" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
 					        <input type="hidden" value="${principal.emp_name}" id="emp_name" name="emp_name">
  			           </sec:authorize> 
  			           		<input type="hidden" value="${eVo.eboard_content}" id="originContent" >
+ 			           		<input type="text" name="cgory_no" value="${eVo.cgory_no}">
+ 			           		<input type="text" name="eboard_no" value="${eVo.eboard_no}">
+ 			           		<input type="text" name="cald_id" value="${eVo.cald_id}">
 						<table class="table table-bordered" id="modifyTbl">
 							<tbody>
 								<tr>
 									<td>분류</td>
 									<td>
-										<select name="cgory_no" class="form-control" style="width: 100px;" disabled>
+										<select class="form-control" style="width: 100px;" disabled>
 											<c:choose>
 											<c:when test="${eVo.cgory_no =='101'}"><option value="101">일반</option></c:when>	
 											<c:when test="${eVo.cgory_no =='102'}"><option value="102">필독</option></c:when>
@@ -40,6 +43,7 @@
 											<c:when test="${eVo.cgory_no =='302'}"><option value="302">일정</option></c:when>
 											</c:choose>
 										</select>
+										
 									</td>
 								</tr>
 								<c:if test="${eVo.cgory_no =='302'}">
@@ -48,12 +52,12 @@
 									<td>
 										<div style="float: left;">
 										<label>시작:</label>
-										<input type='datetime-local' class='form-control' id="cald_start" style='width: 200px;' value="${eVo.cald_start}">
+										<input type='datetime-local' class='form-control' id="cald_start" name="cald_start" style='width: 200px;'>
 										</div>
 
 										<div style="margin-left: 10px;">
 										<label>종료:</label>
-										<input type='datetime-local' class='form-control' id="cald_end"" style='width: 200px;' value="${eVo.cald_end}">
+										<input type='datetime-local' class='form-control' id="cald_end" name="cald_end" style='width: 200px;'>
 										</div>
 									</td>
 								</tr>
@@ -64,34 +68,34 @@
 								</tr>
 								<c:choose>
 								<c:when test="${eVo.cgory_no =='302'}">
-									<tr>
-										<td>내용</td>
-										<td>
-											<textarea rows="5" cols="10" id="cald_content" class="form-control" style="resize: none;">${eVo.eboard_content}</textarea>
-										</td>
-									</tr>
-								</c:when>
-							<c:otherwise>
 								<tr>
 									<td>내용</td>
 									<td>
-									<textarea name ="eboard_content" id="content">${eVo.eboard_content}</textarea>
+									<textarea name ="cald_content" id="cald_content" class="form-control" style="width: 740px; height: 250px;">${eVo.eboard_content}</textarea>
 									</td>
 								</tr>
-							</c:otherwise>
-								</c:choose>
+								</c:when>
+								<c:otherwise>
+								<tr>
+									<td>내용</td>
+									<td>
+										<textarea name ="eboard_content" id="eboard_content">${eVo.eboard_content}</textarea>
+									</td>
+								</tr>
+								</c:otherwise>
+							</c:choose>
 							</tbody>
 							<tfoot>
 								<tr>
 									<td colspan="3">
 										<input type="button" class="btn btn-default" value="초기화" onclick="resetOrigin()">
-										<input type="submit" class="btn btn-default" value="수정완료" onclick="modifyAction()">
+										<input type="submit" class="btn btn-default" value="수정완료">
 										<input type="button" class="btn btn-default" value="취소" onclick="cancleModify()">
 									</td>
 								</tr>
 							</tfoot>
 						</table>
-						</form>
+					</form>	
 					</div>
                 </div>
             <%@include file="../comm/aside.jsp" %>    
@@ -124,18 +128,34 @@ function cancleModify(){
 	}
 }
 
-function modifyAction(){
-	var originContent=document.getElementById("originContent").value;
-	
-	
-}
-
 function resetOrigin(){
 	var con = confirm("원본글로 복구하시겠습니까?? (작업중인 내용이 모두 사라집니다.)");
 	var originContent=document.getElementById("originContent").value;
 	if(con){
 		CKEDITOR.instances.content.setData(originContent);
 	}
+}
+
+function modifyAction(){
+	console.log("modifyAction 작동");
+	var modifyFrm = document.getElementById("#modifyFrm");
+	
+	var cald_start= $("#cald_start").val();
+	var cald_end=$("#cald_end").val();
+	
+	if(cald_start==""){
+		alert("수정할 일정시작을 입력해주세요");
+		return false;
+	}else if(cald_end==""){
+		alert("수정할 일정종료를 입력해주세요");
+		return false;
+	}else{
+		modifyFrm.submit();
+	}
+	
+	
+
+
 }
 
 </script>

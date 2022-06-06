@@ -1,9 +1,13 @@
 package com.doit.gw.ctrl.entr;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.doit.gw.service.board.IEntrService;
-import com.doit.gw.service.board.IJaryoService;
+import com.doit.gw.service.entr.IEntrService;
+import com.doit.gw.service.entr.IJaryoService;
 import com.doit.gw.vo.entr.EntrBoardVo;
 import com.doit.gw.vo.entr.FileListVo;
 import com.google.gson.Gson;
@@ -35,8 +39,8 @@ public class AdminBoardController {
 	
 	@RequestMapping(value = "/entrBoardAdmin.do", method = RequestMethod.GET)
 	public String entrBoardAdmin() {
-		logger.info("EntrBoardController entrBoardAdmin 관리자 게시판관리 이동");
-		return "/admin/entrBoardAdmin";
+		logger.info("@entrBoardAdmin 관리자 게시판관리 이동");
+		return "/admin/entrAdmin";
 	}
 	
 	@RequestMapping(value = "/selEboardAllAdmin.do", method = {RequestMethod.POST})
@@ -63,10 +67,10 @@ public class AdminBoardController {
 		logger.info("EntrBoardController OneBoardAdmin 관리자 공지게시글 상세조회 : {}",eboard_no);
 		EntrBoardVo entrOne = eService.selEboardDetail(eboard_no);
 		model.addAttribute("entrOne", entrOne);
-		return "/admin/oneBoardAdmin";
+		return "/admin/oneAdmin";
 	}
 	
-	@RequestMapping(value = "/changeDel.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/changeEntrDel.do", method = RequestMethod.POST)
 	public String changeDel(@RequestParam ArrayList<String> chk) {
 		logger.info("@changeDel 관리자 게시글 숨김/보임 처리 : {}", chk);
 		int cnt = eService.updEboardDelfAdmin(chk);
@@ -88,19 +92,62 @@ public class AdminBoardController {
 	@RequestMapping(value = "/deletOne.do", method = RequestMethod.GET)
 	public String deletOne(String eboard_no) {
 		logger.info("@deletOne 관리자 상세조회에서 게시글 완전삭제: {}",eboard_no );
-		int cnt = eService.delEboardRoot(eboard_no);
+		int cnt = eService.delEboard(eboard_no);
 		logger.info("@deletOne 삭제된 게시글 갯수 : {}", cnt);
 		return "redirect:/entrBoardAdmin.do";
 	}
 	
-	@RequestMapping(value = "/jaryoBoardAdmin.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/jaryoBoardAdmin.do", method=RequestMethod.GET)
+	public String jaryoBoardAdmin() {
+		logger.info("@jaryoBoardAdmin 관리자 자료게시판 이동");
+		return "admin/jaryoAdmin";
+	}
+	
+	@RequestMapping(value = "/selJaryoAllAdmin.do", method = RequestMethod.GET,
+					produces = "application/html; charset=UTF-8")
 	@ResponseBody
-	public Map<String, Object> jaryoBoardAdmin() {
+	public String selJaryoAllAdmin() {
 		logger.info("@jaryoBoardAdmin 관리자 자료게시판 전체조회");
 		List<FileListVo> jList = jService.selJaryoAllAdmin();
-		Map<String, Object> map= new HashMap<String, Object>();
-		map.put("jList", jList);
-		return map;
+		Gson gson = new GsonBuilder().create();
+		return gson.toJson(jList);
 	}
+	
+	@RequestMapping(value="/changeJaryoDel.do", method = RequestMethod.POST)
+	public void changeJaryoDel(@RequestParam ArrayList<String> chk, HttpServletResponse response) throws IOException {
+		logger.info("@changeJaryoDel 관리자 자료글 숨김/보임 처리 :{}", chk);
+		int cnt =jService.updJaryoDelflagAdmin(chk);
+		logger.info("@changeJaryoDel 숨김/보임 변경성공 횟수 : {}", cnt);
+		
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter printWriter =response.getWriter();
+		
+		if(cnt >0) {
+			printWriter.println("<script>alert('선택한 자료들의 숨김여부를 변경하였습니다!'); location.href='./jaryoBoardAdmin.do'</script>");
+		}else {
+			printWriter.println("<script>alert('선택한 자료들의 숨김여부 변경에 실패하였습니다!')</script>");
+		}
+		
+		return;
+	}
+	
+	@RequestMapping(value = "/deleteJaryo.do", method = RequestMethod.POST)
+	public void deleteJaryo(@RequestParam ArrayList<String> chk, HttpServletResponse response) throws IOException{
+		logger.info("deleteJaryo 관리자 자료글 삭제 :{}",chk);
+		int cnt = jService.delJaryo(chk);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter printWriter = response.getWriter();
+		
+		if(cnt>0) {
+			printWriter.println("<script>alert('선택한 자료들을 완전히 삭제하였습니다!'); location.href='./jaryoBoardAdmin.do'</script>");
+		}else {
+			printWriter.println("<script>alert('선택한 자료들 삭제에 실패하였습니다.');location.href='./jaryoBoardAdmin.do'</script>");
+		}
+		
+	}
+	
+
 	
 }

@@ -1,6 +1,5 @@
 package com.doit.gw.ctrl.entr;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.doit.gw.service.board.IEntrService;
+import com.doit.gw.service.entr.IEntrService;
 import com.doit.gw.vo.entr.EntrBoardVo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,6 +49,15 @@ public class EntrBoardController {
 		Gson data = new GsonBuilder().create();
 		return data.toJson(eList);
 
+	}
+	
+	@RequestMapping(value = "/FildocAll.do", method = RequestMethod.GET,
+			produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public List<EntrBoardVo> FildocAll(){
+		logger.info("@FildocAll 공지게시판 필독전체보기 클릭");
+		List<EntrBoardVo> data= service.selEboardFildocAll();
+		return data;
 	}
 	
 	@RequestMapping(value = "/OneBoard.do", method = RequestMethod.GET)
@@ -95,7 +103,7 @@ public class EntrBoardController {
 		return "redirect:/entrBoard.do";
 	}
 	
-	@RequestMapping(value = "/modify.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/modifyBoard.do", method = RequestMethod.GET)
 	public String modify(String eboard_no, Model model) {
 		logger.info("@modify 글수정 페이지로 이동 : {}", eboard_no);
 		EntrBoardVo eVo = service.selEboardDetail(eboard_no);
@@ -103,14 +111,22 @@ public class EntrBoardController {
 		return "/entr/entrModify";
 	}
 	
-
-	@RequestMapping(value = "/FildocAll.do", method = RequestMethod.GET,
-					produces = "application/json; charset=UTF-8")
-	@ResponseBody
-	public List<EntrBoardVo> FildocAll(){
-		logger.info("@FildocAll 공지게시판 필독전체보기 클릭");
-		List<EntrBoardVo> data= service.selEboardFildocAll();
-		return data;
+	@RequestMapping(value = "/modifyFrm.do", method = RequestMethod.POST)
+	public String modifyFrm(@RequestParam Map<String, Object> map) {
+		logger.info("@modifyFrm 수정된 내용 저장 : {}",map);
+		String cgory_no = (String) map.get("cgory_no");
+		System.out.println(cgory_no);
+		if(cgory_no.equals("302")) {
+			int cnt1 = service.updEboardCald(map);
+			int cnt2=service.updEboardRoot(map);
+			logger.info("@modifyFrm 일정수정완료:{}, 내용수정완료:{}",cnt1,cnt2);
+		}else {
+			int cnt = service.updEboardRoot(map);
+			logger.info("@modifyFrm 게시글 수정완료:{}",cnt);
+		}
+		
+		return null;
 	}
+
 
 }

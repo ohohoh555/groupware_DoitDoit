@@ -1,4 +1,4 @@
-package com.doit.gw.mapper.board;
+package com.doit.gw.mapper.entr;
 
 import java.util.List;
 
@@ -40,6 +40,21 @@ public class JaryoMapperImpl implements IJaryoMapper {
 	@Override
 	public List<FileListVo> selJaryoAllAdmin() {
 		return sqlSession.selectList(NS+"selJaryoAllAdmin");
+	}
+
+	@Override
+	public int updJaryoDelflagAdmin(List<String> eboard_nos) {
+		return sqlSession.update(NS+"updJaryoDelflagAdmin", eboard_nos);
+	}
+
+	@Override
+	public int delJaryoAttach(List<String> eboard_nos) {
+		return sqlSession.delete(NS+"delJaryoAttach", eboard_nos);
+	}
+
+	@Override
+	public int delJaryoRoot(List<String> eboard_nos) {
+		return sqlSession.delete(NS+"delJaryoRoot", eboard_nos);
 	}
 
 }
