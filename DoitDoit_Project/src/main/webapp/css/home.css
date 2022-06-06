@@ -312,7 +312,7 @@ aside{
 	text-align: right;
 }
 
-input[type=text] {
+.selEmp {
   width: 700px;
   height: 45px;
   font-size: 20px;
@@ -320,6 +320,15 @@ input[type=text] {
   outline: none;
   padding-left: 10px;
   background-color: #8e8fc1;
+}
+
+.upEmp {
+  width: 700px;
+  height: 45px;
+  font-size: 20px;
+  border: 0;
+  outline: none;
+  padding-left: 10px;
 }
 
 #selDetailFrm{

@@ -22,25 +22,48 @@
         <main>
             <%@include file="../comm/header.jsp" %>
             <div id="content">
-            	<form action="" id="selDetailFrm">
+            	<form action="./upEmp.do" id="selDetailFrm" method="post">
             		<div class="profile"></div>
             		<c:forEach items="${lists}" var="empVo">
             		<div class="inputUser">
-            			<input type="text" id="emp_id" name="emp_id" value="${empVo.emp_id}" readonly>
-            			<input type="text" name="emp_name" value="${empVo.emp_name}" readonly>
-            			<input type="text" name="emp_email" value="${empVo.emp_email}">
-            			<input type="text" name="dept_no" value="${empVo.dept_no}">
-            			<input type="text" name="rank_no" value="${empVo.rank_no}">
-            			<input type="text" name="emp_regdate" value="${empVo.emp_regdate}">
+            			<label for="emp_id">사번 :</label>
+            			<input type="text" class="selEmp" id="emp_id" name="emp_id" value="${empVo.emp_id}" readonly>
+            			<label for="emp_name">이름 :</label>
+            			<input type="text" class="selEmp" name="emp_name" value="${empVo.emp_name}" readonly>
+	            		<label for="emp_email">이메일 :(입력)</label>
+	            		<input type="text" class="upEmp" name="emp_email" value="${empVo.emp_email}">
+            			<label for="dept_no">부서 :(선택)</label>
+						<select name="dept_no">
+           					<option>부서</option>
+           					<option value="01">인사부</option>
+           					<option value="02">관리부</option>
+           					<option value="03">개발부</option>
+           					<option value="04">영업부</option>
+           				</select>
+            			<label for="rank_no">직급 :(선택)</label>
+            			<select name="rank_no">
+           					<option>직급</option>
+           					<option value="01">사원</option>
+           					<option value="02">대리</option>
+           					<option value="03">과장</option>
+           					<option value="04">차장</option>
+           					<option value="05">부장</option>
+           					<option value="06">대표</option>
+           				</select><br>
+            			<label for="emp_regdate">입사일 :(입력)</label>
+            			<input type="text" class="upEmp" name="emp_regdate" value="${empVo.emp_regdate}">
             		</div>
             		<div class="inputAdd">
-            			<input type="text" value="${empVo.emp_address}">
-            			<input type="text" value="${empVo.emp_nfc}" readonly>
+            			<label for="emp_address">주소 :(입력)</label>
+            			<input type="text" class="upEmp" name="emp_address" value="${empVo.emp_address}">
+            			<label for="emp_nfc">NFC :</label>
+            			<input type="text" class="selEmp" value="${empVo.emp_nfc}" readonly>
             		</div>
             		</c:forEach>
             		<div class="buttonArea">
             			<input class="btn btn-default" type="submit" value="수정완료">
             			<input class="btn btn-default" type="button" value="뒤로가기" onclick="history.back(-1)">
+            			<input class="btn btn-default" type="button" value="NFC읽기">
             		</div>
             	</form>
             </div>
