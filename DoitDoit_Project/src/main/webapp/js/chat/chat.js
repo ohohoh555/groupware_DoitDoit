@@ -61,6 +61,13 @@ $(document).ready(function() {
 			if($('#chatLog').scrollTop()){
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			};
+			
+			if(content.type == "O"){
+				chatMemRemove(content.emp_id);
+				if(content.emp_id == emp_id){
+					location.href="./gohome.do";
+				}
+			}
 		});
 		
 		//들어 왔을떄
@@ -85,6 +92,10 @@ $(document).ready(function() {
 		});
 		
 		roomEnter(room_id,emp_id);
+		
+		stomp.subscribe("/sub/chat/roomOut/" + room_id, function(out){
+			console.log("나간거 이벤트 발생", out);
+		});
 	});
 	// 채팅입력
 	$("#btnSend").on("click",function(){
@@ -174,7 +185,7 @@ function roomEnter(room_id,username){
 
 //채팅방 닫기 실행 시
 function roomOut(room_id, username){
-   stomp.send('/pub/chat/out', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id }));
+   stomp.send('/pub/chat/out', {}, JSON.stringify({ room_id: room_id, emp_id: emp_id, user_name: user_name }));
 }
 
 //채팅방에 있는지 없는지 판단
@@ -191,14 +202,17 @@ function aboutChatRoom(mems){
 	}
 }
 
-//ajax로 파일 입력
-function sendFileToServer(fd) {
+function chatMemRemove(emp_id){
+	var emps = $("#members").children();
+	for(var i = 0; i < emps.length; i++){
+		if($.inArray(emps.eq(i).attr("id"), emp_id)){
+			$("#members > div").eq(i).remove();
+		}
+	}
+}
 
-//	//FormData()에 room_id와 empId 추가
-//	fd.append('room_id',room_id);
-//	fd.append('user_name',user_name);
-//	fd.append('emp_id',emp_id);
-	
+//ajax로 파일 입력
+function sendFileToServer(fd) {	
 	$.ajax({
 		type : "POST",
 		data : fd,
@@ -208,10 +222,15 @@ function sendFileToServer(fd) {
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
 		cache : false, //ajax 로 통신 중 cache 가 남아서 갱신된 데이터를 받아오지 못할 경우를 대비
 		success : function(map){
-			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html:map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
+			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
 		},
 		error:function(){
 			alert("파일업로드 실패");
 		}
 	});
+}	
+
+function getOut(){
+	console.log("getOut() 실행")
+	stomp.send('/pub/chat/message', {},JSON.stringify({room_id: room_id, emp_id: emp_id, user_name: user_name, type: "O"}));
 }

@@ -1,6 +1,8 @@
 package com.doit.gw.ctrl.chat;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.service.appro.IApproLineService;
@@ -130,5 +134,48 @@ public class ChatRoomController {
 		}
 		logger.info("[jsonArr 값] : {}" ,jsonArr.toJSONString());
 		return jsonArr;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/makeRoom.do",method = RequestMethod.POST)
+	@ResponseBody
+	public String makeRoom(@RequestParam List<String> mems, String roomName){
+		logger.info("ChatRoomController makeRoom {} / {}", mems, roomName);
+		
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		String formatedNow = now.format(formatter);
+		
+		JSONObject json = new JSONObject();
+		JSONArray jsonArr = new JSONArray();
+		
+		for(int i = 0; i < mems.size(); i++) {
+			JSONObject valJson = new JSONObject();
+			valJson.put("id", mems.get(i));
+			valJson.put("join", formatedNow);
+			
+			jsonArr.add(valJson);
+		}
+		
+		json.put("ROOM", jsonArr);
+		
+		Map<String, String> map = new HashMap<String, String>();
+		
+		map.put("room_name", roomName);
+		map.put("room_mem", json.toString());
+		
+		String room_id = service.insChatRoom(map);
+		
+		Map<String, String> chat = new HashMap<String, String>();
+		
+		chat.put("room_id", room_id);
+		chat.put("emp_id", "0");
+		chat.put("chat_con", "<span class=\"msg\">"+roomName + "이 생성 되었습니다.</span>");
+		chat.put("chat_time", formatedNow);
+		chat.put("chat_type", "T");
+		
+		service.insChat(chat);
+		
+		return room_id;
 	}
 }
