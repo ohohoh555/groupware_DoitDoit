@@ -84,4 +84,19 @@ public class EmpController {
 		model.addAttribute("lists", lists);
 		return "emp/upEmpDetail";
 	}
+	
+	@RequestMapping(value = "/upEmp.do", method = RequestMethod.POST)
+	public String upEmp(EmpVo eVo) {
+		logger.info("전달받은 수정 값 : " + eVo);
+		Map<String, Object> eMap = new HashMap<String, Object>();
+		eMap.put("emp_id", eVo.getEmp_id());
+		eMap.put("emp_email", eVo.getEmp_email());
+		eMap.put("dept_no", eVo.getDept_no());
+		eMap.put("rank_no", eVo.getRank_no());
+		eMap.put("emp_regdate", eVo.getEmp_regdate());
+		eMap.put("emp_address", eVo.getEmp_address());
+		service.upEmp(eMap);
+		return "redirect:/selAllEmp.do";
+	}
+	
 }

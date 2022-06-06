@@ -11,4 +11,5 @@ public interface IEmpService {
 	public int insEmp(Map<String, Object> map);
 	public List<EmpVo> selEmpDetail(String emp_id);
 	public int resetPassword(String emp_id);
+	public int upEmp(Map<String, Object> map);
 }

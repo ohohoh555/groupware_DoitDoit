@@ -26,16 +26,24 @@
             		<div class="profile"></div>
             		<c:forEach items="${lists}" var="empVo">
             		<div class="inputUser">
-            			<input type="text" id="emp_id" name="emp_id" value="${empVo.emp_id}" readonly>
-            			<input type="text" value="${empVo.emp_name}" readonly>
-            			<input type="text" value="${empVo.emp_email}" readonly>
-            			<input type="text" value="${empVo.dept_no}" readonly>
-            			<input type="text" value="${empVo.rank_no}" readonly>
-            			<input type="text" value="${empVo.emp_regdate}" readonly>
+            			<label for="emp_id">사번 :</label>
+            			<input type="text" class="selEmp" id="emp_id" name="emp_id" value="${empVo.emp_id}" readonly>
+            			<label for="emp_name">이름 :</label>
+            			<input type="text" class="selEmp" name="emp_name" value="${empVo.emp_name}" readonly>
+            			<label for="emp_email">이메일 :</label>
+            			<input type="text" class="selEmp" name="emp_email" value="${empVo.emp_email}" readonly>
+            			<label for="dept_no">부서 :</label>
+            			<input type="text" class="selEmp" name="dept_no" value="${empVo.dept_no}" readonly>
+            			<label for="rank_no">직급 :</label>
+            			<input type="text" class="selEmp" name="rank_no" value="${empVo.rank_no}" readonly>
+            			<label for="emp_regdate">입사일 :</label>
+            			<input type="text" class="selEmp" name="emp_regdate" value="${empVo.emp_regdate}" readonly>
             		</div>
             		<div class="inputAdd">
-            			<input type="text" value="${empVo.emp_address}" readonly>
-            			<input type="text" value="${empVo.emp_nfc}" readonly>
+            			<label for="emp_address">주소 :</label>
+            			<input type="text" class="selEmp" name="emp_address" value="${empVo.emp_address}" readonly>
+            			<label for="emp_nfc">NFC :</label>
+            			<input type="text" class="selEmp" name="emp_nfc" value="${empVo.emp_nfc}" readonly>
             		</div>
             		</c:forEach>
             		<div class="buttonArea">

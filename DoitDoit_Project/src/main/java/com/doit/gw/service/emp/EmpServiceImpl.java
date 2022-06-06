@@ -64,4 +64,9 @@ public class EmpServiceImpl implements IEmpService{
 		
 		return mapper.pwdUpdate(eVo);
 	}
+	
+	@Override
+	public int upEmp(Map<String, Object> map) {
+		return mapper.upEmp(map);
+	}
 }

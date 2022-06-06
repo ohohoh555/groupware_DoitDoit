@@ -96,5 +96,10 @@
 	<select id="resetPwdCheck" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT EMP_PASSWORD FROM EMP WHERE EMP_ID = #{emp_id}
 	</select>
+	
+	<update id="upEmp" parameterType="java.util.Map">
+		UPDATE EMP SET EMP_EMAIL = #{emp_email}, DEPT_NO = #{dept_no}, RANK_NO = #{rank_no}, 
+		EMP_REGDATE = #{emp_regdate},EMP_ADDRESS = #{emp_address} WHERE EMP_ID = #{emp_id}
+	</update>
 
 </mapper>
