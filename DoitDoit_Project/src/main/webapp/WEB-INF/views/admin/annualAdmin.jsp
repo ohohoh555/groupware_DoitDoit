@@ -7,14 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>연차 관리</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
+<%@include file="../comm/setting.jsp" %>
 <script type="text/javascript" src="./js/ann/annual.js"></script>
 </head>
 <body>
@@ -65,7 +58,7 @@
             		</tbody>
             	</table>
             	<hr style="border: solid 1px #6667AB;">
-	            <button class="btn btn-default" style="float: right;" onclick="annAdd()">연차 부여</button>
+	            <button class="btn btn-default" style="float: right;" onclick="addModal()">연차 부여</button>
             	</div>  
             </div>
         </main>
@@ -74,32 +67,38 @@
     
 	<!-- 연차 모달 -->
 	<div class="modal fade" id="annual" role="dialog">
-	  <div class="modal-dialog modal-md">
+	  <div class="modal-dialog modal-lg" style="width: 700px;">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
 	        <h4 class="modal-title" style="text-align: center;">연차 부여</h4>
 	      </div>
 	      <div class="modal-body">
-	        <form method="post" id="frmWriter">
+	        <form action="./annualAdd.do" method="post" id="frmAnn">
 	        	<table class="table table-bordered" style="height: 300px;">
 	        		<tr>
-		       			<th style="text-align: center; color: white; background-color: #6667AB">사원</th>
-		       			<td>
-			      			<input type="text" id="emp_id" name="emp_id" readonly>
+		       			<th style="text-align: center; color: white; background-color: #6667AB">사원 번호</th>
+		       			<td style="text-align: center;">
+			      			<input type="text" id="empId" name="emp_id" readonly style="width: 550px; background-color: white; border: 1px solid black; font-size: 13pt;">
+		       			</td>
+	        		</tr>
+	        		<tr>
+		       			<th style="text-align: center; color: white; background-color: #6667AB">연차 수</th>
+		       			<td style="text-align: center;">
+			      			<input type="text" id="annDays" name="ann_add_days" style="width: 550px; background-color: white; border: 1px solid black; font-size: 13pt;">
 		       			</td>
 	        		</tr>
 	        		<tr>
 	        			<th style="text-align: center; color: white; background-color: #6667AB">연차 내용</th>
-	        			<td>
-			      			<textarea rows="" cols="40"></textarea>
+	        			<td style="text-align: center;">
+			      			<textarea id="annContent" name="ann_add_content" rows="5" cols="59" style="font-size: 13pt;"></textarea>
 	        			</td>
 	        		</tr>
 	        	</table>
 	       	</form>
 	      </div>
 		  <div class="modal-footer">
-		    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn btn-default" onclick="annAdd()">연차 부여</button>
 	      </div>
 	    </div>
 	  </div>

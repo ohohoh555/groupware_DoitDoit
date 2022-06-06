@@ -104,4 +104,10 @@ public class AutoAnnualController {
 		}
 	}
 	
+	@Scheduled(cron = "0 0/1 0 * * *", zone = "Asia/Seoul")//매일 0시 1분
+	public void everyDayReset() {
+		logger.info("AutoAnnualController everyDayReset 출퇴근 초기화");
+		int n = service.updAnnualEveryDay();
+		logger.info("AutoAnnualController everyDayReset "+(n>0?"출퇴근 시간 초기화":""));
+	}
 }

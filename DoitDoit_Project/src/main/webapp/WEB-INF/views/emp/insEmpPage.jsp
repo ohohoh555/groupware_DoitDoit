@@ -12,6 +12,7 @@
 href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 <script type="text/javascript" src="./js/home.js"></script>
 </head>
@@ -49,8 +50,8 @@ href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
             			</div>
             			<div id="frmMiddle">
             				<input type="text" name="emp_address" placeholder="자택주소">
-            				<input type="text" name="emp_nfc" placeholder="nfc">
-            				<input type="button" value="NFC 읽기" class="btn btn-info">
+            				<input type="text" id="nfc" name="emp_nfc" placeholder="nfc">
+            				<input type="button" value="NFC 읽기" class="btn btn-info" onclick="nfcRead()">
             			</div>
             			<div id="frmBottom">
             				<input class="btn btn-danger" type="submit" value="등록">
@@ -60,5 +61,41 @@ href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
             </div>
         </main>
     </div>
+	<!-- nfc 등록 모달 -->
+	<div class="modal fade" id="nfcModal" role="dialog">
+	  <div class="modal-dialog modal-md" style="width: 500px;">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title" style="text-align: center;">NFC 등록</h4>
+	      </div>
+	      <div class="modal-body">
+	        	<table class="table table-bordered">
+	        		<tr>
+		       			<td style="text-align: center;">
+			      			<input type="text" id="empNfc" name="emp_nfc" style="background-color: white; width: 300px;" onkeypress="nfcVal(event)">
+		       			</td>
+	        		</tr>
+	        	</table>
+	      </div>
+	    </div>
+	  </div>
+	</div><!-- 모달 영역 끝 -->       
 </body>
+<script type="text/javascript">
+function nfcRead() {
+	$("#nfcModal").modal();
+	$("#nfcModal").on("shown.bs.modal", function () {
+		$("#empNfc").focus();
+	})
+}
+
+function nfcVal(e) {
+	if(e.keyCode==13){
+		var emp_nfc = $("#empNfc").val();
+		$("#nfcModal").modal("hide");
+		$("#nfc").val(emp_nfc);
+	}
+}
+</script>
 </html>
