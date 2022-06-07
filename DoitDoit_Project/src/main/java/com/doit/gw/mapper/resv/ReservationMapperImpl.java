@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.doit.gw.vo.entr.EntrBoardVo;
 import com.doit.gw.vo.resv.ReservationVo;
 
 @Repository
@@ -45,6 +46,11 @@ public class ReservationMapperImpl implements IReservationMapper {
 	@Override
 	public boolean updResvDate(Map<String, Object> map) {
 		return sqlSession.update(NS+"updResvDate", map)>0?true:false;
+	}
+	
+	@Override
+	public List<ReservationVo> selResvInsDate() {
+		return sqlSession.selectList(NS+"selResvInsDate");
 	}
 
 }

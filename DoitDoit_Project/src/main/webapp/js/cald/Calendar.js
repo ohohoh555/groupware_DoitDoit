@@ -110,7 +110,10 @@ function selectAjax() {
 // true : 성공 / false : 실패
 function insertAjax() {
 	console.log(dateFormat(new Date))
-	console.log();
+	console.log(dateFormat($("#datetimepicker1").datetimepicker('getValue')));
+	console.log(dateFormat($("#datetimepicker2").datetimepicker('getValue')));
+	var cha = dateFormat($("#datetimepicker2").datetimepicker('getValue'))-dateFormat($("#datetimepicker1").datetimepicker('getValue'))
+	console.log(cha)
 	// 일정명 칸이 비었을 경우
 	if ($("#title").val() == "") {
 		alert("일정명을 입력해주세요")
@@ -122,6 +125,11 @@ function insertAjax() {
 	if ($("#content2").val() == "") {
 		alert("내용을 입력해주세요")
 		$("#content2").focus();
+		return false;
+	}
+	
+	if(cha>=70000){
+		alert("일정은 7일 이상 등록할 수 없습니다.")
 		return false;
 	}
 	
@@ -255,7 +263,7 @@ function updateContent() {
 }
 
 function deleteContent() {
-	var id = $("#id2").val();
+	var id = $("#id").val();
 	$.ajax({
 		url: "./deleteAjax.do",
 		type: "post",
@@ -264,11 +272,11 @@ function deleteContent() {
 		success: function(data) {
 			console.log(data);
 			if (data != true) {
-				$("#schedule-detail").modal("hide");
+				$("#schedule-edit").modal("hide");
 				console.log("실패");
 				return false;
 			} else {
-				$("#schedule-detail").modal("hide");
+				$("#schedule-edit").modal("hide");
 				console.log("성공")
 				selectAjax();
 			}

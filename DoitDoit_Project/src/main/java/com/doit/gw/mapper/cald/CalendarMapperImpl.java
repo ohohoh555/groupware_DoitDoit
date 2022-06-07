@@ -57,4 +57,6 @@ public class CalendarMapperImpl implements ICalendarMapper {
 		return sqlSession.delete(NS+"delCaldDate", cald_id)>0?true:false;
 	}
 	
+	
+	
 }

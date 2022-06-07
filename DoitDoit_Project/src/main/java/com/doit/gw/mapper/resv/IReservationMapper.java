@@ -3,6 +3,7 @@ package com.doit.gw.mapper.resv;
 import java.util.List;
 import java.util.Map;
 
+import com.doit.gw.vo.entr.EntrBoardVo;
 import com.doit.gw.vo.resv.ReservationVo;
 
 public interface IReservationMapper {
@@ -19,5 +20,6 @@ public interface IReservationMapper {
 	
 	public boolean updResvDate(Map<String, Object> map);
 
+	public List<ReservationVo> selResvInsDate();
 	
 }

@@ -19,4 +19,5 @@ public interface IReservationService {
 	
 	public boolean updResvDate(Map<String, Object> map);
 	
+	public List<ReservationVo> selResvInsDate();
 }

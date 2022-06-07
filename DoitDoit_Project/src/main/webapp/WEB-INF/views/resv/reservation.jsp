@@ -50,11 +50,9 @@
 							<div>
 								<b>작성자 :</b>
 								<sec:authentication property="principal" var="info"/>
-								<input type="text" name="resv_writer" value="${info.emp_name}" readonly="readonly">
+								<input type="text" id="name" name="resv_writer" value="${info.emp_name}" readonly="readonly">
 								<b>일정명 : </b>
 								<input type="text" id="title" name="resv_title"><br><br>
-								<b>내용 : </b>
-								<input type="text" id="content2" name="resv_description">
 								<b>회의실 명 : </b>
 								<select id="res" name="resv_room_id" style="display:inline">
 									<option value="1">회의실 A</option>
@@ -100,8 +98,6 @@
 				                    	<input type="text" name="resv_writer" id="modalWriter" readonly="readonly"><br>
 				                        <label>제목:</label>
 				                        <input type="text" id="modalTitle" class="form-control" readonly>
-				                        <label>내용:</label>
-				                        <input type="text" name="resv_content" class="form-control" id="modalContent">
 				                        <label>일정 시작일:</label>
 				                        <input type="text" name="resv_start" class="form-control" id="datetimepicker1_2" readonly>
 				                        <label>일정 종료일:</label>
@@ -113,6 +109,7 @@
 				            <div class="modal-footer">
 				                <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
 				                 <button type="button" class="btn btn-success" onclick="updateContent()">수정</button>
+				                 <input type="button" class="btn btn-danger" value="삭제" onclick="deleteContent()">
 				            </div>
 				        </div>
 				    </div>
@@ -132,12 +129,11 @@
 				                <form id="modaldetailFrm">
 				                    <div class="form-group">
 				                    	<input type="hidden" name="cald_id" id="id2">
+				                    	<input type="hidden" id="resId">
 				                    	<label>작성자:</label><br>
 				                    	<input type="text" name="resv_writer" id="modalWriter2" readonly><br>
 				                        <label>제목:</label>
 				                        <input type="text" id="modalTitle2" class="form-control" readonly>
-				                        <label>내용:</label>
-				                        <input type="text" class="form-control" id="modalContent2" readonly>
 				                        <label>일정 시작일:</label>
 				                        <input type="text" class="form-control" id="start" readonly>
 				                        <label>일정 종료일:</label>
@@ -148,7 +144,6 @@
 				            <!-- Modal footer -->
 				            <div class="modal-footer">
 				                <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
-				                <input type="button" class="btn btn-danger" value="삭제" onclick="deleteContent()">
 				            </div>
 				        </div>
 				    </div>
