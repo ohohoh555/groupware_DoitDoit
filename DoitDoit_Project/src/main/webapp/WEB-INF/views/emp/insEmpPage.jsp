@@ -84,6 +84,7 @@ href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 </body>
 <script type="text/javascript">
 function nfcRead() {
+	$("#empNfc").val("");
 	$("#nfcModal").modal();
 	$("#nfcModal").on("shown.bs.modal", function () {
 		$("#empNfc").focus();
