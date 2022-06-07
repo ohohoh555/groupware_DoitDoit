@@ -1,21 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.0/sockjs.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
+<%@include file="../comm/setting.jsp" %>
 <script type="text/javascript" src="./js/chat/chat.js"></script>
-
 <style type="text/css">
 	.rContent-full > div > div {
 		float: left;
@@ -174,6 +165,8 @@
 							<div id="dragdrop" class="chatGroup">
 								<div class="roomInfo">
 									채팅방 정보
+									<button onclick="invite()">초대하기</button>
+									<button onclick="getOut('${room_id}','${emp_id}')">나가기</button>
 								</div>
 								<div id="chatList"> <!-- chatWrap -->
 									<div id="chatLog">

@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.doit.gw.vo.ann.AnnAddVo;
+import com.doit.gw.vo.ann.AnnUseVo;
 import com.doit.gw.vo.ann.AnnualVo;
 import com.doit.gw.vo.emp.EmpVo;
 
@@ -69,8 +71,53 @@ public class AnnMapperImpl implements IAnnMapper {
 	}
 
 	@Override
+	public int updAnnualEveryDay() {
+		return sqlSession.update(NS+"updAnnualEveryDay");
+	}
+	
+	@Override
 	public List<AnnualVo> selAnnualAdmin(String dept_no) {
 		return sqlSession.selectList(NS+"selAnnualAdmin", dept_no);
+	}
+
+	@Override
+	public int insAnnAdd(AnnAddVo annAddVo) {
+		return sqlSession.insert(NS+"insAnnAdd", annAddVo);
+	}
+
+	@Override
+	public int updAnnualAdd(Map<String, Object> map) {
+		return sqlSession.update(NS+"updAnnualAdd", map);
+	}
+
+	@Override
+	public AnnualVo selAnnualEmp(String emp_id) {
+		return sqlSession.selectOne(NS+"selAnnualEmp", emp_id);
+	}
+
+	@Override
+	public List<AnnAddVo> selAnnAddEmp(String emp_id) {
+		return sqlSession.selectList(NS+"selAnnAddEmp", emp_id);
+	}
+
+	@Override
+	public List<AnnUseVo> selAnnUseEmp(String emp_id) {
+		return sqlSession.selectList(NS+"selAnnUseEmp", emp_id);
+	}
+
+	@Override
+	public int updAnnualWorkIn(String emp_nfc) {
+		return sqlSession.update(NS+"updAnnualWorkIn", emp_nfc);
+	}
+
+	@Override
+	public int updAnnualWorkOut(String emp_nfc) {
+		return sqlSession.update(NS+"updAnnualWorkOut", emp_nfc);
+	}
+
+	@Override
+	public int updAnnualWorkDays(String emp_nfc) {
+		return sqlSession.update(NS+"updAnnualWorkDays", emp_nfc);
 	}
 
 }

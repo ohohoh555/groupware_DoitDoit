@@ -48,6 +48,12 @@ public class ApproServiceImpl implements IApproService {
 		logger.info("===== ApproServiceImpl selAllDocument 실행 =====");
 		return mapper.selAllDocument(emp_id);
 	}
+	
+	@Override
+	public List<ApproVo> selStatusDocument(ApproVo approVo) {
+		logger.info("===== ApproServiceImpl selStatusDocument 실행 =====");
+		return mapper.selStatusDocument(approVo);
+	}
 
 	@Override
 	public ApproVo selOneDocument(String appro_no) {
@@ -59,6 +65,18 @@ public class ApproServiceImpl implements IApproService {
 	public List<Map<String, Object>> selLineList(String appro_no) {
 		logger.info("===== ApproServiceImpl selLineList 실행 =====");
 		return mapper.selLineList(appro_no);
+	}
+
+	@Override
+	public int updApprovedApproLine(ApproVo approVo) {
+		logger.info("===== ApproServiceImpl updApprovedApproLine 실행 =====");
+		return mapper.updApprovedApproLine(approVo);
+	}
+
+	@Override
+	public int updApprovedAppro(int appro_line_no) {
+		logger.info("===== ApproServiceImpl updApprovedAppro 실행 =====");
+		return mapper.updApprovedAppro(appro_line_no);
 	}
 
 

@@ -62,6 +62,41 @@
 			AND e.RANK_NO = r.RANK_NO
 			ORDER BY 3 DESC, TO_DATE(jt.JDATE,'YYYYMMDDHH24MISS') DESC
 	</select>
+		
+	<!-- 채팅방 최신 방 조회 -->
+	<select id="selLastRoom" resultType="java.lang.String">
+		SELECT MAX(TO_NUMBER(ROOM_ID))
+			FROM CHAT_ROOM
+	</select>
+
+	<!-- 나가기 -->
+	<select id="selGetOut" parameterType="java.lang.String" resultType="ChatRoomVo">
+		SELECT ROOM_ID, ROOM_NAME, ROOM_MEM
+			FROM CHAT_ROOM
+			WHERE ROOM_ID = #{room_id}
+	</select>
+	
+	<update id="updGetOut" parameterType="ChatRoomVo">
+		UPDATE CHAT_ROOM SET ROOM_MEM = #{room_mem}
+			WHERE ROOM_ID = #{room_id} 
+	</update>
+	
+	<delete id="delChatFile">
+		DELETE CHAT_FILE
+			WHERE CHAT_ID IN (SELECT CHAT_ID FROM CHAT WHERE ROOM_ID = #{room_id})
+	</delete>
+	
+	<delete id="delChat">
+		DELETE CHAT
+			WHERE ROOM_ID = #{room_id}
+	</delete>
+	
+	<delete id="delChatRoom" parameterType="java.lang.String">
+		DELETE CHAT_ROOM
+			WHERE ROOM_ID = #{room_id}
+	</delete>
+	
+	<!-- 나가기 전에 파일 삭제 -->
 	
 	<!-- 채팅 입력 -->
 	<insert id="insChat" parameterType="java.util.Map">

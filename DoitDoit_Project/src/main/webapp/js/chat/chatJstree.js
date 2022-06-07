@@ -38,5 +38,24 @@ function createJson(treedata) {
 }
 
 function btnInvite(){
-	
+	console.log($("#roomName").val().length);
+	if(3 > $("#roomName").val().length || $("#roomName").val().length > 20){
+		alert('채팅방 제목 길이를 3~20 사이로 설정해 주세요.');
+	}else if(jsTreeData.length < 2){
+		alert('채팅방 초대인원을 2명이상 선택해 주세요');
+	}else if($.array){
+	}else{
+		$.ajax({
+			url : "./makeRoom.do",
+			type : "post",
+			dataType : "text",
+			data : "mems="+jsTreeData+"&roomName="+$("#roomName").val(),
+			success : function(room_id){
+				window.location.href="./chatRoom.do?room_id="+room_id;
+			},
+			error : function(request, status, error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);	
+			}
+		});
+	}
 }

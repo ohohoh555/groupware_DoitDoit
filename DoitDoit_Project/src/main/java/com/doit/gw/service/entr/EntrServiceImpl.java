@@ -1,4 +1,4 @@
-package com.doit.gw.service.board;
+package com.doit.gw.service.entr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.doit.gw.mapper.board.IEntrMapper;
+import com.doit.gw.mapper.entr.IEntrMapper;
 import com.doit.gw.vo.entr.EntrBoardVo;
 
 @Service
@@ -83,8 +83,9 @@ public class EntrServiceImpl implements IEntrService {
 	}
 
 	@Override
-	public int delEboardRoot(String eboard_no) {
+	public int delEboard(String eboard_no) {
 		logger.info("@delEboardRoot 관리자 게시글 완전삭제 : {}", eboard_no);
+		int cnt1 = mapper.delEboardAttach(eboard_no);
 		return mapper.delEboardRoot(eboard_no);
 	}
 
@@ -100,6 +101,18 @@ public class EntrServiceImpl implements IEntrService {
 		int cnt = mapper.insEboardCald(eVo);
 		logger.info("@캘린더에 일정 먼저 등록 성공 : {}", cnt);
 		return mapper.insCaldRoot(eVo);
+	}
+
+	@Override
+	public int updEboardCald(Map<String, Object> map) {
+		logger.info("@updEboardCald 일정게시글의 일시 수정:{}",map);
+		return mapper.updEboardCald(map);
+	}
+
+	@Override
+	public int updEboardRoot(Map<String, Object> map) {
+		logger.info("@updEboardRoot 사용자 게시글 수정:{}",map);
+		return mapper.updEboardRoot(map);
 	}
 
 

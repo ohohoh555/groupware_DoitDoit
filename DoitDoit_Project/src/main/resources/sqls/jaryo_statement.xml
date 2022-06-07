@@ -38,10 +38,12 @@
 			#{flist_uploadpath})
 	</insert>
 	
+	<!-- 사용자 자료게시글 단일 삭제처리 -->
 	<update id="updJaryoDelflagUser" parameterType="java.lang.String">
 		UPDATE ENTRBOARD SET EBOARD_DELFLAG = 'Y' WHERE EBOARD_NO = #{eboard_no}
 	</update>
 	
+	<!-- 관리자 자료게시글 전체 조회 -->
 	<select id="selJaryoAllAdmin" resultType="FileListVo"> 
 		SELECT e.EBOARD_NO, e.GUBUN_NO, e.CGORY_NO, 
 			e.EMP_ID, e.EMP_NAME,e.EBOARD_REGDATE, 
@@ -51,5 +53,32 @@
 			ON e.EBOARD_NO = f.EBOARD_NO 
 			WHERE e.CGORY_NO = '201'
 	</select>
-
+	
+	<!-- 관리자 자료게시글 숨김/보임처리 -->
+	<update id="updJaryoDelflagAdmin" parameterType="java.util.List">
+		UPDATE ENTRBOARD SET EBOARD_DELFLAG =  
+			CASE EBOARD_DELFLAG  WHEN 'N' THEN 'Y' ELSE 'N' END
+			WHERE EBOARD_NO IN
+		<foreach collection="list" item="eboard_no" open="(" separator="," close=")">
+			#{eboard_no}
+		</foreach>
+	</update>
+	
+	
+	<!-- 관리자 자료글 DB 완전삭제 -->
+	<delete id="delJaryoAttach" parameterType="java.util.List">
+		DELETE FROM ENTRBOARD e 
+ 		 WHERE EXISTS (SELECT 1 FROM FILELIST f WHERE e.EBOARD_NO = f.EBOARD_NO AND e.EBOARD_NO IN 
+ 		 <foreach collection="list" item="eboard_no" open="(" separator="," close=")">
+ 			 #{eboard_no}
+ 		 </foreach>
+ 		 )
+	</delete>
+	<delete id="delJaryoRoot" parameterType="java.util.List">
+	DELETE FROM ENTRBOARD e 
+ 	 WHERE e.EBOARD_NO IN 
+ 	 	 <foreach collection="list" item="eboard_no" open="(" separator="," close=")">
+ 			 #{eboard_no}
+ 		 </foreach>
+	</delete>
 </mapper>

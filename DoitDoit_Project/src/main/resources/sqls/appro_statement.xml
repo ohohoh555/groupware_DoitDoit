@@ -7,7 +7,7 @@
 		SELECT SEQ_APPROVAL_LINE.NEXTVAL FROM DUAL
 		</selectKey>
  	<![CDATA[ 
- 	INSERT INTO ADMIN.APPROVAL
+ 	INSERT INTO APPROVAL
 (APPRO_NO, APPRO_LINE_NO, DOC_FORM_NO, 
 EMP_ID, APPRO_EMPNAME, APPRO_TITLE, 
 APPRO_CONTENT,  APPRO_STATUS, APPRO_STATUS_NO, 
@@ -41,6 +41,7 @@ VALUES('DOIT-'||TO_CHAR(SYSDATE,'YYYYMMDD')||CASE WHEN SEQ_APPROVAL.NEXTVAL <10 
 #{appro_content}, '임시저장',4, '',#{appro_refer})
  	]]>
 </insert>
+
 <!-- 문서조회(기안자:상신) -->
 <select id="selMyDocument" parameterType="java.lang.Integer" resultType="ApproVo">
 SELECT a.APPRO_NO, a.APPRO_LINE_NO, a.DOC_FORM_NO, 
@@ -53,7 +54,7 @@ ON a.APPRO_LINE_NO = al.APPRO_LINE_NO
 WHERE a.EMP_ID = #{emp_id} AND APPRO_STATUS_NO =1
 </select>
 
-<!-- 문서조회(결재자:송신) -->
+ <!-- 문서조회(결재자:송신) -->
 <select id="selAllDocument" parameterType="java.lang.Integer" resultType="java.util.Map">
 
 SELECT a.APPRO_NO ,a.APPRO_LINE_NO ,ap.EMP_ID , ap.APPRO_STATUS , ap.APPRO_INFO ,TO_NUMBER(ROW_NUMBER) RM 
@@ -64,13 +65,25 @@ FROM APPROVAL_LINE al ,(SELECT APPRO_NO,APPRO_LINE_NO  FROM APPROVAL a) a ,JSON_
 			APPRO_INFO VARCHAR2(100) PATH '$.APPRO_NAME',
 			APPRO_STATUS VARCHAR2(100) PATH '$.APPRO_STATUS')) AS ap
 WHERE al.APPRO_LINE_NO = a.APPRO_LINE_NO AND ap.EMP_ID = #{emp_id}
-
 </select>
+
+<!-- 문서조회(결재상태별 조회) -->
+<select id="selStatusDocument" parameterType="ApproVo" resultType="ApproVo">
+SELECT a.APPRO_NO, a.APPRO_LINE_NO, a.DOC_FORM_NO, 
+		a.EMP_ID, a.APPRO_EMPNAME, a.APPRO_TITLE, 
+		a.APPRO_CONTENT, a.APPRO_REGDATE, a.APPRO_STATUS, 
+		a.APPRO_STATUS_NO, a.APPRO_TYPE, a.APPRO_REFER, 
+		a.APPRO_RETURNREASON, al.APPRO_LINE
+FROM APPROVAL a JOIN APPROVAL_LINE al 
+ON a.APPRO_LINE_NO = al.APPRO_LINE_NO 
+WHERE a.EMP_ID = #{emp_id} AND APPRO_STATUS_NO =#{appro_status_no}
+</select>
+
 <!-- 문서 상세조회 -->
 <select id="selOneDocument" parameterType="java.lang.String" resultType="ApproVo">
-SELECT APPRO_NO, a.APPRO_LINE_NO, al.APPRO_LINE , DOC_FORM_NO, EMP_ID, APPRO_EMPNAME, APPRO_TITLE, APPRO_CONTENT, APPRO_REGDATE, APPRO_STATUS, APPRO_STATUS_NO, APPRO_TYPE, APPRO_REFER, APPRO_RETURNREASON
-	FROM ADMIN.APPROVAL a JOIN APPROVAL_LINE al
-	ON al.APPRO_LINE_NO = a.APPRO_LINE_NO  
+SELECT APPRO_NO, a.APPRO_LINE_NO, al.APPRO_LINE ,DOC_FORM_NO, EMP_ID, APPRO_EMPNAME, APPRO_TITLE, APPRO_CONTENT, TO_CHAR(APPRO_REGDATE, 'YYYY-MM-DD') AS APPRO_REGDATE, APPRO_STATUS, APPRO_STATUS_NO, APPRO_TYPE, APPRO_REFER, APPRO_RETURNREASON
+	FROM APPROVAL a JOIN APPROVAL_LINE al 
+	ON al.APPRO_LINE_NO = a.APPRO_LINE_NO 
 		WHERE a.APPRO_NO = #{appro_no}
 </select>
 <!-- 문서번호 별 결재라인 리스트 조회 -->
@@ -83,5 +96,19 @@ FROM APPROVAL_LINE al ,(SELECT APPRO_NO,APPRO_LINE_NO  FROM APPROVAL a) a ,JSON_
 			APPRO_INFO VARCHAR2(100) PATH '$.APPRO_NAME',
 			APPRO_STATUS VARCHAR2(100) PATH '$.APPRO_STATUS')) AS ap
 WHERE al.APPRO_LINE_NO = a.APPRO_LINE_NO AND a.APPRO_NO = #{appro_no}
-</select>	 	
+</select>	
+
+<!-- 결재승인 -->
+<!-- 결재승인 : json 업데이트 -->
+<update id="updApprovedApproLine" parameterType="ApproVo">
+UPDATE APPROVAL_LINE 
+	SET APPRO_LINE = #{appro_line}
+		WHERE APPRO_LINE_NO = #{appro_line_no}
+</update>
+<!-- 결재승인 : 문서상태 업데이트 -->
+<update id="updApprovedAppro" parameterType="java.lang.Integer">
+UPDATE APPROVAL 
+	SET APPRO_STATUS_NO = 3 , APPRO_STATUS = '완료'
+		WHERE APPRO_LINE_NO = #{appro_line_no}
+</update>
 </mapper>

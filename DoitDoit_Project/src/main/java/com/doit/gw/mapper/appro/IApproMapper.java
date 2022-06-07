@@ -12,8 +12,9 @@ public interface IApproMapper {
 	public int insApproDraft(ApproVo approVo);
 	public List<ApproVo> selMyDocument(int emp_id);
 	public List<Map<String, Object>> selAllDocument(int emp_id);
+	public List<ApproVo> selStatusDocument(ApproVo approVo);
 	public ApproVo selOneDocument(String appro_no);
 	public List<Map<String, Object>> selLineList(String appro_no);
-
-
+	public int updApprovedApproLine(ApproVo approVo);
+	public int updApprovedAppro(int appro_line_no);
 }

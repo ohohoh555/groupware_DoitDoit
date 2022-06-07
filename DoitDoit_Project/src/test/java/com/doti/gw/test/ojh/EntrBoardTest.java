@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.doit.gw.service.board.IEntrService;
+import com.doit.gw.service.entr.IEntrService;
 import com.doit.gw.vo.entr.EntrBoardVo;
 
 @RunWith(SpringJUnit4ClassRunner.class)

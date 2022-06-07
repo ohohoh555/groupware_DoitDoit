@@ -41,6 +41,11 @@ public class ApproMapperImpl implements IApproMapper {
 	public List<Map<String, Object>> selAllDocument(int emp_id) {
 		return sqlSession.selectList(NS+"selAllDocument",emp_id);
 	}
+	
+	@Override
+	public List<ApproVo> selStatusDocument(ApproVo approVo) {
+		return sqlSession.selectList(NS+"selStatusDocument",approVo);
+	}
 
 	@Override
 	public ApproVo selOneDocument(String appro_no) {
@@ -51,4 +56,15 @@ public class ApproMapperImpl implements IApproMapper {
 	public List<Map<String, Object>> selLineList(String appro_no) {
 		return sqlSession.selectList(NS+"selLineList",appro_no);
 	}
+
+	@Override
+	public int updApprovedApproLine(ApproVo approVo) {
+		return sqlSession.update(NS+"updApprovedApproLine",approVo);
+	}
+
+	@Override
+	public int updApprovedAppro(int appro_line_no) {
+		return sqlSession.update(NS+"updApprovedAppro",appro_line_no);
+	}
+
 }
