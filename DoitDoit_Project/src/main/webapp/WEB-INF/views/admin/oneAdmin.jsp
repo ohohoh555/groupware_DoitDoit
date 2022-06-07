@@ -15,9 +15,7 @@
         <main>
             <%@include file="../comm/header.jsp" %>
             <div id="content">
-                <div id="rContent">
-					<div class="rContent-full">
-					
+					<div id="adminContent">
 					<table class="table table-bordered">
 						<thead>
 							<tr>
@@ -67,8 +65,7 @@
 								<button onclick="deletOne(${entrOne.eboard_no})"   class="btn btn-default">완전삭제</button>
 								<button onclick="javascript:location.href='./entrBoardAdmin.do'" class="btn btn-default">목록</button>
 						</div>
-					</div> <!-- rContent-full 끝 -->
-                </div>
+					</div>
             </div><!-- content 끝 -->
         </main>
     </div><!-- container 끝 -->

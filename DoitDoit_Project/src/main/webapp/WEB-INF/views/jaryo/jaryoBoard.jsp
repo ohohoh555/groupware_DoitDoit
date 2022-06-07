@@ -8,6 +8,7 @@
 <title>자료게시판(사용자)</title>
 <%@include file="../comm/setting.jsp" %>
 <link rel="stylesheet" type="text/css" href="./css/jaryo/dragAndDrop.css">
+<link rel="stylesheet" type="text/css" href="./css/jaryo/jaryo.css">
 <script type="text/javascript" src="./js/jaryo/Map.js"></script>
 <script type="text/javascript" src="./js/jaryo/dragAndDrop.js"></script>
 </head>
@@ -30,7 +31,7 @@
 						<div>
 							<div class="div1">
 								<input type="button" class='menu btn btn-success' value='파일 업로드' onclick="slideDown()">
-								<div id="fileUpload" class="dragAndDropDiv hide10">
+								<div id="fileUpload" class="dragAndDropDiv hide10" style="position: relative;" >
 									<table id='fileTable' class='fileList table-bordered'>
 										<tr>
 											<td id='tabFileName'>파일명</td>
@@ -38,8 +39,8 @@
 											<td id='tabFileDel'>삭제</td>
 										</tr>	
 									</table>
-									<div class="div2" >
-									<input type="button" class="btn btn-default" value="등록" onclick="submitFile()">
+									<div class="div2" style="position: absolute; bottom: 0px; width: 95% ;">
+									<input type="button" class="btn btn-default" value="등록" onclick="submitFile()" style="margin: 0px auto;">
 									</div>
 								</div>
 							</div> <!-- div1 끝 -->
@@ -98,7 +99,7 @@ $(document).ready(function(){
 	        dataSrc:""
 	    },
 	    columns:[
-	        {data:"eboard_no"},
+	        {data:"eboard_no",render:function(data,type,row,meta){return meta.row+1 } },
 	        {data:"flist_originname",render:function(data,type,row,meta){
 	        	if(row.emp_id==emp){
 	        		return '<a href="./download.do?uid='+row.flist_uuid+'&fileName='+data+'">'

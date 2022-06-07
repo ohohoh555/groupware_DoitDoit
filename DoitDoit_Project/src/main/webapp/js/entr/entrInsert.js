@@ -8,11 +8,20 @@ function insertAction(){
 	
 	var title = document.getElementById("title").value;
 	var content = CKEDITOR.instances.eboard_content.getData();
+	var cald= document.getElementById("cald_content").value;
 
 	var cgory_no = $("select[name='cgory_no']").val()
 	var cald_start = $("#cald_start").val();
 	var cald_end = $("#cald_end").val();
 	console.log(cald_start,cald_end);
+	
+	if(title==""){
+		alert("제목은 필수로 입력해주세요");
+		return false;
+	}else if(title.length < 2){
+		alert("제목은 2글자 이상 입력해주세요");
+		return false;
+	}
 
 	
 	if(cgory_no=='302'){
@@ -22,22 +31,23 @@ function insertAction(){
 		}else if(cald_end==""){
 			alert("일정종료를 입력해주세요");
 			return false;
+		}else if(cald==""){
+			alert("일정 내용을 입력해주세요");
+			return false;
+		}else{
+			insertFrm.submit();
 		}
 
-
-	if(title==""){
-		alert("제목은 필수로 입력해주세요");
-		return false;
-	}else if(title.length < 2){
-		alert("제목은 2글자 이상 입력해주세요");
-		return false;
-	}else if(content ==""){
-		alert("내용을 필수로 입력해주세요");
-		return false;
 	}else{
-		insertFrm.submit();
+		
+			if(content =="" ){
+				alert("내용을 필수로 입력해주세요");
+				return false;
+			}else{
+				insertFrm.submit();
+			}
 	}
-}
+
 }
 
 function selectCgory(val){
@@ -51,38 +61,44 @@ function selectCgory(val){
 // 	html +="<input type='time' class='form-control' style='width: 150px;'>";
 // 	html +="</td></tr>";
 
-	var cald_start = document.getElementById("cald_start");
-	var cald_end = document.getElementById("cald_end");
+//	var cald_start = document.getElementById("cald_start");
+//	var cald_end = document.getElementById("cald_end");
+//
+//	cald_start.disabled = true;
+//	cald_end.disabled = true;
 
-	cald_start.disabled = true;
-	cald_end.disabled = true;
+
 
 	
 	if(val == 101){
 		$("#cgoryEtc").empty();
+		$("#trDate").hide();
+		$("#trCald").hide();
+		$("#trEboard").show();
 //		$("#trDate").remove();
-		cald_start.disabled = true;
-		cald_end.disabled = true;
+//		cald_start.disabled = true;
+//		cald_end.disabled = true;
 
 	}else if(val == 102){
 		$("#cgoryEtc").empty();
-//		$("#trDate").remove();
-		cald_start.disabled = true;
-		cald_end.disabled = true;
-
+		$("#trDate").hide();
+		$("#trCald").hide();
+		$("#trEboard").show();
 		$("#cgoryEtc").text("필독게시물은 게시판 상단에 별도 표기됩니다.");
 	}else if(val == 103){
 		$("#cgoryEtc").empty();
-//		$("#trDate").remove();
-		cald_start.disabled = true;
-		cald_end.disabled = true;
-
+		$("#trDate").hide();
+		$("#trCald").hide();
+		$("#trEboard").show();
 	}else{
 		$("#cgoryEtc").empty();
-		$("#trDate").remove();
+		$("#trDate").show();
+		$("#trCald").show();
+		$("#trEboard").hide();
+//		$("#trDate").remove();
 // 		$("#insertTbl >tbody > tr").eq(0).after(html);
-		cald_start.disabled = false;
-		cald_end.disabled = false;
+//		cald_start.disabled = false;
+//		cald_end.disabled = false;
 		
 	}
 }

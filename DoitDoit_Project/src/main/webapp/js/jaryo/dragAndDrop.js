@@ -39,15 +39,15 @@ function delFile(e){
 function submitFile(){
 		// 추가적으로 보낼 파라미터가 있으면 formData에 넣어준다.
 		// 예를들어 , 게시판의 경우 게시글 제목 , 게시글 내용 등등
-		fd.append('emp_id',$("#emp_id").val());
-		fd.append('emp_name',$("#emp_name").val());
-		
+
 		var fileCnt = $(".filename").length;
 		console.log("업로드할 파일 갯수",fileCnt);
 		if(fileCnt<=0){
 			alert("하나 이상의 파일을 업로드 해주세요");
 			return false;
 		}else{
+			fd.append('emp_id',$("#emp_id").val());
+			fd.append('emp_name',$("#emp_name").val());
 			sendFileToServer(fd);
 		}
 
@@ -70,6 +70,7 @@ function sendFileToServer(formData) {
 			success : function(data) {
 				alert(data);
 				$('#fileTable tr:not(:first)').remove(); //첫번째 행 제외하고 모두 삭제 
+				$('#jaryoTable').DataTable().ajax.reload(null, false); //페이지는 고정한 상태에서 ajax만 다시 reload
 			},
 			error:function(data){
 				alert("파일업로드 실패");

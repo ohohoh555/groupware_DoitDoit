@@ -15,11 +15,11 @@ public interface IEntrMapper {
 	public List<EntrBoardVo> selEboardFildocAll();
 	public EntrBoardVo selEboardDetail(String eboard_no);
 	public int updEboardDelflagUser(String eboard_no);
-	public int insEboardRoot(EntrBoardVo eVo);
+	public int insEboardRoot(Map<String, Object>map);
 	public int insEboardAttach(Map<String, Object>map);
 	
-	public int insEboardCald(EntrBoardVo eVo);
-	public int insCaldRoot(EntrBoardVo eVo);
+	public int insEboardCald(Map<String, Object>map);
+	public int insCaldRoot(Map<String, Object>map);
 	
 	public int updEboardCald(Map<String, Object> map);
 	public int updEboardRoot(Map<String, Object> map);

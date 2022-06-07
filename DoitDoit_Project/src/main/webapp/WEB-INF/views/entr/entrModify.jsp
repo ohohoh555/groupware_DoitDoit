@@ -51,12 +51,12 @@
 									<td>일시</td>
 									<td>
 										<div style="float: left;">
-										<label>시작:</label>
+										<label>일정시작:</label>
 										<input type='datetime-local' class='form-control' id="cald_start" name="cald_start" style='width: 200px;'>
 										</div>
 
 										<div style="margin-left: 10px;">
-										<label>종료:</label>
+										<label>일정종료:</label>
 										<input type='datetime-local' class='form-control' id="cald_end" name="cald_end" style='width: 200px;'>
 										</div>
 									</td>

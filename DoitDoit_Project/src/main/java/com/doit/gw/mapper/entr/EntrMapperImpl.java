@@ -63,8 +63,8 @@ public class EntrMapperImpl implements IEntrMapper {
 	}
 
 	@Override
-	public int insEboardRoot(EntrBoardVo eVo) {
-		return sqlSession.insert(NS+"insEboardRoot", eVo);
+	public int insEboardRoot(Map<String, Object>map) {
+		return sqlSession.insert(NS+"insEboardRoot", map);
 	}
 
 	@Override
@@ -83,13 +83,13 @@ public class EntrMapperImpl implements IEntrMapper {
 	}
 
 	@Override
-	public int insEboardCald(EntrBoardVo eVo) {
-		return sqlSession.insert(NS+"insEboardCald",  eVo);
+	public int insEboardCald(Map<String, Object>map) {
+		return sqlSession.insert(NS+"insEboardCald",  map);
 	}
 
 	@Override
-	public int insCaldRoot(EntrBoardVo eVo) {
-		return sqlSession.insert(NS+"insCaldRoot", eVo);
+	public int insCaldRoot(Map<String, Object>map) {
+		return sqlSession.insert(NS+"insCaldRoot", map);
 	}
 
 	@Override

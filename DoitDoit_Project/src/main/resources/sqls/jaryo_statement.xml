@@ -12,6 +12,7 @@
 		FROM ENTRBOARD e LEFT JOIN FILELIST f 
 		ON e.EBOARD_NO = f.EBOARD_NO 
 		WHERE e.CGORY_NO = '201' AND e.EBOARD_DELFLAG = 'N'
+		ORDER BY EBOARD_REGDATE DESC
 	</select>
 	
 	<!-- 사용자 자료글 입력  -->

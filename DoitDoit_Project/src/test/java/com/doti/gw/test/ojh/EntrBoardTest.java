@@ -94,15 +94,15 @@ public class EntrBoardTest {
 	
 //	@Test
 	public void insEboardRootTest() {
-		EntrBoardVo eVo = new EntrBoardVo();
-		eVo.setCgory_no("101");
-		eVo.setEmp_id("2022053000");
-		eVo.setEmp_name("오지혜");
-		eVo.setEboard_title("입력테스트");
-		eVo.setEboard_content("<p>일반 게시글 입력 테스트 중</p>");
-		
-		int cnt = service.insEboardRoot(eVo);
-		System.out.println(cnt>0?"입력성공":"입력실패");
+//		EntrBoardVo eVo = new EntrBoardVo();
+//		eVo.setCgory_no("101");
+//		eVo.setEmp_id("2022053000");
+//		eVo.setEmp_name("오지혜");
+//		eVo.setEboard_title("입력테스트");
+//		eVo.setEboard_content("<p>일반 게시글 입력 테스트 중</p>");
+//		
+//		int cnt = service.insEboardRoot(eVo);
+//		System.out.println(cnt>0?"입력성공":"입력실패");
 	}
 	
 //	@Test
