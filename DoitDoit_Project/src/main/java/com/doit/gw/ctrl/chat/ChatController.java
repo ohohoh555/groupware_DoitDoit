@@ -175,9 +175,7 @@ public class ChatController {
 
 		List<MultipartFile> file = multipartRequest.getFiles("file");
 
-		String room_id = multipartRequest.getParameter("room_id");
 		String user_name = multipartRequest.getParameter("user_name");
-		String emp_id = multipartRequest.getParameter("emp_id");
 
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
@@ -279,6 +277,7 @@ public class ChatController {
 				
 		JSONArray jsonRoom = (JSONArray) json.get("ROOM");
 		
+		logger.info("현재 방의 멤버 {}",jsonRoom);
 		for (int i = 0; i < jsonRoom.size(); i++) {
 			JSONObject jsonVal = (JSONObject) jsonRoom.get(i);
 			String id = (String) jsonVal.get("id");
@@ -287,11 +286,13 @@ public class ChatController {
 				jsonRoom.remove(i);
 			}
 		} 
+		logger.info("삭제된 멤버 {}", jsonRoom);
 		
 		json.clear();
 		json.put("ROOM", jsonRoom);
-		
+		logger.info("업데이트 할 json / {}", json);
 		vo.setRoom_mem(json.toString());
+		logger.info("업데이트 vo {}", vo);
 		
 		service.updGetOut(vo);
 	}
