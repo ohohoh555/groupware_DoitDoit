@@ -28,15 +28,21 @@
 	    			<button class="btn-sm btn-info" data-toggle="modal" data-target="#chatJstree">채팅방 생성</button>    						
     			</div>
 <!--     		jstree 초대 부분(modal) -->
-			 	<div class="modal fade" id="chatJstree" role="dialog">
-					<div class="modal-dialog modal-sm">
+			 	<div class="modal fade" id="chatJstree" role="dialog"">
+					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4>채팅창 초대</h4>
+								<h4>채팅방 생성</h4>
 							</div>
 							<div class="mod-body">
 								
+							</div>
+							<div class="mod-footer">
+								<div style="width:200px; margin: 0px auto">
+									<button onclick="btnInvite()" class="btn btn-success">생성</button>
+						    		<button onclick="btnCancle()" class="btn">취소</button>								
+								</div>
 							</div>
 						</div>
 					</div>

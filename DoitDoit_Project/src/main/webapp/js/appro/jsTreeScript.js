@@ -121,8 +121,6 @@ function findLiRank(liId){
 
 //disabled로 바꿔줌
 function setDisabled(isc,row){
-	//console.log("isc =",isc);
-	//console.log("row =",row);
 	if(isc){
 		$(row).attr("aria-disabled","true");
 		$(row).children("div").prop("class","jstree-wholerow");

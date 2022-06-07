@@ -86,8 +86,15 @@ $(document).ready(function() {
 		
 		roomEnter(room_id,emp_id);
 		
-		stomp.subscribe("/sub/chat/roomOut/" + room_id, function(out){
-			console.log("나간거 이벤트 발생", out);
+		stomp.subscribe("/sub/chat/getOut/" + room_id, function(out){			
+			var mem = JSON.parse(out.body);
+
+			var emps = $("#members").children();
+			for(var i = 0; i < emps.length; i++){
+				if(emps.eq(i).attr("id") == mem.emp_id){
+					$("#members").children().eq(i).remove();
+				}
+			}
 		});
 	});
 	// 채팅입력
@@ -172,10 +179,11 @@ function chatSend(){
 
 //채팅방 나가기(disconnect)
 function getOut(){
-	console.log("getOut() 실행");
-	location.href="./gohome.do";
+	console.log("getOut() 실행");	
+	stomp.send('/pub/chat/message', {}, JSON.stringify({room_id: room_id, emp_id: emp_id, user_name: user_name, type: "O"}));
+	stomp.send('/sub/chat/getOut/' + room_id, {}, JSON.stringify({emp_id: emp_id}));
 	
-	stomp.send('/pub/chat/message', {},JSON.stringify({room_id: room_id, emp_id: emp_id, user_name: user_name, type: "O"}));
+	location.href="./gohome.do";
 }
 
 //채팅방 입장 시 
@@ -207,6 +215,7 @@ function aboutChatRoom(mems){
 function sendFileToServer(fd) {	
 	
 	fd.append("user_name",user_name);
+	fd.append("room_id",room_id);
 	
 	$.ajax({
 		type : "POST",

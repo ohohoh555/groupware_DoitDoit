@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.doit.gw.mapper.chat.IChatDao;
+import com.doit.gw.vo.chat.ChatFileVo;
 import com.doit.gw.vo.chat.ChatJoinVo;
 import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
@@ -47,13 +48,10 @@ public class ChatServiceImpl implements IChatService{
 	}
 
 	@Override
-	public int insFile(Map<String, String> map) {
-		logger.info("$$$$$ insFile $$$$$",map);
+	public int insFile(ChatFileVo vo) {
+		logger.info("$$$$$ insFile $$$$$",vo);
 		
-		int m = dao.insFile(map);
-		int n = dao.insChat(map);
-		
-		return (n > 0 && m > 0)?1:0;
+		return dao.insFile(vo);
 	}
 
 	@Override

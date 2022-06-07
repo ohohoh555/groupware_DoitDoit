@@ -3,6 +3,7 @@ package com.doit.gw.service.chat;
 import java.util.List;
 import java.util.Map;
 
+import com.doit.gw.vo.chat.ChatFileVo;
 import com.doit.gw.vo.chat.ChatJoinVo;
 import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
@@ -20,7 +21,7 @@ public interface IChatService {
 	//채팅 입력
 	public int insChat(Map<String, String> map);
 	//파일 입력
-	public int insFile(Map<String, String> map);
+	public int insFile(ChatFileVo vo);
 	//채팅방 생성
 	public String insChatRoom(Map<String, String> chat_room);
 	//원본 파일명 조회
