@@ -1,4 +1,4 @@
-package com.doit.gw.mapper.board;
+package com.doit.gw.mapper.entr;
 
 import java.util.List;
 import java.util.Map;
@@ -90,6 +90,21 @@ public class EntrMapperImpl implements IEntrMapper {
 	@Override
 	public int insCaldRoot(EntrBoardVo eVo) {
 		return sqlSession.insert(NS+"insCaldRoot", eVo);
+	}
+
+	@Override
+	public int delEboardAttach(String eboard_no) {
+		return sqlSession.delete(NS+"delEboardAttach", eboard_no);
+	}
+
+	@Override
+	public int updEboardCald(Map<String, Object> map) {
+		return sqlSession.update(NS+"updEboardCald", map);
+	}
+
+	@Override
+	public int updEboardRoot(Map<String, Object> map) {
+		return sqlSession.update(NS+"updEboardRoot", map);
 	}
 
 }

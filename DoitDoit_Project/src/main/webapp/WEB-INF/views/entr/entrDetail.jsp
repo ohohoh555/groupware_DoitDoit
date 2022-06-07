@@ -87,7 +87,7 @@ function hideOne(eboard_no){
 
 function modifyOne(eboard_no){
 	console.log("modifyOne 사용자 글수정",eboard_no);
-	location.href="./modify.do?eboard_no="+eboard_no;
+	location.href="./modifyBoard.do?eboard_no="+eboard_no;
 }
 
 </script>

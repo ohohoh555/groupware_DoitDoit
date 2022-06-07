@@ -1,25 +1,32 @@
-document.addEventListener('DOMContentLoaded', readyFn());
-function readyFn(){
-	console.log("dom 완성");
-}
-
-
 function resetContent(){
-	CKEDITOR.instances.content.setData("");
+	CKEDITOR.instances.eboard_content.setData("");
 }
 
 function insertAction(){
 	var insertFrm = document.getElementById("insertFrm");
 	insertFrm.action ="./insertFrm.do";
 	
-	
 	var title = document.getElementById("title").value;
-	var content = CKEDITOR.instances.content.getData();
-	console.log(title, content, title.length);
+	var content = CKEDITOR.instances.eboard_content.getData();
+
+	var cgory_no = $("select[name='cgory_no']").val()
+	var cald_start = $("#cald_start").val();
+	var cald_end = $("#cald_end").val();
+	console.log(cald_start,cald_end);
+
 	
+	if(cgory_no=='302'){
+		if(cald_start==""){
+			alert("일정시작을 입력해주세요");
+			return false;
+		}else if(cald_end==""){
+			alert("일정종료를 입력해주세요");
+			return false;
+		}
+
+
 	if(title==""){
 		alert("제목은 필수로 입력해주세요");
-		title.focus();
 		return false;
 	}else if(title.length < 2){
 		alert("제목은 2글자 이상 입력해주세요");
@@ -31,7 +38,7 @@ function insertAction(){
 		insertFrm.submit();
 	}
 }
-
+}
 
 function selectCgory(val){
 	console.log("selectCgory 작동", val);
@@ -76,7 +83,7 @@ function selectCgory(val){
 // 		$("#insertTbl >tbody > tr").eq(0).after(html);
 		cald_start.disabled = false;
 		cald_end.disabled = false;
-
+		
 	}
 }
 
