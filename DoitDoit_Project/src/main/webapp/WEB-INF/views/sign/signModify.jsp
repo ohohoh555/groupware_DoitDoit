@@ -65,20 +65,20 @@
 	                   </table>
 	                   </div>
 	                   <div style="text-align: center;" >
-	                   <input type="button" class="btn btn-danger" value="새로운 서명 이미지 추가" onclick="location.href='./signUploadForm.do';">
+	                   <input type="button" class="btn btn-danger" value="새로운 서명 이미지 추가" onclick="addSign()">
 	                   </div>
                     </div> 
                     </div>
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
-         <%--    <sec:authorize access="isAuthenticated()">
+            <sec:authorize access="isAuthenticated()">
             	아이디 : <sec:authentication property="principal" var="emp_id"/> ${principal} <br>
             	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
             	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>
             	이름 : <sec:authentication property="Details" var="info"/>${info.emp_name}<br>
             	권한 : <sec:authentication property="Authorities"/> ${Authorities} <br>
-            </sec:authorize> --%>
+            </sec:authorize>
             <input type="hidden"  id="emp_id" value="${emp_id}">
             <input type="hidden"  id=defaultsign value="기본서명.png">
             </div>
@@ -105,10 +105,11 @@ window.onload = function signList(){
 	//		console.log(obj.names);
 			var images = obj.images;
 			var names = obj.names;
+			var empIds = obj.empIds;
 			
 			for(let j=0; j< names.length; j++){
 				$("#names").append('<td><input type="hidden" value="'+names[j]+'"></td>');
-				$("#buttons").append('<td style="text-align: center; "><input type="button" id="removebtn" class="btn btn-info -sm" value="삭제"><input type="hidden" value="'+names[j]+'"></td>');
+				$("#buttons").append('<td style="text-align: center; "><input type="button" id="removebtn" class="btn btn-info -sm" value="삭제"><input type="hidden" value="'+names[j]+'"><input type="hidden" value="'+empIds[j]+'"></td>');
 			}
 			for(let i=0; i< images.length; i++){
 				$("#images").append('<td><img style="width: 150px; height: 150px;" src="'+images[i]+'"></td>');
@@ -121,28 +122,47 @@ window.onload = function signList(){
 
 $(document).on("click","#removebtn",function (){ 
 	var namesign = $(this).next().val();
-	var n = new String(namesign);
+	var empIdsign = $(this).next().next().val();
 	console.log(namesign,typeof namesign);
-	var design = document.getElementById("defaultsign").value;
-	console.log(design,typeof design);
-	var d = new String(design);
-	console.log(d === n);
-	if(namesign === '기본서명.png'){
-	console.log($(this).next().val());
-	console.log("같다");
+	console.log(empIdsign,typeof empIdsign);
+	
+	var removebtns = document.getElementById("buttons").children.length;
+	console.log(removebtns);
+	
+	if(removebtns === 1){
+	alert("최소 한 개의 서명은 등록 해야 합니다.\n그래서 삭제 할 수 없습니다~!");
+	}else{
+		$.ajax({
+			url : "./delSign.do",
+			data : "names="+namesign+"&empIds="+empIdsign,
+			type : "get",
+			async : true,
+			success : function(data){
+				console.log(data)
+				if(data == "true"){
+					alert("서명이미지가 삭제되었습니다!");
+					location.href="./signModify.do";
+				}else{
+					alert("서명이미지 삭제 실패!");
+				}
+			}
+		});
 	}
 });
 
-/* btn.onclick = function(){
-	console.log("click 동작 시작");
-	$(this).next().val();
-	console.log($(this).next().val());
-}; */
-/* function remove(){
-	console.log("서명 삭제 시작");
-	var btn = document.getElementById("removebtn").next();
-	console.log(btn);
-} */
-
+//서명추가
+function addSign(){
+	console.log("실행");
+	var removebtns = document.getElementById("buttons").children.length;
+	console.log(removebtns);
+	console.log(removebtns > 3);
+if(removebtns >= 3){
+	alert("서명은 3개까지만 등록 할 수 있습니다");
+}else{
+	location.href='./signUploadForm.do';
+}
+	
+}
+ 
 </script>
 </html>

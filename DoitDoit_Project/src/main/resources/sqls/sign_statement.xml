@@ -17,8 +17,7 @@ SELECT SIGN_NO, EMP_ID, SIGN_REGDATE, SIGN_NAME, SIGN_IMG
 
 <!-- 서명 삭제 버튼 클릭시 -->
 <update id="updSign" parameterType="SignVo">
-UPDATE SIGN
-	SET SIGN_IMG = '' , SIGN_NAME = ''
+DELETE FROM SIGN
 		WHERE EMP_ID = #{emp_id} AND SIGN_NAME = #{sign_name}
 </update>
 

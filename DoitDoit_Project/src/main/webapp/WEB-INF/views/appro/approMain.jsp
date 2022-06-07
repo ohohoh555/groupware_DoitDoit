@@ -40,9 +40,7 @@
                     </tr>
                     </thead>
                     <tbody id="myDocList" >
-                    
-                   <%--  <c:forEach var="lists" items="${aList}"> --%>
-            <%--         </c:forEach> --%>
+
                     </tbody>
                     </table>
                     </div>
@@ -51,35 +49,34 @@
                      <div class="rContent-normal-bottom" style="width: 780px; height: 460px;">
                       <fieldset style="width:770px;">
 						<legend style="margin-bottom : 3px;">결재 문서 조회</legend>
-							<select>
+						<select>
 								<option>==== 선택 ====</option>
-								<option>결재대기</option>
-								<option>반려</option>
-								<option>임시저장</option>
-								<option>결재완료</option>
+								<option value="1">결재대기</option>
+								<option value="2">반려</option>
+								<option value="3">결재완료</option>
+								<option value="4">임시저장</option>
 							</select>
-                    	<input type="button" onclick="()" value="선택">
+                    		<input type="button" onclick="docClick()" value="선택">
 					</fieldset>
+					   <div style="width: 774px; height: 395px; border: 1px solid black;margin-left:1px;">
+					 <table id="approStatusList" class="cell-border dataTable">
+                    <thead>
+                    <tr>
+                    <th>No.</th>
+                    <th>문서번호</th>
+                    <th>결재상태</th>
+                    <th>제목</th>
+                    <th>기안자</th>
+                    <th>기안일</th>
+                    </tr>
+                    </thead>
+                    <tbody id="statusDocList" >
+                    
+                   	</tbody>
+                    </table>
                      </div>
-                    <!-- 
-                    <div class="rContent-normal-bottom" style="width: 600px; height: 500px;">
-	                    <div style="float: left; cursor: pointer;" onclick="location.href='./signpadForm.do';"  >
-		                    <div  class="signImg1">
-		                    </div>
-		                    <div style="margin-left: 90px; margin-top: 50px;" >
-		                    <h2 style="font-style: #6667AB;">서명생성</h2>
-		                    </div>
-	                    </div>
-	                    
-	                    <div style="float: right; cursor: pointer;" onclick="location.href='./signModify.do';">
-		                    <div  class="signImg2">
-		                    </div>
-		                    <div style="margin-left: 90px;">
-		                    <h2 style="font-style: #6667AB;">서명관리</h2>
-		                    </div>
-	                    </div>
-                    </div>  -->
                     </div>
+                </div>
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
@@ -180,6 +177,5 @@ function allDoc(){
 	
 	});
  }
-
 </script>
 </html>

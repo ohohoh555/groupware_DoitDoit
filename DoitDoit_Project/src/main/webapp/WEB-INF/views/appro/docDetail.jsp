@@ -60,10 +60,10 @@ String today = sf.format(now);
 						결재 대기 문서
 						</legend>
 						<c:if test="${loginEmp_id ne aVo.emp_id}">
-                    	<input type="button" data-toggle="modal" data-target="#approClick" value="승인">
-                    	<input type="button" onclick="return()" value="반려">
+                    	<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#appro">승인</button>
+                    	<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#approReturn">반려</button>
 						</c:if>
-                    	<input type="button" onclick="javascript:history.back(-1)" value="뒤로가기">
+                    	<input type="button" class="btn btn-default btn-sm"  onclick="javascript:history.back(-1)" value="뒤로가기">
                     	<input type="hidden" id="empId" value="${loginEmp_id}">
 					</fieldset>
                     <div >
@@ -92,12 +92,12 @@ String today = sf.format(now);
 						</div>
 						<div class="right">
 						<table style="margin-right: 10px;">
-						<tr id="appro" >
+						<tr id="approGianja" >
 						<td class="tableForm" rowspan="3" style="writing-mode: vertical-rl; text-orientation: upright;  width:30px;">결재라인</td>
 						<td class="tableForm">기안자</td>
 						</tr>
-						<tr>
-						<td height="70px;" id="sign"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src=""><input type="hidden" id="gianja" value="${aVo.emp_id}"></td>
+						<tr >
+						<td id="sign" height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src=""><input type="hidden" id="gianja" value="${aVo.emp_id}"></td>
 						</tr>
 						
 						<tr id="name">
@@ -120,22 +120,43 @@ String today = sf.format(now);
         </main>
     </div>
     
-        
 <!-- 승인버튼 클릭 모달 -->
-<div class="modal fade" id="approClick" role="dialog">
+<div class="modal fade" id="appro" role="dialog">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">&times;</button>
 			<h4>결재승인</h4>
 			</div>
-			    <div class="modal-body">
-			    <form action="post" id="frmApproClick">
-			    <div id="approClick">
-			    	
+			    <div class="modal-body" id="approModalbody">
+			  <!--   <form action="post" id="frmApproClick"> -->
+			    <div id="gyuljaeSign" >
+			    <div style="width: 100px; height: 100px; border:1px solid black; border-radius: 10px;">
+			    	 <img style=" width: 90px; height: 90px; margin: 5px; " id="gyuljaeSignImg" alt="" src="">
+			    </div>
 			    	
 			    </div>
-			    </form>
+		<!-- 	    </form> -->
+			    </div>
+		</div>
+	</div>
+</div>
+
+<!-- 반려버튼 클릭 모달 -->
+<div class="modal fade" id="approReturn" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4>결재반려</h4>
+			</div>
+			    <div class="modal-body">
+			  <!--   <form action="post" id="frmApproClick"> -->
+			    <div id="approClick">
+			   
+			    	
+			    </div>
+		<!-- 	    </form> -->
 			    </div>
 		</div>
 	</div>
@@ -174,7 +195,7 @@ window.onload = function viewImg(){
 function viewApproLine(){
 	var obj = json.approval;
 	for(let i=0;i<obj.length;i++){
-		$("#appro").append('<td class="tableForm">결재자</td>');
+		$("#approGianja").append('<td class="tableForm">결재자</td>');
 		var status = obj[i].APPRO_STATUS;
 		var empId = obj[i].EMP_ID;
 	//	console.log(status,typeof status);
@@ -192,86 +213,67 @@ function viewApproLine(){
 					//	console.log("성공인지?");
 						if(data.length > 0 && data != null){
 							//document.getElementById("image").src = data;
-			$("#sign").after('<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" alt="결재자사인" src="'+data+'"></td>');
-						console.log(status);
-						console.log(data);
+			$("#sign").after('<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src="'+data+'"></td>');
 						}
 					},
 					error : function(){
 						console.log("실패	ㅠㅠ");
 					}
 				});
-			}else if(status != 'Y'){
+			}else{
 		$("#sign").after('<td height="70px;">&nbsp;&nbsp;</td>');
-						console.log(status);
 			}
 		var name = obj[i].APPRO_NAME;
 		$("#name").append('<td style="text-align: center;">'+name+'</td>');
 	}
 }	
-$(".modal-body").load("./viewImg.do");
 
-var approLine = function(){
-	var EmpId = document.getElementById("empId").value;
+//승인 버튼 클릭시 모달에 서명 이미지 로드하기
+$("#approModalbody").load(gyuljaeSignClick());
+		
+function gyuljaeSignClick(){
+	console.log("결재자 승인모달");
 	$.ajax({
 		url : "./viewImg.do?",
 		data : {
-			"emp_id" : EmpId
+			"emp_id" : ${loginEmp_id}
 		},
 		type : "GET",
 		async : true ,
 		success : function(data){
-		//	console.log(data);
-		//	console.log("성공인지?");
-			
 			if(data.length > 0 && data != null){
-			//	document.getElementById("image").src = data;
-				$("#frmApproClick").html(data);
+				document.getElementById("gyuljaeSignImg").src = data;
+				$("#gyuljaeSign").append("<br><button style='margin-left:30px;' onclick='gyuljaeClick()'>선택</button>");
 			}
 		},
 		error : function(){
 			console.log("실패	ㅠㅠ");
 		}		
-	});	
-	
-//	var approlineList = '${aVo.appro_line}';
-//	console.log(approlineList, typeof(approlineList));
-//	var json = JSON.parse(approlineList);
-	var obj = json.approval;
-//	console.log(obj);
-	console.log(obj.length);
-	console.log(json.approval);
-	console.log(json.approval[0]);
-	console.log(json.approval[1]);
-	for(let i=0; i< obj.length; i++){
-		console.log(obj[i]);
-		console.log(obj[i].EMP_ID);
-		console.log(obj[i].APPRO_STATUS);
-		console.log(obj[i].APPRO_NAME);
-	}
-}	
-
-function appro(){
-	console.log("승인 버튼 ");
-	var EmpId = document.getElementById("empId").value;
-	console.log(EmpId);
-	var obj = json.approval;
-	console.log(obj);
-	for(let i=0;i<obj.length;i++){
-		var approStatus = obj[i].APPRO_STATUS;
-		var approEmpId = obj[i].EMP_ID;
-		if(approStatus == 'W' && approEmpId == EmpId){
-			
-			console.log(approStatus);
-			console.log(approStatus == 'W');
-			console.log(approEmpId);
-			console.log(approEmpId == EmpId);
-			console.log("같은가");
-			approLine();
-			$("#approClick").modal({backdrop:'static',keyboard:false});
-		}
-	}
+	});			
 }
-	
+
+function gyuljaeClick(){
+	console.log("결재선택 시작");
+	console.log(approlineList);
+	console.log(${aVo.appro_line_no });
+	$.ajax({
+		url : "./guyljaejaApprove.do",
+		data : {
+			"approlineList" : approlineList,
+			"appro_line_no" : ${aVo.appro_line_no },
+			"emp_id" : ${loginEmp_id}
+		},
+		type : "GET",
+		async : true,
+		success : function(data){
+			console.log("아작스 성공했는지~~")
+			console.log(data)
+			if(data == "true"){
+				alert("승인되었습니다!");
+				location.href="./approMain.do";
+			}
+		}
+	});
+}
 </script>
 </html>
