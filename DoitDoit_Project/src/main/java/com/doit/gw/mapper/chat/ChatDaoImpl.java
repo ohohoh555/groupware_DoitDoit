@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.doit.gw.vo.chat.ChatJoinVo;
+import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
 
 
@@ -37,6 +38,11 @@ public class ChatDaoImpl implements IChatDao{
 	public List<Map<String, String>> selRoomMem(String room_id) {
 		return sqlSession.selectList(NS+"selRoomMem",room_id);
 	}
+	
+	@Override
+	public String selLastRoom() {
+		return sqlSession.selectOne(NS+"selLastRoom");
+	}
 
 	@Override
 	public int insChat(Map<String, String> chat) {
@@ -58,5 +64,31 @@ public class ChatDaoImpl implements IChatDao{
 	@Override
 	public String selFileNM(String file_chat_id) {
 		return sqlSession.selectOne(NS+"selFileNM",file_chat_id);
+	}
+	
+	//삭제 부분
+	@Override
+	public ChatRoomVo selGetOut(String room_id) {
+		return sqlSession.selectOne(NS+"selGetOut", room_id);
+	}
+	
+	@Override
+	public int updGetOut(ChatRoomVo vo) {
+		return sqlSession.update(NS+"updGetOut", vo);
+	}
+	
+	@Override
+	public int delChatFile(String room_id) {
+		return sqlSession.delete(NS+"delChatFile", room_id);
+	}
+	
+	@Override
+	public int delChat(String room_id) {
+		return sqlSession.delete(NS+"delChat", room_id);
+	}
+	
+	@Override
+	public int delChatRoom(String room_id) {
+		return sqlSession.delete(NS+"delChatRoom", room_id);
 	}
 }

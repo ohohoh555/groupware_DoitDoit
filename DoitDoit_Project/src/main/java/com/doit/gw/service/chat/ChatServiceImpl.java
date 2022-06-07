@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.doit.gw.mapper.chat.IChatDao;
 import com.doit.gw.vo.chat.ChatJoinVo;
+import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
 import com.doit.gw.vo.emp.EmpVo;
 
@@ -38,7 +39,7 @@ public class ChatServiceImpl implements IChatService{
 		logger.info("$$$$$ selRoomMem {} $$$$$", room_id);
 		return dao.selRoomMem(room_id);
 	}
-
+	
 	@Override
 	public int insChat(Map<String, String> map) {
 		logger.info("$$$$$ insChat {} $$$$$",map);
@@ -56,9 +57,14 @@ public class ChatServiceImpl implements IChatService{
 	}
 
 	@Override
-	public int insChatRoom(Map<String, String> chat_room) {
+	public String insChatRoom(Map<String, String> chat_room) {
 		logger.info("$$$$$ insChatRoom $$$$$",chat_room);
-		return dao.insChatRoom(chat_room);
+		int n = dao.insChatRoom(chat_room);
+		if(n > 0) {
+			return dao.selLastRoom();
+		}else {
+			return "0";
+		}
 	}
 
 	@Override
@@ -66,4 +72,28 @@ public class ChatServiceImpl implements IChatService{
 		logger.info("$$$$$ selFileNM $$$$$",file_chat_id);
 		return dao.selFileNM(file_chat_id);
 	}
+
+	@Override
+	public ChatRoomVo selGetOut(String room_id) {
+		return dao.selGetOut(room_id);
+	}
+
+	@Override
+	public int updGetOut(ChatRoomVo room_id) {
+		return dao.updGetOut(room_id);
+	}
+
+	@Override
+	public boolean delChatRoom(String room_id) {
+		int i = dao.delChatFile(room_id);
+		int k = dao.delChat(room_id);
+		int j = dao.delChatRoom(room_id);
+		if(i > 0 && k > 0 && j > 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	
 }

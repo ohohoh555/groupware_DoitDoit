@@ -6,24 +6,34 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.http.HttpClient.Redirect;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +44,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.doit.gw.service.chat.IChatService;
 import com.doit.gw.vo.chat.ChatFileVo;
+import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
 
 @Controller
@@ -71,7 +82,6 @@ public class ChatController {
 	// 채팅방에 들어왔을때
 	@MessageMapping(value = "/chat/enter")
 	public void enter(ChatVo cVo) {
-		logger.info("d"+i++);
 		logger.info("@ChatController enter() : {}", cVo);
 
 		logger.info("^^^^ 해당 방 멤버 {} ^^^^", mapMem.get(cVo.getRoom_id()));
@@ -93,7 +103,7 @@ public class ChatController {
 		template.convertAndSend("/sub/chatMem/room/" + cVo.getRoom_id(), mapMem.get(cVo.getRoom_id()));
 	}
 
-	// 채팅방 나갔을 때
+	// 채팅방 퇴장 했을때(그냥 나감)
 	@MessageMapping(value = "/chat/out")
 	public void out(ChatVo cVo) {
 		logger.info("@ChatController out() : {}", cVo);
@@ -115,7 +125,7 @@ public class ChatController {
 
 	// 채팅 메시지
 	@MessageMapping(value = "/chat/message")
-	public void chatMessage(@RequestParam Map<String, String> map) {		
+	public void chatMessage(@RequestParam Map<String, String> map) throws ParseException, IOException {		
 		if (mapChat.get(map.get("room_id")) != null) {
 			listChat = mapChat.get(map.get("room_id"));
 			logger.info("해당 방의 채팅 있음 {}", listChat);
@@ -124,13 +134,20 @@ public class ChatController {
 			logger.info("해당 방의 채팅 없음 {}", listChat);
 		}
 		
+		String html = "";
 		if(map.get("type").equals("T")) {
-			String html = "";
 			html += "<span class=\"Name\">"+map.get("user_name")+"</span>";
 			html += "<span class=\"msg\">"+ map.get("chat_con")+"</span>";
 
 			map.put("html", html);
 			map.put("type", "T");
+		}else if(map.get("type").equals("O")) {
+			html += "<span class=\"msg\">"+map.get("user_name")+"님이 나가셨습니다</span>";
+			map.put("emp_id", "0");
+			map.put("html", html);
+			map.put("type", "O");
+			
+			getOut(map.get("room_id"), map.get("emp_id"));
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -145,7 +162,7 @@ public class ChatController {
 		
 		template.convertAndSend("/sub/chat/room/" + map.get("room_id"), vo);
 	}
-
+	
 	// 파일 메시지 받아서 저장
 	@RequestMapping(value = "/saveFile.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
@@ -248,5 +265,34 @@ public class ChatController {
 		mapChat.remove(room_id);
 		
 		logger.info("저장 횟수는 {}",cnt);
+	}
+	
+	//나가는 데이터 update
+	@SuppressWarnings("unchecked")
+	public void getOut(String room_id, String emp_id) throws ParseException {
+		ChatRoomVo vo = service.selGetOut(room_id);
+		logger.info("가져온 vo {}",vo.getRoom_mem());
+		
+		JSONParser parser = new JSONParser();
+		Object obj = parser.parse(vo.getRoom_mem());
+		JSONObject json = (JSONObject)obj;
+				
+		JSONArray jsonRoom = (JSONArray) json.get("ROOM");
+		
+		for (int i = 0; i < jsonRoom.size(); i++) {
+			JSONObject jsonVal = (JSONObject) jsonRoom.get(i);
+			String id = (String) jsonVal.get("id");
+			
+			if(id.equals(emp_id)) {
+				jsonRoom.remove(i);
+			}
+		} 
+		
+		json.clear();
+		json.put("ROOM", jsonRoom);
+		
+		vo.setRoom_mem(json.toString());
+		
+		service.updGetOut(vo);
 	}
 }
