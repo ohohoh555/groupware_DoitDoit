@@ -104,7 +104,7 @@ public class ApproController {
 			JSONObject obj = new JSONObject();
 			ApproVo aVo = List.get(i);
 			obj.put("appro_no", aVo.getAppro_no());
-		//	obj.put("appro_line_no",aVo.getAppro_line_no());
+			obj.put("appro_line_no",aVo.getAppro_line_no());
 		//	obj.put("appro_line",aVo.getAppro_line());
 			obj.put("appro_status",aVo.getAppro_status());
 		//	obj.put("appro_status_no",aVo.getAppro_status_no());
@@ -227,6 +227,44 @@ public class ApproController {
 		return obj.toString();
 	}
 	
+	//결재문서 조회(결재상태별 조회)
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@RequestMapping(value = "/statusDocList.do", method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
+	public String selStatusDocument(int emp_id,int appro_status_no) {
+		logger.info("ApprovalController selMyDocument 실행");
+//		int int_emp_id = Integer.parseInt(emp_id);
+		logger.info("[emp_id 값] : {}" ,emp_id);
+		logger.info("[appro_status_no 값] : {}" ,appro_status_no);
+		ApproVo approVo = new ApproVo();
+		approVo.setEmp_id(emp_id);
+		approVo.setAppro_status_no(appro_status_no);
+		List<ApproVo> List = service.selStatusDocument(approVo);
+		logger.info("[List size 값] : {}" ,List.size());
+		JSONObject json = new JSONObject();
+		JSONArray jArr = new JSONArray();
+		for (int i = 0; i < List.size(); i++) {
+			JSONObject obj = new JSONObject();
+			ApproVo aVo = List.get(i);
+			obj.put("appro_no", aVo.getAppro_no());
+			obj.put("appro_line_no",aVo.getAppro_line_no());
+		//	obj.put("appro_line",aVo.getAppro_line());
+			obj.put("appro_status",aVo.getAppro_status());
+		//	obj.put("appro_status_no",aVo.getAppro_status_no());
+			obj.put("emp_id",aVo.getEmp_id());
+			obj.put("appro_empname",aVo.getAppro_empname());
+			obj.put("appro_title",aVo.getAppro_title());
+		//	obj.put("appro_content",aVo.getAppro_content());
+			obj.put("appro_regdate",aVo.getAppro_regdate());
+			obj.put("appro_type",aVo.getAppro_type());
+		//	obj.put("appro_refer",aVo.getAppro_refer());
+		//	obj.put("appro_returnreason",aVo.getAppro_returnreason());
+			jArr.add(obj);
+		}
+		json.put("lists",jArr);
+		return json.toString();
+	}
+	
 	//문서 상세조회
 	@RequestMapping(value = "/selDocDetail.do",method = RequestMethod.GET)
 	public String selDocDetail(String appro_no,Model model,int emp_id) {
@@ -246,4 +284,41 @@ public class ApproController {
 		model.addAttribute("loginEmp_id", emp_id);
 		return "/appro/docDetail";
 	}
+	//결재자 승인 클릭시
+	@ResponseBody
+	@RequestMapping(value = "/guyljaejaApprove.do",method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
+	public String guyljaejaApprove(int appro_line_no, String approlineList, int emp_id) throws ParseException {
+		logger.info("[appro_line_no 값] : {}" ,appro_line_no);
+		logger.info("[approlineList 값] : {}" ,approlineList);
+		logger.info("[emp_id 값] : {}" ,emp_id);
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(approlineList);
+		JSONArray jArr = (JSONArray) parser.parse(obj.get("approval").toString());
+		logger.info("[수정 전 화면에서 받은 JSON 값] : {}" ,jArr.toJSONString());
+		ApproVo approVo = new ApproVo();
+		
+		for(int i=0; i<jArr.size(); i++) {
+			int length = jArr.size();
+			JSONObject tmp = (JSONObject) jArr.get(i);
+			if(tmp.get("EMP_ID").equals(String.valueOf(emp_id)) && length-1 == i) {
+				tmp.replace("APPRO_STATUS", "Y");
+				jArr.set(i, tmp);
+				service.updApprovedAppro(appro_line_no);
+				approVo.setAppro_line_no(appro_line_no);
+				logger.info("[if문의 approVo 값] : {}" ,approVo);
+			}else if(tmp.get("EMP_ID").equals(String.valueOf(emp_id))) {
+				tmp.replace("APPRO_STATUS", "Y");
+				jArr.set(i, tmp);
+				approVo.setAppro_line_no(appro_line_no);
+				logger.info("[else if문의 approVo 값] : {}" ,approVo);
+			}
+		}
+		obj.replace("approval", jArr);
+		logger.info("[수정 후 변경한 JSON 값] : {}" ,jArr.toJSONString());
+		approVo.setAppro_line(obj.toJSONString());
+		logger.info("[for 문 밖의 approVo 값] : {}" ,approVo);
+		int n = service.updApprovedApproLine(approVo);
+		
+		return (n==1)?"true":"flase";
+	}	
 }

@@ -263,4 +263,20 @@ public class SignController {
 				
 				return obj.toJSONString();
 	}
+	//서명 삭제
+		@RequestMapping(value = "/delSign.do",method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
+		@ResponseBody
+		public String updSign(String names,String empIds) {
+			logger.info("[names 값 확인] : {}",names);
+			logger.info("[empIds 값 확인] : {}",empIds);
+			SignVo signVo = new SignVo();
+			signVo.setEmp_id(Integer.parseInt(empIds));
+			signVo.setSign_name(names);
+			int n = service.updSign(signVo);
+			if(n == 1) {
+				return "true";
+			}else {
+				return "false";
+			}
+		}
 }
