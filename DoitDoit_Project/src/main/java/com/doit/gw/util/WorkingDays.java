@@ -45,6 +45,11 @@ public class WorkingDays {
 			}
 		}
 		
+		//근로자의 날
+		if(sMonth.equals("05")) {
+			holidays.add(year+"0501");
+		}
+		
 		urlBuilder.append("?"+URLEncoder.encode("serviceKey", "UTF-8") + "=" + key);
 		urlBuilder.append("&"+URLEncoder.encode("pageNo", "UTF-8")+"="+URLEncoder.encode("1", "UTF-8"));
 		urlBuilder.append("&"+URLEncoder.encode("numOfRows", "UTF-8")+"="+URLEncoder.encode("30", "UTF-8"));
