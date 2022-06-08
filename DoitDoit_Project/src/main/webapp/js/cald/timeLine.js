@@ -65,6 +65,8 @@ function selectAjax() {
 						$("#id").val(info.event.id);
 						$("#modalTitle").val(info.event.title);
 						$("#modalWriter").val(info.event.extendedProps.writer);
+						$("#datetimepicker1_2").val(change(info.event._instance.range.start.toISOString()))
+						$("#datetimepicker2_2").val(change(info.event._instance.range.end.toISOString()))
 					} else {
 						console.log(info.event._instance.range.start.toLocaleString())
 						detailModal.modal({ backdrop: 'static', keyboard: false });
@@ -93,6 +95,7 @@ function selectAjax() {
 	});
 }
 
+// UTC 날짜 형식을 바꾸어줌
 function change(date){
 	console.log(date)
 	var sp = date.split("T");
@@ -104,25 +107,29 @@ function change(date){
 	return sum;
 }
 
+// 예약 등록
 function insertAjax() {
 	var cnt = 0;
 	console.log(aa);
+	var st = dateFormat($("#datetimepicker1_2").datetimepicker('getValue'))
 	var start = (new Date($("#datetimepicker1_2").val())).getTime();
 	var end = (new Date($("#datetimepicker2_2").val())).getTime();
 	var cnt = 0;
 	
-	
+	// 같은 회의실 내에서 예약이 겹치는지 유효성 검사
 	$.each(aa, function(index, val) {
 		console.log(val)
 		var rgxStart = new Date(val.start).getTime();
 		var rgxEnd = new Date(val.end).getTime();
 		
+		// 인당 하나의 예약만 가능
 		if(val.writer == $("#name").val()){
 			cnt++;
 			alert("한사람당 하나의 예약만 가능합니다 .")
 			return;
 		}
 		
+		// 자기 예약을 제외한 예약과 같은 회의실에서 하는 예약인지 검사
 		if(val.writer != $("#name").val() && val.resourceId == $("#resId").val()){
 			if(start>=rgxStart && start<=rgxEnd){
 				cnt++;
@@ -140,18 +147,23 @@ function insertAjax() {
 	if (cnt != 0) {
 		return false;
 	}
-
+	
+	// 작성자 필수값 입력 검사
 	console.log($("#datetimepicker1").val())
 	if ($("#writer").val() == "") {
 		alert("작성자를 입력해주세요")
 		$("#writer").focus();
 		return false;
 	}
+	
+	// 예약 명 필수 값
 	if ($("#title").val() == "") {
-		alert("예약 제목을 입력해주세요")
+		alert("예약명을 입력해주세요")
 		$("#title").focus();
 		return false;
 	}
+	
+	// 예약 시간 필수 값 검사
 	if ($("#datetimepicker1").val() == "" || $("#datetimepicker2").val() == "") {
 		alert("시간을 입력해 주세요")
 		return false;
@@ -161,8 +173,9 @@ function insertAjax() {
 	if (dateVal('datetimepicker1', 'datetimepicker2') == false) {
 		return false;
 	}
-
-	if (dateFormat(new Date) > start) {
+	
+	// 예약 시작일이 현재 날짜보다 이전인지 체크
+	if (dateFormat(new Date) > st) {
 		alert("현재 날짜 이전의 예약입니다")
 		return false;
 	}
@@ -192,6 +205,7 @@ function insertAjax() {
 				$("#datetimepicker1").val("");
 				$("#datetimepicker2").val("");
 				$("#res option:eq(0)").attr("selected", "selected")
+				alert("예약이 등록되었습니다.")
 				selectAjax();
 				console.log("ㅎㅇㅎㅇ")
 			}
@@ -202,6 +216,7 @@ function insertAjax() {
 	})
 }
 
+// 예약 수정
 function updateContent() {
 	var frm = $("#modalFrm").serialize();
 	var content = $("#modalContent");
@@ -221,6 +236,7 @@ function updateContent() {
 		var rgxStart = new Date(val.start).getTime();
 		var rgxEnd = new Date(val.end).getTime();
 		
+		// 자기 예약을 제외한 예약과 같은 회의실에서 하는 예약인지 검사
 		if(val.writer != $("#modalWriter2").val() && val.resourceId == $("#resId").val()){
 			if(start>=rgxStart && start<=rgxEnd){
 				cnt++;
@@ -273,11 +289,13 @@ function updateContent() {
 				$("#datetimepicker1_2").val("");
 				$("#datetimepicker2_2").val("");
 				console.log("실패");
+				alert("예약 수정에 실패하였습니다. 본인의 예약인지 확인하여 주세요.")
 				$("#schedule-edit").modal("hide");
 				return false;
 			} else {
 				$("#schedule-edit").modal("hide");
 				console.log("성공")
+				alert("예약이 수정되었습니다.")
 				selectAjax();
 			}
 		},
@@ -300,10 +318,12 @@ function deleteContent() {
 			if (data != true) {
 				$("#schedule-detail").modal("hide");
 				console.log("실패");
+				alert("본인의 예약만 삭제 가능합니다.")
 				return false;
 			} else {
 				$("#schedule-detail").modal("hide");
 				console.log("성공")
+				alert("예약이 삭제되었습니다.")
 				selectAjax();
 			}
 		},
