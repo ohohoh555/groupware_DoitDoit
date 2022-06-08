@@ -59,7 +59,9 @@ public class ChatServiceImpl implements IChatService{
 		logger.info("$$$$$ insChatRoom $$$$$",chat_room);
 		int n = dao.insChatRoom(chat_room);
 		if(n > 0) {
-			return dao.selLastRoom();
+			String room = dao.selLastRoom() ;
+			logger.info("maxRoom {}",room);
+			return room;
 		}else {
 			return "0";
 		}

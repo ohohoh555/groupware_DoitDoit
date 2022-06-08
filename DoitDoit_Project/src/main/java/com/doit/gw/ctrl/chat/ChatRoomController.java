@@ -153,6 +153,7 @@ public class ChatRoomController {
 		}
 		
 		json.put("ROOM", jsonArr);
+		logger.info("{}",json);
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
@@ -160,6 +161,7 @@ public class ChatRoomController {
 		map.put("room_mem", json.toString());
 		
 		String room_id = service.insChatRoom(map);
+		logger.info("room_id", room_id);
 		
 		Map<String, String> chat = new HashMap<String, String>();
 		

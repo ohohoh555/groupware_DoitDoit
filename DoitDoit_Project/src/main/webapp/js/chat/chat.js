@@ -18,13 +18,11 @@ $(document).ready(function() {
 	
 	//방 id
 	room_id = $("#room_id").val();
-	console.log("room_id", room_id);
 	// emp_id
 	emp_id = $("#pr_emp_id").val();
-	console.log("emp_id", emp_id);
 	// emp 성함
 	user_name = $("#pr_user_name").val();
-	console.log("user_name",user_name);
+
 	
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {

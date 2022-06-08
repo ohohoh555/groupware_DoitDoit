@@ -59,6 +59,7 @@ public class ChatDaoImpl implements IChatDao{
 
 	@Override
 	public int insChatRoom(Map<String, String> map) {
+		logger.info("daoImpl {}",map);
 		return sqlSession.insert(NS+"insChatRoom", map);
 	}
 
