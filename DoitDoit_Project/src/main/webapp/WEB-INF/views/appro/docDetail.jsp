@@ -57,7 +57,21 @@ String today = sf.format(now);
                     <div class="rContent-normal-top" style="width: 780px; height: 780px; margin-top: 10px;">
                     <fieldset style="width:770px;">
 						<legend style="margin-bottom : 3px;">
-						결재 대기 문서
+						<c:set var="aStatus" value="${aVo.appro_status_no }"/>
+						<c:choose>
+							<c:when test="${aStatus eq 1 }">
+									결재 대기 문서
+							</c:when>
+							<c:when test="${aStatus eq 2 }">
+									반려 문서
+							</c:when>
+							<c:when test="${aStatus eq 3 }">
+									결재 완료 문서
+							</c:when>
+							<c:when test="${aStatus eq 4 }">
+									임시 저장 문서
+							</c:when>
+						</c:choose>
 						</legend>
 						<c:if test="${loginEmp_id ne aVo.emp_id}">
                     	<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#appro">승인</button>

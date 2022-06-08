@@ -34,6 +34,11 @@ public class SignMapperImpl implements ISignMapper {
 	public int updSign(SignVo signVo) {
 		return sqlSession.update(NS+"updSign",signVo);
 	}
+
+	@Override
+	public int insDefaultSign(SignVo signVo) {
+		return sqlSession.insert(NS+"insDefaultSign",signVo);
+	}
 	
 	
 }

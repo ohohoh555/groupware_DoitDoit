@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.service.ann.IAnnService;
 import com.doit.gw.service.emp.IEmpService;
+import com.doit.gw.service.sign.ISignService;
 import com.doit.gw.vo.emp.EmpVo;
+import com.doit.gw.vo.sign.SignVo;
 
 @Controller
 public class EmpController {
@@ -26,6 +28,10 @@ public class EmpController {
 	//연차 등록을 위한 service
 	@Autowired
 	private IAnnService annService;
+	
+	//디폴트 사인이미지 등록을 위한 service
+	@Autowired
+	private ISignService signService;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -58,6 +64,12 @@ public class EmpController {
 		service.insEmp(map);
 		//연차 등록
 		annService.insAnnual();
+		//서명이미지 등록
+		SignVo signVo = new SignVo();
+		int emp_id = Integer.parseInt(vo.getEmp_id());
+		signVo.setEmp_id(emp_id);
+		signService.insDefaultSign(signVo);
+		
 		return "redirect:/selAllEmp.do";
 	}
 	
