@@ -63,8 +63,6 @@ public class ChatController {
 
 	private static Map<String, List<String>> mapMem;
 	private static Map<String, List<ChatVo>> mapChat;
-	
-	private static int i;
 
 	public ChatController() {
 		listChat = new ArrayList<ChatVo>();
@@ -141,13 +139,13 @@ public class ChatController {
 
 			map.put("html", html);
 			map.put("type", "T");
-		}else if(map.get("type").equals("O")) {
+		}else if(map.get("type").equals("O")) { // => disconnect 하였을 때
+			getOut(map.get("room_id"), map.get("emp_id"));
+			
 			html += "<span class=\"msg\">"+map.get("user_name")+"님이 나가셨습니다</span>";
 			map.put("emp_id", "0");
 			map.put("html", html);
 			map.put("type", "O");
-			
-			getOut(map.get("room_id"), map.get("emp_id"));
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -175,10 +173,9 @@ public class ChatController {
 
 		List<MultipartFile> file = multipartRequest.getFiles("file");
 
-		String room_id = multipartRequest.getParameter("room_id");
 		String user_name = multipartRequest.getParameter("user_name");
-		String emp_id = multipartRequest.getParameter("emp_id");
-
+		String room_id =  multipartRequest.getParameter("room_id");
+		
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		
@@ -192,7 +189,8 @@ public class ChatController {
 			cFv.setFile_chat_uuid(UUID.randomUUID().toString());
 			cFv.setFile_uploadpath(WebUtils.getRealPath(req.getSession().getServletContext(),
 					"/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()));
-
+			cFv.setRoom_id(room_id);
+			
 			try {
 				inputStream = file.get(i).getInputStream();
 
@@ -214,6 +212,8 @@ public class ChatController {
 				while ((read = inputStream.read(b)) != -1) {
 					outputStream.write(b, 0, read);
 				}
+				
+				service.insFile(cFv);
 				
 				map = new HashMap<String, String>();
 				
@@ -288,11 +288,17 @@ public class ChatController {
 			}
 		} 
 		
-		json.clear();
-		json.put("ROOM", jsonRoom);
-		
-		vo.setRoom_mem(json.toString());
-		
-		service.updGetOut(vo);
+		logger.info("남은 사람 {}",jsonRoom);
+		if(jsonRoom.size() == 0) {
+			logger.info("대화방 아예 삭제 {}",jsonRoom);
+			mapMem.remove(room_id);
+			service.delChatRoom(room_id);
+		}else {
+			json.clear();
+			json.put("ROOM", jsonRoom);
+			vo.setRoom_mem(json.toString());
+			
+			service.updGetOut(vo);
+		}
 	}
 }

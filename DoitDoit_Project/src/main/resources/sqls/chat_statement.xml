@@ -83,7 +83,7 @@
 	
 	<delete id="delChatFile">
 		DELETE CHAT_FILE
-			WHERE CHAT_ID IN (SELECT CHAT_ID FROM CHAT WHERE ROOM_ID = #{room_id})
+			WHERE ROOM_ID = #{room_id}
 	</delete>
 	
 	<delete id="delChat">
@@ -108,16 +108,14 @@
 	</insert>
 	
 	<!-- 파일 입력 -->
-	<insert id="insFile" parameterType="java.util.Map">
-		<selectKey resultType="java.lang.String" keyProperty="seq" order="BEFORE" >
+	<insert id="insFile" parameterType="ChatFileVo">
+		<selectKey resultType="java.lang.String" keyProperty="file_chat_id" order="BEFORE">
 			SELECT SEQ_CHAT_FILE.NEXTVAL FROM DUAL
 		</selectKey>
 		INSERT INTO CHAT_FILE (FILE_CHAT_ID,FILE_CHAT_UUID,FILE_CHAT_ORIGINNM,
-						  FILE_CHAT_TYPE,FILE_UPLOADPATH,CHAT_ID) 
-    		VALUES (#{seq},#{file_chat_uuid},#{file_chat_originnm},
-    				#{file_chat_type},#{file_uploadpath},
-    				(SELECT MAX(TO_NUMBER(CHAT_ID)) 
-						FROM CHAT))
+						  FILE_CHAT_TYPE,FILE_UPLOADPATH,ROOM_ID) 
+    		VALUES (#{file_chat_id},#{file_chat_uuid},#{file_chat_originnm},
+    				#{file_chat_type},#{file_uploadpath},#{room_id})
 	</insert>
 	
 	<!-- 채팅방 생성 -->

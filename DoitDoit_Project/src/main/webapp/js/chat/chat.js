@@ -42,14 +42,14 @@ $(document).ready(function() {
 			
 			//누구 메세지 인지 판단
 			if(content.emp_id == 0){
-				clas = "msg";
+				clas = "issue";
 			}else if(content.emp_id == emp_id){
 				clas = "myMsg";
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			}else{
 				clas = "anotherMsg";
 			}
-						
+			console.log("받은 메시지 클래스",clas);
 			//append 새로운 메시지
 			var html = '';
 			html += "<div class=\""+clas+"\">";
@@ -61,13 +61,6 @@ $(document).ready(function() {
 			if($('#chatLog').scrollTop()){
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			};
-			
-			if(content.type == "O"){
-				chatMemRemove(content.emp_id);
-				if(content.emp_id == emp_id){
-					location.href="./gohome.do";
-				}
-			}
 		});
 		
 		//들어 왔을떄
@@ -93,8 +86,15 @@ $(document).ready(function() {
 		
 		roomEnter(room_id,emp_id);
 		
-		stomp.subscribe("/sub/chat/roomOut/" + room_id, function(out){
-			console.log("나간거 이벤트 발생", out);
+		stomp.subscribe("/sub/chat/getOut/" + room_id, function(out){			
+			var mem = JSON.parse(out.body);
+
+			var emps = $("#members").children();
+			for(var i = 0; i < emps.length; i++){
+				if(emps.eq(i).attr("id") == mem.emp_id){
+					$("#members").children().eq(i).remove();
+				}
+			}
 		});
 	});
 	// 채팅입력
@@ -177,6 +177,15 @@ function chatSend(){
 	}
 }
 
+//채팅방 나가기(disconnect)
+function getOut(){
+	console.log("getOut() 실행");	
+	stomp.send('/pub/chat/message', {}, JSON.stringify({room_id: room_id, emp_id: emp_id, user_name: user_name, type: "O"}));
+	stomp.send('/sub/chat/getOut/' + room_id, {}, JSON.stringify({emp_id: emp_id}));
+	
+	location.href="./gohome.do";
+}
+
 //채팅방 입장 시 
 function roomEnter(room_id,username){
 	console.log("roomEnter");
@@ -202,17 +211,12 @@ function aboutChatRoom(mems){
 	}
 }
 
-function chatMemRemove(emp_id){
-	var emps = $("#members").children();
-	for(var i = 0; i < emps.length; i++){
-		if($.inArray(emps.eq(i).attr("id"), emp_id)){
-			$("#members > div").eq(i).remove();
-		}
-	}
-}
-
 //ajax로 파일 입력
 function sendFileToServer(fd) {	
+	
+	fd.append("user_name",user_name);
+	fd.append("room_id",room_id);
+	
 	$.ajax({
 		type : "POST",
 		data : fd,
@@ -222,6 +226,7 @@ function sendFileToServer(fd) {
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
 		cache : false, //ajax 로 통신 중 cache 가 남아서 갱신된 데이터를 받아오지 못할 경우를 대비
 		success : function(map){
+			console.log(JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
 			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
 		},
 		error:function(){
@@ -229,8 +234,3 @@ function sendFileToServer(fd) {
 		}
 	});
 }	
-
-function getOut(){
-	console.log("getOut() 실행")
-	stomp.send('/pub/chat/message', {},JSON.stringify({room_id: room_id, emp_id: emp_id, user_name: user_name, type: "O"}));
-}

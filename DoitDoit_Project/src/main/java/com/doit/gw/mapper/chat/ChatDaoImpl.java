@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.doit.gw.vo.chat.ChatFileVo;
 import com.doit.gw.vo.chat.ChatJoinVo;
 import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
@@ -51,9 +52,9 @@ public class ChatDaoImpl implements IChatDao{
 	}
 
 	@Override
-	public int insFile(Map<String, String> map) {
-		logger.info("CCCCC insFile CCCCC", map);
-		return sqlSession.insert(NS+"insFile", map);
+	public int insFile(ChatFileVo vo) {
+		logger.info("CCCCC insFile CCCCC", vo);
+		return sqlSession.insert(NS+"insFile", vo);
 	}
 
 	@Override

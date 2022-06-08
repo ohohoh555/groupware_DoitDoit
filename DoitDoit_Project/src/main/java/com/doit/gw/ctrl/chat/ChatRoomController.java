@@ -94,11 +94,11 @@ public class ChatRoomController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/doJstree.do",method = RequestMethod.POST)
-	public JSONArray doJstree(String emp_id) {
+	public JSONArray doJstree(@RequestParam List<String> emp_id) {
 		logger.info("ChatRoomController doJstree {}", emp_id);
 		List<ApproEmpVo> listEmp = treeService.selEmp();
 		List<ApproDeptVo> listDept = treeService.selDept();
-
+		
 		JSONArray jsonArr = new JSONArray();
 		for (ApproDeptVo approDeptVo : listDept) {
 			JSONObject json = new JSONObject();
@@ -110,27 +110,22 @@ public class ChatRoomController {
 			jsonArr.add(json);
 		}
 		
+		logger.info("emp_id {}",emp_id);
+		
 		for (ApproEmpVo approEmpVo : listEmp) {
-			JSONObject json = new JSONObject();
-			JSONObject state = new JSONObject();
-			json.put("id", approEmpVo.getEmp_id());
-			json.put("parent", (approEmpVo.getDept_no()!= null)?approEmpVo.getDept_no():"00");
-			json.put("text", approEmpVo.getEmp_name());
-			json.put("icon","glyphicon glyphicon-folder-open");
-			json.put("rank", approEmpVo.getRank_no());
-			
-			state.put("opened", false);
-			if(emp_id.equals(Integer.toString(approEmpVo.getEmp_id()))) {
-				state.put("disabled", true);
-				state.put("selected", true);
-				logger.info("이미 있음 {}",approEmpVo.getEmp_id());
-			}else {
-				state.put("disabled", false);
-				state.put("selected", false);
+			logger.info("contains의 값 {} / {}",approEmpVo.getEmp_id() ,String.valueOf(approEmpVo.getEmp_id()));
+			if(emp_id.contains(String.valueOf(approEmpVo.getEmp_id())) == false) {
+				JSONObject json = new JSONObject();
+				JSONObject state = new JSONObject();
+				json.put("id", approEmpVo.getEmp_id());
+				json.put("parent", (approEmpVo.getDept_no()!= null)?approEmpVo.getDept_no():"00");
+				json.put("text", approEmpVo.getEmp_name());
+				json.put("icon","glyphicon glyphicon-folder-open");
+				json.put("rank", approEmpVo.getRank_no());
+				json.put("state", state);
+				
+				jsonArr.add(json);
 			}
-			json.put("state", state);
-			
-			jsonArr.add(json);
 		}
 		logger.info("[jsonArr 값] : {}" ,jsonArr.toJSONString());
 		return jsonArr;
