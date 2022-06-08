@@ -10,14 +10,6 @@
 
 
 	<!-- 매년 1월 1일 -->
-	<!-- 생성 내역 삭제 -->	
-	<delete id="delAnnAddReset">
-		DELETE FROM ANN_ADD
-	</delete>
-	<!-- 사용 내역 삭제 -->	
-	<delete id="delAnnUseReset">
-		DELETE FROM ANN_USE
-	</delete>	
 	<!-- 모든 연차 초기화 -->	
 	<update id="updAnnualReset">
 		UPDATE ANNUAL SET ANN_ADD = 0, ANN_USE = 0, ANN_REST = 0
@@ -145,4 +137,18 @@
 			WHERE EMP_NFC = #{emp_nfc}
 		)
 	</update>
+	
+	<!-- 연차 사용 -->
+	<insert id="insAnnUse" parameterType="java.util.Map">
+		INSERT INTO ANN_USE (ANN_USE_NO, ANN_USE_CONTENT, ANN_USE_DAYS, 
+							 ANN_USE_PERIOD, ANN_USE_DATE, EMP_ID)
+		VALUES (SEQ_ANN_USE.NEXTVAL, #{use_content}, #{use_days}, 
+		        #{use_period}, #{use_date}, #{emp_id})
+	</insert>
+	<update id="updAnnualUse" parameterType="java.util.Map">
+		UPDATE ANNUAL SET ANN_USE = ANN_USE + #{use_days}, ANN_REST = ANN_REST - #{use_days}, 
+									ANN_WORK_DAYS = ANN_WORK_DAYS + #{use_work_days}
+		WHERE EMP_ID = #{emp_id}		
+	</update>
+	
 </mapper>

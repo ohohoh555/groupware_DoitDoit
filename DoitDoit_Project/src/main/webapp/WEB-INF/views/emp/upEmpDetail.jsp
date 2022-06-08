@@ -118,10 +118,26 @@
     	function nfcVal(e) {
     		if(e.keyCode==13){
     			var emp_nfc = $("#empNfc").val();
-    			$("#nfcModal").modal("hide");
-    			$("#nfc").val(emp_nfc);
+    			$.ajax({
+    				url:"./nfcCheck.do",
+    				type:"post",
+    				data: {"emp_nfc":emp_nfc},
+    				success:function(data){
+    					if(data=="0"){
+    						alert("사용가능한 nfc번호 입니다.");
+    						$("#nfcModal").modal("hide");
+    						$("#nfc").val(emp_nfc);
+    					}else{
+    						alert("사용할 수 없는 nfc번호 입니다.");
+    						$("#empNfc").val("");
+    					}
+    				},
+    				error:function(){
+    					alert("잘못된 통신입니다.");
+    				}
+    			});
     		}
-    	}        	
+    	}           	
     </script>
 </body>
 </html>

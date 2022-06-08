@@ -67,4 +67,10 @@ public class EmpMapperImpl implements IEmpMapper {
 	public int upEmp(Map<String, Object> map) {
 		return sqlSession.update(NS+"upEmp", map);
 	}
+
+	//nfc 중복확인
+	@Override
+	public int selEmpNfcCheck(String emp_nfc) {
+		return sqlSession.selectOne(NS+"selEmpNfcCheck", emp_nfc);
+	}
 }

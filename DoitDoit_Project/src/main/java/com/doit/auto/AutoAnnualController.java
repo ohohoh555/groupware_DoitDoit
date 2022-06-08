@@ -46,10 +46,6 @@ public class AutoAnnualController {
 	@Scheduled(cron = "0 0/1 0 1 1 *", zone = "Asia/Seoul")//매년 1월 1일 0시 1분
 	public void generateAnnYear() {
 		logger.info("AutoAnnualController generateAnnYear 새해 연차");
-		//생성내역 초기화
-		service.delAnnAddReset();
-		//사용내역 초기화
-		service.delAnnUseReset();
 		//연차 초기화
 		service.updAnnualReset();
 		

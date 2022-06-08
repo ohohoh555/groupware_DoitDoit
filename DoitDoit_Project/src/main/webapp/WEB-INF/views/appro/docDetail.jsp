@@ -274,6 +274,22 @@ function gyuljaeClick(){
 			}
 		}
 	});
+	
+	//승인시 연차 사용
+// 	var iscAnn = $("table tr td:eq(16)").text();//연차 판단
+// 	var annPeriod = $("table tr td:eq(18)").text();//사용 기간
+// 	var annDays = $("table tr td:eq(22)").text();//연차 신청일수
+// 	console.log("승인 emp_id="+data);
+// 	if(iscAnn=="연차"){
+// 		$.ajax({
+// 			url:"./test.do",
+// 			type:"post",
+// 			data:{"use_days":annDays, "use_period":annPeriod, "emp_id" : data},
+// 			success : function() {
+			
+// 			}
+// 		});
+// 	}	
 }
 </script>
 </html>

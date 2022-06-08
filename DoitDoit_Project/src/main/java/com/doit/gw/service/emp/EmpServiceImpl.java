@@ -69,4 +69,10 @@ public class EmpServiceImpl implements IEmpService{
 	public int upEmp(Map<String, Object> map) {
 		return mapper.upEmp(map);
 	}
+
+	//nfc 중복확인
+	@Override
+	public int selEmpNfcCheck(String emp_nfc) {
+		return mapper.selEmpNfcCheck(emp_nfc);
+	}
 }

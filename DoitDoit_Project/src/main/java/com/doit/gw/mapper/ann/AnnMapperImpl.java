@@ -26,16 +26,6 @@ public class AnnMapperImpl implements IAnnMapper {
 	}
 
 	@Override
-	public int delAnnAddReset() {
-		return sqlSession.delete(NS+"delAnnAddReset");
-	}
-
-	@Override
-	public int delAnnUseReset() {
-		return sqlSession.delete(NS+"delAnnUseReset");
-	}
-
-	@Override
 	public int updAnnualReset() {
 		return sqlSession.update(NS+"updAnnualReset");
 	}
@@ -118,6 +108,16 @@ public class AnnMapperImpl implements IAnnMapper {
 	@Override
 	public int updAnnualWorkDays(String emp_nfc) {
 		return sqlSession.update(NS+"updAnnualWorkDays", emp_nfc);
+	}
+
+	@Override
+	public int insAnnUse(Map<String, Object> map) {
+		return sqlSession.insert(NS+"insAnnUse", map);
+	}
+
+	@Override
+	public int updAnnualUse(Map<String, Object> map) {
+		return sqlSession.update(NS+"updAnnualUse", map);
 	}
 
 }
