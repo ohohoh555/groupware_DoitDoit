@@ -74,13 +74,13 @@ public class ChatServiceImpl implements IChatService{
 	}
 
 	@Override
-	public ChatRoomVo selGetOut(String room_id) {
-		return dao.selGetOut(room_id);
+	public ChatRoomVo selRoomMember(String room_id) {
+		return dao.selRoomMember(room_id);
 	}
 
 	@Override
-	public int updGetOut(ChatRoomVo room_id) {
-		return dao.updGetOut(room_id);
+	public int updRoomMember(ChatRoomVo vo) {
+		return dao.updRoomMember(vo);
 	}
 
 	@Override

@@ -76,6 +76,11 @@ public class ChatController {
 		List<ChatVo> sendChat = mapChat.get(room_id);
 		return sendChat;
 	}
+	
+	public static List<String> getListMem(String room_id){
+		List<String> sendMem = mapMem.get(room_id);
+		return sendMem;
+	}
 
 	// 채팅방에 들어왔을때
 	@MessageMapping(value = "/chat/enter")
@@ -270,7 +275,7 @@ public class ChatController {
 	//나가는 데이터 update
 	@SuppressWarnings("unchecked")
 	public void getOut(String room_id, String emp_id) throws ParseException {
-		ChatRoomVo vo = service.selGetOut(room_id);
+		ChatRoomVo vo = service.selRoomMember(room_id);
 		logger.info("가져온 vo {}",vo.getRoom_mem());
 		
 		JSONParser parser = new JSONParser();
@@ -298,7 +303,7 @@ public class ChatController {
 			json.put("ROOM", jsonRoom);
 			vo.setRoom_mem(json.toString());
 			
-			service.updGetOut(vo);
+			service.updRoomMember(vo);
 		}
 	}
 }

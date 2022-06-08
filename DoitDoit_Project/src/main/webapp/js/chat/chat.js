@@ -12,6 +12,8 @@ var k = 0;
 
 $(document).ready(function() {
 
+	$(".modal-body").load("./inviteJstree.do");
+
 	console.log("js실행");
 	var sock = new SockJS("/DoitDoit_Project/stompSocket");
 	console.log(sock);
@@ -64,20 +66,12 @@ $(document).ready(function() {
 		//들어 왔을떄
 		stomp.subscribe("/sub/chatMem/room/" + room_id, function(member){
 			console.log("chatMem Enter");
-			var mems = member.body;
+			mems = member.body;
 			mems = mems.replaceAll('"', '');
 			mems = mems.replace('[', '');
 			mems = mems.replace(']', '');
 			mems = mems.split(",");
 			console.log(mems);
-			
-			html = '';
-			
-			for(var i = 0; i < mems.length; i++){
-				html += "<div>";
-				html += mems[i];
-				html += "</div>";
-			}
 			
 			aboutChatRoom(mems);
 		});
@@ -93,6 +87,12 @@ $(document).ready(function() {
 					$("#members").children().eq(i).remove();
 				}
 			}
+		});
+		
+		stomp.subscribe("/sub/invite/room/" + room_id, function(invite){
+			var mem = JSON.parse(invite.body);
+			$("#members").html(mem.html);
+			aboutChatRoom(mem.memList);
 		});
 	});
 	// 채팅입력

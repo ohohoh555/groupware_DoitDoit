@@ -25,7 +25,7 @@
     		</div>
     		<div class="container">
     			<div>
-	    			<button class="btn-sm btn-info" onclick="(${info.emp_id},'create')" data-toggle="modal" data-target="#cJstree">채팅방 생성</button>    						
+	    			<button class="btn-sm btn-info" onclick="treeDo('create')" data-toggle="modal" data-target="#cJstree">채팅방 생성</button>    						
     			</div>
 <!--     		jstree 채팅방 생성 부분(modal) -->
 			 	<div class="modal fade" id="cJstree" role="dialog"">
@@ -39,9 +39,10 @@
 								
 							</div>
 							<div class="mod-footer">
-								<div style="width: 150px; margin:10px auto">
+								<div style="width: 200px; margin:10px auto">
 									<button onclick="btnCreate()" class="btn btn-success">생성</button>
-						    		<button onclick="btnCancle()" class="btn">취소</button>								
+									<button onclick="btnHide('create')" class="btn">숨김</button>
+						    		<button onclick="btnCancle('create')" class="btn">취소</button>								
 								</div>
 							</div>
 						</div>

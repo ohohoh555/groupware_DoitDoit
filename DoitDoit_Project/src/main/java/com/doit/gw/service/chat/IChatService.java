@@ -27,9 +27,9 @@ public interface IChatService {
 	//원본 파일명 조회
 	public String selFileNM(String file_chat_id);
 	//방 나갈려고 할때 멤버 조회
-	public ChatRoomVo selGetOut(String room_id); 
+	public ChatRoomVo selRoomMember(String room_id); 
 	//방 나가고 나서 남은 멤버 업데이트
-	public int updGetOut(ChatRoomVo room_id);
+	public int updRoomMember(ChatRoomVo vo);
 	//해당 방의 삭제
 	public boolean delChatRoom(String room_id);
 }

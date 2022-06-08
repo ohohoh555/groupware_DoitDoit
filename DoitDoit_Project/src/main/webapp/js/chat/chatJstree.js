@@ -2,35 +2,44 @@ var jsonData;//ajax로 가져온 값
 var checkData;//체크 한 값
 var jsTreeType;
 var divId;
+var getEmp_id = new Array();
 
-function treeDo(emp_id, type){
+function treeDo(type){
 	jsTreeType = type;
+	getEmp_id = [];
 	
-	//어디 div에 jsTree를 뿌릴지 id 값 
 	if(type == "create"){
 		divId = "#createJsTree";
+		getEmp_id.push($("#pr_emp_id").val());
+		console.log("push data",getEmp_id);
+		console.log("초대하는 사람 아이디", getEmp_id);
 	}else{
 		divId = "#inviteJsTree";
+		var emp = $(".members").children();
+		for(var i = 0; i < emp.length; i++){
+			getEmp_id.push($(".members").children().eq(i).attr("id"));
+		}
+		console.log(getEmp_id);
 	}
 	
-	console.log("속해있는 emp_id",emp_id);
 	console.log("jsTreeType",jsTreeType);
-	if($(divId).html() == "" && jsTreeType == "create"){
+	if($("#createJsTree").html() == "" && jsTreeType == "create"){
 		console.log("채팅방 생성 jstree 실행");
-		treeAjax(emp_id);
-	}else if($(divId).html() == "" && jsTreeType == "invite"){
+		treeAjax(getEmp_id);
+	}else if($("#inviteJsTree").html() == "" && jsTreeType == "invite"){
 		console.log("채팅방 초대 jstree 실행");
-		treeAjax(emp_id);
+		treeAjax(getEmp_id);
 	}
 }
 
-function treeAjax(emp_id){
+function treeAjax(getEmp_id){
 	$.ajax({
 		url : "./doJstree.do",
 		type : "post",
 		dataType : "json",
-		data : "emp_id="+emp_id,
+		data : "emp_id="+getEmp_id,
 		success : function(treedata) {
+			console.log(treedata);
 			createJson(treedata);
 		},
 		error : function(){
@@ -68,12 +77,12 @@ function createTree(treedata) {
 function createJson(treedata) {
 	createTree(treedata);
 	
-	if(jsTreeType == "create"){
+//	if(jsTreeType == "create"){
 		$(divId).on("changed.jstree",function(e, data) {
 			checkData = data.selected;
 			console.log(checkData);
 		});
-	}
+//	}
 }
 
 function btnCreate(){
@@ -82,15 +91,11 @@ function btnCreate(){
 			checkData.splice(i, 1);
 		}
 	}
-	if(jsTreeType == "create"){
-		checkData.push($("#pr_emp_id").val());
-		console.log(checkData);
-	}
-	
-	if(3 > $("#roomName").val().length || $("#roomName").val().length > 20){
+
+	if(jsTreeType == "create" && (3 > $("#roomName").val().length || $("#roomName").val().length > 20)){
 		alert('채팅방 제목 길이를 3~20 사이로 설정해 주세요.');
-	}else if(checkData.length < 2){
-		alert('채팅방 초대인원을 2명이상 선택해 주세요');
+	}else if(checkData.length < 1){
+		alert('채팅방 초대인원을 1명이상 선택해 주세요');
 	}else{
 		var urls;
 		if(jsTreeType == "create"){
@@ -99,20 +104,66 @@ function btnCreate(){
 			urls = "./inviteRoom.do";
 		}
 		
+		var data;
+		if(jsTreeType == "create"){
+			getEmp_id.push(checkData);
+			data = "mems="+getEmp_id+"&roomName="+$("#roomName").val();
+			console.log(data);
+		}else{
+			data = "mems="+checkData+"&room_id="+$("#room_id").val();
+			console.log(data);
+		}
+		
 		$.ajax({
 			url : urls,
 			type : "post",
-			dataType : "text",
-			data : "mems="+checkData+"&roomName="+$("#roomName").val(),
-			success : function(room_id){
-				console.log(room_id);
+			dataType : "json",
+			data : data,
+			success : function(result){
 				if(jsTreeType == "create"){
-					window.location.href="./chatRoom.do?room_id="+room_id;
+					console.log(result);
+					console.log(result.room_id);
+					window.location.href="./chatRoom.do?room_id="+result.room_id;
+					$("#createJsTree").html("");
+				}else{
+					console.log("html",result.html);
+					console.log("memList",result.memList);
+					console.log("room_id",result.room_id);
+					$("#inviteJsTree").html("");
+					stomp.send('/sub/invite/room/' + result.room_id, {}, JSON.stringify({html: result.html, memList: result.memList}));
 				}
 			},
 			error : function(request, status, error){
 				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);	
 			}
 		});
+	}
+}
+
+function btnHide(type){
+	if(type == "create"){
+		$("#cJstree").modal("hide");
+	}else{
+		$("#iJstree").modal("hide");		
+	}
+}
+
+function btnCancle(type){
+	if(type == "create"){
+		$("#cJstree").modal("hide");
+		$("#createJsTree > ul > li").prop("aria-selected","false");
+		$("#createJsTree > ul > li > ul > li").prop("aria-selected","false");
+		$("#createJsTree > ul > li > a").prop("class","jstree-anchor");
+		$("#createJsTree > ul > li > ul > li > a").prop("class","jstree-anchor");
+		$("#createJsTree > ul > li > div").prop("class","jstree-wholerow");
+		$("#createJsTree > ul > li > ul > li > div").prop("class","jstree-wholerow");
+	}else{
+		$("#iJstree").modal("hide");		
+		$("#inviteJsTree > ul > li").prop("aria-selected","false");
+		$("#inviteJsTree > ul > li > ul > li").prop("aria-selected","false");
+		$("#inviteJsTree > ul > li > a").prop("class","jstree-anchor");
+		$("#inviteJsTree > ul > li > ul > li > a").prop("class","jstree-anchor");
+		$("#inviteJsTree > ul > li > div").prop("class","jstree-wholerow");
+		$("#inviteJsTree > ul > li > ul > li > div").prop("class","jstree-wholerow");
 	}
 }
