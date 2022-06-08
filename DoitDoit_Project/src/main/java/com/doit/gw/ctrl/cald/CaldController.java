@@ -40,7 +40,7 @@ public class CaldController {
 	public String moveCalendar() {
 
 		return "cald/Calendar";
-	}
+	} 
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/calendarAjax.do", method = RequestMethod.GET)
