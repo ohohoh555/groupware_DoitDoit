@@ -102,4 +102,8 @@
 		EMP_REGDATE = #{emp_regdate},EMP_ADDRESS = #{emp_address} WHERE EMP_ID = #{emp_id}
 	</update>
 
+	<select id="selEmpNfcCheck" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM EMP WHERE EMP_NFC = #{emp_nfc}
+	</select>
+
 </mapper>

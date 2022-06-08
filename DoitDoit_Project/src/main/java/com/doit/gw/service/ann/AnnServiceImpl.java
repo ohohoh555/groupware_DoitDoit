@@ -29,18 +29,6 @@ public class AnnServiceImpl implements IAnnService {
 	}
 
 	@Override
-	public int delAnnAddReset() {
-		logger.info("AnnServiceImpl delAnnAddReset 연차 생성내역 초기화");
-		return mapper.delAnnAddReset();
-	}
-
-	@Override
-	public int delAnnUseReset() {
-		logger.info("AnnServiceImpl delAnnUseReset 연차 사용내역 초기화");
-		return mapper.delAnnUseReset();
-	}
-
-	@Override
 	public int updAnnualReset() {
 		logger.info("AnnServiceImpl updAnnualReset 연차 초기화");
 		return mapper.updAnnualReset();
@@ -140,6 +128,18 @@ public class AnnServiceImpl implements IAnnService {
 	public int updAnnualWorkDays(String emp_nfc) {
 		logger.info("AnnServiceImpl updAnnualWorkDays 사원 근무일 등록 : {}", emp_nfc);
 		return mapper.updAnnualWorkDays(emp_nfc);
+	}
+
+	@Override
+	public int insAnnUse(Map<String, Object> map) {
+		logger.info("AnnServiceImpl insAnnUse 연차 사용(insert) : {}", map);
+		return mapper.insAnnUse(map);
+	}
+
+	@Override
+	public int updAnnualUse(Map<String, Object> map) {
+		logger.info("AnnServiceImpl updAnnualUse 연차 사용(update) : {}", map);
+		return mapper.updAnnualUse(map);
 	}
 
 }

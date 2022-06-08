@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.service.ann.IAnnService;
@@ -109,6 +110,18 @@ public class EmpController {
 		eMap.put("emp_address", eVo.getEmp_address());
 		service.upEmp(eMap);
 		return "redirect:/selAllEmp.do";
+	}
+	
+	@RequestMapping(value = "/nfcCheck.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String nfcCheck(@RequestParam String emp_nfc) {
+		logger.info("전달받은 nfc 값 : " + emp_nfc);
+		int n = service.selEmpNfcCheck(emp_nfc);
+		if(n==0) {
+			return "0";
+		}else {
+			return "1";
+		}
 	}
 	
 }

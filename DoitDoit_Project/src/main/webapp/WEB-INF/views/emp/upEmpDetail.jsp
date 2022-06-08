@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/home.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 </head>
@@ -57,18 +58,38 @@
             			<label for="emp_address">주소 :(입력)</label>
             			<input type="text" class="upEmp" name="emp_address" value="${empVo.emp_address}">
             			<label for="emp_nfc">NFC :</label>
-            			<input type="text" class="selEmp" value="${empVo.emp_nfc}" readonly>
+            			<input type="text" id="nfc" class="selEmp" value="${empVo.emp_nfc}" readonly>
             		</div>
             		</c:forEach>
             		<div class="buttonArea">
             			<input class="btn btn-default" type="submit" value="수정완료">
             			<input class="btn btn-default" type="button" value="뒤로가기" onclick="history.back(-1)">
-            			<input class="btn btn-default" type="button" value="NFC읽기">
+            			<input class="btn btn-default" type="button" value="NFC읽기" onclick="nfcRead()">
             		</div>
             	</form>
             </div>
         </main>
     </div>
+    <!-- nfc 등록 모달 -->
+	<div class="modal fade" id="nfcModal" role="dialog">
+	  <div class="modal-dialog modal-md" style="width: 500px;">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title" style="text-align: center;">NFC 등록</h4>
+	      </div>
+	      <div class="modal-body">
+	        	<table class="table table-bordered">
+	        		<tr>
+		       			<td style="text-align: center;">
+			      			<input type="text" id="empNfc" name="emp_nfc" style="background-color: white; width: 300px;" onkeypress="nfcVal(event)">
+		       			</td>
+	        		</tr>
+	        	</table>
+	      </div>
+	    </div>
+	  </div>
+	</div><!-- 모달 영역 끝 -->    
     <script type="text/javascript">
     	var emp_id = $("#emp_id").val();
     	
@@ -85,8 +106,38 @@
         		}
         	})
     	}
-    
-    	
+        
+    	function nfcRead() {
+    		$("#empNfc").val("");
+    		$("#nfcModal").modal();
+    		$("#nfcModal").on("shown.bs.modal", function () {
+    			$("#empNfc").focus();
+    		})
+    	}
+
+    	function nfcVal(e) {
+    		if(e.keyCode==13){
+    			var emp_nfc = $("#empNfc").val();
+    			$.ajax({
+    				url:"./nfcCheck.do",
+    				type:"post",
+    				data: {"emp_nfc":emp_nfc},
+    				success:function(data){
+    					if(data=="0"){
+    						alert("사용가능한 nfc번호 입니다.");
+    						$("#nfcModal").modal("hide");
+    						$("#nfc").val(emp_nfc);
+    					}else{
+    						alert("사용할 수 없는 nfc번호 입니다.");
+    						$("#empNfc").val("");
+    					}
+    				},
+    				error:function(){
+    					alert("잘못된 통신입니다.");
+    				}
+    			});
+    		}
+    	}           	
     </script>
 </body>
 </html>

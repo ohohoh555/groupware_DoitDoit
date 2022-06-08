@@ -12,4 +12,5 @@ public interface IEmpService {
 	public List<EmpVo> selEmpDetail(String emp_id);
 	public int resetPassword(String emp_id);
 	public int upEmp(Map<String, Object> map);
+	public int selEmpNfcCheck(String emp_nfc);
 }

@@ -14,10 +14,6 @@ public interface IAnnMapper {
 	public int insAnnual();
 	
 	//===매년 1월 1일
-	//생성 내역 초기화
-	public int delAnnAddReset();
-	//사용 내역 초기화
-	public int delAnnUseReset();
 	//모든 연차 초기화
 	public int updAnnualReset();
 	//올해 이전 입사한 사원 조회
@@ -63,5 +59,11 @@ public interface IAnnMapper {
 	public int updAnnualWorkOut(String emp_nfc);
 	//근무일
 	public int updAnnualWorkDays(String emp_nfc);
+	
+	//연차 사용
+	//연차 사용(insert)
+	public int insAnnUse(Map<String, Object> map);
+	//연차 사용(update)
+	public int updAnnualUse(Map<String, Object> map);
 	
 }
