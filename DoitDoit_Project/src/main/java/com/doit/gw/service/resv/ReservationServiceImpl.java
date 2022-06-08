@@ -53,5 +53,10 @@ public class ReservationServiceImpl implements IReservationService {
 	public boolean updResvDate(Map<String, Object> map) {
 		return mapper.updResvDate(map);
 	}
+	
+	@Override
+	public List<ReservationVo> selResvInsDate() {
+		return mapper.selResvInsDate();
+	}
 
 }

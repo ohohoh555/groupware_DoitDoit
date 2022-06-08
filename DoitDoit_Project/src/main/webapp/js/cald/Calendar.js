@@ -48,14 +48,16 @@ function selectAjax() {
 						modal.modal({backdrop: 'static', keyboard: false});
 						$("#id").val(info.event.id);
 						$("#modalTitle").val(info.event.title);
-						$("#modalContent").attr("placeholder", info.event.extendedProps.description);	
+						$("#modalContent").attr("placeholder", info.event.extendedProps.description);
+						$("#datetimepicker1_2").val(change(info.event._instance.range.start.toISOString()))
+						$("#datetimepicker2_2").val(change(info.event._instance.range.end.toISOString()))
 					}else{
 						detailModal.modal({backdrop: 'static', keyboard: false});
 						$("#id2").val(info.event.id);
 						$("#modalTitle2").val(info.event.title);
 						$("#modalContent2").val(info.event.extendedProps.description);
-						$("#start").val(info.event._instance.range.start)
-						$("#end").val(info.event._instance.range.end)
+						$("#start").val(change(info.event._instance.range.start.toISOString()))
+						$("#end").val(change(info.event._instance.range.end.toISOString()))
 					}
 					
 				},
@@ -104,13 +106,28 @@ function selectAjax() {
 		}
 	});
 }
+
+function change(date){
+	console.log(date)
+	var sp = date.split("T");
+	console.log(sp);
+	var sp2 = sp[1].split(":");
+	var sum = sp[0]+" "+sp2[0]+":"+sp2[1]
+	console.log(sum);
+	
+	return sum;
+}
+
 // form을 통한 일정 등록
 // 입력 값 : 작성자(writer), 일정명(title), 내용(content), 그룹(group), 일정 시작일(start), 일정 종료일(end)
 // 돌아오는 반환값(data)값 : boolean
 // true : 성공 / false : 실패
 function insertAjax() {
 	console.log(dateFormat(new Date))
-	console.log();
+	console.log(dateFormat($("#datetimepicker1").datetimepicker('getValue')));
+	console.log(dateFormat($("#datetimepicker2").datetimepicker('getValue')));
+	var cha = dateFormat($("#datetimepicker2").datetimepicker('getValue'))-dateFormat($("#datetimepicker1").datetimepicker('getValue'))
+	console.log(cha)
 	// 일정명 칸이 비었을 경우
 	if ($("#title").val() == "") {
 		alert("일정명을 입력해주세요")
@@ -122,6 +139,11 @@ function insertAjax() {
 	if ($("#content2").val() == "") {
 		alert("내용을 입력해주세요")
 		$("#content2").focus();
+		return false;
+	}
+	
+	if(cha>=70000){
+		alert("일정은 7일 이상 등록할 수 없습니다.")
 		return false;
 	}
 	
@@ -255,7 +277,7 @@ function updateContent() {
 }
 
 function deleteContent() {
-	var id = $("#id2").val();
+	var id = $("#id").val();
 	$.ajax({
 		url: "./deleteAjax.do",
 		type: "post",
@@ -264,11 +286,11 @@ function deleteContent() {
 		success: function(data) {
 			console.log(data);
 			if (data != true) {
-				$("#schedule-detail").modal("hide");
+				$("#schedule-edit").modal("hide");
 				console.log("실패");
 				return false;
 			} else {
-				$("#schedule-detail").modal("hide");
+				$("#schedule-edit").modal("hide");
 				console.log("성공")
 				selectAjax();
 			}

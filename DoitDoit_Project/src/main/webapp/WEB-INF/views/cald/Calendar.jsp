@@ -28,6 +28,22 @@
 	.koHolidays{
     	pointer-events: none;
     }
+    
+    .fc-daygrid-day-number{
+    	pointer-events: none;
+    }
+    
+    .fc-event-main-frame>.fc-event-title-container{
+    	text-overflow: ellipsis;
+    	margin-left: 48px;
+    }
+    
+   .fc-event-main-frame>.fc-event-time{
+   		position: absolute;
+    }
+    .koHolidays>.fc-event-main>.fc-event-main-frame>.fc-event-title-container{
+    	margin-left: 0px;
+    }
 </style>
 </head>
 <body>
@@ -95,6 +111,7 @@
 				            <div class="modal-footer">
 				                <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
 				                 <button type="button" class="btn btn-success" onclick="updateContent()">수정</button>
+				                 <input type="button" class="btn btn-danger" value="삭제" onclick="deleteContent()">
 				            </div>
 				        </div>
 				    </div>
@@ -128,7 +145,6 @@
 				            <!-- Modal footer -->
 				            <div class="modal-footer">
 				                <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
-				                <input type="button" class="btn btn-danger" value="삭제" onclick="deleteContent()">
 				            </div>
 				        </div>
 				    </div>

@@ -10,7 +10,6 @@ public class ReservationVo implements Serializable {
 	private String emp_id;
 	private String resv_title;
 	private String resv_writer;
-	private String resv_description;
 	private String resv_start;
 	private String resv_end;
 	private String resv_room_id;
@@ -39,12 +38,6 @@ public class ReservationVo implements Serializable {
 	}
 	public void setResv_writer(String resv_writer) {
 		this.resv_writer = resv_writer;
-	}
-	public String getResv_description() {
-		return resv_description;
-	}
-	public void setResv_description(String resv_description) {
-		this.resv_description = resv_description;
 	}
 	public String getResv_start() {
 		return resv_start;
@@ -79,18 +72,17 @@ public class ReservationVo implements Serializable {
 	@Override
 	public String toString() {
 		return "ReservationVo [resv_id=" + resv_id + ", emp_id=" + emp_id + ", resv_title=" + resv_title
-				+ ", resv_writer=" + resv_writer + ", resv_description=" + resv_description + ", resv_start="
+				+ ", resv_writer=" + resv_writer + ", resv_start="
 				+ resv_start + ", resv_end=" + resv_end + ", resv_room_id=" + resv_room_id + ", resv_room_title="
 				+ resv_room_title + ", resv_room_eventcolor=" + resv_room_eventcolor + "]";
 	}
-	public ReservationVo(String resv_id, String emp_id, String resv_title, String resv_writer, String resv_description,
+	public ReservationVo(String resv_id, String emp_id, String resv_title, String resv_writer,
 			String resv_start, String resv_end, String resv_room_id, String resv_room_title,
 			String resv_room_eventcolor) {
 		this.resv_id = resv_id;
 		this.emp_id = emp_id;
 		this.resv_title = resv_title;
 		this.resv_writer = resv_writer;
-		this.resv_description = resv_description;
 		this.resv_start = resv_start;
 		this.resv_end = resv_end;
 		this.resv_room_id = resv_room_id;

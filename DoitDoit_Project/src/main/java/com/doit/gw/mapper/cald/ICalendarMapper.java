@@ -25,4 +25,6 @@ public interface ICalendarMapper {
 	
 	public boolean delCaldContent(String cald_id);
 	
+	
+	
 }

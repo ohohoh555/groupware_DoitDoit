@@ -6,13 +6,13 @@
 	INSERT INTO ADMIN.RESERVATION
 	(
 		RESV_ID, EMP_ID, RESV_ROOM_ID,
-		RESV_TITLE, RESV_WRITER, RESV_DESCRIPTION,
+		RESV_TITLE, RESV_WRITER,
 		RESV_START, RESV_END
 	)
 	VALUES
 	(
 		RESERVATION_SEQ.NEXTVAL, #{emp_id}, #{resv_room_id},
-		#{resv_title}, #{resv_writer}, #{resv_description},
+		#{resv_title}, #{resv_writer},
 		TO_DATE(#{resv_start},'YYYY/MM/DD HH24:MI'), TO_DATE(#{resv_end},'YYYY/MM/DD HH24:MI')
 	)
 </insert>
@@ -23,7 +23,13 @@
 </select>
 
 <select id="selResvAll" parameterType="java.lang.String" resultType="ReservationVo">
-	<![CDATA[SELECT RESV_ID , EMP_ID , RESV_ROOM_ID , RESV_TITLE , RESV_WRITER , RESV_DESCRIPTION , RESV_START ,RESV_END 
+	<![CDATA[SELECT RESV_ID , EMP_ID , RESV_ROOM_ID , RESV_TITLE , RESV_WRITER , TO_CHAR(RESV_START,'YYYY-MM-DD HH24:MI')AS RESV_START,TO_CHAR(RESV_END,'YYYY-MM-DD HH24:MI') AS RESV_END
+				FROM RESERVATION r 
+					WHERE TO_CHAR(CURRENT_DATE, 'YYYYMMDD')<=TO_CHAR(RESV_START,'YYYYMMDD')]]>
+</select>
+
+<select id="selResvInsDate" resultType="ReservationVo">
+<![CDATA[SELECT TO_CHAR(RESV_START,'YYYYMMDDHH24MI')AS RESV_START ,TO_CHAR(RESV_END,'YYYYMMDDHH24MI')AS RESV_END 
 				FROM RESERVATION r 
 					WHERE TO_CHAR(CURRENT_DATE, 'YYYYMMDD')<=TO_CHAR(RESV_START,'YYYYMMDD')]]>
 </select>
@@ -31,8 +37,7 @@
 <update id="updResv" parameterType="java.util.Map">
 	<![CDATA[UPDATE RESERVATION 
 				SET RESV_START=TO_DATE(#{resv_start},'YYYY/MM/DD HH24:MI'),
-					RESV_END=TO_DATE(#{resv_end},'YYYY/MM/DD HH24:MI'),
-					RESV_DESCRIPTION=#{resv_description}
+					RESV_END=TO_DATE(#{resv_end},'YYYY/MM/DD HH24:MI')
 					WHERE RESV_ID = #{resv_id}
 					AND EMP_ID = #{emp_id}
 					AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=#{resv_end}]]>
@@ -50,7 +55,6 @@
 <delete id="delResv" parameterType="java.util.Map">
 	<![CDATA[DELETE FROM RESERVATION 
 				WHERE RESV_ID = #{resv_id}
-				AND TO_CHAR(CURRENT_DATE, 'YYYYMMDDHH24MI')<=#{resv_end}
 				AND EMP_ID=#{emp_id}]]>
 </delete>	
 
