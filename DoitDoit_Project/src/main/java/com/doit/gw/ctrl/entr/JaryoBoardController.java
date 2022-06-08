@@ -56,17 +56,23 @@ public class JaryoBoardController {
 	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, FileListVo fVo) throws IOException {
 		logger.info("@saveJaryo 자료글 저장하기 : {}", fVo);
 		
-		String serverPath = WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/");
+		String server = WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/");
 		
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY\\MM\\");
 		String nowFormat = now.format(formatter); 
 		
-		String backPath = "C:\\Users\\user\\git\\groupware_doit\\DoitDoit_Project\\src\\main\\resources\\back\\"+nowFormat;
+		String back = "C:\\Users\\user\\git\\groupware_doit\\DoitDoit_Project\\src\\main\\resources\\back\\"+nowFormat;
+		
+		File serverPath = new File(server);
+		File backPath = new File(back);
+		if(!serverPath.exists() || !backPath.exists()) {
+			serverPath.mkdirs();
+			backPath.mkdirs();
+		}
+		
 		
 		Iterator<String> itr =multipartRequest.getFileNames();
-		
-		
 		OutputStream outFile = null;
 		
 
@@ -84,8 +90,11 @@ public class JaryoBoardController {
 			System.out.println("파일 전체 경로 : "+fileFullPath);
 			System.out.println("파일 서버 경로 : "+serverPath);
 			
+			
+			
 			// 등록된 파일을 백업 파일로 복사
 			File backFile = new File(serverPath+saveFileName);
+			
 			outFile = new FileOutputStream(backFile);
 			outFile.write(bytes);
 			outFile.flush();
@@ -93,7 +102,7 @@ public class JaryoBoardController {
 			fVo.setFlist_originname(originFileName);
 			fVo.setFlist_size(saveFileSize);
 			fVo.setFlist_uuid(uid.toString());
-			fVo.setFlist_uploadpath(backPath);
+			fVo.setFlist_uploadpath(back);
 			
 			int cnt = service.insJaryo(fVo);
 			logger.info("@saveJaryo 자료글 입력 성공횟수:{}",cnt);
