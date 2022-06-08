@@ -22,6 +22,7 @@
 					<div class="rContent-full">
 						<h3>&lt;&lt;공지게시판&gt;&gt;</h3>
 						<hr>
+						<div id="FilDiv">
 						<table id="FildokTable" class="stripe">
 							<thead>
 								<tr>
@@ -51,24 +52,24 @@
 								</tr>
 							</tfoot>
 						</table>
-						
+						</div>
 						<hr>
 						<div id="EntrDiv">
 						<table id="EntrTable" class="stripe">
 							<thead>
 								<tr>
 									<th>No.</th>
-									<th>분류</th>
+									<th width="30px">분류</th>
 									<th>제목</th>
-									<th>작성자</th>
-									<th width="80px;">등록일</th>
-									<th>조회</th>
+									<th width="40px">작성자</th>
+									<th width="70px;">등록일</th>
+									<th width="25px ">조회</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="eVo" items="${eList}">
+								<c:forEach var="eVo" items="${eList}" varStatus="vs">
 									<tr>
-										<td>${eVo.eboard_no}</td>
+										<td>${vs.count}</td>
 										<td>${eVo.cgory_no}</td>
 										<td><a href="./OneBoard.do?eboard_no=${eVo.eboard_no}">${eVo.eboard_title}</a></td>
 										<td>${eVo.emp_name}</td>

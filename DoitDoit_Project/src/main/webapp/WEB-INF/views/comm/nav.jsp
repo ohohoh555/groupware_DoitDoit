@@ -21,6 +21,7 @@
                     <ul class="subMenu">
                         <li onclick="location.href='./entrBoard.do'"><span>공지게시판</span></li>
                         <li onclick="location.href='./jaryoBoard.do'"><span>자료게시판</span></li>
+                         <li onclick="location.href='./unifiedSearch.do'"><span>통합검색</span></li>
                     </ul>
                 </li>
                 <li onclick="location.href='./annual.do'"><span>연차현황</span><img class="menuIcon" src="./img/apro_32.png" alt=""></li>

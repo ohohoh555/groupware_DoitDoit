@@ -5,6 +5,8 @@ function adminJaryo(){
 //	$("#navGongji").removeClass("active");
 //	$("#navJaryo").addClass("active");
 //	$("#boardResult").html("");
+
+	var megaByte = 1024*1024;
 	
 	$.ajax({
 		url:"./selJaryoAllAdmin.do",
@@ -31,7 +33,7 @@ function adminJaryo(){
 				html += "<tr>";	
 				html += "<td><input type='checkbox' name='chk' value='"+value.eboard_no+"'></td>";		
 				html += "<td>"+value.flist_originname+"</td>";		
-				html += "<td>"+value.flist_size+"</td>";		
+				html += "<td>"+Math.round(value.flist_size/megaByte*100)/100+"MB</td>";		
 				html += "<td>"+value.emp_name+"</td>";		
 				html += "<td>"+value.eboard_delflag+"</td>";		
 				html += "<td>"+value.eboard_regdate+"</td>";		
@@ -44,6 +46,8 @@ function adminJaryo(){
 			$("#jaryoResult").html(html);
 			
 			$("#jaryoTable").DataTable({
+				lengthMenu: [ 5, 10, 15],
+			 displayLength: 10,
 				aoColumnDefs: [
 		          { 'bSortable': false, 'aTargets': [0,1] }
 				],

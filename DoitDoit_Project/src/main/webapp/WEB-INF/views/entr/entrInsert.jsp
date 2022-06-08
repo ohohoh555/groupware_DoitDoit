@@ -32,7 +32,7 @@
 								<tr>
 									<td>분류</td>
 									<td>
-										<select name="cgory_no" class="form-control" style="width: 100px;" onchange="selectCgory(this.value)">
+										<select name="cgory_no" class="form-control" style="width: 100px; float: left;" onchange="selectCgory(this.value)">
 											<option value="101">일반</option>
 											<option value="102">필독</option>
 											<option value="103">인사</option>
@@ -45,21 +45,25 @@
 									<td>제목</td>
 									<td><input type="text" name="eboard_title" id="title" class="form-control"></td>
 								</tr>
-								<tr>
+								<tr id="trDate" style="display: none;">
 									<td>일시</td>
 									<td>
 										<div style="float: left;">
 										<label>시작:</label>
-										<input type='datetime-local' class='form-control' name="cald_start" id="cald_start" style='width: 200px;' disabled>
+										<input type='datetime-local' class='form-control' name="cald_start" id="cald_start" style='width: 200px;'>
 										</div>
 
 										<div style="margin-left: 10px;">
 										<label>종료:</label>
-										<input type='datetime-local' class='form-control' name="cald_end" id="cald_end"" style='width: 200px;' disabled>
+										<input type='datetime-local' class='form-control' name="cald_end" id="cald_end"" style='width: 200px;'>
 										</div>
 									</td>
 								</tr>
-								<tr>
+								<tr id="trCald" style="display: none">
+									<td>내용</td>
+									<td><input type="text" name="cald_content" id="cald_content" class='form-control' ></td>
+								</tr>
+								<tr id="trEboard">
 									<td>내용</td>
 									<td>
 										<textarea name ="eboard_content" id="eboard_content"></textarea>
@@ -95,7 +99,7 @@ CKEDITOR.replace( 'eboard_content' ,{
     '여기에 글을 입력하거나 파일을 드래그해주세요...', 
 	filebrowserUploadUrl: "fileupload.do",
 	uploadUrl:"fileupload.do",
-     width : '750px',  // 입력창의 넓이, 넓이는 config.js 에서 % 로 제어
+     width : '730px',  // 입력창의 넓이, 넓이는 config.js 에서 % 로 제어
      height : '200px' 
 
 	}

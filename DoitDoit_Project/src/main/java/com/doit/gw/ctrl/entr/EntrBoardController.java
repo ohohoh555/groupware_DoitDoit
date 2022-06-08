@@ -60,6 +60,18 @@ public class EntrBoardController {
 		return data;
 	}
 	
+	@RequestMapping(value = "/FildocThree.do", method = RequestMethod.GET,
+					produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String FildocThree() {
+		logger.info("@FildocThree 공지게시판 필독3개보기");
+		List<EntrBoardVo> fList = service.selEboardFildocThree();
+		
+		Gson data = new GsonBuilder().create();
+		return data.toJson(fList);
+		
+	}
+	
 	@RequestMapping(value = "/OneBoard.do", method = RequestMethod.GET)
 	public String OneBoard(String eboard_no, Model model) {
 		logger.info("@OneBoard 공지게시글 상세조회 : {}", eboard_no);
@@ -84,19 +96,19 @@ public class EntrBoardController {
 	}
 	
 	@RequestMapping(value = "/insertFrm.do", method = RequestMethod.POST)
-	public String insertFrm(EntrBoardVo eVo) {
-		logger.info("@insertFrm 새글입력 및 저장 : {}", eVo);
-		String Cgory_no = eVo.getCgory_no();
-		String cald_start=eVo.getCald_start();
-		String cald_end = eVo.getCald_end();
+	public String insertFrm(/*EntrBoardVo eVo*/ @RequestParam Map<String, Object>map) {
+		logger.info("@insertFrm 새글입력 및 저장 : {}", map);
+		String cgory_no = (String) map.get("cgory_no");
+		String cald_start=(String) map.get("cald_start");
+		String cald_end = (String) map.get("cald_end");
 		int cnt=0;
-		if(Cgory_no.equals("302")) {
-			eVo.setCald_start(cald_start.replace("T", " "));
-			eVo.setCald_end(cald_end.replace("T", " "));
-			cnt = service.insEboardCald(eVo);
+		if(cgory_no.equals("302")) {
+			map.put("cald_start", cald_start.replace("T", " "));
+			map.put("cald_end", cald_end.replace("T", " "));
+			cnt = service.insEboardCald(map);
 			logger.info("@insertFrm 일정 등록 성공한 횟수: {}", cnt);
 		}else {
-			cnt = service.insEboardRoot(eVo);
+			cnt = service.insEboardRoot(map);
 			logger.info("@insertFrm 새글 입력에 성공한 횟수 : {}", cnt);
 		}
 
@@ -115,7 +127,8 @@ public class EntrBoardController {
 	public String modifyFrm(@RequestParam Map<String, Object> map) {
 		logger.info("@modifyFrm 수정된 내용 저장 : {}",map);
 		String cgory_no = (String) map.get("cgory_no");
-		System.out.println(cgory_no);
+		String eboard_no = (String) map.get("eboard_no");
+		System.out.println("카테고리"+ cgory_no+","+"글번호"+eboard_no);
 		if(cgory_no.equals("302")) {
 			int cnt1 = service.updEboardCald(map);
 			int cnt2=service.updEboardRoot(map);
@@ -125,7 +138,7 @@ public class EntrBoardController {
 			logger.info("@modifyFrm 게시글 수정완료:{}",cnt);
 		}
 		
-		return null;
+		return "redirect:/OneBoard.do?eboard_no="+eboard_no;
 	}
 
 

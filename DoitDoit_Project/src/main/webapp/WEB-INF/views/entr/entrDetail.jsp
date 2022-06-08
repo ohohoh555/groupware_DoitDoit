@@ -44,8 +44,8 @@
 							</tr>
 							<c:if test="${entrOne.cgory_no =='302'}">
 							<tr>
-								<td>일시</td>
-								<td>${entrOne.cald_start} ~ ${entrOne.cald_end}</td>
+								<td>일정</td>
+								<td>시작 : ${entrOne.cald_start} ~ 종료 : ${entrOne.cald_end}</td>
 							</tr>
 							</c:if>
 							<tr>
@@ -57,9 +57,12 @@
 						<div style="text-align: center;">
 						   <sec:authorize access="isAuthenticated()">
 					        <sec:authentication property="principal.emp_id" var="emp_id"/>
-	           					<c:if test="${emp_id eq entrOne.emp_id}">
-			           				<button onclick="modifyOne(${entrOne.eboard_no})" class="btn btn-default">수정</button>
-									<button onclick="hideOne(${entrOne.eboard_no})" class="btn btn-default">삭제</button>
+	           					<c:if test="${emp_id eq entrOne.emp_id && entrOne.cgory_no=='302'}">
+	           						<button onclick="hideOne(${entrOne.eboard_no})" class="btn btn-default">삭제</button>
+	           					</c:if>
+	           					<c:if test="${emp_id eq entrOne.emp_id && entrOne.cgory_no ne'302'}">
+	           						<button onclick="hideOne(${entrOne.eboard_no})" class="btn btn-default">삭제</button>
+	           						<button onclick="modifyOne(${entrOne.eboard_no})" class="btn btn-default">수정</button>
 	           					</c:if>
 	 			           </sec:authorize> 
 						<button onclick="javascript:history.back(-1)" class="btn btn-default">확인</button>

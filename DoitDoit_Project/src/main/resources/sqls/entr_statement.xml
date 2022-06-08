@@ -23,7 +23,7 @@
 				WHEN CGORY_NO='103' THEN '[인사]'
 				ELSE '[일정]' END AS CGORY_NO, 
 			EMP_ID,EMP_NAME, EBOARD_TITLE,
-			EBOARD_READCOUNT, EBOARD_REGDATE
+			EBOARD_READCOUNT, TO_CHAR(EBOARD_REGDATE, 'YYYY-MM-DD') EBOARD_REGDATE
 		FROM ENTRBOARD
 		WHERE CGORY_NO = #{cgory_no} AND EBOARD_DELFLAG ='N'
 		ORDER BY EBOARD_REGDATE DESC
@@ -103,32 +103,32 @@
 	</update>
 	
 	<!-- 사용자 공지게시판 게시글 입력 (일반,필독,인사)-->
-	<insert id="insEboardRoot" parameterType="EntrBoardVo">
+	<insert id="insEboardRoot" parameterType="java.util.Map">
 		INSERT INTO ENTRBOARD
 					(EBOARD_NO, GUBUN_NO, CGORY_NO,  
 					EMP_ID,EMP_NAME, EBOARD_TITLE, 
 					EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, EBOARD_DELFLAG)
-			VALUES((SELECT MAX(EBOARD_NO)+1 FROM ENTRBOARD), '100', #{cgory_no}, 
+			VALUES(ENTRYBOARD_SEQ.NEXTVAL, '100', #{cgory_no}, 
 					#{emp_id},#{emp_name} , #{eboard_title}, 
 					#{eboard_content}, 0, CURRENT_DATE, 'N')
 	</insert>
 	
 	<!-- 사용자 공지게시판 게시글 입력2 (일정)-->
-	<insert id="insEboardCald" parameterType="EntrBoardVo">
+	<insert id="insEboardCald" parameterType="java.util.Map">
 	INSERT INTO CALENDAR
 		(CALD_ID, CALD_START,CALD_END, CALD_COLOR)
 	VALUES
 		(SEQ_CALENDAR.NEXTVAL, TO_DATE(#{cald_start},'YYYY/MM/DD HH24:MI'),
 			TO_DATE(#{cald_end},'YYYY/MM/DD HH24:MI'),'red')
 	</insert>
-	<insert id="insCaldRoot" parameterType="EntrBoardVo">
+	<insert id="insCaldRoot" parameterType="java.util.Map">
 		INSERT INTO ENTRBOARD
 					(EBOARD_NO, GUBUN_NO, CGORY_NO,  
 					EMP_ID,CALD_ID,EMP_NAME, EBOARD_TITLE, 
 					EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, EBOARD_DELFLAG)
-			VALUES((SELECT MAX(EBOARD_NO)+1 FROM ENTRBOARD), '100', '302', 
+			VALUES(ENTRYBOARD_SEQ.NEXTVAL, '100', '302', 
 					#{emp_id},(SELECT MAX(CALD_ID) FROM CALENDAR) ,#{emp_name} , #{eboard_title}, 
-					#{eboard_content}, 0, SYSDATE, 'N')
+					#{cald_content}, 0, CURRENT_DATE, 'N')
 	</insert>
 	
 	<!-- 사용자 게시글 입력시 업로드 파일이 있을 경우 파일정보 저장 -->

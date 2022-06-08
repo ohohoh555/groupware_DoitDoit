@@ -71,9 +71,9 @@ public class EntrServiceImpl implements IEntrService {
 	}
 
 	@Override
-	public int insEboardRoot(EntrBoardVo eVo) {
-		logger.info("@insEboardRoot 사용자 게시글 입력 : {}", eVo);
-		return mapper.insEboardRoot(eVo);
+	public int insEboardRoot(Map<String, Object>map) {
+		logger.info("@insEboardRoot 사용자 게시글 입력 : {}",map);
+		return mapper.insEboardRoot(map);
 	}
 
 	@Override
@@ -96,11 +96,11 @@ public class EntrServiceImpl implements IEntrService {
 	}
 
 	@Override
-	public int insEboardCald(EntrBoardVo eVo) {
-		logger.info("@insEboardCald 사용자 일정 게시글 입력 : {}",eVo);
-		int cnt = mapper.insEboardCald(eVo);
+	public int insEboardCald(Map<String, Object>map) {
+		logger.info("@insEboardCald 사용자 일정 게시글 입력 : {}",map);
+		int cnt = mapper.insEboardCald(map);
 		logger.info("@캘린더에 일정 먼저 등록 성공 : {}", cnt);
-		return mapper.insCaldRoot(eVo);
+		return mapper.insCaldRoot(map);
 	}
 
 	@Override

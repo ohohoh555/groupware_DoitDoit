@@ -16,13 +16,13 @@
             <%@include file="../comm/header.jsp" %>
             <div id="content">
             <sec:authorize access="hasAnyRole('ROLE_ADMIN_BOARD','ROLE_ADMIN_INSA')">
-                <div id="rContent">
-					<div class="rContent-full">
+					<div id="adminContent">
 						<ul class="nav nav-tabs">
 							<li class="active" id="navGongji"><a href="./entrBoardAdmin.do">공지게시판</a></li>
 							<li id="navJaryo"><a href="./jaryoBoardAdmin.do">자료게시판</a></li>
 						</ul>
 						<br>
+						
 						<div>
 							<button onclick="javascript:location.href='./entrBoardAdmin.do'" class="btn btn-default">전체</button>
 							<button value="101" onclick="cgoryBoard(this.value)" class="btn btn-default">일반</button>
@@ -30,10 +30,10 @@
 							<button value="103" onclick="cgoryBoard(this.value)" class="btn btn-default">인사</button>
 							<button value="302" onclick="cgoryBoard(this.value)" class="btn btn-default">일정</button>
 						</div>
-						
+						<br>
 						<form action="#" method="post" id="entrFrm" onsubmit="return ChangEntrDel()">
 						<input type="submit" class="btn btn-success" value="숨김/보임" >
-						<br>
+						<hr>
 						<table id="entrTable" class="stripe">
 							<thead>
 								<tr>
@@ -48,8 +48,7 @@
 							</thead>
 						</table>
 						</form>
-					</div><!-- rContent-full 끝 -->
-                </div> <!-- rContent 끝 -->
+					</div>
             </sec:authorize>
             </div><!-- content 끝 -->
         </main>

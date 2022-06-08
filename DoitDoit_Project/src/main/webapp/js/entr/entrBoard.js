@@ -37,16 +37,18 @@ function cgoryAction(val){
 	console.log("cgoryAction 작동", val);
 	
 	$("#EntrTable").DataTable().destroy();
+	$("#EntrDiv").hide();
 	
 		$.ajax({
 			url:"./cgoryBoard.do?cgory_no="+val,
 			type:"get",
 			success:function(data){
-				console.log(data);
+			//	console.log(data);
+			$("#EntrDiv").show();
 				$('#EntrTable').DataTable({
 					data:data,
 				    columns: [
-				        { data: 'eboard_no' },
+				        { data: 'eboard_no', render:function(data,type,row,meta){return meta.row+1 } },
 				        { data: 'cgory_no' },
 				        { data: 'eboard_title',
 				        	render: function (data,type,row,meta) {
@@ -76,6 +78,7 @@ function cgoryAction(val){
 				     displayLength: 5,
 				     order:[ [ 4, "desc"]]
 				});
+				
 			},
 			error:function(){
 				alert("EboardCgory 통신실패");
@@ -125,10 +128,48 @@ function fildokAll(){
 	
 	$("#FildokTable tfoot>tr").remove();
 	$("#FildokTable>tfoot").append('<tr><td colspan="6" style="text-align: center;" onclick="fildokClose()">필독게시판 닫기</td></tr>');
-	$("#EntrDiv").remove();
+//	$("#EntrDiv").remove();
 
 }
 
 function fildokClose(){
-	location.href="./entrBoard.do";
+	console.log("필독게시판 닫기");
+	
+	$("#FildokTable").DataTable().destroy();
+
+	
+	$.ajax({
+		url:"./FildocThree.do",
+		data:"get",
+		success:function(data){
+//			console.log(data);
+			$("#FildokTable").DataTable({
+				
+				data:data,
+				columns: [
+					{data:"eboard_no", render: function (data,type,row,meta) {return "★"}},
+					{data:"cgory_no", render: function (data,type,row,meta) {return "[필독]"}},
+					{data:"eboard_title", render:function(data,type,row,meta){return '<a href="./OneBoardAdmin.do?eboard_no='+row.eboard_no+'">'+data+'</a>'}},
+					{data:"emp_name"},
+					{data:"eboard_regdate"},
+					{data:"eboard_readcount"}
+				],
+				lengthChange: false,
+				searching: false,
+				ordering: false,
+				info: false,
+				paging:false,
+				order:[ [ 4, "desc"]]
+			});
+	$("#FildokTable tfoot>tr").remove();
+	$("#FildokTable>tfoot").append(
+		'<tr><td colspan="6" style="text-align: center;"><ul><li onclick="fildokAll()">&lt;&lt;[필독]게시글 전체보기&gt;&gt;</li></ul></td></tr>'					
+	);
+	
+		},
+		error:function(){
+			alert("필독게시판 닫기 통신오류");
+		}
+
+	});
 }

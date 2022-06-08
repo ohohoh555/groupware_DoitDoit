@@ -3,6 +3,7 @@ function cgoryBoard(val){
 	console.log("cgoryBoard 작동", val);
 	
 	$("#entrTable").DataTable().destroy();
+
 	
 	$.ajax({
 		url:"./selEboardCgoryAdmin.do?cgory_no="+val,
