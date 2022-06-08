@@ -10,5 +10,7 @@ public interface ISignMapper {
 	public int insSign(SignVo signVo);
 	public List<Map<String, Object>> selSign(int emp_id);
 	public int updSign(SignVo signVo);
+	public int insDefaultSign(SignVo signVo);
+	
 
 }

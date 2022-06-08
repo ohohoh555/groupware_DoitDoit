@@ -22,11 +22,10 @@ DELETE FROM SIGN
 </update>
 
 <!-- 기본 디폴트 서명이미지로 초기화 -->
-<update id="updDefaultSign" parameterType="SignVo">
-UPDATE SIGN 
-	SET SIGN_IMG = (SELECT SIGN_IMG FROM SIGN s WHERE DOIT_EMP_ID = 1004),
-		SIGN_NAME = (SELECT SIGN_NAME FROM SIGN s WHERE DOIT_EMP_ID = 1004)
-	WHERE EMP_ID = #{emp_id}
-</update>
+<insert id="insDefaultSign" parameterType="SignVo">
+INSERT INTO ADMIN.SIGN
+(SIGN_NO, EMP_ID, SIGN_NAME, SIGN_IMG)
+VALUES(SEQ_SIGN.NEXTVAL, #{emp_id},(SELECT SIGN_NAME FROM SIGN s WHERE EMP_ID = 1004), (SELECT SIGN_IMG FROM SIGN s WHERE EMP_ID = 1004))
+</insert>
 
 </mapper>

@@ -23,8 +23,8 @@
                     <div class="rContent-normal-top" style="width: 780px; height: 300px; margin-top: 10px;">
                     <fieldset style="width:770px;">
 						<legend style="margin-bottom : 3px;">결재 대기 문서</legend>
-                    	<input type="button" onclick="myDoc()" value="상신">
-                    	<input type="button" onclick="allDoc()" value="송신">
+                    	<input type="button"  class="btn btn-default"  onclick="myDoc()" value="상신">
+                    	<input type="button"  class="btn btn-default"  onclick="allDoc()" value="송신">
                     	<input type="hidden" id="emp_id" value="${emp_id}">
 					</fieldset>
                     <div style="width: 774px; height: 235px; border: 1px solid black;margin-left:1px;">
@@ -49,14 +49,14 @@
                      <div class="rContent-normal-bottom" style="width: 780px; height: 460px;">
                       <fieldset style="width:770px;">
 						<legend style="margin-bottom : 3px;">결재 문서 조회</legend>
-						<select>
+						<select id="statusSelect">
 								<option>==== 선택 ====</option>
 								<option value="1">결재대기</option>
 								<option value="2">반려</option>
 								<option value="3">결재완료</option>
 								<option value="4">임시저장</option>
 							</select>
-                    		<input type="button" onclick="docClick()" value="선택">
+                    		<input type="button"  class="btn btn-default"  onclick="docClick()" value="선택">
 					</fieldset>
 					   <div style="width: 774px; height: 395px; border: 1px solid black;margin-left:1px;">
 					 <table id="approStatusList" class="cell-border dataTable">
@@ -174,8 +174,50 @@ function allDoc(){
 				} 
 			}	
 		}
-	
 	});
  }
+ 
+function docClick(){
+	var status = $("#statusSelect option:selected").val();
+	var emp_id = document.getElementById("emp_id").value;
+	console.log(status);
+	$.ajax({
+		url : "./statusDocList.do",
+		data : {
+			"appro_status_no" : status,
+			"emp_id" : emp_id
+		},
+		type : "GET",
+		async : true,
+		success : function(data){
+			console.log(data);
+			
+			var tbody = document.getElementById("statusDocList")	//제거하고자 하는 엘리먼트
+			while ( tbody.hasChildNodes() )
+			{
+				tbody.removeChild(tbody.firstChild );       
+			}
+			
+			var obj = JSON.parse(data);
+			var objlists = obj.lists;
+
+			for(let i=0; i<objlists.length; i++){
+				console.log(objlists[i]);
+				console.log(objlists[i].appro_empname);
+				html = '';
+				html += '<tr>';
+				html += '<td>'+(i+1)+'</td>';
+				html += '<td><a href="./selDocDetail.do?emp_id='+emp_id+'&appro_no='+objlists[i].appro_no+'">'+objlists[i].appro_no+'</td>';
+				html += '<td>'+objlists[i].appro_status+'</td>';
+				html += '<td>'+objlists[i].appro_title+'</td>';
+				html += '<td>'+objlists[i].appro_empname+'</td>'
+				html += '<td>'+objlists[i].appro_regdate+'</td>';
+				html += '</tr>';
+				$("#statusDocList").append(html);
+			}
+			
+		}
+	});
+} 
 </script>
 </html>

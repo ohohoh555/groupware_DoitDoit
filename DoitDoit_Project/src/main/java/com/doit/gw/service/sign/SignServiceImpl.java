@@ -36,5 +36,11 @@ public class SignServiceImpl implements ISignService {
 		logger.info("===== SignServiceImpl updSign 실행 : vo 값 : {} =====",signVo);
 		return mapper.updSign(signVo);
 	}
+
+	@Override
+	public int insDefaultSign(SignVo signVo) {
+		logger.info("===== SignServiceImpl insDefaultSign 실행 : vo 값 : {} =====",signVo);
+		return mapper.insDefaultSign(signVo);
+	}
 	
 }
