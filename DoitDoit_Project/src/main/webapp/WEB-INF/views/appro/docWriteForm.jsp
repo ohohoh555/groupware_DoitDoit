@@ -75,7 +75,7 @@ String today = sf.format(now);
 		</div>
 		<button style="margin-left: 5px; margin-right: 5px;" class="btn btn-danger" onclick="docSel()">선택</button>
 </div>
-<form action="./approval.do" method="post">
+<form action="./approval.do" method="post" onsubmit="return approval()"> 
 	<div style="margin-left: 3px;">
 	<input type="button" class="btn btn-info" data-toggle="modal" data-target="#jstree"value="결재선 선택">	
 	<input type="submit" class="btn btn-info" value="결재요청">
@@ -113,7 +113,7 @@ String today = sf.format(now);
 		<table>
 		<tr id="appro">
 		<td class="tableForm" rowspan="3" style="writing-mode: vertical-rl; text-orientation: upright;  width:30px;">결재라인</td>
-		<td class="tableForm">기안자</td>
+		<td class="tableForm" id="approGianja">기안자</td>
 		</tr>
 		<tr id="sign">
 		<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src=""><input type="hidden" id="imagename" value="${emp_id}" name="emp_id"></td>
@@ -134,11 +134,11 @@ String today = sf.format(now);
 		</tr>
 		<tr>
 		<td class="tableForm" >참조자</td>
-		<td width="800px;"><input type="text" name="appro_refer"></td>	
+		<td width="800px;"><input class="form-control" style="width: 700px;" type="text" name="appro_refer"></td>	
 		</tr>
 		<tr>
 		<td class="tableForm" >제목</td>
-		<td width="800px;"><input type="text" name="appro_title"></td>	
+		<td width="800px;"><input id="docTitle" class="form-control" style="width: 700px;" type="text" name="appro_title"></td>	
 		</tr>
 		<tr>
 		<td colspan="2">
@@ -157,13 +157,7 @@ String today = sf.format(now);
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
-           <%--  <sec:authorize access="isAuthenticated()">
-            	아이디 : <sec:authentication property="principal"/> ${principal} <br>
-            	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
-            	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>
-            	이름 : <sec:authentication property="Details" var="info"/>${info.emp_name}<br>
-            	권한 : <sec:authentication property="Authorities"/> ${Authorities} <br>
-            </sec:authorize> --%>
+         
             </div>
         </main>
     </div>
@@ -346,6 +340,26 @@ function draft(frm){
 	frm.action = './draft.do';
 	frm.submit();
 	return true;
+}
+
+function approval(){
+	console.log("문서입력 리턴 들어오는지");
+	var docTitle = document.getElementById("docTitle").value;
+	var approGianja = document.getElementById("approGianja");
+	var guyljaesun = approGianja.parentNode.lastChild.innerHTML; //결재자
+	
+	if(docTitle == "" && guyljaesun != "결재자"){
+		window.alert("제목과 결재선을 입력하세요!");        
+		return false;
+	}else if(guyljaesun != "결재자"){
+		window.alert("결재선을 지정하세요!");        
+		return false;
+	}else if(docTitle == ""){
+		window.alert("제목을 입력하세요!");        
+		return false;
+	}else{
+		return true;
+	}
 }
 </script> 
 </html>

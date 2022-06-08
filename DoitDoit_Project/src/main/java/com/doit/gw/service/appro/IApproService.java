@@ -27,5 +27,7 @@ public interface IApproService {
 	public int updApprovedApproLine(ApproVo approVo);
 	//결재 승인 : 마지막 결재자까지 승인 됐다면 문서상태 완료로 변경 
 	public int updApprovedAppro(int appro_line_no);
+	//완료 문서 조회(결재자 기준)
+	public List<ApproVo> selFinalDoc(int emp_id);
 
 }

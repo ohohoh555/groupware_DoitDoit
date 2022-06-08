@@ -79,5 +79,11 @@ public class ApproServiceImpl implements IApproService {
 		return mapper.updApprovedAppro(appro_line_no);
 	}
 
+	@Override
+	public List<ApproVo> selFinalDoc(int emp_id) {
+		logger.info("===== ApproServiceImpl selFinalDoc 실행 =====");
+		return mapper.selFinalDoc(emp_id);
+	}
+
 
 }
