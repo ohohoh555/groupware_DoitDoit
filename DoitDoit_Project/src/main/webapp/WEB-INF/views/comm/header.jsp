@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <body>
 	<header>
+		<sec:authentication property="principal" var="emp"/><input type="hidden" id="empN" value="${emp.emp_id}">
 		<a href="./gohome.do" id="headerLogo"><img alt="로고" src="./img/Doit_Logo.png"></a>
 		<a href=""><img alt="" src="./img/bellon32.png"></a>
 		<a href=""><img alt="" src="./img/bell32.png"></a>

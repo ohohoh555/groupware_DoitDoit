@@ -84,8 +84,8 @@
 	}
 	
 	#chatLog {
-	    height: 565px;
-	    overflow-y: auto;
+	    height: 572px;
+	    overflow-y: scroll;
 	    padding: 0px 10px;
 	}
 	
@@ -100,7 +100,7 @@
 	    margin-bottom: 5px;
 	}
 	
-	.msg {
+	.msg, .imageMsg {
 		height:100%;
 	    display: inline-block;
 	    border-radius: 15px;
@@ -114,11 +114,11 @@
 		margin-bottom: 5px;
 	}
 	
-	.anotherMsg > .msg {
+	.anotherMsg > .msg, .anotherMsg > .imageMsg {
 	    background-color: #f1f0f0;
 	}
 	
-	.myMsg > .msg {
+	.myMsg > .msg, .myMsg > .imageMsg {
 	    background-color: #0084FF;
 	    color: #fff;
 	}
@@ -128,12 +128,14 @@
 	    color: #fff;
 	}
 	
-	.msg{
+	.msg .imageMsg{
 		max-width: 200px;
-		white-space: pre-wrap;
+/* 		white-space: pre-wrap; */
 	}
 	
-	.msg > img{
+	.imageMsg > img{
+		max-width : 180px;
+		max-height : 180px;
 		margin: 0px auto;
 	}
 	
@@ -210,6 +212,10 @@
 												${i.chat_con}
 						                	</div>						             	
 										</c:forEach>
+										<div class="myMsg">
+												<span class="Name">김우연</span>
+												<span class="imageMsg"><img src="./chatFile/2022/6/9/5c498bea-7291-43c1-b229-1d91e1ce3c4e.png"></span>
+						                </div>
 					            	</div>
 								</div>
 								<div class="insChat">

@@ -17,6 +17,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
 <script type="text/javascript" src="./js/home.js"></script>
+<script type="text/javascript" src="./js/chat/chat.js"></script>
 <script type="text/javascript" src="./js/chat/chatJstree.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>

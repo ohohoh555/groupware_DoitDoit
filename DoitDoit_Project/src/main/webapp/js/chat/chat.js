@@ -3,6 +3,11 @@ var room_id;
 var emp_id;
 var user_name;
 
+//우연
+var susin;
+var barsin;
+var empArr;
+
 // 파일 중복 업로드 방지용 맵을 선언한다.
 //var map = new Map(); // Map.prototype(); 객체는 언제나 함수형태로 생성
 //파일 업로드
@@ -13,6 +18,9 @@ var k = 0;
 $(document).ready(function() {
 
 	$(".modal-body").load("./inviteJstree.do");
+	
+	//우연
+	var empN = $("#empN").val();
 
 	console.log("js실행");
 	var sock = new SockJS("/DoitDoit_Project/stompSocket");
@@ -94,7 +102,29 @@ $(document).ready(function() {
 			$("#members").html(mem.html);
 			aboutChatRoom(mem.memList);
 		});
+		
+		//우연
+		stomp.subscribe('/sub/alarm/'+empN, function(text){
+        	console.log(text.body)
+        	var hel = JSON.parse(text.body);
+         
+         	if(hel.type == "appr"){
+            	$("#textApp").text(hel.barsin+" 님이 결재를 요청하였습니다.")
+            	$("#textApp").slideDown();
+            	$("#textApp").delay(3000).slideUp();
+         	}
+      	});
+      
+		//우연      
+      	stomp.subscribe('/sub/approval/complet/'+empN,function(text){
+         	var hel = JSON.parse(text.body);
+         	console.log(hel);
+         	$("#textApp").text("결재가 완료되었습니다.")
+         	$("#textApp").slideDown();
+         	$("#textApp").delay(3000).slideUp();
+    	});
 	});
+	
 	// 채팅입력
 	$("#btnSend").on("click",function(){
 		chatSend();
@@ -163,6 +193,53 @@ $(document).ready(function() {
 		sendFileToServer(fd);
 	}
 });
+
+//우연 시작
+function sendEmp_No(empNo){
+   	$("#frClick").click(function(){
+ 		console.log("진짜 짜증나네"+empNo)
+ 		empArr = empNo;
+ 		onSendApprMessage();
+   });
+}
+
+
+function onSendApprMessage(){
+  	console.log(empArr[0])
+	susin = empArr[0];
+	barsin = $("#imagename").val();
+ 	stomp.send("/pub/alarm/"+susin,{},JSON.stringify({type:"appr",barsin:barsin,susin:susin}));
+}
+
+function gyuljaeClick2(empList){
+   	console.log("기안자 아이디 "+$("#gianja").val());
+   	console.log(empList);
+   	var json = JSON.parse(empList);
+   	console.log("JSON 파싱 후 ",json.approval)
+   	for(let i=0; i<json.approval.length; i++){
+      	if(json.approval[i].EMP_ID==$("#empN").val()){
+         	if(json.approval[i+1] !== undefined){
+            	susin = json.approval[i+1].EMP_ID;
+            	stomp.send("/pub/alarm/"+susin,{},JSON.stringify({type:"appr",barsin:$("#gianja").val(),susin:susin}));
+     		}else{
+        		stomp.send("/pub/apprMem/complet/"+$("#gianja").val(),{},JSON.stringify({barsin:$("#gianja").val()}));
+     		} 
+      	}
+	}
+}
+
+function onSendCompMessage(){
+   	stomp.send("/pub/Comp/"+susin,{},JSON.stringify({barsin:barsin,susin:susin}));
+}
+
+function disconn(){
+   	if(stomp != null){
+   	console.log("연결종료")
+      	client.send("/pub/logout",{},JSON.stringify({barsin:barsin}))
+      	client.disconnect();
+   	}
+}
+//우연 끝
 
 //채팅 컨트롤러로 보내는 영역
 function chatSend(){
