@@ -126,4 +126,19 @@ UPDATE APPROVAL
 	SET APPRO_STATUS_NO = 3 , APPRO_STATUS = '완료'
 		WHERE APPRO_LINE_NO = #{appro_line_no}
 </update>
+
+<!-- 결재반려 -->
+<!-- 결재반려 : json 업데이트 -->
+<update id="updReturnApproLine" parameterType="ApproVo">
+UPDATE APPROVAL_LINE 
+	SET APPRO_LINE =#{appro_line} 
+		WHERE APPRO_LINE_NO = #{appro_line_no}
+</update>
+<!-- 결재반려 : 문서상태 업데이트 -->
+<update id="updReturnAppro" parameterType="ApproVo">
+UPDATE APPROVAL 
+	SET APPRO_STATUS_NO = 2 , APPRO_STATUS = '반려' , APPRO_RETURNREASON = #{appro_returnreason}
+		WHERE APPRO_LINE_NO = #{appro_line_no} 
+</update>
+
 </mapper>

@@ -243,6 +243,7 @@ function gyuljae(){
 	console.log("------");
 	console.log(emps);
 
+	sendEmp_No(emps);
 	
 	$.ajax({
 		url : "./gyuljae.do",

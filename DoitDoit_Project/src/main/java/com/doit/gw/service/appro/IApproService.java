@@ -29,5 +29,9 @@ public interface IApproService {
 	public int updApprovedAppro(int appro_line_no);
 	//완료 문서 조회(결재자 기준)
 	public List<ApproVo> selFinalDoc(int emp_id);
+	//결재 반려 : 결재라인 CLOB 업데이트
+	public int updReturnApproLine(ApproVo approVo);
+	//결재 반려 : 결재상태 반려로 변경 
+	public int updReturnAppro(ApproVo approVo);
 
 }
