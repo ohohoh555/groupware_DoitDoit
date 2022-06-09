@@ -140,9 +140,17 @@
 	}
 	
 	.Name {
-	    font-size: 12px;
+	    font-size: 15px;
 	    display: block;
 	}
+	
+	.saveFile > a{
+		font-size: 12px;
+	    display: block;
+		margin-right: 10px;
+		color: black;
+	}
+	
 	/* 채팅방 멤버 리스트 */
 	.memList{
 		font-size: 20px; 
@@ -189,7 +197,7 @@
 														<button type="button" class="close" data-dismiss="modal">&times;</button>
 														<h4>채팅방 초대</h4>
 													</div>
-													<div class="modal-body">
+													<div class="invite-modal-body">
 														
 													</div>
 													<div class="mod-footer">
@@ -212,9 +220,12 @@
 												${i.chat_con}
 						                	</div>						             	
 										</c:forEach>
-										<div class="myMsg">
-												<span class="Name">김우연</span>
-												<span class="imageMsg"><img src="./chatFile/2022/6/9/5c498bea-7291-43c1-b229-1d91e1ce3c4e.png"></span>
+<!-- 										<div class="myMsg"> -->
+<!-- 												<span class="Name">김우연</span> -->
+<!-- 												<span class="imageMsg"> -->
+<!-- 													<img src="./chatFile/2022/6/9/5c498bea-7291-43c1-b229-1d91e1ce3c4e.png"> -->
+<!-- 												</span> -->
+<!-- 												<span class="Name"><a href="./download.do?path=">저장</a> <a href="#">다른 이름으로 저장</a></span> -->
 						                </div>
 					            	</div>
 								</div>

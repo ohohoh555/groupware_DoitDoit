@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -254,9 +255,14 @@ public class ChatController {
 				String html = "";
 				html += "<span class=\"Name\">"+user_name+"</span>";
            		html += "<span class=\"imageMsg\">";
-           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
+           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" 
+           						+ date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
+           						+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
             	html += "</span>";
-            	html += "<span class=\"Name\"><a href=\"#\">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
+            	html += "<span class=\"saveFile\"><a href="+date.getYear() +"/" + 
+            				date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
+            				+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+
+            				">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
             	
             	map.put("html", html);
 			} catch (Exception e) {
@@ -272,6 +278,27 @@ public class ChatController {
 		}
 		
 		return map;
+	}
+	
+	@RequestMapping( value = "/download.do", method = RequestMethod.GET )
+	public void fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws FileNotFoundException {
+		logger.info("@ChatController fileDownload {}", path);
+		
+		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/chatFIle");
+		File file = new File(realPath + "/" + path);
+		
+		String orignNM = path.substring(path.lastIndexOf("/"), path.lastIndexOf("."));
+		
+		logger.info("originNm : {} / file : {}", orignNM, file);
+		
+//		byte[] bytes = FileCopyUtils.copyToByteArray(file);
+		
+//		resp.setHeader("Content-Disposition","attachment; filename=\""+originNM+"\"");
+//		resp.setContentLength(bytes.length);
+//		resp.setContentType("application/octet-stream");
+//		
+//		return bytes;
+		
 	}
 	
 	//채팅 저장

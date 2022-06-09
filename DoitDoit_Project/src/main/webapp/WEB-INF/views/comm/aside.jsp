@@ -35,7 +35,7 @@
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
 								<h4>채팅방 생성</h4>
 							</div>
-							<div class="mod-body">
+							<div class="create-modal-body">
 								
 							</div>
 							<div class="mod-footer">
