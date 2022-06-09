@@ -68,6 +68,7 @@ String today = sf.format(now);
 <div style="float: left;">
 		<div style="float: left;" >
 		<select class="form-control" style="width: 200px;" id="docFormSelect">
+			<option selected="selected" value="DOC0000">===폼 선택===</option>
 			<option value="DOC0001">휴가신청서</option>
 			<option value="DOC0002">교육훈련신청서</option>
 			<option value="DOC0003">증명서신청서</option>
@@ -347,15 +348,28 @@ function approval(){
 	var docTitle = document.getElementById("docTitle").value;
 	var approGianja = document.getElementById("approGianja");
 	var guyljaesun = approGianja.parentNode.lastChild.innerHTML; //결재자
+	var docForm = $("#docFormSelect option:selected").val();
 	
-	if(docTitle == "" && guyljaesun != "결재자"){
-		window.alert("제목과 결재선을 입력하세요!");        
+	if(docTitle == "" && guyljaesun != "결재자" && docForm == "DOC0000"){
+		window.alert("필수값을 입력해주세요 \n 필수 값 :(제목/결재선/폼 양식) 을 입력해주세요!");        
+		return false;
+	}else if(docTitle == "" && guyljaesun != "결재자"){
+		window.alert("필수값을 입력해주세요 \n (제목/결재선) 을 입력해주세요!");        
+		return false;
+	}else if(docTitle == "" && docForm == "DOC0000"){
+		window.alert("필수값을 입력해주세요 \n (제목/폼 양식) 을 입력해주세요!");        
+		return false;
+	}else if(guyljaesun != "결재자" && docForm == "DOC0000"){
+		window.alert("필수값을 입력해주세요 \n (결재선/폼 양식) 을 입력해주세요!");        
 		return false;
 	}else if(guyljaesun != "결재자"){
 		window.alert("결재선을 지정하세요!");        
 		return false;
 	}else if(docTitle == ""){
 		window.alert("제목을 입력하세요!");        
+		return false;
+	}else if(docForm == "DOC0000"){
+		window.alert("폼 양식을 선택하세요!");        
 		return false;
 	}else{
 		return true;

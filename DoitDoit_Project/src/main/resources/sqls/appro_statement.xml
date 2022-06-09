@@ -12,8 +12,8 @@
 EMP_ID, APPRO_EMPNAME, APPRO_TITLE, 
 APPRO_CONTENT,  APPRO_STATUS, APPRO_STATUS_NO, 
 APPRO_TYPE, APPRO_REFER)
-VALUES('DOIT-'||TO_CHAR(SYSDATE,'YYYYMMDD')||CASE WHEN SEQ_APPROVAL.NEXTVAL <10 THEN '0'||SEQ_APPROVAL.NEXTVAL ELSE ''||SEQ_APPROVAL.NEXTVAL END, #{appro_line_no},#{doc_form_no}
-,#{emp_id}, (SELECT EMP_NAME FROM EMP e WHERE EMP_ID = #{emp_id}),#{appro_title},
+VALUES('DOIT-'||TO_CHAR(SYSDATE,'YYYYMMDD')||CASE WHEN SEQ_APPROVAL.NEXTVAL <10 THEN '0'||SEQ_APPROVAL.NEXTVAL ELSE ''||SEQ_APPROVAL.NEXTVAL END, #{appro_line_no},
+#{doc_form_no},#{emp_id}, (SELECT EMP_NAME FROM EMP e WHERE EMP_ID = #{emp_id}),#{appro_title},
  #{appro_content}, '결재대기', 1, '상신', #{appro_refer})
  	]]>
  	</insert>
