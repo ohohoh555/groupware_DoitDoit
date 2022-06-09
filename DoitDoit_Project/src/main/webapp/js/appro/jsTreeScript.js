@@ -270,15 +270,18 @@ function lineClear(){
 	console.log(empParent);
 	console.log(empParent.parentNode);
 	
+	if(approChild.length == 2){
+		alert("초기화 할 결재자가 없습니다");
+	}else{
 	for(let i= 0; i < empParent.length; i++){
 	$(".empList").remove();
 	}
 	
-	for(let i=0; i<approChild.length; i++){
+	for(let i=0; i<approChild.length-1; i++){
 			$("#appro").children().last().remove();
 			$("#sign").children().last().remove();
 			$("#name").children().last().remove();
 	}
 	deSel();
-	
+	}
 }
