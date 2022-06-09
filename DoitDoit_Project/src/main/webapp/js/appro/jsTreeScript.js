@@ -10,7 +10,7 @@ $(function() {
 		dataType : "json",
 		success : function(jsondata) {
 			createData(jsondata);
-			console.log(jsondata);
+	//		console.log(jsondata);
 		},
 		error : function() {
 			alert("통신 오류 입니다");
@@ -135,8 +135,8 @@ function setDisabled(isc,row){
 
 function sel() {
 
-console.log("sel이 동작되는지");
-console.log(empNo);
+//console.log("sel이 동작되는지");
+//console.log(empNo);
 	if(empNo[0].length >= 3){	
 		//해당 id값의 rank를 찾음
 		rank = findLiRank(empNo);
@@ -160,8 +160,8 @@ console.log(empNo);
 			}
 		});
 		
-		console.log(empLists.length);
-		console.log(empNo);
+//		console.log(empLists.length);
+//		console.log(empNo);
 		empNo = "0";
 	}else if(empNo[0].length < 3){
 		alert('사원을 선택해 주세요.');
@@ -189,7 +189,7 @@ function deSel(){
 		});
 	});
 	
-	console.log("최고 rank는 ", rank);
+//	console.log("최고 rank는 ", rank);
 	
 	var isc;
 	$.each($("ul>li>ul>li"), function(idx, row) {
@@ -200,7 +200,7 @@ function deSel(){
 
 function gyuljaeClick(){
 	var empLists = $(".empList");
-		console.log(empLists.length); 
+//		console.log(empLists.length); 
 		for(var i=0; i<empLists.length; i++ ){
 			$("#appro").append('<td class="tableForm">결재자</td>');
 			$("#sign").append('<td height="70px;">&nbsp;&nbsp;</td>');
@@ -216,8 +216,8 @@ function gyuljae(){
 
 	$.each($(".empList"), function(idx,row){
 		$.each(empData, function(idxs,rows){
-			 console.log("------");
-			 console.log(empData);
+//			 console.log("------");
+//			 console.log(empData);
 			if($(row).text() == rows.text){
 				emps.push(rows.id);
 				emps.push(rows.text);
@@ -228,8 +228,8 @@ function gyuljae(){
 		});
 	});
 	
-	console.log("------");
-	console.log(emps);
+//	console.log("------");
+//	console.log(emps);
 
 	sendEmp_No(emps);
 	
@@ -239,15 +239,15 @@ function gyuljae(){
 		data : "emps="+emps,
 		dataType : "text",
 		success : function(isc) {
-			console.log(isc);
+//			console.log(isc);
 			if(isc == null){
 				alert("전송 실패");
 			}else{
 				alert("전송 성공");
-				console.log(emps);
-				console.log(isc);
+//				console.log(emps);
+//				console.log(isc);
 				document.getElementById("selList").value = isc;
-				console.log(document.getElementById("selList").value);
+//				console.log(document.getElementById("selList").value);
 			}
 		},
 		error : function() {
@@ -262,13 +262,13 @@ function lineClear(){
 	var approChild = document.getElementById("appro").children;
 	
 	var selEmpFind = document.getElementById("selEmp");
-	console.log(selEmpFind.children);
+//	console.log(selEmpFind.children);
 	
-	console.log(selEmpFind.children.childNodes);
+//	console.log(selEmpFind.children.childNodes);
 	
 	var empParent = document.getElementsByClassName("empList");
-	console.log(empParent);
-	console.log(empParent.parentNode);
+//	console.log(empParent);
+//	console.log(empParent.parentNode);
 	
 	if(approChild.length == 2){
 		alert("초기화 할 결재자가 없습니다");

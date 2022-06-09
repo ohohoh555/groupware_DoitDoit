@@ -148,14 +148,12 @@ String today = sf.format(now);
 			<h4>결재승인</h4>
 			</div>
 			    <div class="modal-body" id="approModalbody">
-			  <!--   <form action="post" id="frmApproClick"> -->
 			    <div id="gyuljaeSign" >
 			    <div style="width: 100px; height: 100px; border:1px solid black; border-radius: 10px;">
 			    	 <img style=" width: 90px; height: 90px; margin: 5px; " id="gyuljaeSignImg" alt="" src="">
 			    </div>
 			    	
 			    </div>
-		<!-- 	    </form> -->
 			    </div>
 		</div>
 	</div>
@@ -187,7 +185,7 @@ String today = sf.format(now);
 </body>
 <script type="text/javascript">
 window.onload = function viewImg(){
-	console.log("뷰이미지 셀렉트 함수 시작");
+//	console.log("뷰이미지 셀렉트 함수 시작");
 	var emp_id = document.getElementById("gianja").value;
 	$.ajax({
 		url :"./viewImg.do?",
@@ -238,7 +236,7 @@ function viewApproLine(){
 $("#approModalbody").load(gyuljaeSignClick());
 		
 function gyuljaeSignClick(){
-	console.log("결재자 승인모달");
+//	console.log("결재자 승인모달");
 	$.ajax({
 		url : "./viewImg.do?",
 		data : {
@@ -259,9 +257,9 @@ function gyuljaeSignClick(){
 }
 
 function gyuljaeClick(){
-	console.log("결재선택 시작");
-	console.log(approlineList);
-	console.log(${aVo.appro_line_no });
+//	console.log("결재선택 시작");
+//	console.log(approlineList);
+//	console.log(${aVo.appro_line_no });
 	
 	gyuljaeClick2(approlineList);
 	
@@ -275,8 +273,8 @@ function gyuljaeClick(){
 		type : "GET",
 		async : true,
 		success : function(data){
-			console.log("아작스 성공했는지~~")
-			console.log(data)
+	//		console.log("아작스 성공했는지~~")
+	//		console.log(data)
 			if(data == "true"){
 				alert("승인되었습니다!");
 				location.href="./approMain.do";
@@ -293,12 +291,10 @@ function returnAppro(){
 	var returnList = new Array();
 	
 	chkList.forEach(function(ch){
-		console.log(ch.parentNode.lastChild.innerHTML);
+//		console.log(ch.parentNode.lastChild.innerHTML);
 		returnList.push(ch.parentNode.lastChild.innerHTML); 
 	})
-		console.log("for문 밖의 : ",returnList);
-		console.log(typeof returnList);
-		console.log(returnList.toString());
+//		console.log(returnList.toString());
 	$.ajax({
 		url : "./guyljaejaReturn.do",
 		data : {
@@ -310,7 +306,7 @@ function returnAppro(){
 		type : "GET",
 		async : true,
 		success : function(data){
-			console.log(data);
+	//		console.log(data);
 			if(data == "true"){
 				alert("반려되었습니다!");
 				location.href="./approMain.do";
@@ -321,7 +317,7 @@ function returnAppro(){
 	
 //완료문서 pdf출력
 function docToPdf() {
-	console.log("pdf시작");
+//	console.log("pdf시작");
 	var pdfToDoc = document.getElementsByClassName("rContent-normal-top")[0];
 //	console.log(pdfToDoc);
 	html2canvas(pdfToDoc).then(function(canvas) {
