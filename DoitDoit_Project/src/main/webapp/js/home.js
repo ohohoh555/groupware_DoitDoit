@@ -40,15 +40,9 @@ $(document).ready(function(){
 		}
 	});		
 
-	$(".mod-body").load("./createJstree.do");
-	
-	
+	$(".create-modal-body").load("./createJstree.do");
 	
 	eboardResent();
-	
-	
-	
-	
 });
 
 function menuOn(){

@@ -17,7 +17,7 @@ var k = 0;
 
 $(document).ready(function() {
 
-	$(".modal-body").load("./inviteJstree.do");
+	$(".invite-modal-body").load("./inviteJstree.do");
 	
 	//우연
 	var empN = $("#empN").val();
