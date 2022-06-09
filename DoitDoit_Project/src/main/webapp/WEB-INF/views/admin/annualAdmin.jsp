@@ -27,36 +27,38 @@
 		            </select>
 <!-- 		            </form> -->
             	<hr style="border: solid 1px #6667AB;">
-            	<table id="annualTable" class="table table-bordered" style="text-align: center;">
-            		<thead>
-            			<tr>
-            				<th  style="text-align: center;" data-orderable="false"><input type="checkbox" id="chkAll" onclick="checkAll(this.checked)"></th>
-            				<th  style="text-align: center;">NO</th>
-            				<th  style="text-align: center;" data-orderable="false">부서</th>
-            				<th  style="text-align: center;">사원번호</th>
-            				<th  style="text-align: center;">이름</th>
-            				<th  style="text-align: center;" data-orderable="false">직급</th>
-            				<th  style="text-align: center;" data-orderable="false">발생연차</th>
-            				<th  style="text-align: center;" data-orderable="false">사용연차</th>
-            				<th  style="text-align: center;" data-orderable="false">잔여연차</th>
-            			</tr>
-            		</thead>
-            		<tbody >
-            			<c:forEach var="annualVo" items="${lists}" varStatus="vs">
-            				<tr>
-            					<td><input type="checkbox" name="chk" value="${annualVo.emp_id}" onclick="checkEmp()"></td>
-            					<td>${vs.count}</td>
-            					<td>${annualVo.dept_name}</td>
-            					<td>${annualVo.emp_id}</td>
-            					<td>${annualVo.emp_name}</td>
-            					<td>${annualVo.rank_name}</td>
-            					<td>${annualVo.ann_add}</td>
-            					<td>${annualVo.ann_use}</td>
-            					<td>${annualVo.ann_rest}</td>
-            				</tr>
-            			</c:forEach>
-            		</tbody>
-            	</table>
+            	<div style="height: 60%;">
+	            	<table id="annualTable" class="table table-bordered" style="text-align: center;">
+	            		<thead>
+	            			<tr>
+	            				<th  style="text-align: center;" data-orderable="false"><input type="checkbox" id="chkAll" onclick="checkAll(this.checked)"></th>
+	            				<th  style="text-align: center;">NO</th>
+	            				<th  style="text-align: center;" data-orderable="false">부서</th>
+	            				<th  style="text-align: center;">사원번호</th>
+	            				<th  style="text-align: center;">이름</th>
+	            				<th  style="text-align: center;" data-orderable="false">직급</th>
+	            				<th  style="text-align: center;" data-orderable="false">발생연차</th>
+	            				<th  style="text-align: center;" data-orderable="false">사용연차</th>
+	            				<th  style="text-align: center;" data-orderable="false">잔여연차</th>
+	            			</tr>
+	            		</thead>
+	            		<tbody >
+	            			<c:forEach var="annualVo" items="${lists}" varStatus="vs">
+	            				<tr>
+	            					<td><input type="checkbox" name="chk" value="${annualVo.emp_id}" onclick="checkEmp()"></td>
+	            					<td>${vs.count}</td>
+	            					<td>${annualVo.dept_name}</td>
+	            					<td>${annualVo.emp_id}</td>
+	            					<td><a href="./annualAdminDetail.do?emp_id=${annualVo.emp_id}">${annualVo.emp_name}</a></td>
+	            					<td>${annualVo.rank_name}</td>
+	            					<td>${annualVo.ann_add}</td>
+	            					<td>${annualVo.ann_use}</td>
+	            					<td>${annualVo.ann_rest}</td>
+	            				</tr>
+	            			</c:forEach>
+	            		</tbody>
+	            	</table>
+            	</div>
             	<hr style="border: solid 1px #6667AB;">
 	            <button class="btn btn-default" style="float: right;" onclick="addModal()">연차 부여</button>
             	</div>  
@@ -77,20 +79,20 @@
 	        <form action="./annualAdd.do" method="post" id="frmAnn">
 	        	<table class="table table-bordered" style="height: 300px;">
 	        		<tr>
-		       			<th style="text-align: center; color: white; background-color: #6667AB">사원 번호</th>
-		       			<td style="text-align: center;">
+		       			<th style="text-align: center; color: white; background-color: #6667AB; vertical-align: middle;">사원 번호</th>
+		       			<td style="text-align: center; vertical-align: middle;">
 			      			<input type="text" id="empId" name="emp_id" readonly style="width: 550px; background-color: white; border: 1px solid black; font-size: 13pt;">
 		       			</td>
 	        		</tr>
 	        		<tr>
-		       			<th style="text-align: center; color: white; background-color: #6667AB">연차 수</th>
-		       			<td style="text-align: center;">
+		       			<th style="text-align: center; color: white; background-color: #6667AB; vertical-align: middle;">연차 수</th>
+		       			<td style="text-align: center; vertical-align: middle;">
 			      			<input type="text" id="annDays" name="ann_add_days" style="width: 550px; background-color: white; border: 1px solid black; font-size: 13pt;">
 		       			</td>
 	        		</tr>
 	        		<tr>
-	        			<th style="text-align: center; color: white; background-color: #6667AB">연차 내용</th>
-	        			<td style="text-align: center;">
+	        			<th style="text-align: center; color: white; background-color: #6667AB; vertical-align: middle;">연차 내용</th>
+	        			<td style="text-align: center; vertical-align: middle;">
 			      			<textarea id="annContent" name="ann_add_content" rows="5" cols="59" style="font-size: 13pt;"></textarea>
 			      			<input type="hidden" name="dept_no" value="${dept_no}">
 	        			</td>

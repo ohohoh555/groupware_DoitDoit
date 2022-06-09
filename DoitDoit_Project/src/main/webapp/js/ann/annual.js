@@ -90,12 +90,10 @@ $(document).ready( function () {
 
 function checkAll(bool){
 	var chks = $("input[name='chk']");
-//	check();
 	for(var i=0; i<chks.length; i++){
 		chks[i].checked = bool;
 	}
 }
-
 
 function checkEmp(){
 	var chks = $("input[name='chk']:checked");
@@ -103,7 +101,11 @@ function checkEmp(){
 	chks.each(function(){
 		arrChk.push($(this).val());
 	});
-	console.log(arrChk);	
+	if(arrChk.length == 5){
+		$("#chkAll").prop("checked", true);
+	}else{
+		$("#chkAll").prop("checked", false);
+	}
 	return arrChk;
 }
 
@@ -120,7 +122,6 @@ function addModal(){
 function annAdd(){
 	var annContent = $("#annContent").val();
 	var annDays = $("#annDays").val();
-	console.log(annDays);
 	if(annContent == ""){
 		alert("연차 내용을 입력해 주세요.");
 	}else if(isNaN(annDays)){

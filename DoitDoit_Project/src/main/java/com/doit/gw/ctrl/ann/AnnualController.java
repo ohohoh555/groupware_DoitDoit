@@ -50,6 +50,18 @@ public class AnnualController {
 		model.addAttribute("dept_no", dept_no);
 		return "/admin/annualAdmin";
 	}
+	
+	/*
+	 * 관리자 연차 상세 조회
+	 */
+	@RequestMapping(value = "/annualAdminDetail.do", method = RequestMethod.GET)
+	public String annualAdminDetail(String emp_id, Model model) {
+		List<AnnAddVo> annAddVo = service.selAnnAddEmp(emp_id);
+		List<AnnUseVo> annUseVo = service.selAnnUseEmp(emp_id);
+		model.addAttribute("annAddVo", annAddVo);
+		model.addAttribute("annUseVo", annUseVo);
+		return "/admin/annualAdminDetail";
+	}
 
 	/*
 	 * 관리자 연차 부여
@@ -112,10 +124,15 @@ public class AnnualController {
 			if(iscNfc == 0) {
 				return "0";				
 			}else {
-				service.updAnnualWorkIn(emp_nfc);
-				service.updAnnualWorkOut(emp_nfc);
-				service.updAnnualWorkDays(emp_nfc);
-				return "출/퇴근 등록";				
+				AnnualVo vo = service.selAnuualWorkIn(emp_nfc);
+				logger.info("AnnualController annualWork 출근확인 : {}", vo);
+				if(vo==null) {
+					service.updAnnualWorkIn(emp_nfc);
+					return "출근";				
+				}else {
+					service.updAnnualWorkOut(emp_nfc);
+					return "퇴근";				
+				}
 			}
 		}
 	}

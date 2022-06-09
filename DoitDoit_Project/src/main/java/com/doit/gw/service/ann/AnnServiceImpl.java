@@ -34,45 +34,57 @@ public class AnnServiceImpl implements IAnnService {
 	}
 
 	@Override
-	public int updAnnualReset() {
-		logger.info("AnnServiceImpl updAnnualReset 연차 초기화");
-		return mapper.updAnnualReset();
+	public List<EmpVo> selEmpYear() {
+		logger.info("AnnServiceImpl selEmpYear 입사 1년차 이상 사원 조회 : {}");
+		return mapper.selEmpYear();
 	}
-
+	
 	@Override
-	public List<EmpVo> selEmpYear(String date) {
-		logger.info("AnnServiceImpl selEmpYear 올해 이전에 입사한 사원 조회 : {}", date);
-		return mapper.selEmpYear(date);
+	public int updAnnualReset(Map<String, String[]> emp_ids) {
+		logger.info("AnnServiceImpl updAnnualReset 입사 1년차 이상 사원 연차 초기화 : {}", emp_ids);
+		return mapper.updAnnualReset(emp_ids);
 	}
 
 	@Override
 	public int insAnnAddYear(String emp_id) {
-		logger.info("AnnServiceImpl insAnnAddYear 올해 이전에 입사한 사원 연차(15개)부여(insert) : {}", emp_id);
+		logger.info("AnnServiceImpl insAnnAddYear 입사 1년차 이상 사원 연차(15개) 부여(insert) : {}", emp_id);
 		return mapper.insAnnAddYear(emp_id);
 	}
 
 	@Override
 	public int updAnnualYear(Map<String, String[]> map) {
-		logger.info("AnnServiceImpl updAnnualYear 올해 이전에 입사한 사원 연차(15개)부여(update) : {}", map);
+		logger.info("AnnServiceImpl updAnnualYear 입사 1년차 이상 사원 연차(15개) 부여(update) : {}", map);
 		return mapper.updAnnualYear(map);
 	}
 
 	@Override
-	public List<EmpVo> selEmpMonth(Map<String, Object> map) {
-		logger.info("AnnServiceImpl selEmpMonth 올해 입사한 사원 조회 : {}", map);
-		return mapper.selEmpMonth(map);
+	public List<EmpVo> selEmpMonth(int days) {
+		logger.info("AnnServiceImpl selEmpMonth 입사 1년차 안되며 만근인 사원 조회 : {}", days);
+		return mapper.selEmpMonth(days);
 	}
 
 	@Override
 	public int insAnnAddMonth(String emp_id) {
-		logger.info("AnnServiceImpl insAnnAddMonth 올해 입사한 사원 만근시 연차(1개) 부여(insert) : {}", emp_id);
+		logger.info("AnnServiceImpl insAnnAddMonth 입사 1년차 안된 사원 만근시 연차(1개) 부여(insert) : {}", emp_id);
 		return mapper.insAnnAddMonth(emp_id);
 	}
 
 	@Override
 	public int updAnnualMonth(Map<String, String[]> emp_ids) {
-		logger.info("AnnServiceImpl insAnnAddMonth 올해 입사한 사원 만근시 연차(1개) 부여(update) : {}", emp_ids);
+		logger.info("AnnServiceImpl updAnnualMonth 입사 1년차 안된 사원 만근시 연차(1개) 부여(update) : {}", emp_ids);
 		return mapper.updAnnualMonth(emp_ids);
+	}
+	
+	@Override
+	public int updAnnualMonthWork() {
+		logger.info("AnnServiceImpl updAnnualMonthWork 근무일수 초기화");
+		return mapper.updAnnualMonthWork();
+	}
+	
+	@Override
+	public List<EmpVo> selEmpEveryDay() {
+		logger.info("AnnServiceImpl updAnnualEveryDay 매일 입사 1년차된 사원 조회");
+		return mapper.selEmpEveryDay();
 	}
 	
 	@Override
@@ -118,6 +130,12 @@ public class AnnServiceImpl implements IAnnService {
 	}
 
 	@Override
+	public AnnualVo selAnuualWorkIn(String emp_nfc) {
+		logger.info("AnnServiceImpl updAnnualWorkIn 사원 출근 확인 : {}", emp_nfc);
+		return mapper.selAnuualWorkIn(emp_nfc);
+	}
+	
+	@Override
 	public int updAnnualWorkIn(String emp_nfc) {
 		logger.info("AnnServiceImpl updAnnualWorkIn 사원 출근 등록 : {}", emp_nfc);
 		return mapper.updAnnualWorkIn(emp_nfc);
@@ -127,12 +145,6 @@ public class AnnServiceImpl implements IAnnService {
 	public int updAnnualWorkOut(String emp_nfc) {
 		logger.info("AnnServiceImpl updAnnualWorkOut 사원 퇴근 등록 : {}", emp_nfc);
 		return mapper.updAnnualWorkOut(emp_nfc);
-	}
-
-	@Override
-	public int updAnnualWorkDays(String emp_nfc) {
-		logger.info("AnnServiceImpl updAnnualWorkDays 사원 근무일 등록 : {}", emp_nfc);
-		return mapper.updAnnualWorkDays(emp_nfc);
 	}
 
 	@Override
