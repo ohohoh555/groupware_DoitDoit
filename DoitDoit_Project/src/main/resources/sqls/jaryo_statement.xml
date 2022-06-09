@@ -22,9 +22,9 @@
 				EMP_ID, EMP_NAME, EBOARD_TITLE, 
 				EBOARD_CONTENT, EBOARD_READCOUNT, EBOARD_REGDATE, 
 				EBOARD_DELFLAG)
-		VALUES((SELECT MAX(EBOARD_NO)+1 FROM ENTRBOARD), '200', '201', 
+		VALUES(ENTRYBOARD_SEQ.NEXTVAL, '200', '201', 
 					#{emp_id}, #{emp_name}, '', 
-					'', 0, SYSDATE, 
+					'', 0, CURRENT_DATE, 
 					'N')
 	</insert>
 	
@@ -34,13 +34,13 @@
 			(FLIST_SEQ, GUBUN_NO, EBOARD_NO , 
 			FLIST_UUID, FLIST_ORIGINNAME, FLIST_SIZE, 
 			FLIST_UPLOADPATH)
-		VALUES(SEQ_FILELIST.NEXTVAL, '200',(SELECT MAX(EBOARD_NO) FROM ENTRBOARD e2 WHERE CGORY_NO = '201') , 
+		VALUES(SEQ_FILELIST.NEXTVAL, '200',(SELECT MAX(EBOARD_NO) FROM ENTRBOARD e2) , 
 			#{flist_uuid}, #{flist_originname}, #{flist_size}, 
 			#{flist_uploadpath})
 	</insert>
 	
 	<!-- 사용자 자료게시글 단일 삭제처리 -->
-	<update id="updJaryoDelflagUser" parameterType="java.lang.String">
+	<update id="updJaryoDelflagUser" parameterType="java.util.Map">
 		UPDATE ENTRBOARD SET EBOARD_DELFLAG = 'Y' WHERE EBOARD_NO = #{eboard_no}
 	</update>
 	
