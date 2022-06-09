@@ -46,7 +46,7 @@
 
 						</div>
 						<div>
-						<form id="jaryoFrm" method="post">
+<!-- 						<form id="jaryoFrm" method="post"> -->
 							<table id="jaryoTable" class="stripe">
 								<thead>
 									<tr>
@@ -58,7 +58,7 @@
 									</tr>
 								</thead>
 							</table>
-						</form>	
+<!-- 						</form>	 -->
 						</div>
 					</div><!-- rContent-full 끝 -->
                 </div><!-- rContent 끝 -->
@@ -128,10 +128,6 @@ function hideJaryo(eboard_no){
 	}
 }
 
-function downloadJaryo(data){
-	console.log(" downloadJaryo 작동",data);
-}
-
 function multiJaryo(){
 	console.log("multiJaryo 작동");
 	
@@ -156,10 +152,11 @@ function multiJaryo(){
 			link.setAttribute("download", "");
 			document.body.appendChild(link);
 			link.click();
+			document.body.removeChild(link);
 		}
 		
 		$("input[name=chk]").prop("checked", false);
- //		document.body.removeChild(link);
+ 		
 
 	
 	}

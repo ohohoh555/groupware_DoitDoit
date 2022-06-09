@@ -47,18 +47,18 @@ function adminJaryo(){
 			
 			$("#jaryoTable").DataTable({
 				lengthMenu: [ 5, 10, 15],
-			 displayLength: 10,
+				 displayLength: 10,
 				aoColumnDefs: [
 		          { 'bSortable': false, 'aTargets': [0,1] }
 				],
 				"language": {
-		            "emptyTable": "게시글이 없어요.",  //게시글이 없을 경우
+		            "emptyTable": "자료가 없어요.",  //게시글이 없을 경우
 		            "lengthMenu": "페이지당 _MENU_ 개씩 보기",  // 페이징 개수
 		            "info": "현재 _START_ - _END_ / _TOTAL_건",  // 시작 - 끝 / 전체페이지 
-		            "infoEmpty": "게시글 없음",   // info부분이 비었을 경우 
+		            "infoEmpty": "자료글 없음",   // info부분이 비었을 경우 
 		            "infoFiltered": "( _MAX_건의 게시글에서 필터링됨 )",
 		            "search": "검색: ",
-		            "zeroRecords": "일치하는 게시글이 없어요.",  //검색시 필터링된 게시글이 없을 경우
+		            "zeroRecords": "일치하는 자료가 없어요.",  //검색시 필터링된 게시글이 없을 경우
 		            "loadingRecords": "로딩중...",
 		            "processing":     "잠시만 기다려 주세요...",
 		            "paginate": {

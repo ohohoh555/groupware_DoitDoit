@@ -27,6 +27,19 @@ public class EntrBoardController {
 	@Autowired
 	private IEntrService service;
 	
+	
+	@RequestMapping(value="/resentBoard.do", method = RequestMethod.GET,
+					produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String resentBoard() {
+		logger.info("@resentBoard 홈화면 최근글 조회");
+		List<EntrBoardVo> rList = service.selEboardResent();
+		
+		Gson data = new GsonBuilder().create();
+		return data.toJson(rList);
+	}
+	
+	
 	@RequestMapping(value="/entrBoard.do", method = RequestMethod.GET)
 	public String entrBoard(Model model) {
 		logger.info("@entrBoard 공지게시판으로 이동");

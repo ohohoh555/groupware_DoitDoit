@@ -16,7 +16,7 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
                     <div id="calendar" class="rContent-half"></div>
-                    <div id="resent" class="rContent-half"></div>
+                    <div id="resent" class="rContent-half"><!-- home.js에서 $(document).ready(function(){ eboardResent() }); --></div>
 <!-- 					<div class="rContent-full"></div> -->
 <!-- 					<div class="rContent-normal-top"></div> -->
 <!-- 					<div class="rContent-normal-bottom"></div> -->
