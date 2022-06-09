@@ -206,35 +206,23 @@ function gyuljaeClick(){
 			$("#sign").append('<td height="70px;">&nbsp;&nbsp;</td>');
 			$("#name").append('<td style="text-align: center;">'+empLists[i].innerHTML+'</td>');
 		}
-	//	$('#jstree').modal('hide');
 		gyuljae();
-		
-		console.log(empLists);
-		console.log(empLists[0]);
-		console.log(empLists[0].innerHTML);
-		console.log(empLists[1]);
-		console.log(empLists[1].innerHTML);
 		
 }
 
 function gyuljae(){
 	//화면에서 선택된 
 	var emps = new Array();
-//	const emps = new Map();
+
 	$.each($(".empList"), function(idx,row){
 		$.each(empData, function(idxs,rows){
 			 console.log("------");
 			 console.log(empData);
 			if($(row).text() == rows.text){
-			//	var map = new Map();
 				emps.push(rows.id);
 				emps.push(rows.text);
 				emps.push(rows.rank);
-				
-//				emps.set("id",rows.id);
-//				emps.set("text",rows.text);
-//				emps.set("rank",rows.rank);
-//추가할 데이터는 push로 여기에 넣고 List가 만들어지면 아래 gyuljae.do로 		
+		
 				return false;
 			}
 		});
@@ -260,14 +248,37 @@ function gyuljae(){
 				console.log(isc);
 				document.getElementById("selList").value = isc;
 				console.log(document.getElementById("selList").value);
-	//			$("#selList").val = emps;
-				//$.each($(".empList"),function(idx, row){
-					
-				//});
 			}
 		},
 		error : function() {
 			alert("통신 오류 입니다");
 		}
 	});
+}
+//결재선 초기화
+function lineClear(){
+//	console.log("clear동작 시작");
+	
+	var approChild = document.getElementById("appro").children;
+	
+	var selEmpFind = document.getElementById("selEmp");
+	console.log(selEmpFind.children);
+	
+	console.log(selEmpFind.children.childNodes);
+	
+	var empParent = document.getElementsByClassName("empList");
+	console.log(empParent);
+	console.log(empParent.parentNode);
+	
+	for(let i= 0; i < empParent.length; i++){
+	$(".empList").remove();
+	}
+	
+	for(let i=0; i<approChild.length; i++){
+			$("#appro").children().last().remove();
+			$("#sign").children().last().remove();
+			$("#name").children().last().remove();
+	}
+	deSel();
+	
 }
