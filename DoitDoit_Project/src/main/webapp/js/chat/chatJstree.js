@@ -23,6 +23,7 @@ function treeDo(type){
 	}
 	
 	console.log("jsTreeType",jsTreeType);
+	console.log($("#inviteJsTree").html())
 	if($("#createJsTree").html() == "" && jsTreeType == "create"){
 		console.log("채팅방 생성 jstree 실행");
 		treeAjax(getEmp_id);
@@ -150,20 +151,26 @@ function btnHide(type){
 
 function btnCancle(type){
 	if(type == "create"){
-		$("#cJstree").modal("hide");
 		$("#createJsTree > ul > li").prop("aria-selected","false");
-		$("#createJsTree > ul > li > ul > li").prop("aria-selected","false");
 		$("#createJsTree > ul > li > a").prop("class","jstree-anchor");
-		$("#createJsTree > ul > li > ul > li > a").prop("class","jstree-anchor");
 		$("#createJsTree > ul > li > div").prop("class","jstree-wholerow");
+		
+		$("#createJsTree > ul > li").prop("aria-expanded","true");
+		$("#createJsTree > ul > li > ul > li").prop("aria-selected","false");
+		$("#createJsTree > ul > li > ul > li > a").prop("class","jstree-anchor");
 		$("#createJsTree > ul > li > ul > li > div").prop("class","jstree-wholerow");
-	}else{
-		$("#iJstree").modal("hide");		
+		$("#createJsTree > ul > li").prop("aria-expanded","false");
+	}else{	
 		$("#inviteJsTree > ul > li").prop("aria-selected","false");
-		$("#inviteJsTree > ul > li > ul > li").prop("aria-selected","false");
 		$("#inviteJsTree > ul > li > a").prop("class","jstree-anchor");
-		$("#inviteJsTree > ul > li > ul > li > a").prop("class","jstree-anchor");
 		$("#inviteJsTree > ul > li > div").prop("class","jstree-wholerow");
+		
+		$("#inviteJsTree > ul > li").prop({"aria-expanded":"true","class":"jstree-node jstree-open"});
+		
+		
+		$("#inviteJsTree > ul > li > ul > li").prop("aria-selected","false");
+		$("#inviteJsTree > ul > li > ul > li > a").prop("class","jstree-anchor");
 		$("#inviteJsTree > ul > li > ul > li > div").prop("class","jstree-wholerow");
+		$("#inviteJsTree > ul > li").prop({"aria-expanded":"false","class":"jstree-node jstree-close"});
 	}
 }

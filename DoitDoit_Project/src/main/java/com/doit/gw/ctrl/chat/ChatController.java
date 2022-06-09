@@ -253,17 +253,26 @@ public class ChatController {
 				map = new HashMap<String, String>();
 				
 				String html = "";
-				html += "<span class=\"Name\">"+user_name+"</span>";
-           		html += "<span class=\"imageMsg\">";
-           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" 
-           						+ date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
-           						+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
-            	html += "</span>";
-            	html += "<span class=\"saveFile\"><a href="+date.getYear() +"/" + 
-            				date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
-            				+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+
-            				">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
-            	
+				if(cFv.getFile_chat_type() == "png" || cFv.getFile_chat_type() == "jpg" || cFv.getFile_chat_type() == "jpeg" || cFv.getFile_chat_type() == "gif" || cFv.getFile_chat_type() == "BMP") {
+					html += "<span class=\"Name\">"+user_name+"</span>";
+	           		html += "<span class=\"imageMsg\">";
+	           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" 
+	           						+ date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
+	           						+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
+	            	html += "</span>";
+	            	html += "<span class=\"saveFile\"><a href=./download.do?path="+date.getYear() +"/" + 
+	            				date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
+	            				+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+
+	            				">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
+				}else {
+					html += "<span class=\"Name\">"+user_name+"</span>";
+					html += "<span class=\"otherMsg\">"+cFv.getFile_chat_originnm()+"."+cFv.getFile_chat_type()+"</span>";
+            		html += "<span class=\"saveFile\">";
+            		html += "<span class=\"saveFile\"><a href=./download.do?path="+date.getYear() +"/" + date.getMonthValue() 
+            					+ "/" + date.getDayOfMonth() + "/" + cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+">저장</a> "
+            					+ "<a href=\"#\">다른 이름으로 저장</a></span>";
+					html += "</span>";
+				}
             	map.put("html", html);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -281,24 +290,26 @@ public class ChatController {
 	}
 	
 	@RequestMapping( value = "/download.do", method = RequestMethod.GET )
-	public void fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws FileNotFoundException {
+	@ResponseBody
+	public byte[] fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		logger.info("@ChatController fileDownload {}", path);
 		
-		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/chatFIle");
+		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/chatFile");
 		File file = new File(realPath + "/" + path);
 		
-		String orignNM = path.substring(path.lastIndexOf("/"), path.lastIndexOf("."));
+		String uuid = path.substring(path.lastIndexOf("/")+1, path.lastIndexOf("."));
+				
+		logger.info("originNm : {} || file : {}", uuid, file);
 		
-		logger.info("originNm : {} / file : {}", orignNM, file);
+		String originNM = service.selFileNM(uuid);
 		
-//		byte[] bytes = FileCopyUtils.copyToByteArray(file);
+		byte[] bytes = FileCopyUtils.copyToByteArray(file);
 		
-//		resp.setHeader("Content-Disposition","attachment; filename=\""+originNM+"\"");
-//		resp.setContentLength(bytes.length);
-//		resp.setContentType("application/octet-stream");
-//		
-//		return bytes;
+		resp.setHeader("Content-Disposition","attachment; filename=\""+originNM+"\"");
+		resp.setContentLength(bytes.length);
+		resp.setContentType("application/octet-stream");
 		
+		return bytes;
 	}
 	
 	//채팅 저장

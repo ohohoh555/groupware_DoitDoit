@@ -6,7 +6,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="../comm/setting.jsp" %>
-<script type="text/javascript" src="./js/chat/chat.js"></script>
 <style type="text/css">
 	.rContent-full > div > div {
 		float: left;
@@ -92,7 +91,7 @@
 	.myMsg {
 		width:265px;
 	    text-align: right;
-	    margin-bottom: 5px;
+	    margin-bottom: 10px;
 	}
 	
 	.anotherMsg {
@@ -100,13 +99,26 @@
 	    margin-bottom: 5px;
 	}
 	
-	.msg, .imageMsg {
+	.msg, .imageMsg, .otherMsg {
 		height:100%;
 	    display: inline-block;
 	    border-radius: 15px;
 	    padding: 7px 15px;
 	    margin-bottom: 10px;
 	    margin-top: 5px;
+	    max-width: 200px;
+ 		white-space: pre-line;
+ 		text-align: left;
+	}
+	
+	.otherMsg{
+		border-radius: 5px;
+		font-size: 15px;
+		padding: 15px; 
+	}
+	
+	.imageMsg{
+		margin-bottom: 5px;
 	}
 	
 	.issue{
@@ -114,11 +126,11 @@
 		margin-bottom: 5px;
 	}
 	
-	.anotherMsg > .msg, .anotherMsg > .imageMsg {
+	.anotherMsg > .msg, .anotherMsg > .imageMsg, .anotherMsg > .otherMsg {
 	    background-color: #f1f0f0;
 	}
 	
-	.myMsg > .msg, .myMsg > .imageMsg {
+	.myMsg > .msg, .myMsg > .imageMsg, .myMsg > .otherMsg {
 	    background-color: #0084FF;
 	    color: #fff;
 	}
@@ -128,14 +140,15 @@
 	    color: #fff;
 	}
 	
-	.msg .imageMsg{
+	.imageMsg{
+		text-align:center;
 		max-width: 200px;
-/* 		white-space: pre-wrap; */
+    	vertical-align:middle;
 	}
 	
 	.imageMsg > img{
-		max-width : 180px;
-		max-height : 180px;
+		max-width : 170px;
+		max-height : 170px;
 		margin: 0px auto;
 	}
 	
@@ -144,11 +157,16 @@
 	    display: block;
 	}
 	
-	.saveFile > a{
+	.saveFile {	
 		font-size: 12px;
 	    display: block;
 		margin-right: 10px;
 		color: black;
+	}
+	
+	.saveFile > a{
+		color:black;
+		margin-bottom: 10px;
 	}
 	
 	/* 채팅방 멤버 리스트 */
@@ -204,7 +222,7 @@
 														<div style="width: 200px; margin:10px auto">
 															<button onclick="btnCreate()" class="btn btn-success">생성</button>
 															<button onclick="btnHide('invite')" class="btn">숨김</button>
-												    		<button onclick="btnCancle('invite')" class="btn">취소</button>								
+												    		<button onclick="btnCancle('invite')" class="btn">reset</button>								
 														</div>
 													</div>
 												</div>
@@ -215,18 +233,11 @@
 								<!-- 모달 끝 -->
 								<div id="chatList"> <!-- chatWrap -->
 									<div id="chatLog">
-										<c:forEach items="${chatList }" var="i">
-						                	<div class=${i.emp_id==0?"issue":(emp_id==i.emp_id?"myMsg":"anotherMsg")}>
-												${i.chat_con}
-						                	</div>						             	
-										</c:forEach>
-<!-- 										<div class="myMsg"> -->
-<!-- 												<span class="Name">김우연</span> -->
-<!-- 												<span class="imageMsg"> -->
-<!-- 													<img src="./chatFile/2022/6/9/5c498bea-7291-43c1-b229-1d91e1ce3c4e.png"> -->
-<!-- 												</span> -->
-<!-- 												<span class="Name"><a href="./download.do?path=">저장</a> <a href="#">다른 이름으로 저장</a></span> -->
-						                </div>
+ 										<c:forEach items="${chatList }" var="i">
+ 						                	<div class=${i.emp_id==0?"issue":(emp_id==i.emp_id?"myMsg":"anotherMsg")}>
+ 												${i.chat_con} 
+ 						                	</div> 
+ 										</c:forEach> 
 					            	</div>
 								</div>
 								<div class="insChat">
@@ -278,4 +289,4 @@
 		</main>
 	</div>
 </body>
-</html>
+</html>ml>

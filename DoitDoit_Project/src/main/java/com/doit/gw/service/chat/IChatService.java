@@ -18,14 +18,14 @@ public interface IChatService {
 	public List<ChatVo> selChat(Map<String, String> map);
 	//채팅멤버 조회
 	public List<Map<String, String>> selRoomMem(String room_id);
+	//원본 파일명 조회
+	public String selFileNM(String file_chat_uuid);
 	//채팅 입력
 	public int insChat(Map<String, String> map);
 	//파일 입력
 	public int insFile(ChatFileVo vo);
 	//채팅방 생성
 	public String insChatRoom(Map<String, String> chat_room);
-	//원본 파일명 조회
-	public String selFileNM(String file_chat_id);
 	//방 나갈려고 할때 멤버 조회
 	public ChatRoomVo selRoomMember(String room_id); 
 	//방 나가고 나서 남은 멤버 업데이트
