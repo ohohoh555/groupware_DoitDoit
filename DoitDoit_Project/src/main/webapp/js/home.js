@@ -107,7 +107,7 @@ function eboardResent(){
 				html +='</div>'
 				html +='</div>';
 			});
-			$("#resent").html(html);
+			$("#resentBoard").html(html);
 			
 		},
 		error:function(){
