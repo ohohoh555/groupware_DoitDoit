@@ -2,6 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.doit.gw.mapper.board.EntrMapperImpl">
 
+	<!-- 홈화면에서 사용할 최근글 조회 -->
+	<select id="selEboardResent" resultType="EntrBoardVo">
+		<![CDATA[SELECT EBOARD_NO, GUBUN_NO, CGORY_NO,
+						EMP_ID, EMP_NAME, EBOARD_TITLE,
+						EBOARD_CONTENT, EBOARD_REGDATE, RNK
+				FROM (SELECT EBOARD_NO , GUBUN_NO, 
+						CASE WHEN CGORY_NO='101' THEN '[일반]' 
+						WHEN CGORY_NO='103' THEN '[인사]'
+						ELSE '[일정]' END AS CGORY_NO,
+						EMP_ID ,EMP_NAME, EBOARD_TITLE,SUBSTR(EBOARD_CONTENT, 1, 50) EBOARD_CONTENT,
+						EBOARD_READCOUNT, TO_CHAR(EBOARD_REGDATE, 'YYYY-MM-DD') EBOARD_REGDATE, EBOARD_DELFLAG,
+						DENSE_RANK() OVER (ORDER BY EBOARD_REGDATE DESC) AS RNK
+						FROM ENTRBOARD e WHERE GUBUN_NO = 100 AND EBOARD_DELFLAG ='N')
+				WHERE RNK <=3
+		]]>
+	</select>
+
 
 	<!-- 사원 게시글 전체조회 -->
 	<select id="selEboardAllUser" resultType="EntrBoardVo">
@@ -80,7 +97,7 @@
 				EMP_ID ,EMP_NAME, EBOARD_TITLE,
 				EBOARD_READCOUNT, TO_CHAR(EBOARD_REGDATE, 'YYYY-MM-DD') EBOARD_REGDATE, EBOARD_DELFLAG
 			FROM ENTRBOARD     
-			WHERE CGORY_NO !=301
+			WHERE CGORY_NO NOT IN('301','201')
 			ORDER BY EBOARD_REGDATE DESC
 	</select>
 	

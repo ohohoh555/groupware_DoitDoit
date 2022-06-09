@@ -16,6 +16,11 @@ public class EntrMapperImpl implements IEntrMapper {
 	private SqlSessionTemplate sqlSession;
 	
 	private final String NS = "com.doit.gw.mapper.board.EntrMapperImpl.";
+	
+	@Override
+	public List<EntrBoardVo> selEboardResent() {
+		return sqlSession.selectList(NS+"selEboardResent");
+	}
 
 	@Override
 	public List<EntrBoardVo> selEboardAllUser() {
@@ -106,5 +111,7 @@ public class EntrMapperImpl implements IEntrMapper {
 	public int updEboardRoot(Map<String, Object> map) {
 		return sqlSession.update(NS+"updEboardRoot", map);
 	}
+
+
 
 }

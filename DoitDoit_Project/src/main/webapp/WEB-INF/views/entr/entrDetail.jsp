@@ -65,7 +65,7 @@
 	           						<button onclick="modifyOne(${entrOne.eboard_no})" class="btn btn-default">수정</button>
 	           					</c:if>
 	 			           </sec:authorize> 
-						<button onclick="javascript:history.back(-1)" class="btn btn-default">확인</button>
+						<button onclick="location.href='./entrBoard.do'" class="btn btn-default">목록</button>
 						</div>
 					</div> <!-- rContent-full 끝 -->
                 </div>

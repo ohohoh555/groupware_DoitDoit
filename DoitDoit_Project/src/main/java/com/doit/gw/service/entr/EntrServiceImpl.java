@@ -19,6 +19,12 @@ public class EntrServiceImpl implements IEntrService {
 	
 	@Autowired
 	private IEntrMapper mapper;
+	
+	@Override
+	public List<EntrBoardVo> selEboardResent() {
+		logger.info("@selEboardResent 사원 최근글 조회");
+		return mapper.selEboardResent();
+	}
 
 	@Override
 	public List<EntrBoardVo> selEboardAllUser() {
@@ -114,6 +120,8 @@ public class EntrServiceImpl implements IEntrService {
 		logger.info("@updEboardRoot 사용자 게시글 수정:{}",map);
 		return mapper.updEboardRoot(map);
 	}
+
+
 
 
 	

@@ -7,6 +7,8 @@ import com.doit.gw.vo.entr.EntrBoardVo;
 
 public interface IEntrService {
 	
+	public List<EntrBoardVo> selEboardResent();
+	
 	public List<EntrBoardVo> selEboardAllUser();
 	public List<EntrBoardVo> selEboardCgoryUser(Map<String, Object> map);
 	public List<EntrBoardVo> selEboardFildocThree();
