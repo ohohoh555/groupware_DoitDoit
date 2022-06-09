@@ -86,6 +86,7 @@
 	    height: 572px;
 	    overflow-y: scroll;
 	    padding: 0px 10px;
+	    padding-top: 10px; 
 	}
 	
 	.myMsg {
@@ -99,7 +100,7 @@
 	    margin-bottom: 5px;
 	}
 	
-	.msg, .imageMsg, .otherMsg {
+	.msg, .imageMsg, .fileMsg {
 		height:100%;
 	    display: inline-block;
 	    border-radius: 15px;
@@ -107,11 +108,11 @@
 	    margin-bottom: 10px;
 	    margin-top: 5px;
 	    max-width: 200px;
- 		white-space: pre-line;
+ 		word-break: break-all;
  		text-align: left;
 	}
 	
-	.otherMsg{
+	.fileMsg{
 		border-radius: 5px;
 		font-size: 15px;
 		padding: 15px; 
@@ -126,11 +127,11 @@
 		margin-bottom: 5px;
 	}
 	
-	.anotherMsg > .msg, .anotherMsg > .imageMsg, .anotherMsg > .otherMsg {
+	.anotherMsg > .msg, .anotherMsg > .imageMsg, .anotherMsg > .fileMsg {
 	    background-color: #f1f0f0;
 	}
 	
-	.myMsg > .msg, .myMsg > .imageMsg, .myMsg > .otherMsg {
+	.myMsg > .msg, .myMsg > .imageMsg, .myMsg > .fileMsg {
 	    background-color: #0084FF;
 	    color: #fff;
 	}
@@ -146,7 +147,7 @@
     	vertical-align:middle;
 	}
 	
-	.imageMsg > img{
+	.myMsg > .imageMsg > img, .anotherMsg > .imageMsg > img{
 		max-width : 170px;
 		max-height : 170px;
 		margin: 0px auto;
@@ -162,11 +163,15 @@
 	    display: block;
 		margin-right: 10px;
 		color: black;
+		margin-bottom: 10px;
 	}
 	
 	.saveFile > a{
 		color:black;
 		margin-bottom: 10px;
+		background-color: #EAEAEA;
+		border-radius: 30px;
+		padding: 3px;
 	}
 	
 	/* 채팅방 멤버 리스트 */
@@ -179,6 +184,56 @@
 	.memListRank{
 		font-size: 15px;
 	}
+	
+	/* 파일 area */
+	#fileArea{
+		height: 720px; 
+		overflow-y: scroll;
+		padding: 5px;
+	}
+	
+	#fileArea > .files {
+		max-width: 140px;
+		float: left;
+		margin-left: 5px;
+	}
+	
+	#fileArea > .files > .fileMsg {
+		padding: 10px;
+		width: 135px;
+		height: 135px;
+		text-align: center;
+		background-color: #FFF;
+		border: 5px solid #8C8C8C;
+		border-radius: 10px; 
+		font-size: 14px;
+		word-break: break-all;
+		display: table;
+	}
+	
+	#fileArea > .files > .fileMsg > span{
+		vertical-align: middle;
+		display: table-cell;
+	}
+	
+	#fileArea > .files > .saveFile{
+		font-size: 10px;
+	}
+	
+	#fileArea > .files > .imageMsg{
+		max-width: 135px;
+		max-height: 135px;
+		background-color: #FFF;
+		border-radius: 10px;
+		border: 5px solid #8C8C8C;
+	}
+	
+	#fileArea > .files > .imageMsg > img{
+		max-width: 130px;
+		max-height: 110px;
+		vertical-align: middle;
+	}
+
 </style>
 </head>
 <body>
@@ -276,8 +331,14 @@
 								<div class="roomInfo">
 									사진, 파일
 								</div>
-								<div>
-								
+								<div id="fileArea" >
+									<c:forEach items="${chatList }" var="i">
+					                	<c:if test="${i.chat_type eq 'F' }">
+											<div class="files">
+												${i.chat_con }					                	
+											</div>
+					                	</c:if>
+									</c:forEach>    
 								</div>
 							</div>	
 						</div>
@@ -289,4 +350,4 @@
 		</main>
 	</div>
 </body>
-</html>ml>
+</html>
