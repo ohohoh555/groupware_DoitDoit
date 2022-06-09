@@ -17,8 +17,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doit.gw.service.ann.IAnnService;
+import com.doit.gw.service.emp.IEmpService;
 import com.doit.gw.vo.ann.AnnAddVo;
 import com.doit.gw.vo.ann.AnnUseVo;
 import com.doit.gw.vo.ann.AnnualVo;
@@ -30,6 +32,9 @@ public class AnnualController {
 
 	@Autowired
 	private IAnnService service;
+	
+	@Autowired
+	private IEmpService empService;
 
 	/*
 	 * 관리자 연차 조회
@@ -55,6 +60,7 @@ public class AnnualController {
 		String emp_id = String.valueOf(map.get("emp_id"));
 		String ann_add_content = String.valueOf(map.get("ann_add_content"));
 		String ann_add_days = String.valueOf(map.get("ann_add_days"));
+		String dept_no = String.valueOf(map.get("dept_no"));
 		AnnAddVo annAddVo = new AnnAddVo();
 		String[] emp_ids = emp_id.split(",");
 		for (String empId : emp_ids) {
@@ -69,7 +75,7 @@ public class AnnualController {
 		service.updAnnualAdd(updMap);
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		out.print("<script>alert('연차가 부여되었습니다.');location.href='./annualAdmin.do';</script>");
+		out.print("<script>alert('연차가 부여되었습니다.');location.href='./annualAdmin.do?dept_no="+dept_no+"';</script>");
 		out.flush();
 	}
 	
@@ -92,18 +98,25 @@ public class AnnualController {
 	/*
 	 * 출퇴근 등록
 	 */
-	@RequestMapping(value = "/annualWork.do", method = RequestMethod.POST)
-	public void annualWork(String emp_nfc, HttpServletResponse response) throws IOException {
+	@ResponseBody
+	@RequestMapping(value = "/annualWork.do", method = RequestMethod.POST, produces = "application/text; charset=utf-8;")
+	public String annualWork(@RequestParam String emp_nfc){
 		logger.info("AnnualController annualWork : {}", emp_nfc);
-		service.updAnnualWorkIn(emp_nfc);
-		service.updAnnualWorkOut(emp_nfc);
-		service.updAnnualWorkDays(emp_nfc);
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print("<script>");
-		out.print("alert('출/퇴근이 등록되었습니다.');");
-		out.print("location.href='./loginPage.do';");
-		out.print("</script>");
-		out.flush();
+		//숫자 판별
+		boolean isNumeric =  emp_nfc.matches("[+-]?\\d*(\\.\\d+)?");
+		if(!isNumeric) {
+			return "문자";
+		}else {
+			int iscNfc = empService.selEmpNfcCheck(emp_nfc);
+			
+			if(iscNfc == 0) {
+				return "0";				
+			}else {
+				service.updAnnualWorkIn(emp_nfc);
+				service.updAnnualWorkOut(emp_nfc);
+				service.updAnnualWorkDays(emp_nfc);
+				return "출/퇴근 등록";				
+			}
+		}
 	}
 }
