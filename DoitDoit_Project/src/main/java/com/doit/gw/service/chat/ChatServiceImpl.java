@@ -59,7 +59,9 @@ public class ChatServiceImpl implements IChatService{
 		logger.info("$$$$$ insChatRoom $$$$$",chat_room);
 		int n = dao.insChatRoom(chat_room);
 		if(n > 0) {
-			return dao.selLastRoom();
+			String room = dao.selLastRoom() ;
+			logger.info("maxRoom {}",room);
+			return room;
 		}else {
 			return "0";
 		}
@@ -72,13 +74,13 @@ public class ChatServiceImpl implements IChatService{
 	}
 
 	@Override
-	public ChatRoomVo selGetOut(String room_id) {
-		return dao.selGetOut(room_id);
+	public ChatRoomVo selRoomMember(String room_id) {
+		return dao.selRoomMember(room_id);
 	}
 
 	@Override
-	public int updGetOut(ChatRoomVo room_id) {
-		return dao.updGetOut(room_id);
+	public int updRoomMember(ChatRoomVo vo) {
+		return dao.updRoomMember(vo);
 	}
 
 	@Override

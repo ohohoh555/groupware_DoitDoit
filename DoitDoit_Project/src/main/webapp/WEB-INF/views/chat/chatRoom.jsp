@@ -142,6 +142,15 @@
 	    display: block;
 	}
 	/* 채팅방 멤버 리스트 */
+	.memList{
+		font-size: 20px; 
+		color: white; 
+		padding-left: 5px
+	}
+	
+	.memListRank{
+		font-size: 15px;
+	}
 </style>
 </head>
 <body>
@@ -161,13 +170,39 @@
 					        <input type="hidden" value="${principal.emp_name}" id="pr_user_name" name="pr_emp_name">
  			           </sec:authorize> 
  			           <input type="hidden" value="${room_id}" id="room_id">
-						<div style="width: 800px; height: 796px;">
+ 			           <input type="hidden" value="${room_mem_list }" id="room_mem_list">
+					   <div style="width: 800px; height: 796px;">
 							<div id="dragdrop" class="chatGroup">
 								<div class="roomInfo">
 									채팅방 정보
-									<button onclick="invite()">초대하기</button>
-									<button onclick="getOut('${room_id}','${emp_id}')">나가기</button>
+									<div class="container">
+										<div>
+											<button class="btn-sm btn-info" onclick="treeDo('invite')" data-toggle="modal" data-target="#iJstree">초대하기</button>
+											<button onclick="getOut('${room_id}','${emp_id}')">나가기</button>
+										</div>									
+										<div class="modal fade" id="iJstree" role="dialog">
+											<div class="modal-dialog modal-sm">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal">&times;</button>
+														<h4>채팅방 초대</h4>
+													</div>
+													<div class="modal-body">
+														
+													</div>
+													<div class="mod-footer">
+														<div style="width: 200px; margin:10px auto">
+															<button onclick="btnCreate()" class="btn btn-success">생성</button>
+															<button onclick="btnHide('invite')" class="btn">숨김</button>
+												    		<button onclick="btnCancle('invite')" class="btn">취소</button>								
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>									
+									</div>
 								</div>
+								<!-- 모달 끝 -->
 								<div id="chatList"> <!-- chatWrap -->
 									<div id="chatLog">
 										<c:forEach items="${chatList }" var="i">
@@ -200,9 +235,9 @@
 								<div id="members" class="members">
 									<c:forEach items="${room_mem_list }" var="i">
 										<div id="${i.EMP_ID }">
-												<span style="font-size: 20px; color: white; padding-left: 5px"></span>.
-												<span style="font-size: 20px; color: white; padding-left: 5px">${i.EMP_NAME }</span>
-												<span style="font-size: 15px; color: white; padding-left: 5px">${i.RANK_NAME }</span>
+												<span class="memList"></span>
+												<span class="memList">${i.EMP_NAME }</span>
+												<span class="memList memListRank">${i.RANK_NAME }</span>
 											<hr style="color:white;">
 										</div>
 									</c:forEach>

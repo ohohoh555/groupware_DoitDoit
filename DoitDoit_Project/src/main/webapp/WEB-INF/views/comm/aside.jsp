@@ -25,11 +25,11 @@
     		</div>
     		<div class="container">
     			<div>
-	    			<button class="btn-sm btn-info" data-toggle="modal" data-target="#chatJstree">채팅방 생성</button>    						
+	    			<button class="btn-sm btn-info" onclick="treeDo('create')" data-toggle="modal" data-target="#cJstree">채팅방 생성</button>    						
     			</div>
-<!--     		jstree 초대 부분(modal) -->
-			 	<div class="modal fade" id="chatJstree" role="dialog"">
-					<div class="modal-dialog">
+<!--     		jstree 채팅방 생성 부분(modal) -->
+			 	<div class="modal fade" id="cJstree" role="dialog"">
+					<div class="modal-dialog modal-sm">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -39,9 +39,10 @@
 								
 							</div>
 							<div class="mod-footer">
-								<div style="width:200px; margin: 0px auto">
-									<button onclick="btnInvite()" class="btn btn-success">생성</button>
-						    		<button onclick="btnCancle()" class="btn">취소</button>								
+								<div style="width: 200px; margin:10px auto">
+									<button onclick="btnCreate()" class="btn btn-success">생성</button>
+									<button onclick="btnHide('create')" class="btn">숨김</button>
+						    		<button onclick="btnCancle('create')" class="btn">취소</button>								
 								</div>
 							</div>
 						</div>

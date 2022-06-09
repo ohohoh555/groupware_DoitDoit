@@ -40,7 +40,7 @@ $(document).ready(function(){
 		}
 	});		
 
-	$(".mod-body").load("./chatJstree.do");
+	$(".mod-body").load("./createJstree.do");
 });
 
 function menuOn(){
