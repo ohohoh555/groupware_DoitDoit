@@ -63,6 +63,8 @@ public class ChatController {
 
 	private static Map<String, List<String>> mapMem;
 	private static Map<String, List<ChatVo>> mapChat;
+	
+	private static Map<String, List<String>> roomAllMem;
 
 	public ChatController() {
 		listChat = new ArrayList<ChatVo>();
@@ -70,6 +72,8 @@ public class ChatController {
 
 		mapMem = new HashMap<String, List<String>>();
 		mapChat = new HashMap<String, List<ChatVo>>();
+		
+		roomAllMem = new HashMap<String, List<String>>();
 	}
 	
 	public static List<ChatVo> getListChat(String room_id) {
@@ -128,13 +132,20 @@ public class ChatController {
 
 	// 채팅 메시지
 	@MessageMapping(value = "/chat/message")
-	public void chatMessage(@RequestParam Map<String, String> map) throws ParseException, IOException {		
+	public void chatMessage(@RequestParam Map<String, String> map) throws IOException, ParseException {		
+		logger.info("@ChatController chatMessage() : {}", map);
+		
 		if (mapChat.get(map.get("room_id")) != null) {
 			listChat = mapChat.get(map.get("room_id"));
 			logger.info("해당 방의 채팅 있음 {}", listChat);
 		} else {
 			listChat = new ArrayList<ChatVo>();
 			logger.info("해당 방의 채팅 없음 {}", listChat);
+		}
+		
+		if(roomAllMem.get(map.get("room_id")) == null) {
+			List<String> memAllList = findRoomAllMem(map.get("room_id"));
+			roomAllMem.put(map.get("room_id"), memAllList);
 		}
 		
 		String html = "";
@@ -164,6 +175,24 @@ public class ChatController {
 		logger.info("저장된 채팅 {}", mapChat);
 		
 		template.convertAndSend("/sub/chat/room/" + map.get("room_id"), vo);
+	}
+	
+	public List<String> findRoomAllMem(String room_id) throws ParseException  {
+		logger.info("@ChatController findRoomAllMem() : {}", room_id);
+		
+		ChatRoomVo vo = service.selRoomMember(room_id);
+		
+		List<String> list = new ArrayList<String>();
+		
+		JSONObject json = jsonParser(vo.getRoom_mem()); 
+		JSONArray jsonRoom = (JSONArray) json.get("ROOM");
+		
+		for (int i = 0; i < jsonRoom.size(); i++) {
+			JSONObject jsonVal = (JSONObject) jsonRoom.get(i);
+			list.add(String.valueOf(jsonVal.get("id")));
+		}
+		
+		return list;
 	}
 	
 	// 파일 메시지 받아서 저장
@@ -224,9 +253,10 @@ public class ChatController {
 				
 				String html = "";
 				html += "<span class=\"Name\">"+user_name+"</span>";
-           		html += "<span class=\"msg\">";
-           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\" width=\"200px\">";
+           		html += "<span class=\"imageMsg\">";
+           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
             	html += "</span>";
+            	html += "<span class=\"Name\"><a href=\"#\">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
             	
             	map.put("html", html);
 			} catch (Exception e) {
@@ -238,7 +268,6 @@ public class ChatController {
 			inputStream.close();
 			outputStream.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -274,13 +303,11 @@ public class ChatController {
 	
 	//나가는 데이터 update
 	@SuppressWarnings("unchecked")
-	public void getOut(String room_id, String emp_id) throws ParseException {
+	public void getOut(String room_id, String emp_id) throws ParseException  {
 		ChatRoomVo vo = service.selRoomMember(room_id);
 		logger.info("가져온 vo {}",vo.getRoom_mem());
 		
-		JSONParser parser = new JSONParser();
-		Object obj = parser.parse(vo.getRoom_mem());
-		JSONObject json = (JSONObject)obj;
+		JSONObject json = jsonParser(vo.getRoom_mem());
 				
 		JSONArray jsonRoom = (JSONArray) json.get("ROOM");
 		
@@ -305,5 +332,13 @@ public class ChatController {
 			
 			service.updRoomMember(vo);
 		}
+	}
+	
+	public JSONObject jsonParser(String value) throws ParseException  {
+		JSONParser parser = new JSONParser();
+		Object obj = parser.parse(value);
+		JSONObject json = (JSONObject)obj;
+		
+		return json;
 	}
 }

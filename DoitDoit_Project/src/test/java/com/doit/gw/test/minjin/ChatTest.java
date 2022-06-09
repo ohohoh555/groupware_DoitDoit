@@ -15,11 +15,16 @@ public class ChatTest {
 	@Autowired
 	IChatService service;
 	
-	@Test
+//	@Test
 	public void chatFileTest() {
 		ChatFileVo vo = new ChatFileVo(null, "uuid", "origin", "png", "C:", "6");
 		
 		int n = service.insFile(vo);
 		System.out.print(n);
+	}
+	
+	@Test
+	public void deleteRoom() {
+		service.delChatRoom("51");
 	}
 }
