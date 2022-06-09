@@ -71,5 +71,14 @@ public class ApproMapperImpl implements IApproMapper {
 	public List<ApproVo> selFinalDoc(int emp_id) {
 		return sqlSession.selectList(NS+"selFinalDoc",emp_id);
 	}
+	@Override
+	public int updReturnApproLine(ApproVo approVo) {
+		return sqlSession.update(NS+"updReturnApproLine",approVo);
+	}
+
+	@Override
+	public int updReturnAppro(ApproVo approVo) {
+		return sqlSession.update(NS+"updReturnAppro",approVo);
+	}
 
 }

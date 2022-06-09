@@ -115,8 +115,8 @@ String today = sf.format(now);
 						<td class="tableForm" rowspan="3" style="writing-mode: vertical-rl; text-orientation: upright;  width:30px;">결재라인</td>
 						<td class="tableForm">기안자</td>
 						</tr>
-						<tr >
-						<td id="sign" height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src=""><input type="hidden" id="gianja" value="${aVo.emp_id}"></td>
+						<tr id="sign" >
+						<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src=""><input type="hidden" id="gianja" value="${aVo.emp_id}"></td>
 						</tr>
 						
 						<tr id="name">
@@ -170,12 +170,16 @@ String today = sf.format(now);
 			<h4>결재반려</h4>
 			</div>
 			    <div class="modal-body">
-			  <!--   <form action="post" id="frmApproClick"> -->
 			    <div id="approClick">
-			   
-			    	
+			    	<h6>반려사유 선택</h6>
+			    	<ul>
+			    		<li><input class="chk" type="checkbox"><span>주요사항 기재 누락으로 인한 반려</span></li>
+			    		<li><input class="chk" type="checkbox"><span>오기입으로 인한 반려</span></li>
+			    		<li><input class="chk" type="checkbox"><span>기안자의 요청으로 인한 반려</span></li>
+			    		<li><input class="chk" type="checkbox"><span>기타 : <textarea class="form-control" style="width: 260px; height: 100px;"></textarea></span></li>
+			    		<li style="margin-left: 40%; margin-top: 5px;" ><button class="btn btn-default" onclick="returnAppro()">선택</button></li>
+			    	</ul>
 			    </div>
-		<!-- 	    </form> -->
 			    </div>
 		</div>
 	</div>
@@ -217,30 +221,13 @@ function viewApproLine(){
 		$("#approGianja").append('<td class="tableForm">결재자</td>');
 		var status = obj[i].APPRO_STATUS;
 		var empId = obj[i].EMP_ID;
-	//	console.log(status,typeof status);
-	//	console.log(status == 'Y');
-		if(status == 'Y'){
-				$.ajax({
-					url :"./viewImg.do?",
-					data : {
-						"emp_id" : empId
-					},
-					type : "GET",
-					async : true ,
-					success : function(data){
-					//	console.log(data);
-					//	console.log("성공인지?");
-						if(data.length > 0 && data != null){
-							//document.getElementById("image").src = data;
-			$("#sign").after('<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src="'+data+'"></td>');
-						}
-					},
-					error : function(){
-						console.log("실패	ㅠㅠ");
-					}
-				});
-			}else{
-		$("#sign").after('<td height="70px;">&nbsp;&nbsp;</td>');
+
+		if(status == 'N'){
+			$("#sign").append('<td  style="text-align: center; height : 70px;"><p style="font-size: 20px;">반려</p></td>');	
+		}else if(status == 'Y'){
+			$("#sign").append('<td height="70px;"><img style=" width: 50px; height: 50px; margin-left: 25px;" id="image" alt="기안자사인" src="'+obj[i].SIGN+'"></td>');
+		}else{
+			$("#sign").append('<td height="70px;">&nbsp;&nbsp;</td>');
 			}
 		var name = obj[i].APPRO_NAME;
 		$("#name").append('<td style="text-align: center;">'+name+'</td>');
@@ -275,6 +262,9 @@ function gyuljaeClick(){
 	console.log("결재선택 시작");
 	console.log(approlineList);
 	console.log(${aVo.appro_line_no });
+	
+	gyuljaeClick2(approlineList);
+	
 	$.ajax({
 		url : "./guyljaejaApprove.do",
 		data : {
@@ -296,6 +286,39 @@ function gyuljaeClick(){
 
 }
 
+//반려 버튼 클릭시 
+function returnAppro(){
+	
+	var chkList = document.querySelectorAll("input[class=chk]:checked");
+	var returnList = new Array();
+	
+	chkList.forEach(function(ch){
+		console.log(ch.parentNode.lastChild.innerHTML);
+		returnList.push(ch.parentNode.lastChild.innerHTML); 
+	})
+		console.log("for문 밖의 : ",returnList);
+		console.log(typeof returnList);
+		console.log(returnList.toString());
+	$.ajax({
+		url : "./guyljaejaReturn.do",
+		data : {
+			"approlineList" : approlineList,
+			"appro_line_no" : ${aVo.appro_line_no },
+			"emp_id" : ${loginEmp_id},
+			"approReturnreason" : returnList.toString()
+		},
+		type : "GET",
+		async : true,
+		success : function(data){
+			console.log(data);
+			if(data == "true"){
+				alert("반려되었습니다!");
+				location.href="./approMain.do";
+			}
+		}
+	});
+}
+	
 //완료문서 pdf출력
 function docToPdf() {
 	console.log("pdf시작");
@@ -327,7 +350,6 @@ function docToPdf() {
 		//파일을 저장합니다
 		doc.save("page"+s+ms+".pdf");
 	});
-
 
 }
 </script>

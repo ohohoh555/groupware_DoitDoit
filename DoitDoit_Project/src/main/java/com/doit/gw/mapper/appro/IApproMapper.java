@@ -18,4 +18,7 @@ public interface IApproMapper {
 	public int updApprovedApproLine(ApproVo approVo);
 	public int updApprovedAppro(int appro_line_no);
 	public List<ApproVo> selFinalDoc(int emp_id);
+	public int updReturnApproLine(ApproVo approVo);
+	public int updReturnAppro(ApproVo approVo);
+	
 }

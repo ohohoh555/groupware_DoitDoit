@@ -1,8 +1,10 @@
 	package com.doit.gw.ctrl.appro;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
+import java.sql.Blob;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.doit.gw.service.ann.IAnnService;
 import com.doit.gw.service.appro.IApproService;
 import com.doit.gw.service.appro.IDocFormService;
+import com.doit.gw.service.sign.ISignService;
 import com.doit.gw.vo.appro.ApproVo;
 import com.doit.gw.vo.appro.DocFormVo;
 
@@ -35,6 +39,9 @@ public class ApproController {
 	
 	@Autowired
 	private IDocFormService docService;
+	
+	@Autowired
+	private ISignService signService;
 	
 	//연차 service
 	@Autowired
@@ -307,19 +314,13 @@ public class ApproController {
 		logger.info("[appro_no 값] : {}" ,appro_no);
 		logger.info("[emp_id 값] : {}" ,emp_id);
 		ApproVo aVo = service.selOneDocument(appro_no);
-//		JSONParser jsonParser = new JSONParser();
-//		try {
-//			JSONObject obj = (JSONObject)jsonParser.parse(aVo.getAppro_line());
-//		//	aVo.setAppro_line(obj.toJSONString());
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
 		logger.info("[aVo 값] : {}" ,aVo);
 		model.addAttribute("aVo", aVo);
 		model.addAttribute("loginEmp_id", emp_id);
 		return "/appro/docDetail";
 	}
 	//결재자 승인 클릭시
+	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/guyljaejaApprove.do",method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
 	public String guyljaejaApprove(int appro_line_no, String approlineList, int emp_id) throws ParseException {
@@ -344,11 +345,41 @@ public class ApproController {
 				service.updApprovedAppro(appro_line_no);
 				approVo.setAppro_line_no(appro_line_no);
 				logger.info("[if문의 approVo 값] : {}" ,approVo);
+
+				List<Map<String, Object>> signLists = signService.selSign(emp_id);
+				Map<String, Object> signMap = signLists.get(0); 
+				byte signArr[] = blobToBytes((Blob) signMap.get("SIGN_IMG"));
+				
+				if(signArr.length > 0 && signArr != null){ //데이터가 들어 있는 경우
+					//바이트를 base64인코딩 실시
+					String base64Encode = Base64Utils.encodeToString(signArr);
+					base64Encode = "data:image/png;base64," + base64Encode;
+					logger.info("[base64Encode값 확인] : {}",base64Encode);
+					tmp.put("SIGN", base64Encode);
+				}else {
+					tmp.put("SIGN", "");
+				}
+				
 			}else if(tmp.get("EMP_ID").equals(String.valueOf(emp_id))) {
 				tmp.replace("APPRO_STATUS", "Y");
 				jArr.set(i, tmp);
 				approVo.setAppro_line_no(appro_line_no);
 				logger.info("[else if문의 approVo 값] : {}" ,approVo);
+				
+				List<Map<String, Object>> signLists = signService.selSign(emp_id);
+				Map<String, Object> signMap = signLists.get(0); 
+				byte signArr[] = blobToBytes((Blob) signMap.get("SIGN_IMG"));
+				
+				if(signArr.length > 0 && signArr != null){ //데이터가 들어 있는 경우
+					//바이트를 base64인코딩 실시
+					String base64Encode = Base64Utils.encodeToString(signArr);
+					base64Encode = "data:image/png;base64," + base64Encode;
+					logger.info("[base64Encode값 확인] : {}",base64Encode);
+					tmp.put("SIGN", base64Encode);
+				}else {
+					tmp.put("SIGN", "");
+				}
+				
 			}
 		}
 		obj.replace("approval", jArr);
@@ -359,4 +390,62 @@ public class ApproController {
 		
 		return (n==1)?"true":"flase";
 	}	
+
+	//결재자 반려 클릭시
+	@ResponseBody
+	@RequestMapping(value = "/guyljaejaReturn.do",method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
+	public String guyljaeReturn(int appro_line_no, String approlineList, int emp_id,String approReturnreason) throws ParseException {
+		logger.info("[appro_line_no 값] : {}" ,appro_line_no);
+		logger.info("[approlineList 값] : {}" ,approlineList);
+		logger.info("[approReturnreason 값] : {}" ,approReturnreason);
+		logger.info("[emp_id 값] : {}" ,emp_id);
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(approlineList);
+		JSONArray jArr = (JSONArray) parser.parse(obj.get("approval").toString());
+		logger.info("[수정 전 화면에서 받은 JSON 값] : {}" ,jArr.toJSONString());
+		ApproVo approVo = new ApproVo();
+		
+		for(int i=0; i<jArr.size(); i++) {
+			int length = jArr.size();
+			JSONObject tmp = (JSONObject) jArr.get(i);
+			if(tmp.get("EMP_ID").equals(String.valueOf(emp_id))) {
+				tmp.replace("APPRO_STATUS", "N");
+				jArr.set(i, tmp);
+				
+				approVo.setAppro_line_no(appro_line_no);
+				approVo.setAppro_returnreason(approReturnreason);
+				service.updReturnAppro(approVo);
+				logger.info("[if문의 approVo 값] : {}" ,approVo);
+			}
+		}
+		obj.replace("approval", jArr);
+		logger.info("[수정 후 변경한 JSON 값] : {}" ,jArr.toJSONString());
+		approVo.setAppro_line(obj.toJSONString());
+		logger.info("[for 문 밖의 approVo 값] : {}" ,approVo);
+		int n = service.updReturnApproLine(approVo);
+		return (n==1)?"true":"flase";
+	}
+	
+	//[blob 데이터를 바이트로 변환해주는 메소드]
+	private static byte[] blobToBytes(Blob blob) {
+		BufferedInputStream is = null;
+		byte[] bytes = null;
+			try {
+				is = new BufferedInputStream(blob.getBinaryStream());
+		        bytes = new byte[(int) blob.length()];
+		        int len = bytes.length;
+		        int offset = 0;
+		        int read = 0;
+		
+		        while (offset < len
+		                && (read = is.read(bytes, offset, len - offset)) >= 0) {
+		            offset += read;
+		        }
+			
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		return bytes;
+	}
+	
 }

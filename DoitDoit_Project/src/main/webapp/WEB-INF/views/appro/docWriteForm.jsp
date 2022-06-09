@@ -79,7 +79,7 @@ String today = sf.format(now);
 <form action="./approval.do" method="post" onsubmit="return approval()"> 
 	<div style="margin-left: 3px;">
 	<input type="button" class="btn btn-info" data-toggle="modal" data-target="#jstree"value="결재선 선택">	
-	<input type="submit" class="btn btn-info" value="결재요청">
+	<input type="submit" class="btn btn-info" value="결재요청" id="frClick">
 	<input type="button" class="btn btn-info" value="임시저장" onclick="return draft(this.form);">
 	<input type="button" class="btn btn-info" value="취소" onclick="self.close()">
 		<input type="hidden" id="doc_form_no" name="doc_form_no">
