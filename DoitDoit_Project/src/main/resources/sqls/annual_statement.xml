@@ -139,6 +139,11 @@
 	</update>
 	
 	<!-- 연차 사용 -->
+	<select id="searchAppro" parameterType="java.lang.Integer" resultType="ApproVo">
+		SELECT APPRO_LINE_NO, EMP_ID, APPRO_CONTENT
+			FROM APPROVAL
+			WHERE APPRO_LINE_NO = #{appro_line_no}	
+	</select>
 	<insert id="insAnnUse" parameterType="java.util.Map">
 		INSERT INTO ANN_USE (ANN_USE_NO, ANN_USE_CONTENT, ANN_USE_DAYS, 
 							 ANN_USE_PERIOD, ANN_USE_DATE, EMP_ID)

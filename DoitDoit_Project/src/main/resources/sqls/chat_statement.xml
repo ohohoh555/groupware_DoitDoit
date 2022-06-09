@@ -41,7 +41,7 @@
         	ORDER BY CHAT_TIME ASC
 	</select>
 	
-	<!-- 채팅방 멤버 조회 -->
+	<!-- 채팅방 멤버 조회(직급 조회 및 정렬) -->
 	<select id="selRoomMem" parameterType="java.lang.String" resultType="java.util.Map">
 		SELECT EMP_ID, EMP_NAME, e.RANK_NO, RANK_NAME
 			FROM CHAT_ROOM,
@@ -69,14 +69,14 @@
 			FROM CHAT_ROOM
 	</select>
 
-	<!-- 나가기 -->
-	<select id="selGetOut" parameterType="java.lang.String" resultType="ChatRoomVo">
+	<!-- 단순 채팅방 멤버 조회 -->
+	<select id="selRoomMember" parameterType="java.lang.String" resultType="ChatRoomVo">
 		SELECT ROOM_ID, ROOM_NAME, ROOM_MEM
 			FROM CHAT_ROOM
 			WHERE ROOM_ID = #{room_id}
 	</select>
 	
-	<update id="updGetOut" parameterType="ChatRoomVo">
+	<update id="updRoomMember" parameterType="ChatRoomVo">
 		UPDATE CHAT_ROOM SET ROOM_MEM = #{room_mem}
 			WHERE ROOM_ID = #{room_id} 
 	</update>

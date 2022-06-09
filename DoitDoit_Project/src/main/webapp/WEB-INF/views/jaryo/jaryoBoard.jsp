@@ -8,12 +8,10 @@
 <title>자료게시판(사용자)</title>
 <%@include file="../comm/setting.jsp" %>
 <link rel="stylesheet" type="text/css" href="./css/jaryo/dragAndDrop.css">
-<link rel="stylesheet" type="text/css" href="./css/jaryo/jaryo.css">
 <script type="text/javascript" src="./js/jaryo/Map.js"></script>
 <script type="text/javascript" src="./js/jaryo/dragAndDrop.js"></script>
 </head>
 <body>
-<button></button>
 	<div id="container">
         <%@include file="../comm/nav.jsp" %>
         <main>
@@ -30,7 +28,8 @@
  			           </sec:authorize> 
 						<div>
 							<div class="div1">
-								<input type="button" class='menu btn btn-success' value='파일 업로드' onclick="slideDown()">
+								<button class='btn btn-success' onclick="slideDown()">파일 업로드</button>
+								<button class='btn btn-success' onclick="multiJaryo()">다중다운로드</button>
 								<div id="fileUpload" class="dragAndDropDiv hide10" style="position: relative;" >
 									<table id='fileTable' class='fileList table-bordered'>
 										<tr>
@@ -47,9 +46,11 @@
 
 						</div>
 						<div>
+						<form id="jaryoFrm" method="post">
 							<table id="jaryoTable" class="stripe">
 								<thead>
 									<tr>
+										<th><input type="checkbox" id="allchk"></th>
 										<th>번호</th>
 										<th>파일명</th>
 										<th>크기</th>
@@ -57,6 +58,7 @@
 									</tr>
 								</thead>
 							</table>
+						</form>	
 						</div>
 					</div><!-- rContent-full 끝 -->
                 </div><!-- rContent 끝 -->
@@ -99,6 +101,7 @@ $(document).ready(function(){
 	        dataSrc:""
 	    },
 	    columns:[
+	    	{data:"eboard_no",render:function(data,type,row,meta){return "<input type='checkbox' name='chk' value='uid="+row.flist_uuid+"&fileName="+row.flist_originname+"'>" } },
 	        {data:"eboard_no",render:function(data,type,row,meta){return meta.row+1 } },
 	        {data:"flist_originname",render:function(data,type,row,meta){
 	        	if(row.emp_id==emp){
@@ -119,11 +122,47 @@ $(document).ready(function(){
 
 function hideJaryo(eboard_no){
 	console.log("hideJaryo 작동");
-	location.href="./jaryoDel.do?eboard_no="+eboard_no;
+	var con = confirm("선택한 자료를 삭제하시겠습니까?(복구는 관리자를 통해서만 가능합니다.)");
+	if(con){
+		location.href="./jaryoDel.do?eboard_no="+eboard_no;
+	}
 }
 
 function downloadJaryo(data){
-	console.log("작동",data);
+	console.log(" downloadJaryo 작동",data);
+}
+
+function multiJaryo(){
+	console.log("multiJaryo 작동");
+	
+	
+
+	var len = $("input[name=chk]:checked").length;
+	var list = new Array(len);
+	if(len<=0){
+		alert("하나 이상의 자료를 선택해주세요!");
+		return false;
+	}else{
+//		$("#jaryoFrm").attr("action","./multiJaryo.do").submit();
+
+		let fileDown = "";
+		let link ="";
+		for(let i=0; i<len;i++){
+			list[i]= $("input[name=chk]:checked").eq(i).val();
+			fileDown ="./download.do?"+list[i];
+			let encodedUri = encodeURI(fileDown);
+			link = document.createElement("a");
+			link.setAttribute("href", encodedUri);
+			link.setAttribute("download", "");
+			document.body.appendChild(link);
+			link.click();
+		}
+		
+		$("input[name=chk]").prop("checked", false);
+ //		document.body.removeChild(link);
+
+	
+	}
 }
 
 </script>   

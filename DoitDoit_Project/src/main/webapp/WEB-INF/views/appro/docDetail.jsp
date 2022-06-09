@@ -293,6 +293,7 @@ function gyuljaeClick(){
 			}
 		}
 	});
+
 }
 
 //완료문서 pdf출력
@@ -326,6 +327,8 @@ function docToPdf() {
 		//파일을 저장합니다
 		doc.save("page"+s+ms+".pdf");
 	});
+
+
 }
 </script>
 </html>

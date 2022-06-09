@@ -137,7 +137,7 @@
 				(FLIST_SEQ, GUBUN_NO, EBOARD_NO , 
 				FLIST_UUID, FLIST_ORIGINNAME, FLIST_SIZE, 
 				FLIST_UPLOADPATH)
-			VALUES(SEQ_FILELIST.NEXTVAL, '100',(SELECT MAX(EBOARD_NO) FROM ENTRBOARD e2 WHERE CGORY_NO = #{cgory_no}) , 
+			VALUES(SEQ_FILELIST.NEXTVAL, '100',(SELECT MAX(EBOARD_NO) FROM ENTRBOARD) , 
 			#{flist_uuid}, #{originname}, #{flist_size}, 
 			#{flist_uploadpath})
 	</insert>

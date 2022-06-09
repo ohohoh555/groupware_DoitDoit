@@ -92,6 +92,7 @@
 	        			<th style="text-align: center; color: white; background-color: #6667AB">연차 내용</th>
 	        			<td style="text-align: center;">
 			      			<textarea id="annContent" name="ann_add_content" rows="5" cols="59" style="font-size: 13pt;"></textarea>
+			      			<input type="hidden" name="dept_no" value="${dept_no}">
 	        			</td>
 	        		</tr>
 	        	</table>

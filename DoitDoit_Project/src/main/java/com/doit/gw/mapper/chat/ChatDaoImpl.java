@@ -59,6 +59,7 @@ public class ChatDaoImpl implements IChatDao{
 
 	@Override
 	public int insChatRoom(Map<String, String> map) {
+		logger.info("daoImpl {}",map);
 		return sqlSession.insert(NS+"insChatRoom", map);
 	}
 
@@ -67,15 +68,15 @@ public class ChatDaoImpl implements IChatDao{
 		return sqlSession.selectOne(NS+"selFileNM",file_chat_id);
 	}
 	
-	//삭제 부분
+	//채팅방의 멤버 변경을 위해서 선언
 	@Override
-	public ChatRoomVo selGetOut(String room_id) {
-		return sqlSession.selectOne(NS+"selGetOut", room_id);
+	public ChatRoomVo selRoomMember(String room_id) {
+		return sqlSession.selectOne(NS+"selRoomMember", room_id);
 	}
 	
 	@Override
-	public int updGetOut(ChatRoomVo vo) {
-		return sqlSession.update(NS+"updGetOut", vo);
+	public int updRoomMember(ChatRoomVo vo) {
+		return sqlSession.update(NS+"updRoomMember", vo);
 	}
 	
 	@Override

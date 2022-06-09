@@ -6,6 +6,7 @@ import java.util.Map;
 import com.doit.gw.vo.ann.AnnAddVo;
 import com.doit.gw.vo.ann.AnnUseVo;
 import com.doit.gw.vo.ann.AnnualVo;
+import com.doit.gw.vo.appro.ApproVo;
 import com.doit.gw.vo.emp.EmpVo;
 
 public interface IAnnMapper {
@@ -61,6 +62,8 @@ public interface IAnnMapper {
 	public int updAnnualWorkDays(String emp_nfc);
 	
 	//연차 사용
+	//연차 사용(select)
+	public ApproVo searchAppro(int appro_line_no);
 	//연차 사용(insert)
 	public int insAnnUse(Map<String, Object> map);
 	//연차 사용(update)

@@ -11,9 +11,12 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +30,7 @@ import com.doit.gw.service.chat.IChatService;
 import com.doit.gw.vo.appro.ApproDeptVo;
 import com.doit.gw.vo.appro.ApproEmpVo;
 import com.doit.gw.vo.chat.ChatJoinVo;
+import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
 import com.doit.gw.vo.emp.EmpVo;
 
@@ -85,10 +89,17 @@ public class ChatRoomController {
     	return "chat/chatRoom";
     }
     
-    @RequestMapping(value = "/chatJstree.do", method = RequestMethod.GET)
-	public String chatJstree() {
+    //방 생성 jsTree 동적 모달
+    @RequestMapping(value = "/createJstree.do", method = RequestMethod.GET)
+	public String createRoom() {
 		logger.info("============== ApproLineController jstree로 이동! ==============");
-		return "/chat/chatJstree";
+		return "/chat/createJstree";
+	}
+    
+    @RequestMapping(value = "/inviteJstree.do", method = RequestMethod.GET)
+	public String inviteRoom() {
+		logger.info("============== ApproLineController jstree로 이동! ==============");
+		return "/chat/inviteJstree";
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -113,7 +124,6 @@ public class ChatRoomController {
 		logger.info("emp_id {}",emp_id);
 		
 		for (ApproEmpVo approEmpVo : listEmp) {
-			logger.info("contains의 값 {} / {}",approEmpVo.getEmp_id() ,String.valueOf(approEmpVo.getEmp_id()));
 			if(emp_id.contains(String.valueOf(approEmpVo.getEmp_id())) == false) {
 				JSONObject json = new JSONObject();
 				JSONObject state = new JSONObject();
@@ -131,15 +141,14 @@ public class ChatRoomController {
 		return jsonArr;
 	}
 	
+	//채팅방 생성
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/makeRoom.do",method = RequestMethod.POST)
 	@ResponseBody
 	public String makeRoom(@RequestParam List<String> mems, String roomName){
 		logger.info("ChatRoomController makeRoom {} / {}", mems, roomName);
-		
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-		String formatedNow = now.format(formatter);
+
+		String formatedNow = localDatetime();
 		
 		JSONObject json = new JSONObject();
 		JSONArray jsonArr = new JSONArray();
@@ -153,6 +162,7 @@ public class ChatRoomController {
 		}
 		
 		json.put("ROOM", jsonArr);
+		logger.info("{}",json);
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
@@ -160,6 +170,7 @@ public class ChatRoomController {
 		map.put("room_mem", json.toString());
 		
 		String room_id = service.insChatRoom(map);
+		logger.info("room_id", room_id);
 		
 		Map<String, String> chat = new HashMap<String, String>();
 		
@@ -171,6 +182,72 @@ public class ChatRoomController {
 		
 		service.insChat(chat);
 		
-		return room_id;
+		return "{\"room_id\":"+room_id+"}";
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/inviteRoom.do",method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject inviteRoom(@RequestParam List<String> mems, String room_id) throws ParseException{
+		logger.info("ChatRoomController inviteRoom mems : {} / room_id",mems);
+		
+		ChatRoomVo vo = service.selRoomMember(room_id);
+		
+		logger.info("vo는 {}",vo);
+		
+		String formatedNow = localDatetime();
+		
+		JSONParser parser = new JSONParser();
+		Object obj = parser.parse(vo.getRoom_mem());
+		JSONObject json = (JSONObject)obj;
+				
+		JSONArray jsonRoom = (JSONArray) json.get("ROOM");
+		
+		for(int i = 0; i < mems.size(); i++) {
+			JSONObject jsonVal = new JSONObject();
+			jsonVal.put("id", mems.get(i));
+			jsonVal.put("join", formatedNow.toString());
+			
+			jsonRoom.add(jsonVal);
+		}
+		json.clear();
+		json.put("ROOM", jsonRoom);
+		
+		vo.setRoom_mem(json.toString());
+		service.updRoomMember(vo);
+		
+		List<Map<String, String>> list = service.selRoomMem(room_id);
+		logger.info("시발이네 진짜 아 {}", list);
+		
+		String html = "";
+		for (int i = 0; i < list.size(); i++) {
+			Map<String, String> map = list.get(i);
+			
+			html += "<div id="+String.valueOf(map.get("EMP_ID"))+">";
+			html += 	"<span class=\"memList\"></span>";
+			html +=  	"<span class=\"memList\">"+map.get("EMP_NAME")+"</span>";
+			html += 	"<span class=\"memList memListRank\">"+map.get("RANK_NAME")+"</span>";
+			html += "</div>";
+			html += "<hr>";
+		}
+		
+		List<String> memList = ChatController.getListMem(room_id);
+		
+		logger.info("들어온 최종적인 값 html : {} / mem : {}",html,memList);
+		
+		JSONObject jsons = new JSONObject();
+		jsons.put("room_id", room_id);
+		jsons.put("html", html);
+		jsons.put("memList", memList);
+		
+		return jsons;
+	}
+	
+	public String localDatetime() {
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		String formatedNow = now.format(formatter);
+		
+		return formatedNow;
 	}
 }
