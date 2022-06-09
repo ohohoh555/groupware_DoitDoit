@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.doit.gw.service.ann.IAnnService;
 import com.doit.gw.service.appro.IApproService;
 import com.doit.gw.service.appro.IDocFormService;
 import com.doit.gw.vo.appro.ApproVo;
@@ -30,6 +31,10 @@ public class ApproController {
 	
 	@Autowired
 	private IDocFormService docService;
+	
+	//연차 service
+	@Autowired
+	private IAnnService annService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ApproController.class);
 	
@@ -301,6 +306,9 @@ public class ApproController {
 			int length = jArr.size();
 			JSONObject tmp = (JSONObject) jArr.get(i);
 			if(tmp.get("EMP_ID").equals(String.valueOf(emp_id)) && length-1 == i) {
+				//연차 승인시 연차 감소
+				annService.anuualUse(appro_line_no);
+				//
 				tmp.replace("APPRO_STATUS", "Y");
 				jArr.set(i, tmp);
 				service.updApprovedAppro(appro_line_no);

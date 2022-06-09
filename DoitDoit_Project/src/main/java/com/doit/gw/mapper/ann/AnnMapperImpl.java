@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.doit.gw.vo.ann.AnnAddVo;
 import com.doit.gw.vo.ann.AnnUseVo;
 import com.doit.gw.vo.ann.AnnualVo;
+import com.doit.gw.vo.appro.ApproVo;
 import com.doit.gw.vo.emp.EmpVo;
 
 @Repository
@@ -110,6 +111,11 @@ public class AnnMapperImpl implements IAnnMapper {
 		return sqlSession.update(NS+"updAnnualWorkDays", emp_nfc);
 	}
 
+	@Override
+	public ApproVo searchAppro(int appro_line_no) {
+		return sqlSession.selectOne(NS+"searchAppro", appro_line_no);
+	}
+	
 	@Override
 	public int insAnnUse(Map<String, Object> map) {
 		return sqlSession.insert(NS+"insAnnUse", map);
