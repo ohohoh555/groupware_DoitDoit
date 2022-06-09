@@ -11,6 +11,8 @@
 <title>결재문서 상세보기</title>
 <%@include file="../comm/setting.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="./js/appro/jspdf.min.js"></script> 
+<script src="./js/appro/html2canvas.js"></script>
 <style type="text/css">
 #docForm{
 	width: 800px;
@@ -73,9 +75,12 @@ String today = sf.format(now);
 							</c:when>
 						</c:choose>
 						</legend>
-						<c:if test="${loginEmp_id ne aVo.emp_id}">
+						<c:if test="${loginEmp_id ne aVo.emp_id and aStatus eq 1}">
                     	<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#appro">승인</button>
                     	<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#approReturn">반려</button>
+						</c:if>
+						<c:if test="${aStatus eq 3}">
+                    	<button type="button" class="btn btn-default btn-sm" onclick="docToPdf()" >문서출력</button>
 						</c:if>
                     	<input type="button" class="btn btn-default btn-sm"  onclick="javascript:history.back(-1)" value="뒤로가기">
                     	<input type="hidden" id="empId" value="${loginEmp_id}">
@@ -288,6 +293,42 @@ function gyuljaeClick(){
 			}
 		}
 	});
+
+}
+
+//완료문서 pdf출력
+function docToPdf() {
+	console.log("pdf시작");
+	var pdfToDoc = document.getElementsByClassName("rContent-normal-top")[0];
+//	console.log(pdfToDoc);
+	html2canvas(pdfToDoc).then(function(canvas) {
+		//캔버스를 이미지로 변환
+		let imgData = canvas.toDataURL('image/png'); 
+		let margin = 3; // 출력 페이지 여백설정
+		let imgWidth = 210; // 이미지 가로 길이(mm) A4 기준
+		let pageHeight = imgWidth * 1.414; // 출력 페이지 세로 길이 계산 A4 기준
+		let imgHeight = canvas.height * imgWidth / canvas.width;
+		let heightLeft = imgHeight;
+		let position = margin;			
+		
+		//pdf생성
+		let doc = new jsPDF('p', 'mm');
+		
+		
+		doc.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+		heightLeft = pageHeight;
+		
+	
+		//파일명을 날짜에서 초+밀리세컨드.pdf로 생성하게합니다
+		var day = new Date();
+		let s = day.getSeconds();
+		let ms = day.getMilliseconds();
+		
+		//파일을 저장합니다
+		doc.save("page"+s+ms+".pdf");
+	});
+
+
 }
 </script>
 </html>

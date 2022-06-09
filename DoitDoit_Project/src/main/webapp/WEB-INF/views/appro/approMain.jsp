@@ -49,7 +49,7 @@
                      <div class="rContent-normal-bottom" style="width: 780px; height: 460px;">
                       <fieldset style="width:770px;">
 						<legend style="margin-bottom : 3px;">결재 문서 조회</legend>
-						<select id="statusSelect">
+						<select style="width: 150px; float: left;" class="form-control" id="statusSelect">
 								<option>==== 선택 ====</option>
 								<option value="1">결재대기</option>
 								<option value="2">반려</option>
@@ -200,7 +200,8 @@ function docClick(){
 			
 			var obj = JSON.parse(data);
 			var objlists = obj.lists;
-
+			var guyljaejalists = obj.guyljaejaLists;
+			
 			for(let i=0; i<objlists.length; i++){
 				console.log(objlists[i]);
 				console.log(objlists[i].appro_empname);
@@ -215,7 +216,23 @@ function docClick(){
 				html += '</tr>';
 				$("#statusDocList").append(html);
 			}
-			
+
+			if(status == 3){
+				for(let i=0; i<guyljaejalists.length; i++){
+					console.log(guyljaejalists[i]);
+					console.log(guyljaejalists[i].appro_empname);
+					html = '';
+					html += '<tr>';
+					html += '<td>'+(i+1)+'</td>';
+					html += '<td><a href="./selDocDetail.do?emp_id='+emp_id+'&appro_no='+guyljaejalists[i].appro_no+'">'+guyljaejalists[i].appro_no+'</td>';
+					html += '<td>'+guyljaejalists[i].appro_status+'</td>';
+					html += '<td>'+guyljaejalists[i].appro_title+'</td>';
+					html += '<td>'+guyljaejalists[i].appro_empname+'</td>'
+					html += '<td>'+guyljaejalists[i].appro_regdate+'</td>';
+					html += '</tr>';
+					$("#statusDocList").append(html);
+				}	
+			}	
 		}
 	});
 } 

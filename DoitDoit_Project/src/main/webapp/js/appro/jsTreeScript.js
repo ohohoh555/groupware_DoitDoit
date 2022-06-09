@@ -148,13 +148,18 @@ console.log(empNo);
 			setDisabled(isc,row);
 		});
 		
+		var empLists = $(".empList");
 		$.each(empData, function(idx,row){
 			if(row.id == empNo){
+				console.log('if문 안의 길이 :',empLists.length);
+				if(empLists.length >= 3){
+				alert("결재자는 최대 3명까지 선택할 수 있습니다.");
+				}else{
 				$("#selEmp").children("ul").append("<li class='empList'>"+row.text+"</li>");
+				}
 			}
 		});
 		
-		var empLists = $(".empList");
 		console.log(empLists.length);
 		console.log(empNo);
 		empNo = "0";

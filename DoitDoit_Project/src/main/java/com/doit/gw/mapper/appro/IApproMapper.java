@@ -17,4 +17,5 @@ public interface IApproMapper {
 	public List<Map<String, Object>> selLineList(String appro_no);
 	public int updApprovedApproLine(ApproVo approVo);
 	public int updApprovedAppro(int appro_line_no);
+	public List<ApproVo> selFinalDoc(int emp_id);
 }

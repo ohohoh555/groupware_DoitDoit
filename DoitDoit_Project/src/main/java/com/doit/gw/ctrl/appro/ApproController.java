@@ -1,8 +1,12 @@
 	package com.doit.gw.ctrl.appro;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -60,7 +64,7 @@ public class ApproController {
 	
 	//기안문서 작성 인서트
 	@RequestMapping(value = "/approval.do",method = RequestMethod.POST)
-	public String insApproval(ApproVo aVo,@RequestParam(value = "appro_line") String appro_line,int emp_id) {
+	public String insApproval(ApproVo aVo,@RequestParam(value = "appro_line") String appro_line,int emp_id,HttpServletResponse response) throws IOException {
 		logger.info("============== ApproController insApproval 시작! ==============");
 		logger.info("[aVo 값] : {}" ,aVo);
 		logger.info("[appro_line 값] : {}" ,appro_line);
@@ -81,6 +85,12 @@ public class ApproController {
 		
 		//결재자 리스트 insert
 		service.insApproLine(approVo);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println("<script>alert('기안 상신 되었습니다.');</script>");
+        out.flush();
+		
 		return "/appro/approMain";
 	}
 	
@@ -267,6 +277,26 @@ public class ApproController {
 			jArr.add(obj);
 		}
 		json.put("lists",jArr);
+
+		//결재 완료문서 화면에 뿌려주기 (결재자 기준 )
+		List<ApproVo> guyljaeLists = service.selFinalDoc(emp_id);
+		JSONArray guyljaeJsonArr = new JSONArray();
+		for (int i = 0; i < guyljaeLists.size(); i++) {
+			JSONObject guyljaeObj = new JSONObject();
+			ApproVo guyljaeApproVo = guyljaeLists.get(i);
+			guyljaeObj.put("appro_no", guyljaeApproVo.getAppro_no());
+			guyljaeObj.put("appro_line_no", guyljaeApproVo.getAppro_line_no());
+			guyljaeObj.put("appro_status",guyljaeApproVo.getAppro_status());
+			guyljaeObj.put("emp_id",guyljaeApproVo.getEmp_id());
+			guyljaeObj.put("appro_empname",guyljaeApproVo.getAppro_empname());
+			guyljaeObj.put("appro_title",guyljaeApproVo.getAppro_title());
+			guyljaeObj.put("appro_regdate",guyljaeApproVo.getAppro_regdate());
+			guyljaeObj.put("appro_type",guyljaeApproVo.getAppro_type());
+			guyljaeJsonArr.add(guyljaeObj);
+		}
+		json.put("guyljaejaLists",guyljaeJsonArr);
+		
+		
 		return json.toString();
 	}
 	
