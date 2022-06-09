@@ -1,6 +1,7 @@
 package com.doit.gw.service.entr;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +37,9 @@ public class JaryoServiceImpl implements IJaryoService {
 
 
 	@Override
-	public int updJaryoDelflagUser(String eboard_no) {
-		logger.info("@updJaryoDelflagUser 사용자 자료글 삭제 : {}", eboard_no);
-		return mapper.updJaryoDelflagUser(eboard_no);
+	public int updJaryoDelflagUser(Map<String, Object>map) {
+		logger.info("@updJaryoDelflagUser 사용자 자료글 삭제 : {}", map);
+		return mapper.updJaryoDelflagUser(map);
 	}
 
 

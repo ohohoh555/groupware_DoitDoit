@@ -1,6 +1,7 @@
 package com.doit.gw.mapper.entr;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -33,8 +34,8 @@ public class JaryoMapperImpl implements IJaryoMapper {
 	}
 
 	@Override
-	public int updJaryoDelflagUser(String eboard_no) {
-		return sqlSession.update(NS+"updJaryoDelflagUser", eboard_no);
+	public int updJaryoDelflagUser(Map<String, Object>map) {
+		return sqlSession.update(NS+"updJaryoDelflagUser", map);
 	}
 
 	@Override
