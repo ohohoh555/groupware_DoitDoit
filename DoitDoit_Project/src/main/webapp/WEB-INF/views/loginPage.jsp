@@ -43,7 +43,7 @@
 	        	<table class="table table-bordered">
 	        		<tr>
 		       			<td style="text-align: center;">
-			      			<input type="password" id="empNfc" name="emp_nfc" onkeypress="nfc(event)">
+			      			<input type="password" id="empNfc" name="emp_nfc" onkeypress="nfcRead(event)">
 		       			</td>
 	        		</tr>
 	        	</table>
@@ -60,7 +60,7 @@ function nfcWork(){
 		$("#empNfc").focus();
 	})
 }
-function nfc(e) {
+function nfcRead(e) {
 	if(e.keyCode==13){
 		var emp_nfc = $("#empNfc").val();
 		$.ajax({
@@ -74,9 +74,24 @@ function nfc(e) {
 				}else if(data=="0"){
 					alert("등록되지 않은 nfc 번호입니다");
 					$("#empNfc").val("");
-				}else{
-					alert("출/퇴근이 등록되었습니다.");
+				}else if(data=="출근"){
+					alert("출근이 등록되었습니다.");
 					$("#workModal").modal("hide");
+					$("#nfcBtn").prop("disabled", true);
+					$("#nfcBtn").css("background-color", "#bdbdbd");
+					setTimeout(function() {
+						$("#nfcBtn").prop("disabled", false);
+						$("#nfcBtn").css("background-color", "#6667AB");
+					}, 1000*60*60);
+				}else {
+					alert("퇴근이 등록되었습니다.");
+					$("#workModal").modal("hide");
+					$("#nfcBtn").prop("disabled", true);
+					$("#nfcBtn").css("background-color", "#bdbdbd");
+					setTimeout(function() {
+						$("#nfcBtn").prop("disabled", false);
+						$("#nfcBtn").css("background-color", "#6667AB");
+					}, 1000*60*60);
 				}
 			}
 		});

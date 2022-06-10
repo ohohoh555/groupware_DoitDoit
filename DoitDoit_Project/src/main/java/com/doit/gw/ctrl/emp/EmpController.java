@@ -112,15 +112,21 @@ public class EmpController {
 		return "redirect:/selAllEmp.do";
 	}
 	
-	@RequestMapping(value = "/nfcCheck.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/nfcCheck.do", method = RequestMethod.POST, produces = "application/text; charset=utf-8;")
 	@ResponseBody
 	public String nfcCheck(@RequestParam String emp_nfc) {
-		logger.info("전달받은 nfc 값 : " + emp_nfc);
-		int n = service.selEmpNfcCheck(emp_nfc);
-		if(n==0) {
-			return "0";
+		logger.info("EmpController nfcCheck 전달받은 nfc 값 : " + emp_nfc);
+		//숫자 판별
+		boolean isNumeric =  emp_nfc.matches("[+-]?\\d*(\\.\\d+)?");
+		if(!isNumeric) {
+			return "문자";
 		}else {
-			return "1";
+			int n = service.selEmpNfcCheck(emp_nfc);
+			if(n==0) {
+				return "0";
+			}else {
+				return "1";
+			}
 		}
 	}
 	
