@@ -42,13 +42,6 @@
                 </div>
             <%@include file="../comm/aside.jsp" %>    
             </sec:authorize>
-        <%--    <sec:authorize access="isAuthenticated()">
-            	아이디 : <sec:authentication property="principal"/> ${principal} <br>
-            	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
-            	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>
-            	이름 : <sec:authentication property="Details" var="info"/>${info.emp_name}<br>
-            	권한 : <sec:authentication property="Authorities"/> ${Authorities} <br>
-            </sec:authorize>	 --%>
             </div>
         </main>
     </div>

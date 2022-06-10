@@ -190,9 +190,9 @@ String today = sf.format(now);
 <script>
 
 window.onload = function viewImg(){
-	console.log("뷰이미지 셀렉트 함수 시작");
+//	console.log("뷰이미지 셀렉트 함수 시작");
 	var emp_id = document.getElementById("imagename").value;
-	console.log("emp_id :",emp_id);
+//	console.log("emp_id :",emp_id);
 //	console.log(doit_emp_id);
 	$.ajax({
 		url :"./viewImg.do?",
@@ -219,7 +219,7 @@ window.onload = function viewImg(){
 $(".modal-body").load("./jstree.do");
 
 function jstree(){
-	console.log('jstree 시작!');
+//	console.log('jstree 시작!');
 	ajaxJstree();
 	$("#jstree").modal({backdrop:'static',keyboard:false});
 }
@@ -228,19 +228,9 @@ var ajaxJstree = function(){
 		url : "./jstree.do",
 		type : "get",
 		success : function(data){
-			console.log(data);
-			console.log('성공');
-		/* 	html = "";
-			html +=  " <div id='SimpleJSTree'></div>";
-			html +=  "    <button id='select' onclick='sel()'>select</button>";
-			html +=  "    <button id='deSelect' onclick='deSel()'>deselect</button>";
-			html +=  "    <button onclick='gyuljae()'>결재선 올리기</button>";
-			html +=  "    <fieldset>";
-			html +=  "    	<legend>선택한 사원</legend>";
-			html +=  "    	<div id='selEmp' style='width: 230px;'>";
-			html +=  "   			<ul>";
-			html +=  "   			</ul>";
-			html +=  "    	</div>"; */
+	//		console.log(data);
+	//		console.log('성공');
+	
 		$("#frmJstree").html(html);
 		
 			
@@ -250,7 +240,7 @@ var ajaxJstree = function(){
 //문서양식 선택 ajax
 function docSel(){
 	var docForm = $("#docFormSelect option:selected").val();
-	console.log(docForm);
+//	console.log(docForm);
 	$.ajax({
 		url : "./selDocForm.do?",
 		type : "get",
@@ -261,7 +251,7 @@ function docSel(){
 		//	console.log(data);
 			CKEDITOR.instances.ck_content.setData(data); 
 			document.getElementById("doc_form_no").value = docForm;
-			console.log(document.getElementById("doc_form_no").value);
+	//		console.log(document.getElementById("doc_form_no").value);
 		}
 		
 	});
@@ -308,7 +298,7 @@ function search(){
 
 function insert(){
 	var data = document.getElementById("inputContent").value;
-	console.log(data);
+//	console.log(data);
 	// <textarea>에 넣어줄 값을 data 부분에 넣어주면 됨 
 	CKEDITOR.instances.content.setData(data); 
 }
@@ -323,7 +313,7 @@ function editorAction(){
 	
 	var title = document.getElementById("title").value;
 	var content = CKEDITOR.instances.content.getData();
-	console.log(title, content);
+//	console.log(title, content);
 	
 	if(title==""){
 		alert("제목을 입력해주세요");
@@ -337,14 +327,12 @@ function editorAction(){
 
 }
 function draft(frm){
-	console.log("임시저장 버튼 들어오는지 확인");
 	frm.action = './draft.do';
 	frm.submit();
 	return true;
 }
 
 function approval(){
-	console.log("문서입력 리턴 들어오는지");
 	var docTitle = document.getElementById("docTitle").value;
 	var approGianja = document.getElementById("approGianja");
 	var guyljaesun = approGianja.parentNode.lastChild.innerHTML; //결재자
