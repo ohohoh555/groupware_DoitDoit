@@ -76,6 +76,13 @@
 			WHERE ROOM_ID = #{room_id}
 	</select>
 	
+	<!-- 원본 파일명 (originName) 조회 -->
+	<select id="selFileNM" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT FILE_CHAT_ORIGINNM || '.' || FILE_CHAT_TYPE 
+			FROM CHAT_FILE
+			WHERE FILE_CHAT_UUID = #{file_chat_uuid}
+	</select>
+	
 	<update id="updRoomMember" parameterType="ChatRoomVo">
 		UPDATE CHAT_ROOM SET ROOM_MEM = #{room_mem}
 			WHERE ROOM_ID = #{room_id} 
@@ -126,11 +133,4 @@
 		INSERT INTO CHAT_ROOM (ROOM_ID, ROOM_NAME,ROOM_MEM)
     		VALUES(#{seq},#{room_name},#{room_mem})
 	</insert>
-	
-	<!-- 원본 파일명 (originName) 조회 -->
-	<select id="selFileNM" parameterType="java.lang.String" resultType="java.lang.String">
-		SELECT FILE_CHAT_ORIGINNM || '.' || FILE_CHAT_TYPE 
-			FROM CHAT_FILE
-			WHERE FILE_CHAT_ID = #{file_chat_id}
-	</select>
 </mapper>

@@ -65,6 +65,17 @@ $(document).ready(function() {
 			html += "</div>"; 
 			$("#chatLog:last-child").append(html);
 			
+			html = "";
+			if(content.chat_type == "F"){
+				html += "<div class=\"files\">"
+				html += content.chat_con;
+				html += "</div>";
+				$("#fileArea:last-child").append(html);
+				if($('#fileArea').scrollTop()){
+					$('#fileArea').scrollTop($('#chatLog')[0].scrollHeight);
+				}
+			}
+			
 			//scrollbar가 내려 갔을시 추가 되는 스크롤 자동으로 내려줌
 			if($('#chatLog').scrollTop()){
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
@@ -112,7 +123,11 @@ $(document).ready(function() {
             	$("#textApp").text(hel.barsin+" 님이 결재를 요청하였습니다.")
             	$("#textApp").slideDown();
             	$("#textApp").delay(3000).slideUp();
-         	}
+         	}else if(hel.type == "chat"){
+				$("#textApp").text(hel.chat_con)
+            	$("#textApp").slideDown();
+            	$("#textApp").delay(6000).slideUp();
+			}
       	});
       
 		//우연      
@@ -175,6 +190,7 @@ $(document).ready(function() {
 	
 	//파일  크기 판단
 	function handleFileUpload(files) {
+		fd = new FormData();
 		console.log("handle에 ",files);
 		// 파일의 길이만큼 반복하며 formData에 셋팅해준다.
 		var megaByte = 1024*1024;
@@ -301,8 +317,8 @@ function sendFileToServer(fd) {
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
 		cache : false, //ajax 로 통신 중 cache 가 남아서 갱신된 데이터를 받아오지 못할 경우를 대비
 		success : function(map){
-			console.log(JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
-			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: "F"}));
+			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: map.type }));
+			fd.remove();
 		},
 		error:function(){
 			alert("파일업로드 실패");

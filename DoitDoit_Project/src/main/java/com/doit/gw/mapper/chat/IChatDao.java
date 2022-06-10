@@ -23,7 +23,7 @@ public interface IChatDao {
 	//채팅방 생성
 	public int insChatRoom(Map<String, String> map);
 	//원본 파일명 조회
-	public String selFileNM(String file_chat_id); 
+	public String selFileNM(String file_chat_uuid); 
 	//최신 방 조회
 	public String selLastRoom();
 	//방 나갈려고 할때 멤버 조회
