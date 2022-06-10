@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.http.HttpClient.Redirect;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.http.HttpResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -59,13 +61,16 @@ public class ChatController {
 	@Autowired
 	private IChatService service;
 
-	private List<String> listMem;
-	private List<ChatVo> listChat;
+	private List<String> listMem;//mapMem에서 불러올때 편하게 불러오기 위해서 선언
+	private List<ChatVo> listChat;//mapChat에서 불러올 때 편하게 불러오기 위해서 선언
 
-	private static Map<String, List<String>> mapMem;
+	private static Map<String, List<String>> mapMem;//각 방에 들어와 있는 멤버 판단 
 	private static Map<String, List<ChatVo>> mapChat;
+	//각 방에 전달된 메세지 저장(다른 사람이 중간에 들어올 떄도 메세지 붙여서 올려줌) 
 	
-	private static Map<String, List<String>> roomAllMem;
+	private static List<String> listRoomAllMem;
+	private static Map<String, List<String>> mapRoomAllMem;
+	//알람 메세지을 보낼지 판단하기 위해서 모든 멤버의 
 
 	public ChatController() {
 		listChat = new ArrayList<ChatVo>();
@@ -74,7 +79,8 @@ public class ChatController {
 		mapMem = new HashMap<String, List<String>>();
 		mapChat = new HashMap<String, List<ChatVo>>();
 		
-		roomAllMem = new HashMap<String, List<String>>();
+		listRoomAllMem = new ArrayList<String>();
+		mapRoomAllMem = new HashMap<String, List<String>>();
 	}
 	
 	public static List<ChatVo> getListChat(String room_id) {
@@ -85,6 +91,14 @@ public class ChatController {
 	public static List<String> getListMem(String room_id){
 		List<String> sendMem = mapMem.get(room_id);
 		return sendMem;
+	}
+
+	public static Map<String, List<String>> getRoomAllMem() {
+		return mapRoomAllMem;
+	}
+
+	public static void setRoomAllMem(Map<String, List<String>> roomAllMem) {
+		ChatController.mapRoomAllMem = roomAllMem;
 	}
 
 	// 채팅방에 들어왔을때
@@ -133,7 +147,7 @@ public class ChatController {
 
 	// 채팅 메시지
 	@MessageMapping(value = "/chat/message")
-	public void chatMessage(@RequestParam Map<String, String> map) throws IOException, ParseException {		
+	public void chatMessage(@RequestParam Map<String, String> map) throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {		
 		logger.info("@ChatController chatMessage() : {}", map);
 		
 		if (mapChat.get(map.get("room_id")) != null) {
@@ -144,9 +158,9 @@ public class ChatController {
 			logger.info("해당 방의 채팅 없음 {}", listChat);
 		}
 		
-		if(roomAllMem.get(map.get("room_id")) == null) {
+		if(mapRoomAllMem.get(map.get("room_id")) == null) {
 			List<String> memAllList = findRoomAllMem(map.get("room_id"));
-			roomAllMem.put(map.get("room_id"), memAllList);
+			mapRoomAllMem.put(map.get("room_id"), memAllList);
 		}
 		
 		String html = "";
@@ -176,9 +190,35 @@ public class ChatController {
 		logger.info("저장된 채팅 {}", mapChat);
 		
 		template.convertAndSend("/sub/chat/room/" + map.get("room_id"), vo);
+		
+		chatAlarm(vo);
 	}
 	
-	public List<String> findRoomAllMem(String room_id) throws ParseException  {
+	private void chatAlarm(ChatVo vo) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		logger.info("@ChatController chatAlarm {}", vo);
+		
+		if(mapMem.get(vo.getRoom_id()) != null) {
+			listMem = mapMem.get(vo.getRoom_id());
+		}
+		
+		listRoomAllMem = mapRoomAllMem.get(vo.getRoom_id());
+		
+		Map<String, String> map = BeanUtils.describe(vo);
+		map.put("type", "chat");
+		
+		logger.info("map의 값은 {}",map);
+		
+		if(listMem.size() != listRoomAllMem.size()) {
+			for(int i = 0; i < listRoomAllMem.size(); i++) {
+				if(!listMem.contains(listRoomAllMem.get(i))) {
+					logger.info("%%%%% 없는 멤버 : {} %%%%%", listRoomAllMem.get(i));
+					template.convertAndSend("/sub/alarm/" + listRoomAllMem.get(i), map);
+				}
+			}
+		}
+	}
+
+	private List<String> findRoomAllMem(String room_id) throws ParseException  {
 		logger.info("@ChatController findRoomAllMem() : {}", room_id);
 		
 		ChatRoomVo vo = service.selRoomMember(room_id);
@@ -205,6 +245,7 @@ public class ChatController {
 		LocalDate date = LocalDate.now();
 		
 		Map<String, String> map = null;
+		String html = "";
 
 		List<MultipartFile> file = multipartRequest.getFiles("file");
 
@@ -248,23 +289,30 @@ public class ChatController {
 					outputStream.write(b, 0, read);
 				}
 				
+				logger.info("파일 확인 ");
 				service.insFile(cFv);
 				
 				map = new HashMap<String, String>();
 				
-				String html = "";
-				html += "<span class=\"Name\">"+user_name+"</span>";
-           		html += "<span class=\"imageMsg\">";
-           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" 
-           						+ date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
-           						+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
-            	html += "</span>";
-            	html += "<span class=\"saveFile\"><a href="+date.getYear() +"/" + 
-            				date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
-            				+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+
-            				">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
-            	
-            	map.put("html", html);
+				if(cFv.getFile_chat_type().equals("png") || cFv.getFile_chat_type().equals("jpg") || cFv.getFile_chat_type().equals("jpeg") || cFv.getFile_chat_type().equals("gif") || cFv.getFile_chat_type().equals("BMP")) {
+					html += "<span class=\"Name\">"+user_name+"</span>";
+	           		html += "<span class=\"imageMsg\">";
+	           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" 
+	           						+ date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
+	           						+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
+	            	html += "</span>";
+	            	html += "<span class=\"saveFile\"><a href=./download.do?path="+date.getYear() +"/" + 
+	            				date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
+	            				+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+
+	            				">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
+				}else {
+					html += "<span class=\"Name\">"+user_name+"</span>";
+					html += "<span class=\"fileMsg\"><span>"+cFv.getFile_chat_originnm()+"."+cFv.getFile_chat_type()+"</span></span>";
+            		html += "<span class=\"saveFile\"><a href=./download.do?path="+date.getYear() +"/" + date.getMonthValue() 
+            					+ "/" + date.getDayOfMonth() + "/" + cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+">저장</a> "
+            					+ "<a href=\"#\">다른 이름으로 저장</a></span>";
+					html += "</span>";
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -277,32 +325,36 @@ public class ChatController {
 			e.printStackTrace();
 		}
 		
+		map.put("type", "F");
+		map.put("html", html);
 		return map;
 	}
 	
 	@RequestMapping( value = "/download.do", method = RequestMethod.GET )
-	public void fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws FileNotFoundException {
+	@ResponseBody
+	public byte[] fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		logger.info("@ChatController fileDownload {}", path);
 		
-		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/chatFIle");
+		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/chatFile");
 		File file = new File(realPath + "/" + path);
 		
-		String orignNM = path.substring(path.lastIndexOf("/"), path.lastIndexOf("."));
+		String uuid = path.substring(path.lastIndexOf("/")+1, path.lastIndexOf("."));
+				
+		logger.info("originNm : {} || file : {}", uuid, file);
 		
-		logger.info("originNm : {} / file : {}", orignNM, file);
+		String originNM = service.selFileNM(uuid);
 		
-//		byte[] bytes = FileCopyUtils.copyToByteArray(file);
+		byte[] bytes = FileCopyUtils.copyToByteArray(file);
 		
-//		resp.setHeader("Content-Disposition","attachment; filename=\""+originNM+"\"");
-//		resp.setContentLength(bytes.length);
-//		resp.setContentType("application/octet-stream");
-//		
-//		return bytes;
+		resp.setHeader("Content-Disposition","attachment; filename=\""+originNM+"\"");
+		resp.setContentLength(bytes.length);
+		resp.setContentType("application/octet-stream");
 		
+		return bytes;
 	}
 	
 	//채팅 저장
-	public void chatSave(String room_id) {
+	private void chatSave(String room_id) {
 		logger.info("@ChatController chatSave {}",room_id);
 		int cnt = 0;
 		
@@ -330,8 +382,11 @@ public class ChatController {
 	
 	//나가는 데이터 update
 	@SuppressWarnings("unchecked")
-	public void getOut(String room_id, String emp_id) throws ParseException  {
+	private void getOut(String room_id, String emp_id) throws ParseException  {
 		ChatRoomVo vo = service.selRoomMember(room_id);
+		
+		mapRoomAllMem.remove(room_id);
+		
 		logger.info("가져온 vo {}",vo.getRoom_mem());
 		
 		JSONObject json = jsonParser(vo.getRoom_mem());

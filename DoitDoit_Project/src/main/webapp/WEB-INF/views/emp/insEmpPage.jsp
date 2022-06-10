@@ -103,6 +103,9 @@ function nfcVal(e) {
 					alert("사용가능한 nfc번호 입니다.");
 					$("#nfcModal").modal("hide");
 					$("#nfc").val(emp_nfc);
+				}else if(data=="문자"){
+					alert("잘못된 nfc 형식입니다.");
+					$("#empNfc").val("");
 				}else{
 					alert("사용할 수 없는 nfc번호 입니다.");
 					$("#empNfc").val("");

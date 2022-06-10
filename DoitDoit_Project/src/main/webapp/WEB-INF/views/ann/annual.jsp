@@ -75,7 +75,7 @@
 									<tr>
 										<th  style="text-align: center;">NO</th>
 										<th  style="text-align: center;" data-orderable="false">이름</th>
-										<th  style="text-align: center;" data-orderable="false">사용 내용</th>
+										<th  style="text-align: center;" data-orderable="false">반차/연차</th>
 										<th  style="text-align: center;" data-orderable="false">사용 연차</th>
 										<th  style="text-align: center;" data-orderable="false">사용 기간</th>
 										<th  style="text-align: center;" data-orderable="false">사용일</th>

@@ -10,24 +10,27 @@
 
 
 	<!-- 매년 1월 1일 -->
-	<!-- 모든 연차 초기화 -->	
-	<update id="updAnnualReset">
-		UPDATE ANNUAL SET ANN_ADD = 0, ANN_USE = 0, ANN_REST = 0
-	</update>
-	<!-- 입사일 올해 이전 사원 조회 -->
-	<select id="selEmpYear" parameterType="java.lang.String" resultType="EmpVo">
-		<![CDATA[
-			SELECT EMP_ID FROM EMP 
-				WHERE EMP_REGDATE < #{date}
-				AND EMP_AUTH = 'ROLE_USER'
-		]]>		
+	<!-- 입사 1년차 이상 사원 조회 -->
+	<select id="selEmpYear" resultType="EmpVo">
+		SELECT EMP_ID 
+			FROM EMP
+			WHERE TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD') >= TO_CHAR(ADD_MONTHS(EMP_REGDATE, 12), 'YYYY-MM-DD')
+			AND EMP_AUTH = 'ROLE_USER'
 	</select>
-	<!-- 입사일 올해 이전 사원 연차(15개) 부여(insert) -->
+	<!-- 입사 1년차 이상 사원 연차 초기화 -->	
+	<update id="updAnnualReset" parameterType="java.util.Map">
+		UPDATE ANNUAL SET ANN_ADD = 0, ANN_USE = 0, ANN_REST = 0
+			WHERE EMP_ID IN 
+		<foreach collection="emp_ids" item="emp_id" open="(" close=")" separator=",">
+			#{emp_id}
+		</foreach>		
+	</update>
+	<!-- 입사 1년차 이상 사원 연차(15개) 부여(insert) -->
 	<insert id="insAnnAddYear" parameterType="java.lang.String">
 		INSERT INTO ANN_ADD (ANN_ADD_NO, ANN_ADD_CONTENT, ANN_ADD_DAYS, EMP_ID)
 		VALUES (SEQ_ANN_ADD.NEXTVAL, '연차', 15, #{emp_id})
 	</insert>	
-	<!-- 입사일 올해 이전 사원 연차(15개) 부여(update) -->
+	<!-- 입사 1년차 이상 사원 연차(15개) 부여(update) -->
 	<update id="updAnnualYear" parameterType="java.util.Map">
 		UPDATE ANNUAL SET ANN_ADD = ANN_ADD + 15, ANN_REST = ANN_REST +15
 			WHERE EMP_ID IN 
@@ -38,28 +41,42 @@
 	
 	
 	<!-- 매월 1일 -->
-	<!-- 입사일 올해인 사원 조회 -->
-	<select id="selEmpMonth" parameterType="java.util.Map" resultType="EmpVo">
-		SELECT EMP_ID  
-			FROM ANNUAL JOIN EMP USING(EMP_ID)
-			WHERE EMP_REGDATE >= #{date} 
-			AND ANN_WORK_DAYS = #{days}
-			AND EMP_AUTH = 'ROLE_USER'			
+	<!-- 입사 1년차 안되며 만근인 사원 조회 -->
+	<select id="selEmpMonth" parameterType="java.lang.Integer" resultType="EmpVo">
+	<![CDATA[
+		SELECT EMP_ID 
+		FROM EMP JOIN ANNUAL USING(EMP_ID)
+		WHERE TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD') < TO_CHAR(ADD_MONTHS(EMP_REGDATE, 12), 'YYYY-MM-DD')
+		AND EMP_AUTH = 'ROLE_USER'
+		AND ANN_WORK_DAYS = #{days}
+	]]>	
 	</select>
-	<!-- 입사일 올해인 사원 만근시 연차(1개) 부여(insert) -->
+	<!-- 입사 1년차 안된 사원 만근시 연차(1개) 부여(insert) -->
 	<insert id="insAnnAddMonth" parameterType="java.lang.String">
 		INSERT INTO ANN_ADD (ANN_ADD_NO, ANN_ADD_CONTENT, ANN_ADD_DAYS, EMP_ID)
 		VALUES (SEQ_ANN_ADD.NEXTVAL, '만근', 1, #{emp_id})
 	</insert>	
-	<!-- 입사일 올해인 사원 만근시 연차(1개) 부여(update) -->
+	<!-- 입사 1년차 안된 사원 만근시 연차(1개) 부여(update) -->
 	<update id="updAnnualMonth" parameterType="java.util.Map">
-		UPDATE ANNUAL SET ANN_ADD = ANN_ADD + 1, ANN_REST = ANN_REST +1, ANN_WORK_DAYS = 0
+		UPDATE ANNUAL SET ANN_ADD = ANN_ADD + 1, ANN_REST = ANN_REST +1
 			WHERE EMP_ID IN 
 		<foreach collection="emp_ids" item="emp_id" open="(" close=")" separator=",">
 			#{emp_id}
 		</foreach>		
+	</update>
+	<!-- 근무일수 초기화 -->
+	<update id="updAnnualMonthWork">
+		UPDATE ANNUAL SET ANN_WORK_DAYS = 0
 	</update>	
 	
+	<!-- 매일 -->
+	<!-- 매일 입사 1년차된 사원 조회 -->
+	<select id="selEmpEveryDay" resultType="EmpVo">
+		SELECT EMP_ID 
+		FROM EMP
+		WHERE TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD') = TO_CHAR(ADD_MONTHS(EMP_REGDATE, 12), 'YYYY-MM-DD')
+		AND EMP_AUTH = 'ROLE_USER'
+	</select>
 	<!-- 매일 출퇴근 시간 초기화 -->
 	<update id="updAnnualEveryDay">
 		UPDATE ANNUAL SET ANN_IN_TIME = NULL , ANN_OUT_TIME = NULL, ANN_WORK_DAYS = ANN_WORK_DAYS 	
@@ -109,9 +126,17 @@
 	</select>
 	
 	<!-- 출퇴근 등록 -->
+	<select id="selAnuualWorkIn" parameterType="java.lang.String" resultType="AnnualVo">
+		SELECT ANN_IN_TIME  
+		FROM ANNUAL
+		WHERE EMP_ID = (
+			SELECT EMP_ID 
+			FROM EMP 
+			WHERE EMP_NFC = #{emp_nfc}
+		)	
+	</select>
 	<update id="updAnnualWorkIn" parameterType="java.lang.String">
-		UPDATE ANNUAL SET ANN_IN_TIME = CASE   
-		WHEN ANN_IN_TIME IS NULL THEN CURRENT_DATE END 
+		UPDATE ANNUAL SET ANN_IN_TIME = CURRENT_DATE
 		WHERE EMP_ID = (
 			SELECT EMP_ID 
 			FROM EMP
@@ -119,18 +144,8 @@
 		)	
 	</update>
 	<update id="updAnnualWorkOut" parameterType="java.lang.String">
-		UPDATE ANNUAL SET ANN_OUT_TIME = CASE 
-		WHEN ANN_IN_TIME IS NULL THEN CURRENT_DATE END 
-		WHERE EMP_ID = (
-			SELECT EMP_ID 
-			FROM EMP
-			WHERE EMP_NFC = #{emp_nfc}
-		)
-	</update>
-	<update id="updAnnualWorkDays" parameterType="java.lang.String">
-		UPDATE ANNUAL SET ANN_WORK_DAYS = CASE 
-		WHEN NOT ANN_OUT_TIME IS NULL THEN ANN_WORK_DAYS +1 
-		WHEN ANN_OUT_TIME IS NULL THEN ANN_WORK_DAYS END
+		UPDATE ANNUAL SET ANN_OUT_TIME = CURRENT_DATE, 
+						  ANN_WORK_DAYS = ANN_WORK_DAYS +1 
 		WHERE EMP_ID = (
 			SELECT EMP_ID 
 			FROM EMP

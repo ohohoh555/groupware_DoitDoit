@@ -46,6 +46,8 @@ function adminJaryo(){
 			$("#jaryoResult").html(html);
 			
 			$("#jaryoTable").DataTable({
+				scrollCollapse:true,
+				scrollY:"200px",
 				lengthMenu: [ 5, 10, 15],
 				 displayLength: 10,
 				aoColumnDefs: [

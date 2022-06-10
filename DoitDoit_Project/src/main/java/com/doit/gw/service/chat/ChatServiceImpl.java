@@ -42,6 +42,12 @@ public class ChatServiceImpl implements IChatService{
 	}
 	
 	@Override
+	public String selFileNM(String file_chat_uuid) {
+		logger.info("$$$$$ selFileNM $$$$$",file_chat_uuid);
+		return dao.selFileNM(file_chat_uuid);
+	}
+	
+	@Override
 	public int insChat(Map<String, String> map) {
 		logger.info("$$$$$ insChat {} $$$$$",map);
 		return dao.insChat(map);
@@ -65,12 +71,6 @@ public class ChatServiceImpl implements IChatService{
 		}else {
 			return "0";
 		}
-	}
-
-	@Override
-	public String selFileNM(String file_chat_id) {
-		logger.info("$$$$$ selFileNM $$$$$",file_chat_id);
-		return dao.selFileNM(file_chat_id);
 	}
 
 	@Override

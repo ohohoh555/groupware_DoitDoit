@@ -40,6 +40,8 @@ function cgoryBoard(val){
 		                "previous": "이전"
 		            }
 		        },
+				scrollCollapse:true,
+				scrollY:"200px",
 		        lengthMenu: [ 5, 10, 15],
 		        displayLength: 5
 				

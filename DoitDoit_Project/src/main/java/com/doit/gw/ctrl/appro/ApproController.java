@@ -95,10 +95,11 @@ public class ApproController {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		out.println("<script>alert('기안 상신 되었습니다.');</script>");
+		out.println("<script>alert('기안 상신 되었습니다.'); location.href='./approMain.do';</script>");
         out.flush();
+        out.close();
 		
-		return "/appro/approMain";
+		return "";
 	}
 	
 	//임시저장
@@ -114,7 +115,8 @@ public class ApproController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/myDocList.do", method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
-	public String selMyDocument(String emp_id) {
+	public String selMyDocument(Principal principal) {
+		String emp_id = principal.getName();
 		logger.info("ApprovalController selMyDocument 실행");
 		int int_emp_id = Integer.parseInt(emp_id);
 		logger.info("[int_emp_id 값] : {}" ,int_emp_id);
@@ -392,6 +394,7 @@ public class ApproController {
 	}	
 
 	//결재자 반려 클릭시
+	@SuppressWarnings({ "unused", "unchecked" })
 	@ResponseBody
 	@RequestMapping(value = "/guyljaejaReturn.do",method = RequestMethod.GET,produces = "application/text; charset=utf-8;")
 	public String guyljaeReturn(int appro_line_no, String approlineList, int emp_id,String approReturnreason) throws ParseException {

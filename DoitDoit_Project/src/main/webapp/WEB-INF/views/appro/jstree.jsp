@@ -16,9 +16,10 @@
 </head>
 <body>
     <div id="SimpleJSTree"></div>
-    <button id="select" onclick="sel()">select</button>
-    <button id="deSelect" onclick="deSel()">deselect</button>
-    <button onclick="gyuljaeClick()">결재선 올리기</button>
+    <button id="select" class="btn btn-default btn-xs"  onclick="sel()">select</button>
+    <button id="deSelect" class="btn btn-default btn-xs"  onclick="deSel()">deselect</button>
+    <button id="lineClear" class="btn btn-default btn-xs"  onclick="lineClear()">clear</button>
+    <button  class="btn btn-info btn-xs"  onclick="gyuljaeClick()">결재선 올리기</button>
     <fieldset>
     	<legend>선택한 사원</legend>
     	<div id="selEmp" style="width: 230px;">

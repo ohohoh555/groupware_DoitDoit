@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<!-- <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> -->
 <title>서명관리 화면</title>
 <%@include file="../comm/setting.jsp" %>
 
@@ -87,9 +87,9 @@
 </body>
 <script type="text/javascript">
 var emp_id = document.getElementById("emp_id").value;
-console.log(emp_id);
+//console.log(emp_id);
 window.onload = function signList(){
-	console.log("서명리스트 아작스 시작");
+//	console.log("서명리스트 아작스 시작");
 	$.ajax({
 		url : "./signList.do",
 		data : {
@@ -123,11 +123,7 @@ window.onload = function signList(){
 $(document).on("click","#removebtn",function (){ 
 	var namesign = $(this).next().val();
 	var empIdsign = $(this).next().next().val();
-	console.log(namesign,typeof namesign);
-	console.log(empIdsign,typeof empIdsign);
-	
 	var removebtns = document.getElementById("buttons").children.length;
-	console.log(removebtns);
 	
 	if(removebtns === 1){
 	alert("최소 한 개의 서명은 등록 해야 합니다.\n그래서 삭제 할 수 없습니다~!");
@@ -138,7 +134,7 @@ $(document).on("click","#removebtn",function (){
 			type : "get",
 			async : true,
 			success : function(data){
-				console.log(data)
+	//			console.log(data)
 				if(data == "true"){
 					alert("서명이미지가 삭제되었습니다!");
 					location.href="./signModify.do";
@@ -152,16 +148,13 @@ $(document).on("click","#removebtn",function (){
 
 //서명추가
 function addSign(){
-	console.log("실행");
+//	console.log("실행");
 	var removebtns = document.getElementById("buttons").children.length;
-	console.log(removebtns);
-	console.log(removebtns > 3);
-if(removebtns >= 3){
-	alert("서명은 3개까지만 등록 할 수 있습니다");
-}else{
-	location.href='./signUploadForm.do';
-}
-	
+	if(removebtns >= 3){
+		alert("서명은 3개까지만 등록 할 수 있습니다");
+	}else{
+		location.href='./signUploadForm.do';
+	}
 }
  
 </script>

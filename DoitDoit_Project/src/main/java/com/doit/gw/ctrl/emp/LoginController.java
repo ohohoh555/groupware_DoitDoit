@@ -1,5 +1,8 @@
 package com.doit.gw.ctrl.emp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -16,6 +19,16 @@ public class LoginController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	private List<String> loginMem = new ArrayList<String>();
+	
+	public List<String> getLoginMem() {
+		return loginMem;
+	}
+
+	public void setLoginMem(List<String> loginMem) {
+		this.loginMem = loginMem;
+	}
+
 	@RequestMapping(value = "/loginPage.do", method = RequestMethod.GET)
 	public String loginPage(@RequestParam(value = "error", required = false) String error, Model model) {
 		logger.info("LoginController loginPage");

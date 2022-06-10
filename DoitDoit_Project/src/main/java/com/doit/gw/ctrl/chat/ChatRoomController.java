@@ -185,11 +185,20 @@ public class ChatRoomController {
 		return "{\"room_id\":"+room_id+"}";
 	}
 	
+	//초대
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/inviteRoom.do",method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject inviteRoom(@RequestParam List<String> mems, String room_id) throws ParseException{
 		logger.info("ChatRoomController inviteRoom mems : {} / room_id",mems);
+		
+		//초대시 멤버 변경이 있으므로 해당 방 전체 멤버 조회 삭제
+		Map<String, List<String>> roomAllMem = ChatController.getRoomAllMem();
+		
+		roomAllMem.remove(room_id);
+		
+		ChatController.setRoomAllMem(roomAllMem);
+		//끝
 		
 		ChatRoomVo vo = service.selRoomMember(room_id);
 		

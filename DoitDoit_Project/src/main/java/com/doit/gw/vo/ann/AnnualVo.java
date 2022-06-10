@@ -9,6 +9,7 @@ public class AnnualVo {
 	private String ann_add;
 	private String ann_use;
 	private String ann_rest;
+	private String ann_in_time;
 	
 	
 	public String getDept_name() {
@@ -53,17 +54,24 @@ public class AnnualVo {
 	public void setAnn_rest(String ann_rest) {
 		this.ann_rest = ann_rest;
 	}
+	public String getAnn_in_time() {
+		return ann_in_time;
+	}
+	public void setAnn_in_time(String ann_in_time) {
+		this.ann_in_time = ann_in_time;
+	}
 	
 	
 	@Override
 	public String toString() {
 		return "AnnualVo [dept_name=" + dept_name + ", emp_id=" + emp_id + ", emp_name=" + emp_name + ", rank_name="
-				+ rank_name + ", ann_add=" + ann_add + ", ann_use=" + ann_use + ", ann_rest=" + ann_rest + "]";
+				+ rank_name + ", ann_add=" + ann_add + ", ann_use=" + ann_use + ", ann_rest=" + ann_rest
+				+ ", ann_in_time=" + ann_in_time + "]";
 	}
 	
 	
 	public AnnualVo(String dept_name, String emp_id, String emp_name, String rank_name, String ann_add, String ann_use,
-			String ann_rest) {
+			String ann_rest, String ann_in_time) {
 		super();
 		this.dept_name = dept_name;
 		this.emp_id = emp_id;
@@ -72,6 +80,7 @@ public class AnnualVo {
 		this.ann_add = ann_add;
 		this.ann_use = ann_use;
 		this.ann_rest = ann_rest;
+		this.ann_in_time = ann_in_time;
 	}
 	
 	
