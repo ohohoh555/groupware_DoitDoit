@@ -20,7 +20,7 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
 					<div class="rContent-full">
-						<h3>&lt;&lt;공지게시판&gt;&gt;</h3>
+						<h3>공지게시판</h3>
 						<hr>
 						<div id="FilDiv">
 						<table id="FildokTable" class="stripe">

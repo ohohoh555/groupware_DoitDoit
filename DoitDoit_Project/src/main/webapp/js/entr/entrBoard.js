@@ -15,6 +15,8 @@ $(document).ready(function(){
                 "previous": "이전"
             }
         },
+		scrollCollapse:true,
+		scrollY:"200px",
         lengthMenu: [ 5, 10, 15],
         displayLength: 5,
         order:[ [ 4, "desc"]]
@@ -23,6 +25,8 @@ $(document).ready(function(){
 	
 	
 	$("#FildokTable").DataTable({
+		scrollCollapse:true,
+		scrollY:"200px",
 		lengthChange: false,
 		searching: false,
 		ordering: false,
@@ -74,6 +78,8 @@ function cgoryAction(val){
 				                "previous": "이전"
 				            }
 				        },
+					scrollCollapse:true,
+					scrollY:"200px",
 				     lengthMenu: [ 5, 10, 15],
 				     displayLength: 5,
 				     order:[ [ 4, "desc"]]
@@ -111,6 +117,8 @@ function fildokAll(){
 					{data:"eboard_regdate"},
 					{data:"eboard_readcount"}
 				],
+				scrollCollapse:true,
+				scrollY:"200px",
 				lengthChange: false,
 				searching: false,
 				ordering: false,

@@ -17,8 +17,9 @@
                 <div id="rContent">
                     <div id="calendar" class="rContent-half"></div>
                     <div id="resent" class="rContent-half">
-                    <div id="resentBoard">
-                    <!-- home.js에서 $(document).ready(function(){ eboardResent() }); --></div>
+                   	 <div id="resentBoard">
+                    <!-- home.js에서 $(document).ready(function(){ eboardResent() }); -->
+                    	</div>
 <!-- 					<div class="rContent-full"></div> -->
 <!-- 					<div class="rContent-normal-top"></div> -->
 <!-- 					<div class="rContent-normal-bottom"></div> -->
