@@ -39,7 +39,7 @@ $(document).ready(function() {
 		console.log("STOMP Connection");
 		
 		//들어 갔을 때 스크롤 밑으로 내리기
-		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+//		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
@@ -133,10 +133,18 @@ $(document).ready(function() {
 		//우연      
       	stomp.subscribe('/sub/approval/complet/'+empN,function(text){
          	var hel = JSON.parse(text.body);
-         	console.log(hel);
-         	$("#textApp").text("결재가 완료되었습니다.")
-         	$("#textApp").slideDown();
-         	$("#textApp").delay(3000).slideUp();
+				console.log("DAFSAFAS"+hel);
+			if(hel.type == "appr"){
+				console.log(hel);
+	         	$("#textApp").text("결재가 완료되었습니다.")
+	         	$("#textApp").slideDown();
+	         	$("#textApp").delay(3000).slideUp();
+			}else if(hel.type == "banryu"){
+				console.log(hel);
+				$("#textApp").text(hel.susin+" 님이 기안을 반려하였습니다.")
+            	$("#textApp").slideDown();
+            	$("#textApp").delay(3000).slideUp();
+			}
     	});
 	});
 	
@@ -238,15 +246,24 @@ function gyuljaeClick2(empList){
             	susin = json.approval[i+1].EMP_ID;
             	stomp.send("/pub/alarm/"+susin,{},JSON.stringify({type:"appr",barsin:$("#gianja").val(),susin:susin}));
      		}else{
-        		stomp.send("/pub/apprMem/complet/"+$("#gianja").val(),{},JSON.stringify({barsin:$("#gianja").val()}));
+        		stomp.send("/pub/apprMem/complet/"+$("#gianja").val(),{},JSON.stringify({type:"comp",barsin:$("#gianja").val()}));
      		} 
       	}
 	}
 }
 
-function onSendCompMessage(){
-   	stomp.send("/pub/Comp/"+susin,{},JSON.stringify({barsin:barsin,susin:susin}));
+function gyuljaeBanryu(empList){
+   	console.log("기안자 아이디 "+$("#gianja").val());
+   	var json = JSON.parse(empList);
+   	console.log("JSON 파싱 후 ",json.approval)
+   	for(let i=0; i<json.approval.length; i++){
+      	if(json.approval[i].EMP_ID==$("#empN").val()){
+				susin = json.approval[i].EMP_ID;
+        		stomp.send("/pub/apprMem/complet/"+$("#gianja").val(),{},JSON.stringify({type:"banryu",susin:susin,barsin:$("#gianja").val()}));
+      	}
+	}
 }
+
 
 function disconn(){
    	if(stomp != null){

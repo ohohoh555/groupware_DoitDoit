@@ -294,7 +294,14 @@ function returnAppro(){
 //		console.log(ch.parentNode.lastChild.innerHTML);
 		returnList.push(ch.parentNode.lastChild.innerHTML); 
 	})
+
+		console.log("for문 밖의 : ",returnList);
+		console.log(typeof returnList);
+		console.log(returnList.toString());
+		gyuljaeBanryu(approlineList);
+
 //		console.log(returnList.toString());
+
 	$.ajax({
 		url : "./guyljaejaReturn.do",
 		data : {

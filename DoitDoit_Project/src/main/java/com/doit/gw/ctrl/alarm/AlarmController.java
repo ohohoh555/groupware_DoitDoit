@@ -45,12 +45,16 @@ public class AlarmController {
 		return obj;
 	}
 
+	@SuppressWarnings("unchecked")
 	@MessageMapping("/apprMem/complet/{barsin}")
 	@SendTo("/sub/approval/complet/{barsin}")
 	@ResponseBody
-	public String apprComplet(@PathVariable(name = "barsin") String barsin) {
+	public JSONObject apprComplet(@PathVariable(name = "barsin") String barsin,  @RequestParam Map<String, Object> map) {
 		System.out.println("session 정보" + map);
 		System.out.println("@@@@@@@@@@@@@@@@@@@" + "dddddd" + barsin);
-		return barsin;
+		JSONObject obj = new JSONObject();
+		obj.put("type", map.get("type"));
+		obj.put("susin", map.get("susin"));
+		return obj;
 	}
 }
