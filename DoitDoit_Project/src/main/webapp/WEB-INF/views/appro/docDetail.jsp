@@ -299,6 +299,7 @@ function returnAppro(){
 		console.log("for문 밖의 : ",returnList);
 		console.log(typeof returnList);
 		console.log(returnList.toString());
+		gyuljaeBanryu(approlineList);
 	$.ajax({
 		url : "./guyljaejaReturn.do",
 		data : {
