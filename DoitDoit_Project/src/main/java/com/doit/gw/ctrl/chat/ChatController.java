@@ -212,7 +212,7 @@ public class ChatController {
 			for(int i = 0; i < listRoomAllMem.size(); i++) {
 				if(!listMem.contains(listRoomAllMem.get(i))) {
 					logger.info("%%%%% 없는 멤버 : {} %%%%%", listRoomAllMem.get(i));
-					template.convertAndSend("/sub/alarm/" + map.get("emp_id"), map);
+					template.convertAndSend("/sub/alarm/" + listRoomAllMem.get(i), map);
 				}
 			}
 		}
