@@ -59,6 +59,8 @@ $(document).ready(function(){
 		aoColumnDefs: [
 	          { 'bSortable': false, 'aTargets': [0,1] }
 	       ],
+	       scrollCollapse:true,
+			scrollY:"200px",
 	     lengthMenu: [ 5, 10, 15],
 	     displayLength: 5,
 	  	"language": {

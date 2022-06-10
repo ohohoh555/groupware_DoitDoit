@@ -30,7 +30,7 @@
 							<div class="div1">
 								<button class='btn btn-success' onclick="slideDown()">파일 업로드</button>
 								<button class='btn btn-success' onclick="multiJaryo()">다중다운로드</button>
-								<div id="fileUpload" class="dragAndDropDiv hide10" style="position: relative;" >
+								<div id="fileUpload" class="dragAndDropDiv hide10" style="position: relative; background-image: url('./img/jaryo/fileDragDrop.png');" >
 									<table id='fileTable' class='fileList table-bordered'>
 										<tr>
 											<td id='tabFileName'>파일명</td>
