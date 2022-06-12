@@ -14,7 +14,7 @@ $(document).ready(function(){
 			$("#chatRoom").html("");
 			for(var i = 0; i < rooms.length; i++){
 				var html; 
-				html = "<div onclick=\"toChatRoom('"+rooms[i].room_id+"')\">";
+				html = "<div id=\""+rooms[i].room_id+"\">";
 				html += 	"<a href=./chatRoom.do?room_id="+rooms[i].room_id+">";
 				html += 		"<div class=\"roomName\">";
 				html += 			"<div>";
@@ -30,8 +30,8 @@ $(document).ready(function(){
 				html +=				"</div>";
 				html += 		"</div>";	
 				html += 	"</a>";
+				html += 	"<hr>";		
 				html += "</div>";	
-				html += "<hr>";		
 				$("#chatRoom").append(html);
 			}
 		},

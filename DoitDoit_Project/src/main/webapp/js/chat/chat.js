@@ -39,7 +39,7 @@ $(document).ready(function() {
 		console.log("STOMP Connection");
 		
 		//들어 갔을 때 스크롤 밑으로 내리기
-		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+		//$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
@@ -80,6 +80,16 @@ $(document).ready(function() {
 			if($('#chatLog').scrollTop()){
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			};
+			console.log("subcribe");
+			console.log(room_id);
+			var child = ($("#chatRoom").find("#"+room_id));
+			var prependHtml = "<div id=\""+room_id+"\">" + $(child).html() + "</div>";
+			$(child).remove();
+			$("#chatRoom").prepend(prependHtml);
+			console.log($(child).find("a > .roomName > div:eq(1) > span:eq(0)").html());
+			var child2 = $(child).find("a > .roomName > div:eq(1) > span:eq(0)");
+			console.log(content.chat_con);
+			$(child2).html("");
 		});
 		
 		//들어 왔을떄
@@ -124,6 +134,8 @@ $(document).ready(function() {
             	$("#textApp").slideDown();
             	$("#textApp").delay(3000).slideUp();
          	}else if(hel.type == "chat"){
+				console.log("chat 받음");
+				console.log(hel);
 				$("#textApp").text(hel.chat_con)
             	$("#textApp").slideDown();
             	$("#textApp").delay(6000).slideUp();
