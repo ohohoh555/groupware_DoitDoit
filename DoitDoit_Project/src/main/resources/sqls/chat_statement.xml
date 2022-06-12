@@ -3,11 +3,12 @@
 <mapper namespace="com.doit.gw.mapper.chat.ChatDaoImpl">
 	<!-- 자신의 방 목록 -->
 	<select id="selRoom" parameterType="java.lang.String" resultType="ChatJoinVo">
-		SELECT ch.ROOM_ID, ROOM_NAME, CHAT_TIME, CHAT_ID, CHAT_TYPE ,EMP_ID,CHAT_CON, CHAT_TYPE
+		SELECT ch.ROOM_ID, ROOM_NAME, CHAT_TIME, CHAT_ID, CHAT_TYPE ,EMP_ID,CHAT_CON, CHAT_TYPE, ISC
     		FROM CHAT_ROOM cr,
 	        	JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
 	            	COLUMNS (
-	                	IDS VARCHAR(20) PATH '$.id'
+	                	IDS VARCHAR(20) PATH '$.id',
+	                	ISC VARCHAR(5) PATH '$.isc'
 	            	)
 	        	) AS jt,
 	        	(SELECT ROOM_ID, EMP_ID ,CHAT_ID ,
@@ -81,6 +82,11 @@
 		SELECT FILE_CHAT_ORIGINNM || '.' || FILE_CHAT_TYPE 
 			FROM CHAT_FILE
 			WHERE FILE_CHAT_UUID = #{file_chat_uuid}
+	</select>
+	
+	<select id="selRoomNames" resultType="java.util.Map">
+		SELECT ROOM_NAME
+			FROM CHAT_ROOM
 	</select>
 	
 	<update id="updRoomMember" parameterType="ChatRoomVo">

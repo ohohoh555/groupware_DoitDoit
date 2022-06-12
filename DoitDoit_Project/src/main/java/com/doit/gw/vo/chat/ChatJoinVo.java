@@ -13,13 +13,14 @@ public class ChatJoinVo implements Serializable{
 	private String emp_id;
 	private String chat_con;
 	private String chat_type;
+	private String isc;
 	
 	public ChatJoinVo() {
 		super();
 	}
-	
-	public ChatJoinVo(String room_id, String room_name, String chat_time, String chat_id, String emp_id, String chat_con,
-			String chat_type) {
+
+	public ChatJoinVo(String room_id, String room_name, String chat_time, String chat_id, String emp_id,
+			String chat_con, String chat_type, String isc) {
 		super();
 		this.room_id = room_id;
 		this.room_name = room_name;
@@ -28,6 +29,7 @@ public class ChatJoinVo implements Serializable{
 		this.emp_id = emp_id;
 		this.chat_con = chat_con;
 		this.chat_type = chat_type;
+		this.isc = isc;
 	}
 
 	public String getRoom_id() {
@@ -86,9 +88,18 @@ public class ChatJoinVo implements Serializable{
 		this.chat_type = chat_type;
 	}
 	
+	public String getIsc() {
+		return isc;
+	}
+
+	public void setIsc(String isc) {
+		this.isc = isc;
+	}
+
 	@Override
 	public String toString() {
-		return "ChatJoin [room_id=" + room_id + ", room_name=" + room_name + ", chat_time=" + chat_time + ", chat_id="
-				+ chat_id + ", emp_id=" + emp_id + ", chat_con=" + chat_con + ", chat_type=" + chat_type + "]";
+		return "ChatJoinVo [room_id=" + room_id + ", room_name=" + room_name + ", chat_time=" + chat_time + ", chat_id="
+				+ chat_id + ", emp_id=" + emp_id + ", chat_con=" + chat_con + ", chat_type=" + chat_type + ", isc="
+				+ isc + "]";
 	}
 }

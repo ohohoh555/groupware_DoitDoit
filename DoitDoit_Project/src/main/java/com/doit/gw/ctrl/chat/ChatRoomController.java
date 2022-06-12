@@ -1,9 +1,13 @@
 package com.doit.gw.ctrl.chat;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,18 +47,40 @@ public class ChatRoomController {
 	private IChatService service;
 	
 	@Autowired
+	private SimpMessagingTemplate template;
+	
+	@Autowired
 	private IApproLineService treeService;
+	
+	@Autowired
+	private ChatController chatController;
+	
+	Map<String, List<ChatJoinVo>> mapListChatRoomList;//채팅방 리스트
+	List<ChatJoinVo> listChatRoomList;
+	
+	//room_id=54, room_name=isc테스트, chat_time=2022-06-13 01:20:57, chat_id=153, emp_id=0, chat_con=<span class="msg">isc테스트을 생성 하였습니다.</span>, chat_type=I, isc=false
+	ChatRoomController(){	
+		mapListChatRoomList = new HashMap<String, List<ChatJoinVo>>();
+		listChatRoomList = new ArrayList<ChatJoinVo>();
+	}
 	
 	//채팅방 목록 출력(메인화면)
   	@RequestMapping(value = "/roomList.do", method = RequestMethod.GET)
   	@ResponseBody
   	public List<ChatJoinVo> getRoom(Model model, Principal principal) {
+  		
   		String empId = principal.getName();
-  		logger.info("@ChatController, GET Chat / Username : " + empId);
   		
-  		List<ChatJoinVo> rooms = service.selRoom(empId);
+  		if(mapListChatRoomList.get(empId) == null) {
+  			logger.info("@ChatController, GET Chat / Username : " + empId);
+  			
+  			listChatRoomList = service.selRoom(empId);
+  			mapListChatRoomList.put(empId, listChatRoomList);
+  		}
   		
-  		return rooms;
+  		listChatRoomList = mapListChatRoomList.get(empId);
+  		logger.info("listChatRoomList {}",listChatRoomList);
+  		return listChatRoomList;
   	}
 	
     //채팅방 진입시 채팅 내역 조회
@@ -145,7 +171,7 @@ public class ChatRoomController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/makeRoom.do",method = RequestMethod.POST)
 	@ResponseBody
-	public String makeRoom(@RequestParam List<String> mems, String roomName){
+	public String makeRoom(String emp_id, @RequestParam List<String> mems, String roomName){
 		logger.info("ChatRoomController makeRoom {} / {}", mems, roomName);
 
 		String formatedNow = localDatetime();
@@ -157,7 +183,7 @@ public class ChatRoomController {
 			JSONObject valJson = new JSONObject();
 			valJson.put("id", mems.get(i));
 			valJson.put("join", formatedNow);
-			
+			valJson.put("isc", "false");
 			jsonArr.add(valJson);
 		}
 		
@@ -176,7 +202,7 @@ public class ChatRoomController {
 		
 		chat.put("room_id", room_id);
 		chat.put("emp_id", "0");
-		chat.put("chat_con", "<span class=\"msg\">"+roomName + "이 생성 되었습니다.</span>");
+		chat.put("chat_con", "<span class=\"msg\">"+roomName + "을 생성 하였습니다.</span>");
 		chat.put("chat_time", formatedNow);
 		chat.put("chat_type", "T");
 		
@@ -189,7 +215,8 @@ public class ChatRoomController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/inviteRoom.do",method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject inviteRoom(@RequestParam List<String> mems, String room_id) throws ParseException{
+	public JSONObject inviteRoom(String emp_id,@RequestParam List<String> mems, String room_id) 
+			throws ParseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException{
 		logger.info("ChatRoomController inviteRoom mems : {} / room_id",mems);
 		
 		//초대시 멤버 변경이 있으므로 해당 방 전체 멤버 조회 삭제
@@ -198,7 +225,6 @@ public class ChatRoomController {
 		roomAllMem.remove(room_id);
 		
 		ChatController.setRoomAllMem(roomAllMem);
-		//끝
 		
 		ChatRoomVo vo = service.selRoomMember(room_id);
 		
@@ -206,16 +232,14 @@ public class ChatRoomController {
 		
 		String formatedNow = localDatetime();
 		
-		JSONParser parser = new JSONParser();
-		Object obj = parser.parse(vo.getRoom_mem());
-		JSONObject json = (JSONObject)obj;
-				
+		JSONObject json = chatController.jsonParser(vo.getRoom_mem());
 		JSONArray jsonRoom = (JSONArray) json.get("ROOM");
 		
 		for(int i = 0; i < mems.size(); i++) {
 			JSONObject jsonVal = new JSONObject();
-			jsonVal.put("id", mems.get(i));
+			jsonVal.put("isc", "false");
 			jsonVal.put("join", formatedNow.toString());
+			jsonVal.put("id", mems.get(i));
 			
 			jsonRoom.add(jsonVal);
 		}
@@ -226,7 +250,10 @@ public class ChatRoomController {
 		service.updRoomMember(vo);
 		
 		List<Map<String, String>> list = service.selRoomMem(room_id);
-		logger.info("시발이네 진짜 아 {}", list);
+		logger.info("list {}", list);
+		
+		List<String> inviteEmps = new ArrayList<String>();//초대 받은 EMP
+		String inviteEmp = ""; //초대한 EMP
 		
 		String html = "";
 		for (int i = 0; i < list.size(); i++) {
@@ -238,16 +265,42 @@ public class ChatRoomController {
 			html += 	"<span class=\"memList memListRank\">"+map.get("RANK_NAME")+"</span>";
 			html += "</div>";
 			html += "<hr>";
+			
+			if(emp_id.equals(String.valueOf(map.get("EMP_ID")))) {
+				inviteEmp = map.get("EMP_NAME") + " " + map.get("RANK_NAME");
+				logger.info("초대자 있음 {}",inviteEmp);
+			}
+			
+			if(mems.contains(String.valueOf(map.get("EMP_ID")))) {
+				inviteEmps.add(map.get("EMP_NAME") + " " + map.get("RANK_NAME"));
+				logger.info("초대 받은 사람들 {}",inviteEmps);
+			}
 		}
 		
 		List<String> memList = ChatController.getListMem(room_id);
 		
 		logger.info("들어온 최종적인 값 html : {} / mem : {}",html,memList);
 		
+		logger.info("inviteEmp {}",inviteEmp);
+		logger.info("inviteEmps {}",inviteEmps);
+		
+		String inviteHtml = "<span class=\"msg\">"+inviteEmp+"님이 ";
+		for (int i = 0; i < inviteEmps.size(); i++) {
+			if(i > 0) {
+				inviteHtml += ", ";
+			}
+			inviteHtml += inviteEmps.get(i) +"님";
+		}
+		
+		inviteHtml += "을 초대하였습니다.</span>";
+		
+		logger.info("inviteHtml {} ",inviteHtml);
+		
 		JSONObject jsons = new JSONObject();
 		jsons.put("room_id", room_id);
 		jsons.put("html", html);
 		jsons.put("memList", memList);
+		jsons.put("inviteHtml", inviteHtml);
 		
 		return jsons;
 	}
