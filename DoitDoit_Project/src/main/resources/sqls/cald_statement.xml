@@ -82,4 +82,45 @@
 		WHERE CALD_ID = #{cald_id}
 </delete>
 
+<select id="selEmpName" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT EMP_NAME FROM EMP WHERE EMP_ID = #{emp_id}
+</select>
+
+<insert id="insAlarmCald">
+	INSERT INTO ADMIN.CALENDAR
+		(CALD_ID, CALD_START, CALD_END)
+		VALUES(SEQ_CALENDAR.NEXTVAL, CURRENT_DATE, CURRENT_DATE+0.0008)
+</insert>
+
+<insert id="insAlarmEntr" parameterType="java.util.Map">
+	INSERT INTO ADMIN.ENTRBOARD
+	(
+		EBOARD_NO, CGORY_NO, GUBUN_NO,
+		EMP_ID, CALD_ID, EMP_NAME,
+		EBOARD_TITLE, EBOARD_READCOUNT,
+		EBOARD_REGDATE, EBOARD_DELFLAG
+	)
+	VALUES
+	(
+		ENTRYBOARD_SEQ.NEXTVAL, '301', '300',
+		#{emp_id}, (SELECT MAX(CALD_ID) FROM CALENDAR), (SELECT EMP_NAME FROM ADMIN.EMP WHERE EMP_ID=#{emp_id}),
+		#{eboard_title},  0,
+		CURRENT_DATE	, 'N'
+	)
+</insert>
+
+<select id="selApprAlarm" resultType="EntrBoardVo" parameterType="java.lang.String">
+SELECT CALD_ID, EBOARD_TITLE, EBOARD_REGDATE 
+	FROM ADMIN.ENTRBOARD e NATURAL JOIN ADMIN.CALENDAR c  
+		WHERE e.EMP_ID = #{emp_id}
+		AND c.CALD_COLOR IS NULL
+		AND CGORY_NO = 301
+		ORDER BY EBOARD_REGDATE
+</select>
+
+<delete id="delAlarmDate" parameterType="java.lang.String">
+	DELETE FROM ADMIN.CALENDAR c 
+			WHERE CALD_ID = #{cald_id}
+</delete>
+
 </mapper>

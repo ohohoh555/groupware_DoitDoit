@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', selectAjax());
 function selectAjax(){
 	$.ajax({
 				type:"get",
-				url:"./calendarAjax.do",
+				url:"./calendarAjaxMain.do",
 				dataType:"json",
 				success:function(data){
 					console.log(data)
@@ -21,14 +21,15 @@ function selectAjax(){
 			        },
 					// 캘린더에 입력될 값
 			        events: data,
-						eventDidMount : function(info){
-							tippy(info.el,{
-								content : info.event.title
-							});
-						}
-			        });
+					eventClick: function(){
+						location.href="./moveCalendar.do";
+					},
+			     });
 				// 달력 초기화시 필수임
 			    calendar.render();
+				
+				$(".fc-list-empty-cushion").text("이번 주 일정이 없습니다.");
+				
 				},
 				error:function(error){
 					alert("통신 실패 : "+error.status)

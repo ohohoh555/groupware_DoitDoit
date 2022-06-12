@@ -41,7 +41,7 @@ public class CaldController {
 
 		return "cald/Calendar";
 	} 
-
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/calendarAjax.do", method = RequestMethod.GET)
 	@ResponseBody
@@ -105,9 +105,35 @@ public class CaldController {
 			// return 형태
 			// [{events:[{},{}]},{resources:[{},{}]}]
 			return lastArr;
-		} else {
+		}else {
 			return null;
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/calendarAjaxMain.do", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONArray calendarSelectAjaxMain(Principal principal, HttpServletRequest req) {
+		logger.info("CaldController calendarSelectAjax 시큐리티 사원 번호 : {}", principal.getName());
+
+		String[] getHeader = req.getHeader("referer").split("/");
+		System.out.println(Arrays.toString(getHeader));
+		System.out.println(getHeader[getHeader.length - 1]);
+			List<EntrBoardVo> list = service.selCaldAll(principal.getName());
+			JSONArray jsonArr = new JSONArray();
+			for (EntrBoardVo entrBoardVo : list) {
+				JSONObject obj = new JSONObject();
+				obj.put("id", entrBoardVo.getCald_id());
+				obj.put("title", entrBoardVo.getEboard_title());
+				obj.put("description", entrBoardVo.getEboard_content());
+				obj.put("start", entrBoardVo.getCald_start());
+				obj.put("end", entrBoardVo.getCald_end());
+				obj.put("color", entrBoardVo.getCald_color());
+
+				jsonArr.add(obj);
+			}
+			return jsonArr;
+		
 	}
 
 	/**

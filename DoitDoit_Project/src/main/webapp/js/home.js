@@ -111,3 +111,13 @@ function eboardResent(){
 	
 	
 }
+
+function approWindowOn(){
+   cnt ++;
+   console.log(cnt);
+   if(cnt % 2 == 1){
+      $("#approWindow").slideDown();
+   }else{
+      $("#approWindow").slideUp();
+   }
+}

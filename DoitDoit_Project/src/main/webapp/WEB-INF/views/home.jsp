@@ -7,6 +7,7 @@
 <title>홈 화면</title>
 </head>
 <%@include file="./comm/setting.jsp" %>
+<script type="text/javascript" src="./js/cald/calendarList.js"></script>
 <body>
 	<div id="container">
         <%@include file="./comm/nav.jsp" %>
