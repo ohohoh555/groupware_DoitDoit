@@ -45,6 +45,8 @@ public class LoginController {
 		System.out.println("Principal 객체 :" + user.getPrincipal());
 		EmpVo eVo = (EmpVo)user.getPrincipal();
 		
+		logger.info("goHome 접속 멤버 : {}",eVo.getEmp_id());
+		
 		if(eVo.getEmp_auth().equals("ROLE_ADMIN_INSA") || eVo.getEmp_auth().equals("ROLE_ADMIN_BOARD")) {
 			logger.info("LoginController gohome");
 			return "home";

@@ -87,7 +87,7 @@ function eboardResent(){
 		type:"get",
 		dataType:"json",
 		success:function(msg){
-			console.log(msg);
+//			console.log(msg);
 			html +='<h3>최근글</h3>';
 			$.each(msg, function(key, value){
 				html +='<div class="panel panel-default" style="margin-bottom:5px;">';
@@ -111,4 +111,14 @@ function eboardResent(){
 	});
 	
 	
+}
+
+function approWindowOn(){
+   cnt ++;
+   console.log(cnt);
+   if(cnt % 2 == 1){
+      $("#approWindow").slideDown();
+   }else{
+      $("#approWindow").slideUp();
+   }
 }

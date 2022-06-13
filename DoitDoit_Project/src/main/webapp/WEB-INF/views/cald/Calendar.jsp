@@ -6,18 +6,11 @@
 <head>
 <meta charset="UTF-8">
 <title>일정관리</title>
-<link rel="stylesheet" type="text/css" href="./css/home.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="./dist/fullcalendar-5.10.2/lib/main.css" />
-<link rel="stylesheet" href="./dist/fullcalendar-5.10.2/lib/main.min2.css" />
+<%@include file="../comm/setting.jsp" %>
 <link rel="stylesheet" href="./dist/datetimepicker/jquery.datetimepicker.css">
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./dist/datetimepicker/jquery.datetimepicker.full.min.js"></script>
-<script type="text/javascript" src="./dist/fullcalendar-5.10.2/lib/main.min2.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
 <script type="text/javascript" src="./js/cald/Calendar.js"></script>
 <script type="text/javascript" src="./js/cald/datatime.js"></script>
 <style type="text/css">
@@ -80,7 +73,6 @@
 					<div id="calendar" class="rContent-normal-bottom"></div>
                 </div>
             <%@include file="../comm/aside.jsp" %>    
-            
 	            <!-- Edit Modal -->
 				<div class="modal fade" id="schedule-edit">
 				    <div class="modal-dialog">

@@ -23,8 +23,10 @@
                     <div class="rContent-normal-top" style="width: 780px; height: 300px; margin-top: 10px;">
                     <fieldset style="width:770px;">
 						<legend style="margin-bottom : 3px;">결재 대기 문서</legend>
+						<span id="menu">
                     	<input type="button"  class="btn btn-default"  onclick="myDoc()" value="상신">
                     	<input type="button"  class="btn btn-default"  onclick="allDoc()" value="송신">
+						</span>
                     	<input type="hidden" id="emp_id" value="${emp_id}">
 					</fieldset>
                     <div style="width: 774px; height: 235px; border: 1px solid black;margin-left:1px;">
@@ -89,17 +91,28 @@
 window.onload = function approDocList(){
 	myDoc();
 }
+
+$("#menu > input").each(function(){
+    $(this).click(function(){
+       $(this).attr("class", "btn btn-primary");
+       $(this).siblings().attr("class", "btn btn-default"); 
+    });
+ });
+
 function myDoc(){
-	console.log("아작스 실행전");
+	var menu = document.querySelectorAll('#menu');
+	$("#menu input:eq(0)").attr("class", "btn btn-primary");
+	
+//	console.log("아작스 실행전");
 	var emp_id = document.getElementById("emp_id").value;
-	console.log(emp_id);
+//	console.log(emp_id);
 	$.ajax({
 		url : "./myDocList.do",
 		type : "GET",
 		data : "emp_id="+emp_id,
 		async : true,
 		success : function(data){
-			console.log("ajax성공");
+//			console.log("ajax성공");
 //			console.log(data);
 			var tbody = document.getElementById("myDocList")	//제거하고자 하는 엘리먼트
 			while ( tbody.hasChildNodes() )
@@ -107,15 +120,13 @@ function myDoc(){
 				tbody.removeChild(tbody.firstChild );       
 			}
 			var json = JSON.parse(data);
-			console.log(json);
-			console.log(json.lists);
+//			console.log(json);
+//			console.log(json.lists);
 			
 			var lists = json.lists;
-			console.log(lists[0]);
+//			console.log(lists[0]);
 			for(let i=0; i<lists.length; i++){
 				if(lists[i].appro_status == '결재대기'){
-					console.log(lists[i].appro_status);
-					console.log(lists[i].appro_status == '결재대기');
 				html = '';
 				html += '<tr>';
 				html += '<td>'+(i+1)+'</td>';
@@ -134,16 +145,16 @@ function myDoc(){
 }
 
 function allDoc(){
-	console.log("아작스 실행전");
+//	console.log("아작스 실행전");
 	var emp_id = document.getElementById("emp_id").value;
-	console.log(emp_id);
+//	console.log(emp_id);
 	$.ajax({
 		url : "./docAllList.do",
 		type : "GET",
 		data : "emp_id="+emp_id,
 		async : true,
 		success : function(data){
-			console.log("ajax성공");
+	//		console.log("ajax성공");
 	//		console.log(data);
 
 			var tbody = document.getElementById("myDocList")	//제거하고자 하는 엘리먼트
@@ -153,14 +164,12 @@ function allDoc(){
 			}
 			
 			var json = JSON.parse(data);
-			console.log(json.lists);
+	//		console.log(json.lists);
 			
 			var lists = json.lists;
-			console.log(lists[0]);
+	//		console.log(lists[0]);
 			for(let i=0; i<lists.length; i++){
 				if(lists[i].appro_status == '결재대기'){
-					console.log(lists[i].appro_status);
-					console.log(lists[i].appro_status == '결재대기');
 					html = '';
 					html += '<tr>';
 					html += '<td>'+(i+1)+'</td>';
@@ -180,7 +189,7 @@ function allDoc(){
 function docClick(){
 	var status = $("#statusSelect option:selected").val();
 	var emp_id = document.getElementById("emp_id").value;
-	console.log(status);
+//	console.log(status);
 	$.ajax({
 		url : "./statusDocList.do",
 		data : {
@@ -190,7 +199,7 @@ function docClick(){
 		type : "GET",
 		async : true,
 		success : function(data){
-			console.log(data);
+//			console.log(data);
 			
 			var tbody = document.getElementById("statusDocList")	//제거하고자 하는 엘리먼트
 			while ( tbody.hasChildNodes() )
@@ -203,8 +212,8 @@ function docClick(){
 			var guyljaejalists = obj.guyljaejaLists;
 			
 			for(let i=0; i<objlists.length; i++){
-				console.log(objlists[i]);
-				console.log(objlists[i].appro_empname);
+		//		console.log(objlists[i]);
+		//		console.log(objlists[i].appro_empname);
 				html = '';
 				html += '<tr>';
 				html += '<td>'+(i+1)+'</td>';
@@ -219,8 +228,8 @@ function docClick(){
 
 			if(status == 3){
 				for(let i=0; i<guyljaejalists.length; i++){
-					console.log(guyljaejalists[i]);
-					console.log(guyljaejalists[i].appro_empname);
+		//			console.log(guyljaejalists[i]);
+		//			console.log(guyljaejalists[i].appro_empname);
 					html = '';
 					html += '<tr>';
 					html += '<td>'+(i+1)+'</td>';

@@ -25,6 +25,14 @@ public interface ICalendarMapper {
 	
 	public boolean delCaldContent(String cald_id);
 	
+	public String selEmpName(String emp_id);
 	
+	public int insAlarmCald();
+	
+	public int insAlarmEntr(Map<String, Object> map);
+	
+	public List<EntrBoardVo> selApprAlarm(String emp_id);
+	
+	public int delAlarmDate(String cald_id);
 	
 }

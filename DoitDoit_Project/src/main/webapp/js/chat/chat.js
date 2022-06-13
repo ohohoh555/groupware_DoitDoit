@@ -33,13 +33,13 @@ $(document).ready(function() {
 	// emp 성함
 	user_name = $("#pr_user_name").val();
 
-	
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
 		console.log("STOMP Connection");
-		
-		//들어 갔을 때 스크롤 밑으로 내리기
-		//$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+
+
+//		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+
 		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
@@ -131,13 +131,12 @@ $(document).ready(function() {
 		
 		//우연
 		stomp.subscribe('/sub/alarm/'+empN, function(text){
-        	console.log(text.body)
         	var hel = JSON.parse(text.body);
          
          	if(hel.type == "appr"){
-            	$("#textApp").text(hel.barsin+" 님이 결재를 요청하였습니다.")
-            	$("#textApp").slideDown();
-            	$("#textApp").delay(3000).slideUp();
+	            $("#textApp").text(hel.barsin+" 님이 결재를 요청하였습니다.")
+	            $("#textApp").slideDown();
+	            $("#textApp").delay(3000).slideUp();
          	}else if(hel.type == "chat"){
 				var child = ($("#chatRoom").find("#"+hel.room_id));
 				$(child).find(".roomName > div:eq(1) > span:eq(0)").html(hel.chat_con);
@@ -162,13 +161,30 @@ $(document).ready(function() {
 			}
       	});
       
-		//우연      
+		//우연
+		stomp.subscribe('/sub/login',{});
+			
+		stomp.send('/pub/login', {}, JSON.stringify({ emp_id: empN }));
+		
+		stomp.subscribe('/sub/logout',function(){
+			console.log("로그아웃")
+		});
+		
+		//우연    
       	stomp.subscribe('/sub/approval/complet/'+empN,function(text){
          	var hel = JSON.parse(text.body);
-         	console.log(hel);
-         	$("#textApp").text("결재가 완료되었습니다.")
-         	$("#textApp").slideDown();
-         	$("#textApp").delay(3000).slideUp();
+				console.log("DAFSAFAS"+hel);
+			if(hel.type == "comp"){
+				console.log(hel);
+	         	$("#textApp").text("결재가 완료되었습니다.")
+	         	$("#textApp").slideDown();
+	         	$("#textApp").delay(3000).slideUp();
+			}else if(hel.type == "banryu"){
+				console.log(hel);
+				$("#textApp").text(hel.susin+" 님이 기안을 반려하였습니다.")
+            	$("#textApp").slideDown();
+            	$("#textApp").delay(3000).slideUp();
+			}
     	});
 	});
 	
@@ -240,12 +256,58 @@ $(document).ready(function() {
 		}
 		sendFileToServer(fd);
 	}
+	
+	// 알림을 뿌려주는 아작스
+	// 우연
+	$.ajax({
+		url:"./selAlaram.do",
+		data:{emp_id:$("#empN").val()},
+		type:"post",
+		success:function(tag){
+			console.log("성공")
+			console.log(tag)            
+			let html = "";
+			if(tag.length>0){
+				$("#bell").attr("src","./img/bellon32.png");
+			}else{
+				$("#bell").attr("src","./img/bell32.png");
+				$("#approWindow").append("<div style='width:100%; font-size:25px; top:40%; position:absolute; text-align:center;'>알림이 없습니다.</div>")
+			}
+			$.each(tag,function(index,val){
+				html +="<div id='alaDiv' style='border:1px solid #000; width: 100%; height:70px;' onclick='hello()'>";
+				html +="	<input type='hidden' id='calId' value='"+val.cald_id+"'> ";
+				html +="	<span style='font-size:13px; text-align:left;'>"+val.eboard_regdate+"</span><br> ";
+				html +="	<span style='font-size:13px; text-align:center;'>"+val.eboard_title+"</span> ";
+				html +="</div>";
+			})
+			$("#approWindow").append(html);
+		},
+		error:function(){
+			alert("실패")
+		}
+	});
+	
+	
+	
 });
+
+function hello(){
+		$.ajax({
+			url:"./delAlarm.do",
+			data:{cald_id:$("#calId").val()},
+			type:"post",
+			success:function(text){
+				console.log("성공여부",text)
+				if(text==true){
+					location.href='./approMain.do';
+				}
+			}
+		});
+}
 
 //우연 시작
 function sendEmp_No(empNo){
    	$("#frClick").click(function(){
- 		console.log("진짜 짜증나네"+empNo)
  		empArr = empNo;
  		onSendApprMessage();
    });
@@ -270,22 +332,32 @@ function gyuljaeClick2(empList){
             	susin = json.approval[i+1].EMP_ID;
             	stomp.send("/pub/alarm/"+susin,{},JSON.stringify({type:"appr",barsin:$("#gianja").val(),susin:susin}));
      		}else{
-        		stomp.send("/pub/apprMem/complet/"+$("#gianja").val(),{},JSON.stringify({barsin:$("#gianja").val()}));
+            	susin = json.approval[i].EMP_ID;
+        		stomp.send("/pub/apprMem/complet/"+$("#gianja").val(),{},JSON.stringify({type:"comp",susin:susin,barsin:$("#gianja").val()}));
      		} 
       	}
 	}
 }
 
-function onSendCompMessage(){
-   	stomp.send("/pub/Comp/"+susin,{},JSON.stringify({barsin:barsin,susin:susin}));
+function gyuljaeBanryu(empList){
+   	console.log("기안자 아이디 "+$("#gianja").val());
+   	var json = JSON.parse(empList);
+   	console.log("JSON 파싱 후 ",json.approval)
+   	for(let i=0; i<json.approval.length; i++){
+      	if(json.approval[i].EMP_ID==$("#empN").val()){
+				susin = json.approval[i].EMP_ID;
+        		stomp.send("/pub/apprMem/complet/"+$("#gianja").val(),{},JSON.stringify({type:"banryu",susin:susin,barsin:$("#gianja").val()}));
+      	}
+	}
 }
 
+
 function disconn(){
-   	if(stomp != null){
-   	console.log("연결종료")
-      	client.send("/pub/logout",{},JSON.stringify({barsin:barsin}))
-      	client.disconnect();
-   	}
+	if(stomp.ws.readyState === WebSocket.OPEN){
+		stomp.send("/pub/logout",{},JSON.stringify({emp_id:$("#empN").val()}))	
+		stomp.disconnect(function(){
+		});
+	}
 }
 //우연 끝
 

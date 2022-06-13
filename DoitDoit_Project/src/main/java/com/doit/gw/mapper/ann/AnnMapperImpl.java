@@ -27,13 +27,13 @@ public class AnnMapperImpl implements IAnnMapper {
 	}
 
 	@Override
-	public int updAnnualReset() {
-		return sqlSession.update(NS+"updAnnualReset");
+	public List<EmpVo> selEmpYear() {
+		return sqlSession.selectList(NS+"selEmpYear");
 	}
-
+	
 	@Override
-	public List<EmpVo> selEmpYear(String date) {
-		return sqlSession.selectList(NS+"selEmpYear", date);
+	public int updAnnualReset(Map<String, String[]> emp_ids) {
+		return sqlSession.update(NS+"updAnnualReset", emp_ids);
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class AnnMapperImpl implements IAnnMapper {
 	}
 
 	@Override
-	public List<EmpVo> selEmpMonth(Map<String, Object> map) {
-		return sqlSession.selectList(NS+"selEmpMonth", map);
+	public List<EmpVo> selEmpMonth(int days) {
+		return sqlSession.selectList(NS+"selEmpMonth", days);
 	}
 
 	@Override
@@ -60,7 +60,17 @@ public class AnnMapperImpl implements IAnnMapper {
 	public int updAnnualMonth(Map<String, String[]> emp_ids) {
 		return sqlSession.update(NS+"updAnnualMonth", emp_ids);
 	}
+	
+	@Override
+	public int updAnnualMonthWork() {
+		return sqlSession.update(NS+"updAnnualMonthWork");
+	}
 
+	@Override
+	public List<EmpVo> selEmpEveryDay() {
+		return sqlSession.selectList(NS+"selEmpEveryDay");
+	}
+	
 	@Override
 	public int updAnnualEveryDay() {
 		return sqlSession.update(NS+"updAnnualEveryDay");
@@ -97,6 +107,11 @@ public class AnnMapperImpl implements IAnnMapper {
 	}
 
 	@Override
+	public AnnualVo selAnuualWorkIn(String emp_nfc) {
+		return sqlSession.selectOne(NS+"selAnuualWorkIn", emp_nfc);
+	}
+	
+	@Override
 	public int updAnnualWorkIn(String emp_nfc) {
 		return sqlSession.update(NS+"updAnnualWorkIn", emp_nfc);
 	}
@@ -104,11 +119,6 @@ public class AnnMapperImpl implements IAnnMapper {
 	@Override
 	public int updAnnualWorkOut(String emp_nfc) {
 		return sqlSession.update(NS+"updAnnualWorkOut", emp_nfc);
-	}
-
-	@Override
-	public int updAnnualWorkDays(String emp_nfc) {
-		return sqlSession.update(NS+"updAnnualWorkDays", emp_nfc);
 	}
 
 	@Override

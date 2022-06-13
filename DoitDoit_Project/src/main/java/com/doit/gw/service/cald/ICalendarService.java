@@ -19,4 +19,12 @@ public interface ICalendarService {
 	
 	public boolean delCaldContent(String cald_id);
 	
+	public String selEmpName(String emp_id);
+	
+	public boolean insAlarm(Map<String, Object> map);
+	
+	public List<EntrBoardVo> selApprAlarm(String emp_id);
+	
+	public boolean delAlarm(String cald_id);
+	
 }
