@@ -115,19 +115,23 @@ function searchAppro(searchWord, op, owner){
 	var jsonData1 = "";
 	
 	if(op=='uniTitle'){
-			jsonData1 = { "query": { 
-							 "bool": { 
-    								  "must": [ { "match": { "emp_id": owner }},{"match": {"appro_title": searchWord}} ]
-				}
-			 }
-		};
+//			jsonData1 = { "query": {  "bool": { "must": [ { "match": { "emp_id": owner }},{"match": {"appro_title": searchWord}} ]}}};
+			jsonData1 = {"query": { 
+							"bool": { 
+							 "must": [{ "match": { "emp_id": owner }},
+								 	   {"wildcard":{"appro_title":"*"+searchWord+"*"}}]
+								}
+							}
+						};
+
 	}else if(op=='uniContent'){
-			jsonData1 = { "query": { 
-							 "bool": { 
-    								  "must": [ { "match": { "emp_id": owner }},{"match": {"appro_content": searchWord}}]			   
-				    }
-				  }
-				};
+			jsonData1 = {"query": { 
+							"bool": { 
+							 "must": [{ "match": { "emp_id": owner }},
+								 	   {"wildcard":{"appro_content":"*"+searchWord+"*"}}]
+								}
+							}
+						};
 	}
 
 	

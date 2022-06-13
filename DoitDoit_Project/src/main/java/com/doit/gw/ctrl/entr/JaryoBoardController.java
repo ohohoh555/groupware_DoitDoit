@@ -81,7 +81,7 @@ public class JaryoBoardController {
 		File backPath = new File(back);
 		
 		if(!serverPath.exists()) {
-			serverPath.mkdir();
+			serverPath.mkdirs();
 		}
 		if(!backPath.exists()) {
 			backPath.mkdirs();
@@ -140,6 +140,40 @@ public class JaryoBoardController {
 	}
 	
 	
+	@RequestMapping(value = "/download.do")
+	@ResponseBody
+	public byte[] filedownload(@RequestParam(value="uid") String uid,
+								@RequestParam(value="fileName") String fileName,
+								HttpServletRequest request, HttpServletResponse response) throws IOException {
+		byte[] bytes=null;
+		logger.info("@download : {} {}",  uid, fileName);
+		
+		//서버에 저장된 이미지 경로 
+		String path=WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/") ;
+		String sDirPath = path+uid+"_"+fileName;
+		
+		File file = new File(sDirPath);
+		
+		bytes = FileCopyUtils.copyToByteArray(file);
+		
+		String outputFilename =new String(file.getName().getBytes(), "8859_1");
+		
+		/* 
+		 * Content-disposition : 지정된 파일명을 지정함으로써 더 자세한 파일의 속성을 알려줄 수 있다.
+		 * attachment : 브라우저 인식 파일확장자를 포함하여 모든 확장자의 파일들에 대해, 
+		 * 				다운로드 시 무조건 '파일다운로드' 대화상자가 뜨도록 하는 해더속성
+		 */
+		response.setHeader("Content-Disposition", "attachment; filename=\""+outputFilename+"\"");
+		//우리가 보내려고 하는 파일의 크기만큼 셋팅
+		response.setContentLength(bytes.length); 
+		//MIME타입, octet-stream : 8비트로 된 파일이라는 의미
+		response.setContentType("application/octet-stream");
+
+		return bytes; 
+	}
+	
+	
+	
 	@RequestMapping(value = "/jaryoDel.do", method = RequestMethod.GET)
 	public void jaryoDel(@RequestParam Map<String, Object>map, HttpServletResponse response) throws IOException {
 		logger.info("@jaryoDel 사용자 자료글 삭제처리 :{}",map);
@@ -177,8 +211,6 @@ public class JaryoBoardController {
 		String path=WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/") ;
 		
 		//http는 한번에 하나의 파일만 다운로드할 수 있음 
-		
-		
 		
 		byte[] bytes = null;
 		String downPath = null;

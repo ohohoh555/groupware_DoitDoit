@@ -98,7 +98,7 @@ function eboardResent(){
 					}
 				html +='</div>';
 				html +='<div class="panel-body" style="opacity:0.5;">작성일:'+value.eboard_regdate+'&nbsp;&nbsp;작성자:'+value.emp_name+'&nbsp;&nbsp;';
-				html +='내용:'+value.eboard_content.replace(/(<([^>]+)>)/ig,"");
+				html +='내용:'+value.eboard_content.replace(/(<([^>]+)>)/ig,"").substring(0,50);
 				html +='</div>'
 				html +='</div>';
 			});
