@@ -116,7 +116,7 @@ function fildokAll(){
 				columns: [
 					{data:"eboard_no", render: function (data,type,row,meta) {return "★"}},
 					{data:"cgory_no", render: function (data,type,row,meta) {return "[필독]"}},
-					{data:"eboard_title", render:function(data,type,row,meta){return '<a href="./OneBoardAdmin.do?eboard_no='+row.eboard_no+'">'+data+'</a>'}},
+					{data:"eboard_title", render:function(data,type,row,meta){return '<a href="./OneBoard.do?eboard_no='+row.eboard_no+'">'+data+'</a>'}},
 					{data:"emp_name"},
 					{data:"eboard_regdate"},
 					{data:"eboard_readcount"}
