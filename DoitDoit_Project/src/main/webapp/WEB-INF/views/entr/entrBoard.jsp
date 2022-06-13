@@ -55,7 +55,7 @@
 						</div>
 						<hr>
 						<div id="EntrDiv">
-						<table id="EntrTable" class="stripe">
+						<table id="EntrTable" class="stripe" style="width:100%">
 							<thead>
 								<tr>
 									<th>No.</th>

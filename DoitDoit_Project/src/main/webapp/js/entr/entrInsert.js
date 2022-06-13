@@ -1,5 +1,9 @@
 function resetContent(){
-	CKEDITOR.instances.eboard_content.setData("");
+	var con = confirm("모든 내용을 정말 삭제하시겠습니까? (작성중인 내용가 모두 사라집니다.)");
+	if(con){
+		CKEDITOR.instances.eboard_content.setData("");
+	}
+
 }
 
 function insertAction(){
@@ -53,31 +57,11 @@ function insertAction(){
 function selectCgory(val){
 	console.log("selectCgory 작동", val);
 	
-// 	var html = "";
-// 	html +="<tr id='trDate'><td>일시</td>";
-// 	html +="<td>시작:<input type='date' class='form-control' style='width: 150px;'>";
-// 	html +="<input type='time' class='form-control' style='width: 150px;'> ~ ";
-// 	html +="종료:<input type='date' class='form-control' style='width: 150px;'>";
-// 	html +="<input type='time' class='form-control' style='width: 150px;'>";
-// 	html +="</td></tr>";
-
-//	var cald_start = document.getElementById("cald_start");
-//	var cald_end = document.getElementById("cald_end");
-//
-//	cald_start.disabled = true;
-//	cald_end.disabled = true;
-
-
-
-	
 	if(val == 101){
 		$("#cgoryEtc").empty();
 		$("#trDate").hide();
 		$("#trCald").hide();
 		$("#trEboard").show();
-//		$("#trDate").remove();
-//		cald_start.disabled = true;
-//		cald_end.disabled = true;
 
 	}else if(val == 102){
 		$("#cgoryEtc").empty();
@@ -95,11 +79,7 @@ function selectCgory(val){
 		$("#trDate").show();
 		$("#trCald").show();
 		$("#trEboard").hide();
-//		$("#trDate").remove();
-// 		$("#insertTbl >tbody > tr").eq(0).after(html);
-//		cald_start.disabled = false;
-//		cald_end.disabled = false;
-		
+
 	}
 }
 

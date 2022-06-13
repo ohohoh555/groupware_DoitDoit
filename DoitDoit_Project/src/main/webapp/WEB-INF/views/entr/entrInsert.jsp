@@ -42,7 +42,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td>제목</td>
+									<td width="50px;">제목</td>
 									<td><input type="text" name="eboard_title" id="title" class="form-control"></td>
 								</tr>
 								<tr id="trDate" style="display: none;">
