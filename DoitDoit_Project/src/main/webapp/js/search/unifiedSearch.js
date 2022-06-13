@@ -22,14 +22,33 @@ function searchAction(){
 function searchEntr(searchWord, op){
 	
 	var jsonData = "";
+	
+
+
 	if(op=='uniTitle'){
-		jsonData = {
-	 			  "query": { "match": { "eboard_title": searchWord } }
-	 	};
+			jsonData = {"query": { 
+								    "bool": { 
+								      "must": [
+								        { "match": { "eboard_delflag":   "N" }},
+								 	    {"wildcard":{"eboard_title":"*"+searchWord+"*"}}
+								      ]
+								    }
+								  }
+								};
+		
+//		jsonData = {
+//	 			  "query": { "match": { "eboard_title": searchWord } }
+//	 	};
 	}else if(op=='uniContent'){
-		jsonData = {
-	 			  "query": { "match": { "eboard_content": searchWord } }
-	 	};
+			jsonData = {"query": { 
+								 "bool": { 
+								 "must": [
+								    { "match": { "eboard_delflag":   "N" }},
+								 	{"wildcard":{"eboard_content":"*"+searchWord+"*"}}
+								]
+							}
+							}
+						};
 	}
 	
 	$("#entrResult").DataTable().destroy();
