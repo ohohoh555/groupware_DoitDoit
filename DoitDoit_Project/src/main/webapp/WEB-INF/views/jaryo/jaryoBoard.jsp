@@ -9,7 +9,7 @@
 <%@include file="../comm/setting.jsp" %>
 <link rel="stylesheet" type="text/css" href="./css/jaryo/dragAndDrop.css">
 <script type="text/javascript" src="./js/jaryo/Map.js"></script>
-<script type="text/javascript" src="+"></script>
+<script type="text/javascript" src="./js/jaryo/dragAndDrop.js"></script>
 </head>
 <body>
 	<div id="container">
@@ -145,7 +145,7 @@ function multiJaryo(){
 		let link ="";
 		for(let i=0; i<len;i++){
 			list[i]= $("input[name=chk]:checked").eq(i).val();
-			fileDown ="./download.do?"+list[i];
+			fileDown ="download.do?"+list[i];
 			let encodedUri = encodeURI(fileDown);
 			link = document.createElement("a");
 			link.setAttribute("href", encodedUri);

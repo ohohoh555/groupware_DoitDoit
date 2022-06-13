@@ -97,8 +97,8 @@ CKEDITOR.replace( 'eboard_content' ,{
 	extraPlugins: 'editorplaceholder', 
     editorplaceholder: // 에디터 화면에 띄운 글귀
     '여기에 글을 입력하거나 파일을 드래그해주세요...', 
-	filebrowserUploadUrl: "fileupload.do",
-	uploadUrl:"fileupload.do",
+	filebrowserUploadUrl: "./fileupload.do",
+	uploadUrl:"./fileupload.do",
      width : '730px',  // 입력창의 넓이, 넓이는 config.js 에서 % 로 제어
      height : '200px' 
 

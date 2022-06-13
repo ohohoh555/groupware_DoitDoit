@@ -29,6 +29,7 @@ import org.springframework.web.util.WebUtils;
 import com.doit.gw.vo.entr.FileListVo;
 
 @Controller
+@RequestMapping("/comm")
 public class FileUploadController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -89,7 +90,7 @@ public class FileUploadController {
 			//폴더(디렉토리)가 없다면 생성
 			if(!serverPath.exists()) {
 				//만드려는 상위디렉토리가 있어야만 생성가능
-				serverPath.mkdir();  
+				serverPath.mkdirs();  
 			}
 			if(!backPath.exists()) {
 				// 만드려는 상위디렉토리가 없으면 상위도 만들어주고 생성

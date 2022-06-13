@@ -1,6 +1,5 @@
 const reg = /<[^>]*>?/g; //정규식
 
-
 function searchAction(){
 	var searchWord = $("#searchWord").val(); //검색어
 	var op =  $("select[name='searchOp']").val(); //검색옵션
@@ -96,21 +95,21 @@ function searchAppro(searchWord, op, owner){
 	var jsonData1 = "";
 	
 	if(op=='uniTitle'){
-			jsonData1 = { "query": { 
-							 "bool": { 
-    								  "must": [ { "match": { "emp_id": owner }}],
-  									    "should": [{"match": {"appro_title": searchWord}}]
-				}
-			 }
-		};
+			jsonData1 = {"query": { 
+							"bool": { 
+							 "must": [{ "match": { "emp_id": owner }},
+								 	   {"wildcard":{"appro_title":"*"+searchWord+"*"}}]
+								}
+							}
+						};
 	}else if(op=='uniContent'){
-			jsonData1 = { "query": { 
-							 "bool": { 
-    								  "must": [ { "match": { "emp_id": owner }}],
-  									    "should": [{"match": {"appro_content": searchWord}}]
-				    }
-				  }
-				};
+			jsonData1 = {"query": { 
+							"bool": { 
+							 "must": [{ "match": { "emp_id": owner }},
+								 	   {"wildcard":{"appro_content":"*"+searchWord+"*"}}]
+								}
+							}
+						};
 	}
 
 	
@@ -134,7 +133,7 @@ function searchAppro(searchWord, op, owner){
 			$("#approResult>tbody").empty();
 			for(var i=0; i<data.length; i++){
 				html += "<tr>";
-				html += "<td><a href='./selDocDetail.do?emp_id="+data[i]._source.emp_id+"&appro_no="+data[i]._source.appro_no+"'>"+data[i]._source.appro_title+"</a></td>";
+				html += "<td><a href='/DoitDoit_Project/appro/selDocDetail.do?emp_id="+data[i]._source.emp_id+"&appro_no="+data[i]._source.appro_no+"'>"+data[i]._source.appro_title+"</a></td>";
 				html += "<td> 등록일&nbsp;:&nbsp;"+data[i]._source.appro_regdate.substring(0,10);
 				html +="<br> 내용&nbsp;:&nbsp;"+data[i]._source.appro_content.replace(reg, "").substring(0, 50) + "...";
 				html+="</td>";
