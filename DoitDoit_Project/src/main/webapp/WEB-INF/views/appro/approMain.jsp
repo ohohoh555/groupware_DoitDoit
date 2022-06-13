@@ -29,7 +29,7 @@
 						</span>
                     	<input type="hidden" id="emp_id" value="${emp_id}">
 					</fieldset>
-                    <div style="width: 774px; height: 235px; border: 1px solid black;margin-left:1px;">
+                    <div style="width: 774px; height: 225px; border: 1px solid black;margin-left:1px;">
                     <table id="approList" class="cell-border dataTable">
                     <thead>
                     <tr>
@@ -60,7 +60,7 @@
 							</select>
                     		<input type="button"  class="btn btn-default"  onclick="docClick()" value="선택">
 					</fieldset>
-					   <div style="width: 774px; height: 395px; border: 1px solid black;margin-left:1px;">
+					   <div style="width: 774px; height: 383px; border: 1px solid black;margin-left:1px;">
 					 <table id="approStatusList" class="cell-border dataTable">
                     <thead>
                     <tr>
@@ -245,5 +245,51 @@ function docClick(){
 		}
 	});
 } 
+
+$('#approList').DataTable({
+    lengthChange: false, // 표시 건수기능 숨기기
+    searching:false, // 검색 기능 숨기기
+    ordering: false, // 정렬 기능 숨기기
+    info: false, // 정보 표시 숨기기
+    paging:true,// 페이징 기능 숨기기
+	"language": {
+        "emptyTable": "검색된 결과가 없어요.",
+        "loadingRecords": "로딩중...",
+        "processing":     "잠시만 기다려 주세요...",
+        "paginate": {
+            "next": "다음",
+            "previous": "이전"
+        }
+    },
+    displayLength: 5,
+	scrollCollapse:true,
+	scrollY:"145px",
+	columnDefs: [
+        { width: 40, targets: 0 }
+    ]
+});
+
+$('#approStatusList').DataTable({
+    lengthChange: false, // 표시 건수기능 숨기기
+    searching:false, // 검색 기능 숨기기
+    ordering: false, // 정렬 기능 숨기기
+    info: false, // 정보 표시 숨기기
+    paging:true,// 페이징 기능 숨기기
+	"language": {
+        "emptyTable": "검색된 결과가 없어요.",
+        "loadingRecords": "로딩중...",
+        "processing":     "잠시만 기다려 주세요...",
+        "paginate": {
+            "next": "다음",
+            "previous": "이전"
+        }
+    },
+    displayLength: 5,
+	scrollCollapse:true,
+	scrollY:"300px",
+	columnDefs: [
+        { width: 40, targets: 0 }
+    ]
+});
 </script>
 </html>
