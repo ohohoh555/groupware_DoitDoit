@@ -83,7 +83,7 @@ function ChangEntrDel(){
 	
 	if(chks.length > 0){
 		document.getElementById("entrFrm").action = "./changeEntrDel.do";
-		var con = confirm("선택한 글의 숨김여부를 변경하시겠습니까? 선택한 글 번호: " +chksVal);
+		var con = confirm("선택한 글의 숨김여부를 변경하시겠습니까?");
 		if(con){
 			alert("선택한 글의 숨김여부가 변경되었습니다.");
 			return true;

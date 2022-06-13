@@ -4,7 +4,8 @@ const reg = /<[^>]*>?/g; //정규식
 function searchAction(){
 	var searchWord = $("#searchWord").val(); //검색어
 	var op =  $("select[name='searchOp']").val(); //검색옵션
-	console.log("검색버튼 작동",op, searchWord);
+	var owner = $("#owner").val();
+	console.log("검색버튼 작동",op, searchWord, owner);
 	
 	if(searchWord.length<2){
 		alert("검색어는 2글자 이상 입력해주세요");
@@ -12,7 +13,7 @@ function searchAction(){
 	}
 	
 	searchEntr(searchWord, op);
-	searchAppro(searchWord, op);
+	searchAppro(searchWord, op, owner);
 
 
 }
@@ -91,18 +92,26 @@ function searchEntr(searchWord, op){
 	
 }
 
-function searchAppro(searchWord, op){
+function searchAppro(searchWord, op, owner){
 	var jsonData1 = "";
+	
 	if(op=='uniTitle'){
-		jsonData1 = {
-	 			  "query": { "match": { "appro_title": searchWord } }
-	 	};
+			jsonData1 = { "query": { 
+							 "bool": { 
+    								  "must": [ { "match": { "emp_id": owner }}],
+  									    "should": [{"match": {"appro_title": searchWord}}]
+				}
+			 }
+		};
 	}else if(op=='uniContent'){
-		jsonData1 = {
-	 			  "query": { "match": { "appro_content": searchWord } }
-	 	};
+			jsonData1 = { "query": { 
+							 "bool": { 
+    								  "must": [ { "match": { "emp_id": owner }}],
+  									    "should": [{"match": {"appro_content": searchWord}}]
+				    }
+				  }
+				};
 	}
-
 
 	
 	$("#approResult").DataTable().destroy();
@@ -154,7 +163,6 @@ function searchAppro(searchWord, op){
 		            { width: 150, targets: 0 }
 		        ]
 		    });
-			
 
 		},
 		error:function(){

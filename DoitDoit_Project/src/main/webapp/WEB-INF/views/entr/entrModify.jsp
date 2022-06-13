@@ -27,9 +27,9 @@
 					        <input type="hidden" value="${principal.emp_name}" id="emp_name" name="emp_name">
  			           </sec:authorize> 
  			           		<input type="hidden" value="${eVo.eboard_content}" id="originContent" >
- 			           		<input type="text" name="cgory_no" value="${eVo.cgory_no}">
- 			           		<input type="text" name="eboard_no" value="${eVo.eboard_no}">
- 			           		<input type="text" name="cald_id" value="${eVo.cald_id}">
+ 			           		<input type="hidden" name="cgory_no" value="${eVo.cgory_no}">
+ 			           		<input type="hidden" name="eboard_no" value="${eVo.eboard_no}">
+ 			           		<input type="hidden" name="cald_id" value="${eVo.cald_id}">
 						<table class="table table-bordered" id="modifyTbl">
 							<tbody>
 								<tr>

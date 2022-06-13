@@ -48,6 +48,10 @@
 					</div><!--panel panel-default 끝  -->
 					
 					<div class="panel panel-default">
+						<sec:authorize access="isAuthenticated()">
+						<sec:authentication property="principal.emp_id" var="emp_id"/>
+						<input type="text" value="${emp_id}" id="owner">
+						 </sec:authorize> 
 						<div class="panel-heading"><h4>전자결재&nbsp;<span class="badge" id="approCnt">0</span></h4></div>
 						<div class="panel-body" style="padding: 0px">
 						<table id="approResult" class="stripe dataTable">
