@@ -19,7 +19,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style type="text/css">
 #docForm{
-	width: 800px;
+	width: 780px;
 	height: 500px;
 }
 table{
@@ -129,21 +129,18 @@ String today = sf.format(now);
 		</div>
 		<div style="display: block;">
 		<table >
-		<tr>
-		<td class="tableForm" >수신부서</td>
-		<td width="800px;">&nbsp;&nbsp;</td>	
-		</tr>
+		
 		<tr>
 		<td class="tableForm" >참조자</td>
-		<td width="800px;"><input class="form-control" style="width: 700px;" type="text" name="appro_refer"></td>	
+		<td width="750px;"><input class="form-control" style="width: 700px;" type="text" name="appro_refer"></td>	
 		</tr>
 		<tr>
 		<td class="tableForm" >제목</td>
-		<td width="800px;"><input id="docTitle" class="form-control" style="width: 700px;" type="text" name="appro_title"></td>	
+		<td width="750px;"><input id="docTitle" class="form-control" style="width: 700px;" type="text" name="appro_title"></td>	
 		</tr>
 		<tr>
 		<td colspan="2">
-		<div style="width: 780px; height: 200px;">
+		<div style="width: 750px; height: 400px;">
 		<textarea class="ckeditor" name="appro_content" id="ck_content"></textarea> 
 		</div>
 	
