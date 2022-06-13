@@ -50,6 +50,7 @@
 				</div>
     		</div>
     	</div>
+    	<div id="approWindow" style="display:none;"></div>
     	<div id="textApp" style="border:1px solid #000000; width: 250px; height:60px; position: absolute; bottom:0; right: 0; display: none;">ㅋ</div>
   	</aside>
 </body>

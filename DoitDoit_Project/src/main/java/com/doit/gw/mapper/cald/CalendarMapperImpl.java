@@ -54,9 +54,32 @@ public class CalendarMapperImpl implements ICalendarMapper {
 
 	@Override
 	public boolean delCaldContent(String cald_id) {
-		return sqlSession.delete(NS+"delCaldDate", cald_id)>0?true:false;
+		return sqlSession.delete(NS+"delCaldContent", cald_id)>0?true:false;
+	}
+
+	@Override
+	public String selEmpName(String emp_id) {
+		return sqlSession.selectOne(NS+"selEmpName",emp_id);
 	}
 	
+	@Override
+	public int insAlarmCald() {
+		return sqlSession.insert(NS+"insAlarmCald");
+	}
 	
+	@Override
+	public int insAlarmEntr(Map<String, Object> map) {
+		return sqlSession.insert(NS+"insAlarmEntr",map);
+	}
+	
+	@Override
+	public List<EntrBoardVo> selApprAlarm(String emp_id) {
+		return sqlSession.selectList(NS+"selApprAlarm", emp_id);
+	}
+	
+	@Override
+	public int delAlarmDate(String cald_id) {
+		return sqlSession.delete(NS+"delAlarmDate",cald_id);
+	}
 	
 }
