@@ -23,9 +23,9 @@
 	
 	    		</div>    		
     		</div>
-    		<div class="container">
-    			<div>
-	    			<button class="btn-sm btn-info" onclick="treeDo('create')" data-toggle="modal" data-target="#cJstree">채팅방 생성</button>    						
+    		<div class="container" style="width: 300px;">
+    			<div style="width: 300px;">
+	    			<button style="padding: 4px 10px 4px 10px;" class="btn-sm btn-info" onclick="treeDo('create')" data-toggle="modal" data-target="#cJstree">채팅방 생성</button>    						
     			</div>
 <!--     		jstree 채팅방 생성 부분(modal) -->
 			 	<div class="modal fade" id="cJstree" role="dialog">
