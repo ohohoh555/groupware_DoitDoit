@@ -23,11 +23,11 @@ public class ChatServiceImpl implements IChatService{
 	@Autowired
 	private IChatDao dao;
 			
-	@Override
-	public List<ChatJoinVo> selRoom(String emp_id) {
-		logger.info("$$$$$ selRoom {} $$$$$",emp_id);
-		return dao.selRoom(emp_id);
-	}
+//	@Override
+//	public List<ChatJoinVo> selRoom(String emp_id) {
+//		logger.info("$$$$$ selRoom {} $$$$$",emp_id);
+//		return dao.selRoom(emp_id);
+//	}
 
 	@Override
 	public List<ChatVo> selChat(Map<String, String> map) {

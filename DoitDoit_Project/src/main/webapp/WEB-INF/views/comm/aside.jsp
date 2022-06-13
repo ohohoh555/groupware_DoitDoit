@@ -28,7 +28,7 @@
 	    			<button class="btn-sm btn-info" onclick="treeDo('create')" data-toggle="modal" data-target="#cJstree">채팅방 생성</button>    						
     			</div>
 <!--     		jstree 채팅방 생성 부분(modal) -->
-			 	<div class="modal fade" id="cJstree" role="dialog"">
+			 	<div class="modal fade" id="cJstree" role="dialog">
 					<div class="modal-dialog modal-sm">
 						<div class="modal-content">
 							<div class="modal-header">

@@ -27,7 +27,7 @@ $(document).ready(function(){
 				}else{
 					html +=				"<span style=\"color: #FCFCFC;\">"+rooms[i].chat_con+"</span>";
 				}
-				html +=					"<p><span style=\"color: #EAEAEA;\">"+rooms[i].chat_time+"</span><p>";
+				html +=					"<p><span style=\"color: #EAEAEA;\">"+rooms[i].chat_time+"</span></p>";
 				html +=				"</div>";
 				html += 		"</div>";	
 				html += 	"</a>";

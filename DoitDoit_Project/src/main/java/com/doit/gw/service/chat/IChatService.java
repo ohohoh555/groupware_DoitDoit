@@ -13,7 +13,7 @@ import com.doit.gw.vo.emp.EmpVo;
 public interface IChatService {
 
 	//자신의 방 목록
-	public List<ChatJoinVo> selRoom(String emp_id);
+//	public List<ChatJoinVo> selRoom(String emp_id);
 	//채팅 조회
 	public List<ChatVo> selChat(Map<String, String> map);
 	//채팅멤버 조회

@@ -231,7 +231,7 @@ public class ChatController {
 	}
 	
 	// 파일 메시지 받아서 저장
-	@RequestMapping(value = "/saveFile.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/saveChatFile.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public Map<String, String> saveFile(HttpServletRequest req, MultipartHttpServletRequest multipartRequest) throws FileNotFoundException {
 		logger.info("@ChatController fileMessage {}", multipartRequest);
@@ -295,14 +295,14 @@ public class ChatController {
 	           						+ date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
 	           						+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
 	            	html += "</span>";
-	            	html += "<span class=\"saveFile\"><a href=./download.do?path="+date.getYear() +"/" + 
+	            	html += "<span class=\"saveFile\"><a href=./chatFileDownload.do?path="+date.getYear() +"/" + 
 	            				date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
 	            				+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+
 	            				">저장</a> <a href=\"#\">다른 이름으로 저장</a></span>";
 				}else {
 					html += "<span class=\"Name\">"+user_name+"</span>";
 					html += "<span class=\"fileMsg\"><span>"+cFv.getFile_chat_originnm()+"."+cFv.getFile_chat_type()+"</span></span>";
-            		html += "<span class=\"saveFile\"><a href=./download.do?path="+date.getYear() +"/" + date.getMonthValue() 
+            		html += "<span class=\"saveFile\"><a href=./chatFileDownload.do?path="+date.getYear() +"/" + date.getMonthValue() 
             					+ "/" + date.getDayOfMonth() + "/" + cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+">저장</a> "
             					+ "<a href=\"#\">다른 이름으로 저장</a></span>";
 					html += "</span>";
@@ -324,7 +324,7 @@ public class ChatController {
 		return map;
 	}
 	
-	@RequestMapping( value = "/download.do", method = RequestMethod.GET )
+	@RequestMapping( value = "/chatFileDownload.do", method = RequestMethod.GET )
 	@ResponseBody
 	public byte[] fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		logger.info("@ChatController fileDownload {}", path);

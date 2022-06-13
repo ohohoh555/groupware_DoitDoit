@@ -7,23 +7,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +30,6 @@ import com.doit.gw.vo.appro.ApproEmpVo;
 import com.doit.gw.vo.chat.ChatJoinVo;
 import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
-import com.doit.gw.vo.emp.EmpVo;
 
 @Controller
 public class ChatRoomController {
@@ -45,9 +38,6 @@ public class ChatRoomController {
 	
 	@Autowired
 	private IChatService service;
-	
-	@Autowired
-	private SimpMessagingTemplate template;
 	
 	@Autowired
 	private IApproLineService treeService;
@@ -74,7 +64,7 @@ public class ChatRoomController {
   		if(mapListChatRoomList.get(empId) == null) {
   			logger.info("@ChatController, GET Chat / Username : " + empId);
   			
-  			listChatRoomList = service.selRoom(empId);
+//  			listChatRoomList = service.selRoom(empId);
   			mapListChatRoomList.put(empId, listChatRoomList);
   		}
   		
