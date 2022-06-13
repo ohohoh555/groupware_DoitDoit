@@ -43,8 +43,14 @@ public class ChatServiceImpl implements IChatService{
 	
 	@Override
 	public String selFileNM(String file_chat_uuid) {
-		logger.info("$$$$$ selFileNM $$$$$",file_chat_uuid);
+		logger.info("$$$$$ selFileNM {} $$$$$",file_chat_uuid);
 		return dao.selFileNM(file_chat_uuid);
+	}
+	
+	@Override
+	public List<Map<String, String>> selRoomNames() {
+		logger.info("$$$$$ selRoomNames $$$$$");
+		return dao.selRoomNames();
 	}
 	
 	@Override

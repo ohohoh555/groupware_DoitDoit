@@ -26,6 +26,8 @@ public interface IChatService {
 	public int insFile(ChatFileVo vo);
 	//채팅방 생성
 	public String insChatRoom(Map<String, String> chat_room);
+	//방 이름들을 조회
+	public List<Map<String, String>> selRoomNames();
 	//방 나갈려고 할때 멤버 조회
 	public ChatRoomVo selRoomMember(String room_id); 
 	//방 나가고 나서 남은 멤버 업데이트

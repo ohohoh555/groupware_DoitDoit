@@ -36,8 +36,10 @@ $(document).ready(function() {
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
 		console.log("STOMP Connection");
-		//들어 갔을 때 스크롤 밑으로 내리기
+
+
 //		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+
 		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
@@ -78,6 +80,21 @@ $(document).ready(function() {
 			if($('#chatLog').scrollTop()){
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			};
+			
+			var child = ($("#chatRoom").find("#"+room_id));
+			$(child).find(".roomName > div:eq(1) > span:eq(0)").html(content.chat_con);
+			var date = new Date();
+			$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+			$(child).find(".read").css("color","#FCFCFC");
+			if(content.chat_type == "F"){
+				$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
+				$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
+				var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
+				$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
+			}
+			var prependHtml = "<div id=\""+room_id+"\">" + $(child).html() + "</div>";
+			$(child).remove();
+			$("#chatRoom").prepend(prependHtml);
 		});
 		
 		//들어 왔을떄
@@ -121,7 +138,24 @@ $(document).ready(function() {
 	            $("#textApp").slideDown();
 	            $("#textApp").delay(3000).slideUp();
          	}else if(hel.type == "chat"){
-				$("#textApp").text(hel.chat_con)
+				var child = ($("#chatRoom").find("#"+hel.room_id));
+				$(child).find(".roomName > div:eq(1) > span:eq(0)").html(hel.chat_con);
+				var date = new Date();
+				$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+				$(child).find(".read").css("color","red");
+				if(hel.chat_type == "F"){
+					$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
+					$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
+					var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
+					$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
+				}
+				var prependHtml = "<div id=\""+room_id+"\">" + $(child).html() + "</div>";
+				$(child).remove();
+				$("#chatRoom").prepend(prependHtml);
+	
+				console.log("chat 받음");
+				console.log(hel);
+				$("#textApp").html(hel.chat_con)
             	$("#textApp").slideDown();
             	$("#textApp").delay(6000).slideUp();
 			}
@@ -395,3 +429,45 @@ function sendFileToServer(fd) {
 		}
 	});
 }	
+
+//날짜 형식
+Date.prototype.format = function (f) {
+
+    if (!this.valueOf()) return " ";
+
+    var weekKorName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+    var weekKorShortName = ["일", "월", "화", "수", "목", "금", "토"];
+    var weekEngName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var weekEngShortName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    var d = this;
+
+    return f.replace(/(yyyy|yy|MM|dd|KS|KL|ES|EL|HH|hh|mm|ss|a\/p)/gi, function ($1) {
+
+        switch ($1) {
+
+            case "yyyy": return d.getFullYear(); // 년 (4자리)
+            case "yy": return (d.getFullYear() % 1000).zf(2); // 년 (2자리)
+            case "MM": return (d.getMonth() + 1).zf(2); // 월 (2자리)
+            case "dd": return d.getDate().zf(2); // 일 (2자리)
+            case "KS": return weekKorShortName[d.getDay()]; // 요일 (짧은 한글)
+            case "KL": return weekKorName[d.getDay()]; // 요일 (긴 한글)
+            case "ES": return weekEngShortName[d.getDay()]; // 요일 (짧은 영어)
+            case "EL": return weekEngName[d.getDay()]; // 요일 (긴 영어)
+            case "HH": return d.getHours().zf(2); // 시간 (24시간 기준, 2자리)
+            case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2); // 시간 (12시간 기준, 2자리)
+            case "mm": return d.getMinutes().zf(2); // 분 (2자리)
+            case "ss": return d.getSeconds().zf(2); // 초 (2자리)
+            case "a/p": return d.getHours() < 12 ? "오전" : "오후"; // 오전/오후 구분
+
+            default: return $1;
+
+        }
+
+    });
+
+};
+
+String.prototype.string = function (len) { var s = '', i = 0; while (i++ < len) { s += this; } return s; };
+String.prototype.zf = function (len) { return "0".string(len - this.length) + this; };
+Number.prototype.zf = function (len) { return this.toString().zf(len); };

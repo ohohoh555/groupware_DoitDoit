@@ -51,6 +51,11 @@ public class ChatDaoImpl implements IChatDao{
 	}
 	
 	@Override
+	public List<Map<String, String>> selRoomNames() {
+		return sqlSession.selectList(NS+"selRoomNames");
+	}
+
+	@Override
 	public int insChat(Map<String, String> chat) {
 		logger.info("CCCCC insChat CCCCC",chat);
 		return sqlSession.insert(NS+"insChat", chat);

@@ -95,8 +95,10 @@ function btnCreate(){
 
 	if(jsTreeType == "create" && (3 > $("#roomName").val().length || $("#roomName").val().length > 20)){
 		alert('채팅방 제목 길이를 3~20 사이로 설정해 주세요.');
-	}else if(checkData.length < 1){
-		alert('채팅방 초대인원을 1명이상 선택해 주세요');
+	}else if(jsTreeType == "create" && checkData.length < 1){
+		alert('채팅방 생성 인원을 1명 이상 선택해 주세요');
+	}else if(jsTreeType == "invite" && checkData.length < 1){
+		alert('채팅방 초대 인원을 1명 이상 선택해 주세요');
 	}else{
 		var urls;
 		if(jsTreeType == "create"){
@@ -111,7 +113,7 @@ function btnCreate(){
 			data = "mems="+getEmp_id+"&roomName="+$("#roomName").val();
 			console.log(data);
 		}else{
-			data = "mems="+checkData+"&room_id="+$("#room_id").val();
+			data = "emp_id="+emp_id+"&mems="+checkData+"&room_id="+$("#room_id").val();
 			console.log(data);
 		}
 		
@@ -121,17 +123,20 @@ function btnCreate(){
 			dataType : "json",
 			data : data,
 			success : function(result){
+				//생성
 				if(jsTreeType == "create"){
 					console.log(result);
 					console.log(result.room_id);
 					window.location.href="./chatRoom.do?room_id="+result.room_id;
 					$("#createJsTree").html("");
+				//초대
 				}else{
 					console.log("html",result.html);
 					console.log("memList",result.memList);
 					console.log("room_id",result.room_id);
 					$("#inviteJsTree").html("");
 					stomp.send('/sub/invite/room/' + result.room_id, {}, JSON.stringify({html: result.html, memList: result.memList}));
+					stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:room_id,html:result.inviteHtml, emp_id: "0", type: "I"}))
 				}
 			},
 			error : function(request, status, error){

@@ -27,7 +27,9 @@ public interface IChatDao {
 	//최신 방 조회
 	public String selLastRoom();
 	//방 나갈려고 할때 멤버 조회
-	public ChatRoomVo selRoomMember(String room_id); 
+	public ChatRoomVo selRoomMember(String room_id);
+	//방 이름들을 조회
+	public List<Map<String, String>> selRoomNames();
 	//방 나가고 나서 남은 멤버 업데이트
 	public int updRoomMember(ChatRoomVo room_id);
 	//해당 방의 파일 삭제
