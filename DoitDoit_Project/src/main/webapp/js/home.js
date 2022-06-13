@@ -41,7 +41,7 @@ $(document).ready(function(){
 		}
 	});		
 
-	$(".create-modal-body").load("./createJstree.do");
+	$(".create-modal-body").load("/DoitDoit_Project/comm/createJstree.do");
 	
 	eboardResent();
 });

@@ -35,6 +35,7 @@ import com.doit.gw.service.entr.IJaryoService;
 import com.doit.gw.vo.entr.FileListVo;
 
 @Controller
+@RequestMapping("/jaryo")
 public class JaryoBoardController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

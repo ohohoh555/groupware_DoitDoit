@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.doit.gw.vo.emp.EmpVo;
 
 @Controller
+@RequestMapping("/comm")
 public class LoginController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -50,21 +51,19 @@ public class LoginController {
 		if(eVo.getEmp_auth().equals("ROLE_ADMIN_INSA") || eVo.getEmp_auth().equals("ROLE_ADMIN_BOARD")) {
 			logger.info("LoginController gohome");
 			return "home";
-		}else {
-			return "home";
 		}
 		
 		// 사용자의 정보에 휴대폰 번호가 등록되어 있지 않을 경우
 		// 문자 발송 페이지로 이동 2022.05.31
 		// 다른분들 작업때문에 임시로 주석 처리
 		
-//		if(eVo.getEmp_phone() == null) {
-//			logger.info("LoginController sendMsg");
-//			return "emp/sendMsg";
-//		}else {
-//			logger.info("LoginController gohome");
-//			return "home";
-//		}
+		if(eVo.getEmp_phone() == null) {
+			logger.info("LoginController sendMsg");
+			return "sms/sendMsg";
+		}else {
+			logger.info("LoginController gohome");
+			return "home";
+		}
 
 	}
 	
@@ -72,5 +71,10 @@ public class LoginController {
 	public String logout() {
 		logger.info("LoginController logout");
 		return "redirect:/loginPage.do";
+	}
+	
+	@RequestMapping(value = "/accessDenied.do")
+	public String accessDenied() {
+		return "accessDenied";
 	}
 }

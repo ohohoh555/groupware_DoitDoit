@@ -26,6 +26,7 @@ import com.doit.gw.vo.ann.AnnUseVo;
 import com.doit.gw.vo.ann.AnnualVo;
 
 @Controller
+@RequestMapping("/ann")
 public class AnnualController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

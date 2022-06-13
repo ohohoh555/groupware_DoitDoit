@@ -74,9 +74,9 @@
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
             	아이디 : <sec:authentication property="principal" var="emp_id"/> ${principal} <br>
-            	직급 : <sec:authentication property="Details" var="info"/>${info.rank_no}<br>
-            	부서 : <sec:authentication property="Details" var="info"/>${info.dept_no}<br>
-            	이름 : <sec:authentication property="Details" var="info"/>${info.emp_name}<br>
+            	직급 : <sec:authentication property="principal" var="info"/>${info.rank_no}<br>
+            	부서 : <sec:authentication property="principal" var="info"/>${info.dept_no}<br>
+            	이름 : <sec:authentication property="principal" var="info"/>${info.emp_name}<br>
             	권한 : <sec:authentication property="Authorities"/> ${Authorities} <br>
             </sec:authorize>
             <input type="hidden"  id="emp_id" value="${emp_id}">

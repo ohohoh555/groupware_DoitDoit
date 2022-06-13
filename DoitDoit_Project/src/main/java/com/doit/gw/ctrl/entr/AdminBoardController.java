@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminBoardController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -75,7 +76,7 @@ public class AdminBoardController {
 		logger.info("@changeDel 관리자 게시글 숨김/보임 처리 : {}", chk);
 		int cnt = eService.updEboardDelfAdmin(chk);
 		logger.info("@changeDel 숨김/보임 처리 성공횟수 :{}", cnt);
-		return "redirect:/entrBoardAdmin.do";
+		return "redirect:./entrBoardAdmin.do";
 	}
 	
 	@RequestMapping(value = "/changeDelOne.do", method = RequestMethod.GET)

@@ -39,6 +39,7 @@ import com.doit.gw.vo.chat.ChatVo;
 import com.doit.gw.vo.emp.EmpVo;
 
 @Controller
+@RequestMapping("/comm")
 public class ChatRoomController {
 	
 	private Logger logger = LoggerFactory.getLogger(ChatRoomController.class);

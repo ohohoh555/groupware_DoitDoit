@@ -26,6 +26,7 @@ import com.doit.gw.vo.entr.EntrBoardVo;
 
 
 @Controller
+@RequestMapping("/comm")
 public class AlarmController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

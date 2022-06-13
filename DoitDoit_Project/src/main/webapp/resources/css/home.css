@@ -1,0 +1,364 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'twayfly';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayfly.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    font-family: 'twayfly', sans-serif;
+    text-decoration: none;
+    color: inherit;
+}
+
+#container{
+    margin: 0 auto;
+    width: 1280px;
+    height: 900px;
+    /* background: green; */
+    overflow: hidden;
+    position: relative;
+}
+
+nav{
+    position: absolute;
+    left: -150px;
+    width: 200px;
+    height: 900px;
+    float: left;
+    z-index: 10;
+}
+
+
+#mainMenu{
+    padding-top: 100px;
+    background: #6667AB;
+    width: 100%;
+    height: 100%;
+}
+
+#mainMenu > li{
+    width: 100%;
+    height: 60px;
+    background: #6667AB;
+    line-height: 60px;
+    margin: 10px auto;
+    position: relative;
+    cursor: pointer;
+}
+
+#mainMenu > li:hover{
+    background: rgba(0,0,0,0.5);
+}
+
+#mainMenu > li > span{
+    display: block;
+    float: left;
+    width: 80%;
+    text-align: right;
+    padding-right: 15px;
+    line-height: 60px;
+    height: 100%;
+    color: #fff;
+    font-size: 16px;
+}
+
+
+
+.subMenu{
+    position: absolute;
+    right: -150px;
+    top: 0;
+    display: none;
+    
+}
+
+.subMenu > li {
+    width: 150px;
+    height: 60px;
+    background: #4b4d89;
+}
+
+.subMenu > li > span {
+    display: block;
+    width: 150px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 14px;
+    color: white;
+}
+
+.subMenu > li > span:hover{
+    background: rgba(0,0,0,0.5);
+}
+
+.menuIcon{
+    margin-top: 10px;
+    margin-right: 8px;
+    display: block;
+    float: right;
+}
+
+main{
+    width: 1230px;
+    height: 900px;
+    background-color: #efefef;
+    float: right;
+}
+
+header{
+    width: 100%;
+    height: 75px;
+    background: #393a68;
+    text-align: right;
+    line-height: 75px;
+}
+
+header > a{
+	width: 32px;
+	height: 32px;
+	margin-right: 15px;
+}
+
+header > #headerLogo{
+	margin-right: 400px;
+}
+
+#content{
+    width: 100%;
+    height: 825px;
+}
+
+#rContent{
+    width: 900px;
+    height: 825px;
+    float: left;
+}
+
+.rContent-half{
+    width: 800px;
+    height: 360px;
+    border: 2px solid #000;
+    margin: 30px auto;
+    font-size: 10pt;
+}
+
+.rContent-full{
+	width: 800px;
+	height: 800px;
+	border: 2px solid #000;
+	margin: 10px auto;
+	font-size: 10pt;
+}
+
+.rContent-normal-top{
+	width: 800px;
+	height: 200px;
+	border: 2px solid #000;
+	margin: 10px auto;
+	font-size: 10pt;
+}
+
+.rContent-normal-bottom{
+	width: 800px;
+	height: 600px;
+	border: 2px solid #000;
+	margin: 10px auto;
+	font-size: 10pt;
+}
+
+aside{
+    width: 330px;
+    height: 100%;
+    background: #efefef;
+    float: right;
+	position: relative;
+}
+
+#profile{
+    width: 300px;
+    height: 350px;
+    margin: 25px auto 0;
+    position: absolute;
+    left: 15px;
+    z-index: 10;
+    background: #6667AB;
+}
+
+#proHeader{
+	width: 100%;
+	height: 50px;
+}
+
+#proBody{
+	width: 100%;
+	height: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#profileCont{
+	width: 180px;
+	height: 180px;
+	border-radius: 50%;
+/* 	background: #fff; */
+	background-image: url("http://placeimg.com/180/180/woman");
+}
+#proFoot{
+	width: 100%;
+	height: 100px;
+	line-height: 30px;
+	text-align: center;
+	font-size: 15pt;
+}
+
+#proFoot > p{
+	color: pink;
+}
+
+#proFoot > p > b{
+	color: orange;
+}
+
+#chat{
+    width:300px;
+    height: 350px;
+    margin: 0 auto;
+    position: absolute;
+    left: 15px;
+    top: 25px;
+    background: #3d3e6d;
+}
+
+/* 채팅 목록 */
+#chat > div:first-child{
+	height: 320px;
+    overflow:hidden; 
+    overflow-y: scroll;
+    padding: 5px;
+}
+
+/* 채팅 초대 부분 */
+#chat > div:nth-child(2){
+	background-color:#6667AB;
+	height: 30px;
+}
+
+#adminContent{
+	border: 5px solid #6667AB;
+	border-radius: 15px;
+	width: 1000px;
+	height: 600px;
+	margin: 20px auto;
+	padding: 20px;
+}
+
+#insEmpBtn{
+	margin-bottom: 10px;
+}
+
+#frmContent{
+	width: 80%;
+	height: 80%;
+	padding: 60px;
+	margin: 30px auto;
+	border: 1px solid #ccc;
+}
+
+#frmTop{
+	height: 45%;
+}
+
+#insProfile{
+	margin: 20px 10px;
+	float: left;
+	width: 100px;
+	height: 150px;
+	background: white;
+}
+
+#insValue{
+	float: left;
+	width: 300px;
+	height: 150px;
+}
+
+#insValue > input{
+	margin-top: 20px;
+	width: 300px;
+	height: 30px;
+}
+
+#frmMiddle{
+	height: 45%;
+}
+
+#frmMiddle > input{
+	width: 700px;
+	height: 30px;
+	margin: 20px auto;
+}
+
+#frmBottom{
+	height: 10%;
+	text-align: right;
+}
+
+.selEmp {
+  width: 700px;
+  height: 45px;
+  font-size: 20px;
+  border: 0;
+  outline: none;
+  padding-left: 10px;
+  background-color: #8e8fc1;
+}
+
+.upEmp {
+  width: 700px;
+  height: 45px;
+  font-size: 20px;
+  border: 0;
+  outline: none;
+  padding-left: 10px;
+}
+
+#selDetailFrm{
+	width: 700px;
+	margin: 20px auto;
+}
+
+.mod-body{
+  	position: relative;
+  	padding: 15px;
+}
+
+#approWindow{
+   width: 300px;
+   height: 353px;
+   border: 0.5px solid #000;
+   overflow:overlay;
+   background: #fff;
+   position: relative;
+   top: 0;
+   right: 20px;
+   z-index: 20;
+}
+
+#alaDiv:hover{
+	opacity: 0.6;
+	background: #e2f3ea;
+	cursor: pointer;
+}
+
+.fc-license-message{
+	display:none;
+}

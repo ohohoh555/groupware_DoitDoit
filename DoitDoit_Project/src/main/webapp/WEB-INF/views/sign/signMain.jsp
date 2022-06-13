@@ -48,7 +48,7 @@
                     	<h2 style="text-align: center;">전자서명 서명관리</h2>
                     </div>
                     <div class="rContent-normal-bottom" style="width: 600px; height: 500px;">
-	                    <div style="float: left; cursor: pointer;" onclick="location.href='./signpadForm.do';"  >
+	                    <div style="float: left; cursor: pointer;" onclick="location.href='./signpadForm.do';">
 		                    <div  class="signImg1">
 		                    </div>
 		                    <div style="margin-left: 90px; margin-top: 50px;" >
@@ -56,7 +56,7 @@
 		                    </div>
 	                    </div>
 	                    
-	                    <div style="float: right; cursor: pointer;" onclick="location.href='./signModify.do';">
+	                    <div style="float: right; cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/appro/signModify.do';">
 		                    <div  class="signImg2">
 		                    </div>
 		                    <div style="margin-left: 90px;">

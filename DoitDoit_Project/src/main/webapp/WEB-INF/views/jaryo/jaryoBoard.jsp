@@ -9,7 +9,7 @@
 <%@include file="../comm/setting.jsp" %>
 <link rel="stylesheet" type="text/css" href="./css/jaryo/dragAndDrop.css">
 <script type="text/javascript" src="./js/jaryo/Map.js"></script>
-<script type="text/javascript" src="./js/jaryo/dragAndDrop.js"></script>
+<script type="text/javascript" src="+"></script>
 </head>
 <body>
 	<div id="container">
