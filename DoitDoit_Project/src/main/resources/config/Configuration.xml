@@ -9,6 +9,7 @@
 		<typeAlias type="com.doit.gw.vo.chat.ChatJoinVo" alias="ChatJoinVo"/>
 		<typeAlias type="com.doit.gw.vo.chat.ChatRoomVo" alias="ChatRoomVo"/>
 		<typeAlias type="com.doit.gw.vo.chat.ChatVo" alias="ChatVo"/>
+		<typeAlias type="com.doit.gw.vo.chat.ChatRoomIscVo" alias="ChatRoomIscVo"/>
 		<typeAlias type="com.doit.gw.vo.entr.EntrBoardVo" alias="EntrBoardVo"/>
 		<typeAlias type="com.doit.gw.vo.entr.FileListVo" alias="FileListVo"/>
 		<typeAlias type="com.doit.gw.vo.ann.AnnualVo" alias="AnnualVo"/>

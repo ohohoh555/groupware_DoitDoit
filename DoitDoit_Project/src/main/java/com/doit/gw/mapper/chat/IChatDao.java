@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.doit.gw.vo.chat.ChatFileVo;
 import com.doit.gw.vo.chat.ChatJoinVo;
+import com.doit.gw.vo.chat.ChatRoomIscVo;
 import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
 
@@ -12,6 +13,10 @@ import com.doit.gw.vo.chat.ChatVo;
 public interface IChatDao {
 	//자신의 방 목록
 	public List<ChatJoinVo> selRoom(String emp_id);
+	//내 방 목록 조회
+	public List<String> selMyRoomList(String emp_id);
+	//채팅방의 isc(읽었는지 안읽었는지 확인)
+	public List<ChatRoomIscVo> selectRoomIsc(List<String> roomList);
 	//채팅 조회
 	public List<ChatVo> selChat(Map<String, String> map);
 	//채팅멤버 조회

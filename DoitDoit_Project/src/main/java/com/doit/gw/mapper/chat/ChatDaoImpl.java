@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.doit.gw.vo.chat.ChatFileVo;
 import com.doit.gw.vo.chat.ChatJoinVo;
+import com.doit.gw.vo.chat.ChatRoomIscVo;
 import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
 
@@ -29,7 +30,17 @@ public class ChatDaoImpl implements IChatDao{
 	public List<ChatJoinVo> selRoom(String emp_id) {
 		return sqlSession.selectList(NS+"selRoom", emp_id);
 	}
+	
+	@Override
+	public List<ChatRoomIscVo> selectRoomIsc(List<String> roomList) {
+		return sqlSession.selectList(NS+"selectRoomIsc", roomList);
+	}
 
+	@Override
+	public List<String> selMyRoomList(String emp_id) {
+		return sqlSession.selectList(NS+"selMyRoomList", emp_id);
+	}
+	
 	@Override
 	public List<ChatVo> selChat(Map<String, String> map) {
 		return sqlSession.selectList(NS+"selChat",map);

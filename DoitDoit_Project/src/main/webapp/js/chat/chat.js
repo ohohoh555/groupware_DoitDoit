@@ -33,13 +33,13 @@ $(document).ready(function() {
 	// emp 성함
 	user_name = $("#pr_user_name").val();
 
+	
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
 		console.log("STOMP Connection");
-
-
-//		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
-
+		
+		//들어 갔을 때 스크롤 밑으로 내리기
+		//$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
@@ -81,20 +81,10 @@ $(document).ready(function() {
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			};
 			
-			var child = ($("#chatRoom").find("#"+room_id));
-			$(child).find(".roomName > div:eq(1) > span:eq(0)").html(content.chat_con);
-			var date = new Date();
-			$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+			//채팅방 리스트
+			chatList(content.room_id,content.chat_con,content.chat_type);
+			var child = ($("#chatRoom").find("#"+hel.room_id));
 			$(child).find(".read").css("color","#FCFCFC");
-			if(content.chat_type == "F"){
-				$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
-				$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
-				var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
-				$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
-			}
-			var prependHtml = "<div id=\""+room_id+"\">" + $(child).html() + "</div>";
-			$(child).remove();
-			$("#chatRoom").prepend(prependHtml);
 		});
 		
 		//들어 왔을떄
@@ -138,24 +128,11 @@ $(document).ready(function() {
 	            $("#textApp").slideDown();
 	            $("#textApp").delay(3000).slideUp();
          	}else if(hel.type == "chat"){
-				var child = ($("#chatRoom").find("#"+hel.room_id));
-				$(child).find(".roomName > div:eq(1) > span:eq(0)").html(hel.chat_con);
-				var date = new Date();
-				$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
-				$(child).find(".read").css("color","red");
-				if(hel.chat_type == "F"){
-					$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
-					$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
-					var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
-					$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
-				}
-				var prependHtml = "<div id=\""+room_id+"\">" + $(child).html() + "</div>";
-				$(child).remove();
-				$("#chatRoom").prepend(prependHtml);
-	
-				console.log("chat 받음");
-				console.log(hel);
-				$("#textApp").html(hel.chat_con)
+            	chatList(hel.room_id,hel.chat_con,hel.chat_type);
+            	var child = ($("#chatRoom").find("#"+hel.room_id));
+            	$(child).find(".read").css("color","red");
+            	
+            	$("#textApp").html(hel.chat_con);
             	$("#textApp").slideDown();
             	$("#textApp").delay(6000).slideUp();
 			}
@@ -313,6 +290,22 @@ function sendEmp_No(empNo){
    });
 }
 
+function chatList(roomId,chatCon,type){
+	var child = ($("#chatRoom").find("#"+roomId));
+	$(child).find(".roomName > div:eq(1) > span:eq(0)").html(chatCon);
+	var date = new Date();
+	$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+	$(child).find(".roomName > div:eq(0) > .read").css("color","#FCFCFC");
+	if(type == "F"){
+		$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
+		$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
+		var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
+		$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
+	}
+	var prependHtml = "<div id=\""+roomId+"\">" + $(child).html() + "</div>";
+	$(child).remove();
+	$("#chatRoom").prepend(prependHtml);
+}
 
 function onSendApprMessage(){
   	console.log(empArr[0])
@@ -415,7 +408,7 @@ function sendFileToServer(fd) {
 	$.ajax({
 		type : "POST",
 		data : fd,
-		url : "./saveFile.do",
+		url : "./saveChatFile.do",
 		enctype: "multipart/form-data",
 		contentType : false, // default 값은 "application/x-www-form-urlencoded; charset=UTF-8","multipart/form-data"로 전송되도록 false 설정
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
