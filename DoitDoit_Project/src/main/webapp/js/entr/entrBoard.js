@@ -12,7 +12,7 @@ $(document).ready(function(){
             "processing":     "잠시만 기다려 주세요...",
             "paginate": {
                 "next": "다음",
-                "previous": "이전"
+                "previous": "이전" 
             }
         },
 		scrollCollapse:true,
@@ -80,6 +80,10 @@ function cgoryAction(val){
 				        },
 					scrollCollapse:true,
 					scrollY:"200px",
+					scrollX:true,
+					columnDefs: [
+						            { width: 22, targets: 0 }
+						        ],
 				     lengthMenu: [ 5, 10, 15],
 				     displayLength: 5,
 				     order:[ [ 4, "desc"]]
