@@ -25,7 +25,7 @@ import com.doit.gw.vo.entr.EntrBoardVo;
 import com.doit.gw.vo.resv.ReservationVo;
 
 @Controller
-//@RequestMapping(value = "/cald")
+@RequestMapping(value = "/cald")
 public class CaldController {
 
 	@Autowired

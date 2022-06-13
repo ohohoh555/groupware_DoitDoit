@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @Controller
+@RequestMapping("/comm")
 public class EntrBoardController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -99,7 +100,7 @@ public class EntrBoardController {
 		logger.info("@delflag 사용자 게시글 삭제처리 : {}", eboard_no);
 		int cnt = service.updEboardDelflagUser(eboard_no);
 		logger.info("EntrBoardController delflag 삭제갯수 : {} 개", cnt);
-		return "redirect:/entrBoard.do";
+		return "redirect:./entrBoard.do";
 	}
 	
 	@RequestMapping(value = "/insertBoard.do", method = RequestMethod.GET)
@@ -125,7 +126,7 @@ public class EntrBoardController {
 			logger.info("@insertFrm 새글 입력에 성공한 횟수 : {}", cnt);
 		}
 
-		return "redirect:/entrBoard.do";
+		return "redirect:./entrBoard.do";
 	}
 	
 	@RequestMapping(value = "/modifyBoard.do", method = RequestMethod.GET)
@@ -151,7 +152,7 @@ public class EntrBoardController {
 			logger.info("@modifyFrm 게시글 수정완료:{}",cnt);
 		}
 		
-		return "redirect:/OneBoard.do?eboard_no="+eboard_no;
+		return "redirect:./OneBoard.do?eboard_no="+eboard_no;
 	}
 
 

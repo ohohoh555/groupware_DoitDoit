@@ -6,8 +6,13 @@
 	version="4.0">
 	
 	<welcome-file-list>
-		<welcome-file>loginPage.do</welcome-file>
+		<welcome-file>/comm/loginPage.do</welcome-file>
 	</welcome-file-list>
+	
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/views/errorPage/500.jsp</location>
+	</error-page>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

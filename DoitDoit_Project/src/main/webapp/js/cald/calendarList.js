@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', selectAjax());
 function selectAjax(){
 	$.ajax({
 				type:"get",
-				url:"./calendarAjaxMain.do",
+				url:"/DoitDoit_Project/cald/calendarAjaxMain.do",
 				dataType:"json",
 				success:function(data){
 					console.log(data)
@@ -22,7 +22,7 @@ function selectAjax(){
 					// 캘린더에 입력될 값
 			        events: data,
 					eventClick: function(){
-						location.href="./moveCalendar.do";
+						location.href="/DoitDoit_Project/cald/moveCalendar.do";
 					},
 			     });
 				// 달력 초기화시 필수임

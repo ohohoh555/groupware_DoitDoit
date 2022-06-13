@@ -4,7 +4,7 @@ var aa;
 function selectAjax() {
 	$.ajax({
 		type: "get",
-		url: "./calendarAjax.do",
+		url: "/DoitDoit_Project/cald/calendarAjax.do",
 		dataType: "json",
 		success: function(data) {
 			aa = data[0].events;
@@ -191,7 +191,7 @@ function insertAjax() {
 
 	// 인서트 성공 시 결과값을 boolean으로 반환
 	$.ajax({
-		url: "./calendarInsert.do",
+		url: "/DoitDoit_Project/cald/calendarInsert.do",
 		data: str,
 		type: "post",
 		dataType: "json",
@@ -273,7 +273,7 @@ function updateContent() {
 
 	console.log(frm);
 	$.ajax({
-		url: "./uadateAjax.do",
+		url: "/DoitDoit_Project/cald/uadateAjax.do",
 		type: "post",
 		data:
 		{
@@ -309,7 +309,7 @@ function deleteContent() {
 	var id = $("#id2").val();
 	var end = $("#end").val();
 	$.ajax({
-		url: "./deleteAjax.do",
+		url: "/DoitDoit_Project/cald/deleteAjax.do",
 		type: "post",
 		data: { "resv_id": id, "resv_end": end },
 		dataType: "json",

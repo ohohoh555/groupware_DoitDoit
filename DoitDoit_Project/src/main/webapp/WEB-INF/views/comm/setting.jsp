@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
-<link rel="stylesheet" type="text/css" href="./css/home.css">
+<link rel="stylesheet" type="text/css" href="./resources/css/home.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 <link rel="stylesheet" href="./dist/fullcalendar-5.10.2/lib/main.css" />
@@ -19,8 +19,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
 <script type="text/javascript" src="./dist/fullcalendar-5.10.2/lib/main.min2.js"></script>
-<script type="text/javascript" src="./js/home.js"></script>
-<script type="text/javascript" src="./js/chat/chat.js"></script>
+<script type="text/javascript" src="./resources/js/home.js"></script>
+<script type="text/javascript" src="./resources/js/chat/chat.js"></script>
 <script type="text/javascript" src="./js/chat/chatJstree.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>

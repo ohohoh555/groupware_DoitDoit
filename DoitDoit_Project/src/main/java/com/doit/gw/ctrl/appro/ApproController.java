@@ -33,6 +33,7 @@ import com.doit.gw.vo.appro.ApproVo;
 import com.doit.gw.vo.appro.DocFormVo;
 
 @Controller
+@RequestMapping("/appro")
 public class ApproController {
 	@Autowired
 	private IApproService service;

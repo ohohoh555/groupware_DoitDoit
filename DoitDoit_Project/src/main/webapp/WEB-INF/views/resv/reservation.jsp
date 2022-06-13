@@ -42,7 +42,7 @@
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
 					<div class="rContent-normal-top">
-						<form action="./calInsert.do" method="post" id="frm">
+						<form action="/DoitDoit_Project/cald/calInsert.do" method="post" id="frm">
 							<div>
 								<b>작성자 :</b>
 								<sec:authentication property="principal" var="info"/>

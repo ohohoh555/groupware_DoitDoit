@@ -21,6 +21,7 @@ import com.doit.gw.vo.emp.EmpVo;
 import com.doit.gw.vo.sign.SignVo;
 
 @Controller
+@RequestMapping("/emp")
 public class EmpController {
 	
 	@Autowired

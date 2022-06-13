@@ -22,8 +22,8 @@ import com.doit.gw.vo.appro.ApproDeptVo;
 
 
 @Controller
+@RequestMapping("/appro")
 public class ApproLineController {
-
 	@Autowired
 	private IApproLineService service;
 

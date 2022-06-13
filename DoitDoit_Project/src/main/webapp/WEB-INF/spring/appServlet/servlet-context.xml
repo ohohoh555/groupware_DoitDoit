@@ -22,6 +22,21 @@
 	<mvc:default-servlet-handler/>
 	<context:component-scan base-package="com.doit." />
 	<task:annotation-driven scheduler="scheduler"/>
-	<task:scheduler id="scheduler" pool-size="10"/>	
+	<task:scheduler id="scheduler" pool-size="10"/>
+	<!-- [mapping]으로 들어오는 모든 요청을 [location] 으로 처리하겠다 -->
+	<mvc:resources location="/resources/" mapping="/comm/resources/**"/>
+	<mvc:resources location="/resources/" mapping="/emp/resources/**"/>
+	<mvc:resources location="/resources/" mapping="/ann/resources/**"/>
+	<mvc:resources location="/resources/" mapping="/admin/resources/**"/>
+	<mvc:resources location="/resources/" mapping="/appro/resources/**"/>
+	<mvc:resources location="/resources/" mapping="/jaryo/resources/**"/>
+	<mvc:resources location="/resources/" mapping="/cald/resources/**"/>
+	<mvc:resources location="/resources/" mapping="/comm/**"/>
+	<mvc:resources location="/resources/" mapping="/admin/**"/>
+	<mvc:resources location="/resources/" mapping="/ann/**"/>
+	<mvc:resources location="/resources/" mapping="/appro/**"/>
+	<mvc:resources location="/resources/" mapping="/emp/**"/>
+	<mvc:resources location="/resources/" mapping="/cald/**"/>
+	<mvc:resources location="/resources/" mapping="/jaryo/**"/>
 	
 </beans:beans>

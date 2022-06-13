@@ -35,6 +35,7 @@ import com.doit.gw.service.sign.ISignService;
 import com.doit.gw.vo.sign.SignVo;
 
 @Controller
+@RequestMapping("/appro")
 public class SignController {
 	
 

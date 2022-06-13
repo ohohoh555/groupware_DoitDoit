@@ -5,8 +5,8 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>로그인 페이지</title>
-	<link rel="stylesheet" type="text/css" href="./css/loginPage.css">
+	<title>==로그인 페이지==</title>
+	<link rel="stylesheet" type="text/css" href="./resources/css/loginPage.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -14,7 +14,7 @@
 <body>
 	<!-- 베리 페리 색상 코드 : #6667AB -->
     <div id="container">
-        <form action="./login.do" method="post" id="loginForm">
+        <form action="${pageContext.request.contextPath}/comm/login.do" method="post" id="loginForm">
             <div class="loginLogo"></div>
             <div class="loginAlert">
                 <span>${msg}</span>
@@ -32,7 +32,7 @@
     </div>
     
 	<!-- 출퇴근 등록 모달 -->
-	<div class="modal fade" id="workModal" role="dialog">
+	<div class="modal fade" id="work" role="dialog">
 	  <div class="modal-dialog modal-md" style="width: 500px;">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -40,13 +40,15 @@
 	        <h4 class="modal-title" style="text-align: center;">출/퇴근 등록</h4>
 	      </div>
 	      <div class="modal-body">
+	        <form action="./annualWork.do" method="post" id="frmAnn">
 	        	<table class="table table-bordered">
 	        		<tr>
 		       			<td style="text-align: center;">
-			      			<input type="password" id="empNfc" name="emp_nfc" onkeypress="nfcRead(event)">
+			      			<input type="password" id="empNfc" name="emp_nfc">
 		       			</td>
 	        		</tr>
 	        	</table>
+	       	</form>
 	      </div>
 	    </div>
 	  </div>
@@ -54,48 +56,10 @@
 </body>
 <script type="text/javascript">
 function nfcWork(){
-	$("#empNfc").val("");
-	$("#workModal").modal();
-	$("#workModal").on("shown.bs.modal", function () {
+	$("#work").modal();
+	$("#work").on("shown.bs.modal", function () {
 		$("#empNfc").focus();
 	})
-}
-function nfcRead(e) {
-	if(e.keyCode==13){
-		var emp_nfc = $("#empNfc").val();
-		$.ajax({
-			url:"./annualWork.do",
-			type:"post",
-			data:{"emp_nfc":emp_nfc},
-			success:function(data){
-				if(data=="문자"){
-					alert("잘못된 nfc 형식입니다.");
-					$("#empNfc").val("");
-				}else if(data=="0"){
-					alert("등록되지 않은 nfc 번호입니다");
-					$("#empNfc").val("");
-				}else if(data=="출근"){
-					alert("출근이 등록되었습니다.");
-					$("#workModal").modal("hide");
-					$("#nfcBtn").prop("disabled", true);
-					$("#nfcBtn").css("background-color", "#bdbdbd");
-					setTimeout(function() {
-						$("#nfcBtn").prop("disabled", false);
-						$("#nfcBtn").css("background-color", "#6667AB");
-					}, 1000*60*60);
-				}else {
-					alert("퇴근이 등록되었습니다.");
-					$("#workModal").modal("hide");
-					$("#nfcBtn").prop("disabled", true);
-					$("#nfcBtn").css("background-color", "#bdbdbd");
-					setTimeout(function() {
-						$("#nfcBtn").prop("disabled", false);
-						$("#nfcBtn").css("background-color", "#6667AB");
-					}, 1000*60*60);
-				}
-			}
-		});
-	}
 }
 </script>
 </html>
