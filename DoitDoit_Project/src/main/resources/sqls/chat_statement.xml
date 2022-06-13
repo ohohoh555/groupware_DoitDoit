@@ -11,15 +11,15 @@
 		        	FROM CHAT
 		    	) ch
 			WHERE cr.ROOM_ID IN 
-			<foreach collection="roomList" item="list" open="(" close=")" separator=",">
-				#{list}
+			<foreach collection="list" item="item" open="(" close=")" separator=",">
+				#{item}
 			</foreach>
 			AND cr.ROOM_ID = ch.ROOM_ID
 			AND mx = 1
 			ORDER BY CHAT_TIME DESC
 	</select>
 	
-	<select id="selectRoomIsc" parameterType="java.util.List" resultType="java.util.Map">
+	<select id="selectRoomIsc" parameterType="java.lang.String" resultType="java.util.Map">
 		SELECT cr.ROOM_ID AS ROOM_ID, jt.IDS AS EMP_ID, jt.ISC AS ISC
 			FROM CHAT_ROOM cr,
 				JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
@@ -28,10 +28,7 @@
 			        	ISC VARCHAR(5) PATH '$.isc'
 			    	)
 				) AS jt
-			WHERE cr.ROOM_ID IN 
-			<foreach collection="roomList" item="list" open="(" close=")" separator=",">
-				#{list}
-			</foreach>
+			WHERE jt.IDS = #{emp_id}
 	</select>
 	
 	<select id="selMyRoomList" parameterType="java.lang.String" resultType="java.lang.String">

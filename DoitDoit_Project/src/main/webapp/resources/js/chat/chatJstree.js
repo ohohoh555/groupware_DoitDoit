@@ -125,8 +125,9 @@ function btnCreate(){
 			success : function(result){
 				//생성
 				if(jsTreeType == "create"){
-					console.log(result);
+					console.log("result",result);
 					console.log(result.room_id);
+//					stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:result.room_id,html:result.chat_con, emp_id: "0", type: "I"}))
 					window.location.href="./chatRoom.do?room_id="+result.room_id;
 					$("#createJsTree").html("");
 				//초대

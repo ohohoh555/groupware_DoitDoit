@@ -41,6 +41,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.doit.gw.service.chat.IChatService;
 import com.doit.gw.vo.chat.ChatFileVo;
+import com.doit.gw.vo.chat.ChatJoinVo;
 import com.doit.gw.vo.chat.ChatRoomVo;
 import com.doit.gw.vo.chat.ChatVo;
 
@@ -54,6 +55,9 @@ public class ChatController {
 	
 	@Autowired
 	private IChatService service;
+	
+	@Autowired
+	private ChatRoomController chatRoomController;
 
 	private List<String> listMem;//mapMem에서 불러올때 편하게 불러오기 위해서 선언
 	private List<ChatVo> listChat;//mapChat에서 불러올 때 편하게 불러오기 위해서 선언
@@ -146,10 +150,8 @@ public class ChatController {
 		
 		if (mapChat.get(map.get("room_id")) != null) {
 			listChat = mapChat.get(map.get("room_id"));
-			logger.info("해당 방의 채팅 있음 {}", listChat);
 		} else {
 			listChat = new ArrayList<ChatVo>();
-			logger.info("해당 방의 채팅 없음 {}", listChat);
 		}
 		
 		if(mapRoomAllMem.get(map.get("room_id")) == null) {
@@ -180,10 +182,24 @@ public class ChatController {
 		ChatVo vo = new ChatVo(null, map.get("room_id"), map.get("emp_id"), map.get("html"), formatedNow.toString(), map.get("type"));
 		listChat.add(vo);
 		mapChat.put(map.get("room_id"), listChat);
-
-		logger.info("저장된 채팅 {}", mapChat);
 		
 		template.convertAndSend("/sub/chat/room/" + map.get("room_id"), vo);
+		
+		//채팅방 리스트 수정하는 부분
+		Map<String, ChatJoinVo> mapRoomList = chatRoomController.getMapRoomList();
+		ChatJoinVo cjVo;
+		if(mapRoomList.get(map.get("room_id")) != null) {
+			cjVo = mapRoomList.get(map.get("room_id"));
+		}else {
+			cjVo = new ChatJoinVo();
+		}
+		cjVo.setChat_con(map.get("html"));
+		cjVo.setEmp_id(map.get("emp_id"));
+		cjVo.setChat_time(formatedNow);
+		cjVo.setChat_type(map.get("type"));
+		
+		mapRoomList.put(map.get("room_id"), cjVo);
+		chatRoomController.setMapRoomList(mapRoomList);
 		
 		chatAlarm(vo);
 	}
@@ -197,6 +213,9 @@ public class ChatController {
 		
 		listRoomAllMem = mapRoomAllMem.get(vo.getRoom_id());
 		
+		Map<String, Map<String, String>> mapMapRoomIsc = chatRoomController.getMapMapRoomIsc();
+		
+		
 		Map<String, String> map = BeanUtils.describe(vo);
 		map.put("type", "chat");
 		
@@ -204,12 +223,26 @@ public class ChatController {
 		
 		if(listMem.size() != listRoomAllMem.size()) {
 			for(int i = 0; i < listRoomAllMem.size(); i++) {
+				Map<String, String> mapRoomIsc = mapMapRoomIsc.get(listRoomAllMem.get(i));
+				logger.info("들고온 mapRoomIsc {}", mapRoomIsc);
 				if(!listMem.contains(listRoomAllMem.get(i))) {
 					logger.info("%%%%% 없는 멤버 : {} %%%%%", listRoomAllMem.get(i));
+					
+					//ChatList 처리 중
+					
+					mapRoomIsc.put(vo.getRoom_id(), "false");
+					mapMapRoomIsc.put(vo.getEmp_id(), mapRoomIsc);
+					
+					
 					template.convertAndSend("/sub/alarm/" + listRoomAllMem.get(i), map);
+				}else {
+					mapRoomIsc.put(vo.getRoom_id(), "true");
+					mapMapRoomIsc.put(vo.getEmp_id(), mapRoomIsc);
 				}
 			}
 		}
+		
+		chatRoomController.setMapMapRoomIsc(mapMapRoomIsc);
 	}
 
 	private List<String> findRoomAllMem(String room_id) throws ParseException  {
@@ -406,6 +439,7 @@ public class ChatController {
 			json.put("ROOM", jsonRoom);
 			vo.setRoom_mem(json.toString());
 			
+			chatRoomController.getChatRoomList(emp_id);
 			service.updRoomMember(vo);
 		}
 	}
