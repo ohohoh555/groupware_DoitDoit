@@ -136,6 +136,10 @@ $(document).ready(function() {
 			console.log("로그아웃")
 		});
 		
+		stomp.subscribe('/sub/beforeLogout',function(){
+			console.log("로그아웃")
+		});
+		
 		//우연    
       	stomp.subscribe('/sub/approval/complet/'+empN,function(text){
          	var hel = JSON.parse(text.body);
@@ -168,6 +172,7 @@ $(document).ready(function() {
 	
 	//나갈때 이벤트 발생
 	$(window).on("beforeunload",function(){
+		stomp.send("/pub/logout",{},JSON.stringify({emp_id:$("#empN").val()}))	
 		roomOut(room_id, empId);
 		stomp.disconnect();
 	});
