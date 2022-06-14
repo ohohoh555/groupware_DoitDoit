@@ -36,10 +36,6 @@ $(document).ready(function() {
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
 		console.log("STOMP Connection");
-
-
-//		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
-
 		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
@@ -81,20 +77,9 @@ $(document).ready(function() {
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			};
 			
-			var child = ($("#chatRoom").find("#"+room_id));
-			$(child).find(".roomName > div:eq(1) > span:eq(0)").html(content.chat_con);
-			var date = new Date();
-			$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+			chatList(content.room_id,content.chat_con,content.chat_type);
+			var child = ($("#chatRoom").find("#"+hel.room_id));
 			$(child).find(".read").css("color","#FCFCFC");
-			if(content.chat_type == "F"){
-				$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
-				$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
-				var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
-				$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
-			}
-			var prependHtml = "<div id=\""+room_id+"\">" + $(child).html() + "</div>";
-			$(child).remove();
-			$("#chatRoom").prepend(prependHtml);
 		});
 		
 		//들어 왔을떄
@@ -138,24 +123,13 @@ $(document).ready(function() {
 	            $("#textApp").slideDown();
 	            $("#textApp").delay(3000).slideUp();
          	}else if(hel.type == "chat"){
-				var child = ($("#chatRoom").find("#"+hel.room_id));
-				$(child).find(".roomName > div:eq(1) > span:eq(0)").html(hel.chat_con);
-				var date = new Date();
-				$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
-				$(child).find(".read").css("color","red");
-				if(hel.chat_type == "F"){
-					$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
-					$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
-					var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
-					$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
-				}
-				var prependHtml = "<div id=\""+room_id+"\">" + $(child).html() + "</div>";
-				$(child).remove();
-				$("#chatRoom").prepend(prependHtml);
+				console.log("알람 울림");
 	
-				console.log("chat 받음");
-				console.log(hel);
-				$("#textApp").html(hel.chat_con)
+				chatList(hel.room_id,hel.chat_con,hel.chat_type);
+            	var child = ($("#chatRoom").find("#"+hel.room_id));
+            	$(child).find(".read").css("color","red");
+            	
+            	$("#textApp").html(hel.chat_con);
             	$("#textApp").slideDown();
             	$("#textApp").delay(6000).slideUp();
 			}
@@ -291,23 +265,42 @@ $(document).ready(function() {
 			alert("실패")
 		}
 	});
-	
-	
-	
 });
 
 function hello(){
-		$.ajax({
-			url:"./delAlarm.do",
-			data:{cald_id:$("#calId").val()},
-			type:"post",
-			success:function(text){
-				console.log("성공여부",text)
-				if(text==true){
-					location.href='./approMain.do';
-				}
+	$.ajax({
+		url:"./delAlarm.do",
+		data:{cald_id:$("#calId").val()},
+		type:"post",
+		success:function(text){
+			console.log("성공여부",text)
+			if(text==true){
+				location.href='./approMain.do';
 			}
-		});
+		}
+	});
+}
+
+function chatList(roomId,chatCon,type){
+	console.log("chatList 실행");
+	var child = ($("#chatRoom").find("#"+roomId));
+	console.log(child);
+	if(child.length == 0){
+		
+	}
+	$(child).find(".roomName > div:eq(1) > span:eq(0)").html(chatCon);
+	var date = new Date();
+	$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+	$(child).find(".roomName > div:eq(0) > .read").css("color","#FCFCFC");
+	if(type == "F"){
+		$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
+		$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
+		var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
+		$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
+	}
+	var prependHtml = "<div id=\""+roomId+"\">" + $(child).html() + "</div>";
+	$(child).remove();
+	$("#chatRoom").prepend(prependHtml);
 }
 
 //우연 시작

@@ -226,13 +226,11 @@ public class ChatController {
 				Map<String, String> mapRoomIsc = mapMapRoomIsc.get(listRoomAllMem.get(i));
 				logger.info("들고온 mapRoomIsc {}", mapRoomIsc);
 				if(!listMem.contains(listRoomAllMem.get(i))) {
-					logger.info("%%%%% 없는 멤버 : {} %%%%%", listRoomAllMem.get(i));
-					
+					logger.info("%%%%% 없는 멤버 : {} %%%%%", listRoomAllMem.get(i));			
 					//ChatList 처리 중
-					
+		
 					mapRoomIsc.put(vo.getRoom_id(), "false");
 					mapMapRoomIsc.put(vo.getEmp_id(), mapRoomIsc);
-					
 					
 					template.convertAndSend("/sub/alarm/" + listRoomAllMem.get(i), map);
 				}else {
