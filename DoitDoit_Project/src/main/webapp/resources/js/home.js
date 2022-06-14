@@ -64,9 +64,6 @@ function chatOn(){
 	}
 }
 
-
-
-
 function eboardResent(){
 	console.log(" eboardResent 최근글 작동");
 	

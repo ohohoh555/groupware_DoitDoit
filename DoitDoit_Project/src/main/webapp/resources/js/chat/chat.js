@@ -78,7 +78,7 @@ $(document).ready(function() {
 			};
 			
 			chatList(content.room_id,content.chat_con,content.chat_type);
-			var child = ($("#chatRoom").find("#"+hel.room_id));
+			var child = ($("#chatRoom").find("#"+content.room_id));
 			$(child).find(".read").css("color","#FCFCFC");
 		});
 		
@@ -125,11 +125,11 @@ $(document).ready(function() {
          	}else if(hel.type == "chat"){
 				console.log("알람 울림");
 	
-				chatList(hel.room_id,hel.chat_con,hel.chat_type);
+				chatList(hel.room_id,hel.chat_con,hel.chat_type,hel.roomName);
             	var child = ($("#chatRoom").find("#"+hel.room_id));
             	$(child).find(".read").css("color","red");
             	
-            	$("#textApp").html(hel.chat_con);
+            	$("#textApp").html("<div>"+hel.roomName+"</div>" + hel.chat_con);
             	$("#textApp").slideDown();
             	$("#textApp").delay(6000).slideUp();
 			}
@@ -281,26 +281,49 @@ function hello(){
 	});
 }
 
-function chatList(roomId,chatCon,type){
+function chatList(roomId,chatCon,type,roomName){
 	console.log("chatList 실행");
 	var child = ($("#chatRoom").find("#"+roomId));
-	console.log(child);
-	if(child.length == 0){
-		
-	}
-	$(child).find(".roomName > div:eq(1) > span:eq(0)").html(chatCon);
+	console.log("child",$(child).text());
 	var date = new Date();
-	$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
-	$(child).find(".roomName > div:eq(0) > .read").css("color","#FCFCFC");
-	if(type == "F"){
-		$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
-		$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
-		var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
-		$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
+	if($(child).text() == ""){
+		console.log
+		var html; 
+		html = "<div id=\""+roomId+"\">";
+		html += 	"<a href=/DoitDoit_Project/comm/chatRoom.do?room_id="+roomId+">";
+		html += 		"<div class=\"roomName\">";
+		html += 			"<div>";
+		html +=					"<span class=\"read\" style=\"color:\"red\"> ● </span>";
+		html += 				"<span style=\"font-size: 10px; color: white;\">"+roomName+"</span>";
+		html += 			"</div>";
+		html += 			"<div>"
+		if(type == "F"){
+			html +=				"<span style=\"color: #FCFCFC;\">파일이 전송 되었습니다.</span>";
+		}else{
+			html +=				"<span style=\"color: #FCFCFC;\">"+chatCon+"</span>";
+		}
+		html +=					"<p><span style=\"color: #EAEAEA;\">"+date.format('yyyy-MM-dd HH:mm:ss')+"</span><p>";
+		html +=				"</div>";
+		html += 		"</div>";	
+		html += 	"</a>";
+		html += 	"<hr>";		
+		html += "</div>";
+		$("#chatRoom").prepend(html);
+	}else{
+		$(child).find(".roomName > div:eq(1) > span:eq(0)").html(chatCon);
+		$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+		$(child).find(".roomName > div:eq(0) > .read").css("color","#FCFCFC");
+		if(type == "F"){
+			$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
+			$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
+			var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
+			$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
+		}
+		
+		var prependHtml = "<div id=\""+roomId+"\">" + $(child).html() + "</div>";
+		$(child).remove();
+		$("#chatRoom").prepend(prependHtml);
 	}
-	var prependHtml = "<div id=\""+roomId+"\">" + $(child).html() + "</div>";
-	$(child).remove();
-	$("#chatRoom").prepend(prependHtml);
 }
 
 //우연 시작
