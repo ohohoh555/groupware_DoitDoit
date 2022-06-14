@@ -102,10 +102,10 @@ window.onload = function signList(){
 			var obj = JSON.parse(data);
 	//		console.log(data);
 	//		console.log(obj.images);
-	//		console.log(obj.names);
 			var images = obj.images;
 			var names = obj.names;
-			var empIds = obj.empIds;
+			var empIds = emp_id;
+//			console.log(obj.names);
 			
 			for(let j=0; j< names.length; j++){
 				$("#names").append('<td><input type="hidden" value="'+names[j]+'"></td>');
