@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,6 @@ public class AlarmController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	
-	// 로그인한 멤버 리스트
 	private List<String> memList;
 	
 	@Autowired
@@ -154,5 +154,20 @@ public class AlarmController {
 		boolean isc = service.delAlarm(cald_id);
 		logger.info("AlarmController delAlarm 삭제 성공여부: {}", isc);
 		return isc;
+	}
+	
+	@MessageMapping("/beforeLogout")
+	public void delSession(String emp_id) {
+		logger.info("AlarmController delSession: {}", emp_id);
+		boolean isc = false;
+		logger.info("로그인 된 회원 ㄴㄴㄴㄴㄴㄴㄴㄴ: {}", memList);
+		if(memList.contains(emp_id)) {
+			if(memList.remove(emp_id)) {
+				isc = true;
+			}
+		}
+		logger.info("회원이 세션에 있는지 확인 여부 : {}",memList.contains(emp_id));
+		logger.info("회원이 세션에서 삭제됐는지 여부 : {}",isc);
+		logger.info("로그인 된 회원 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ: {}", memList);
 	}
 }
