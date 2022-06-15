@@ -109,6 +109,19 @@ public class ApproController {
 		logger.info("============== ApproController insApproDraft 시작! ==============");
 		service.insApproDraft(aVo);
 		logger.info("[aVo 값] : {}" ,aVo);
+		
+//		logger.info("[aVo.getAppro_line() 값] : {}" ,aVo.getAppro_line());
+		//결재자 리스트 insert
+		ApproVo draftAvo = new ApproVo();
+		if(aVo.getAppro_line() == null || aVo.getAppro_line() == "") {
+			draftAvo.setAppro_line("없음");
+		}else {
+			draftAvo.setAppro_line(aVo.getAppro_line());
+		}
+		draftAvo.setAppro_line_no(aVo.getAppro_line_no());
+		logger.info("[draftAvo 값] : {}" ,draftAvo);
+		service.insApproLine(draftAvo);
+		
 
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();

@@ -189,7 +189,8 @@ function allDoc(){
 function docClick(){
 	var status = $("#statusSelect option:selected").val();
 	var emp_id = document.getElementById("emp_id").value;
-//	console.log(status);
+	console.log(status);
+	console.log(emp_id);
 	$.ajax({
 		url : "./statusDocList.do",
 		data : {
@@ -199,7 +200,7 @@ function docClick(){
 		type : "GET",
 		async : true,
 		success : function(data){
-//			console.log(data);
+			console.log(data);
 			
 			var tbody = document.getElementById("statusDocList")	//제거하고자 하는 엘리먼트
 			while ( tbody.hasChildNodes() )
@@ -212,7 +213,7 @@ function docClick(){
 			var guyljaejalists = obj.guyljaejaLists;
 			
 			for(let i=0; i<objlists.length; i++){
-		//		console.log(objlists[i]);
+				console.log(objlists[i]);
 		//		console.log(objlists[i].appro_empname);
 				html = '';
 				html += '<tr>';

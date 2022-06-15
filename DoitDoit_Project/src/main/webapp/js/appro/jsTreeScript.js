@@ -10,7 +10,7 @@ $(function() {
 		dataType : "json",
 		success : function(jsondata) {
 			createData(jsondata);
-	//		console.log(jsondata);
+//			console.log(jsondata);
 		},
 		error : function() {
 			alert("통신 오류 입니다");
@@ -47,7 +47,7 @@ function createData(jsondata) {
 	//select의 이벤트가 변경 될 떄마다 실행
 	$("#SimpleJSTree").on("changed.jstree",function(e, data) {
 		var row = data.node;
-		//console.log("changed",row);
+		console.log("changed",row);
 		
 		if(data.node.id.length >= 3){
 			isc = boolDisabled($(row).attr("id"));
@@ -76,6 +76,7 @@ function createData(jsondata) {
 	//hover 했을때 disabled면 hover 안되게
 	$("#SimpleJSTree").on("hover_node.jstree",function(e, data) {
 		var row = $("li[id = '"+data.node.id+"']")[0];
+		console.log("==========="+data.node.id.length);
 		if(data.node.id.length >= 1){
 			//console.log("hover_node", row);
 			isc = boolDisabled($(row).attr("id"));
@@ -151,7 +152,7 @@ function sel() {
 		var empLists = $(".empList");
 		$.each(empData, function(idx,row){
 			if(row.id == empNo){
-				console.log('if문 안의 길이 :',empLists.length);
+		//		console.log('if문 안의 길이 :',empLists.length);
 				if(empLists.length >= 3){
 				alert("결재자는 최대 3명까지 선택할 수 있습니다.");
 				}else{
@@ -241,9 +242,9 @@ function gyuljae(){
 		success : function(isc) {
 //			console.log(isc);
 			if(isc == null){
-				alert("전송 실패");
+				alert("결재자 선택 실패");
 			}else{
-				alert("전송 성공");
+				alert("결재자 선택 성공");
 //				console.log(emps);
 //				console.log(isc);
 				document.getElementById("selList").value = isc;
@@ -273,6 +274,7 @@ function lineClear(){
 	if(approChild.length == 2){
 		alert("초기화 할 결재자가 없습니다");
 	}else{
+		alert("선택한 결재라인을 삭제하시겠습니까?");	
 	for(let i= 0; i < empParent.length; i++){
 	$(".empList").remove();
 	}
