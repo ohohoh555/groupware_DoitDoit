@@ -105,11 +105,18 @@ public class ApproController {
 	
 	//임시저장
 	@RequestMapping(value = "/draft.do",method = RequestMethod.POST)
-	public String insApproDraft(ApproVo aVo) {
+	public String insApproDraft(ApproVo aVo,HttpServletResponse response) throws IOException {
 		logger.info("============== ApproController insApproDraft 시작! ==============");
 		service.insApproDraft(aVo);
 		logger.info("[aVo 값] : {}" ,aVo);
-		return "/appro/approMain";
+
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println("<script>alert('임시저장 되었습니다.'); location.href='./approMain.do';</script>");
+        out.flush();
+        out.close();
+        
+		return "";
 	}
 	
 	//결재문서 조회(기안자)

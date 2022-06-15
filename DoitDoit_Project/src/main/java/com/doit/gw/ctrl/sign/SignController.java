@@ -171,14 +171,17 @@ public class SignController {
 			
 			response.setContentType("text/html;charset=utf-8;");
 			PrintWriter out = response.getWriter();
-			out.print("<script>alert('서명이미지 업로드 완료!');</script>");
+			out.println("<script>alert('서명이미지 업로드 완료!'); location.href='./signModify.do';</script>");
 	        out.flush();
-	        return "/sign/signModify";
+	        out.close();
+	        
+	        return "";
 		}else {
 			PrintWriter out = response.getWriter();
-			out.print("<script>alert('서명이미지 업로드 실패!');</script>");
+			out.print("<script>alert('서명이미지 업로드 실패!'); location.href='./signUploadForm.do'; </script>");
 			out.flush();
-			return "/sign/signUploadForm";
+			out.close();
+			return "";
 		}
 	}
 	
