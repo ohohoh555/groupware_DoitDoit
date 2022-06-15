@@ -15,8 +15,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
-<script type="text/javascript" src="./js/appro/jsTreeScript.js"></script>	
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/appro/jsTreeScript.js"></script>	
 <style type="text/css">
 #docForm{
 	width: 780px;
@@ -81,7 +81,7 @@ String today = sf.format(now);
 	<input type="button" class="btn btn-info" data-toggle="modal" data-target="#jstree"value="결재선 선택">	
 	<input type="submit" class="btn btn-info" value="결재요청" id="frClick">
 	<input type="button" class="btn btn-info" value="임시저장" onclick="return draft(this.form);">
-	<input type="button" class="btn btn-info" value="취소" onclick="self.close()">
+	<input type="button" class="btn btn-info" value="취소" onclick="resetApproDocContent()">
 		<input type="hidden" id="doc_form_no" name="doc_form_no">
 		<input type="hidden" id="selList" name="appro_line">
 	</div>
@@ -266,64 +266,13 @@ CKEDITOR.replace( 'ck_content' ,{
 }
 );
 
-CKEDITOR.on('dialogDefinition', function( ev ){
-	var dialog = ev.data.definition.dialog;
-	var dialogName = ev.data.name;
-    var dialogDefinition = ev.data.definition;
-  
-    switch (dialogName) {
-        case 'image': 
-        	
-			dialogDefinition.removeContents('advanced'); // 자세히탭 제거
-			dialogDefinition.removeContents('Link'); // 링크탭 제거
-            
-            dialog.on('show', function (obj) {
-        		this.selectPage('Upload'); //업로드탭으로 시작
-            });
-			
-            break;
-    }
-});
-
-
-function search(){
-	// <textarea>의 입력값 가져오기
-	// CKEDITOR.instances.content.getData(); 의 content는 <textarea>에 설정된 id값
-	 var data = CKEDITOR.instances.content.getData();
-	 document.getElementById("result").innerHTML = data;
-}
-
-function insert(){
-	var data = document.getElementById("inputContent").value;
-//	console.log(data);
-	// <textarea>에 넣어줄 값을 data 부분에 넣어주면 됨 
-	CKEDITOR.instances.content.setData(data); 
-}
-
-function resetCon(){
-	CKEDITOR.instances.content.setData("");
-}
-
-function editorAction(){
-	var editorFrm = document.getElementById("editorFrm");
-	editorFrm.action = "./editorFrm.do";
-	
-	var title = document.getElementById("title").value;
-	var content = CKEDITOR.instances.content.getData();
-//	console.log(title, content);
-	
-	if(title==""){
-		alert("제목을 입력해주세요");
-		return false;
-	}else if(content==""){
-		alert("내용을 입력해주세요");
-		return false;
-	}else{
-		editorFrm.submit();
-	}
-
-}
 function draft(frm){
+	var docTitle = document.getElementById("docTitle").value;
+	var docForm = $("#docFormSelect option:selected").val();
+	if(docTitle == "" && docForm == "DOC0000"){
+		window.alert("필수값을 입력해주세요 \n 필수 값 :(제목/폼 양식) 을 입력해주세요!");        
+		return false;
+	}
 	frm.action = './draft.do';
 	frm.submit();
 	return true;
@@ -359,6 +308,14 @@ function approval(){
 	}else{
 		return true;
 	}
+}
+
+function resetApproDocContent(){
+	var con = confirm("작성중인 내용이 사라집니다. 취소 하시겠습니까?");
+	if(con){
+		CKEDITOR.instances.ck_content.setData("");
+	}
+
 }
 </script> 
 </html>

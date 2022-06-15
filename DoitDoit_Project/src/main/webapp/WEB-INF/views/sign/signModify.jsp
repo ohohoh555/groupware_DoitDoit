@@ -14,7 +14,7 @@
 	width: 550px;
 	height: 250px;
 	border:2px solid  #6667AB;
-	margin-left: 25px;
+	margin-left: 30px;
 	margin-top: 50px;
 	margin-bottom: 50px;
 }
@@ -24,7 +24,7 @@
 	margin-left: 40px;
 }
 #images> td > img{
-	margin : 20px;
+	margin : 15px;
 	border: 1px solid #6667AB;
 	border-radius: 10%;
 }
