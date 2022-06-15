@@ -16,8 +16,10 @@ var fd = new FormData();
 var k = 0;
 
 $(document).ready(function() {
-
+	
 	$(".invite-modal-body").load("./inviteJstree.do");
+	
+	$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 	
 	//우연
 	var empN = $("#empN").val();
@@ -36,7 +38,7 @@ $(document).ready(function() {
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
 		console.log("STOMP Connection");
-		
+			
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
 		stomp.subscribe("/sub/chat/room/" + room_id, function(chat) {
