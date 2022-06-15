@@ -246,7 +246,7 @@
             <div id="content">
             <sec:authorize access="hasRole('ROLE_USER')">
                 <div id="rContent">
-					<div class="rContent-full">
+					<div class="rContent-full" id="chat-div-full">
 						<sec:authorize access="isAuthenticated()">
 					        <sec:authentication property="principal" var="principal"/>
 					        <input type="hidden" value="${principal.emp_id}" id="pr_emp_id" name="pr_emp_id"> 
