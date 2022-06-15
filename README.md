@@ -18,10 +18,15 @@
 ### 3. 팀원 및 역할분담 
 
 
-|최횐희|김민진|김우연|이정민|유준상|오지혜|
-|:---:|:---:|:---:|:---:|:---:|:---:|
-|![최환희](https://user-images.githubusercontent.com/101374824/173772634-9fbb859c-16f5-4cce-8ea1-25b57417554d.jpg)|![김민진](https://user-images.githubusercontent.com/101374824/173772622-d35c26c1-cd77-47df-a23a-0193961de967.jpg)|![김우연](https://user-images.githubusercontent.com/101374824/173772624-cddbe5c6-eaec-44f2-918d-ac400ff122c6.jpg)|![이정민](https://user-images.githubusercontent.com/101374824/173772631-9467f423-01eb-4c8d-bdcf-3523141b9e6a.jpg)|![유준상](https://user-images.githubusercontent.com/101374824/173772630-7e80bde8-15c6-4773-bc2a-df353e3b0aff.jpg)|![오지혜](https://user-images.githubusercontent.com/101374824/173772627-ce3b09b1-ccef-4ed3-8106-4898c2e4607b.jpg)|
-|프로젝트 매니저</br>연차관리 시스템 개발</br>연차관리 시스템 개발|데이터베이스 관리자</br>일정관리 시스템 개발</br>알림 시스템 개발|조직도 시스템 개발</br>채팅관리 시스템 개발|전자결재 시스템 개발|로그인 시스템 개발</br>회원 관리 시스템 개발</br>화면템플릿 제작|형상관리 담당자</br>게시판관리 시스템 개발|
+|최횐희|김민진|김우연|
+|:---:|:---:|:---:|
+|![최환희](https://user-images.githubusercontent.com/101374824/173772634-9fbb859c-16f5-4cce-8ea1-25b57417554d.jpg)|![김민진](https://user-images.githubusercontent.com/101374824/173772622-d35c26c1-cd77-47df-a23a-0193961de967.jpg)|![김우연](https://user-images.githubusercontent.com/101374824/173772624-cddbe5c6-eaec-44f2-918d-ac400ff122c6.jpg)|
+|프로젝트 매니저</br>연차관리 시스템 개발</br>근태관리 시스템 개발|조직도 시스템 개발</br>채팅관리 시스템 개발|데이터베이스 관리자</br>일정관리 시스템 개발</br>알림 시스템 개발|
+
+|이정민|유준상|오지혜|
+|:---:|:---:|:---:|
+|![이정민](https://user-images.githubusercontent.com/101374824/173772631-9467f423-01eb-4c8d-bdcf-3523141b9e6a.jpg)|![유준상](https://user-images.githubusercontent.com/101374824/173772630-7e80bde8-15c6-4773-bc2a-df353e3b0aff.jpg)|![오지혜](https://user-images.githubusercontent.com/101374824/173772627-ce3b09b1-ccef-4ed3-8106-4898c2e4607b.jpg)|
+|전자결재 시스템 개발|로그인 시스템 개발</br>회원 관리 시스템 개발</br>화면템플릿 제작|형상관리 담당자</br>게시판관리 시스템 개발|
 
 ### 4. 사용 기술
 #### 1) 주 사용기술 
