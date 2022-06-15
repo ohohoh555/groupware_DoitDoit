@@ -11,7 +11,7 @@ var empArr;
 // 파일 중복 업로드 방지용 맵을 선언한다.
 //var map = new Map(); // Map.prototype(); 객체는 언제나 함수형태로 생성
 //파일 업로드
-var fd = new FormData();
+var chatFd = new FormData();
 // form 에 데이터 추가 시 동적으로 name 을 주기 위해 사용
 var k = 0;
 
@@ -223,7 +223,7 @@ $(document).ready(function() {
 	
 	//파일  크기 판단
 	function handleFileUpload(files) {
-		fd = new FormData();
+		chatFd = new FormData();
 		console.log("handle에 ",files);
 		// 파일의 길이만큼 반복하며 formData에 셋팅해준다.
 		var megaByte = 1024*1024;
@@ -236,10 +236,10 @@ $(document).ready(function() {
 				files[i].remove;
 			}else{
 				console.log("append", files[i]);
-				fd.append('file', files[i]);
+				chatFd.append('file', files[i]);
 			}
 		}
-		sendFileToServer(fd);
+		sendFileToServer(chatFd);
 	}
 	
 	// 알림을 뿌려주는 아작스
@@ -435,14 +435,14 @@ function aboutChatRoom(mems){
 }
 
 //ajax로 파일 입력
-function sendFileToServer(fd) {	
+function sendFileToServer(chatFd) {	
 	
-	fd.append("user_name",user_name);
-	fd.append("room_id",room_id);
+	chatFd.append("user_name",user_name);
+	chatFd.append("room_id",room_id);
 	
 	$.ajax({
 		type : "POST",
-		data : fd,
+		data : chatFd,
 		url : "/DoitDoit_Project/comm/saveChatFile.do",
 		enctype: "multipart/form-data",
 		contentType : false, // default 값은 "application/x-www-form-urlencoded; charset=UTF-8","multipart/form-data"로 전송되도록 false 설정

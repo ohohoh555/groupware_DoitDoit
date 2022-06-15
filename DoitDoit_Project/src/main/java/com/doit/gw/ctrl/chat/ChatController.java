@@ -372,7 +372,7 @@ public class ChatController {
 	public byte[] fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		logger.info("@ChatController fileDownload {}", path);
 		
-		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/comm/chatFile");
+		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "resources/comm/chatFile");
 		File file = new File(realPath + "/" + path);
 		
 		String uuid = path.substring(path.lastIndexOf("/")+1, path.lastIndexOf("."));
