@@ -82,7 +82,6 @@ public class FileUploadController {
 			
 			
 			
-			
 			//서버의 물리적인 경로 가져오기
 			String path = WebUtils.getRealPath(request.getSession().getServletContext(), "/img/storage/");
 			
@@ -93,8 +92,7 @@ public class FileUploadController {
 			// yyyymm
 			String nowFormat = now.format(formatter); 
 			
-			String back = "/var/lib/Doit/jaryoFile/";
-//			doitBackup/jaryoFile$
+			String back = "/Doit/jaryoFile/"+nowFormat;
 			System.out.println("저장위치 path:"+path);
 			System.out.println("백업위치 back:"+back);
 			
@@ -104,11 +102,11 @@ public class FileUploadController {
 			//폴더(디렉토리)가 없다면 생성
 			if(!serverPath.exists()) {
 				//만드려는 상위디렉토리가 있어야만 생성가능
-				serverPath.mkdir();  
+				serverPath.mkdirs();  
 			}
 			if(!backPath.exists()) {
 				// 만드려는 상위디렉토리가 없으면 상위도 만들어주고 생성
-				backPath.mkdir(); 
+				backPath.mkdirs(); 
 			}
 			//덮어쓰기 안되게끔 유효아이디(UUID)로 파일이름 생성
 			String uploalName = path+uid+"_"+fileName;
