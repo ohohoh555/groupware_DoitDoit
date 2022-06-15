@@ -189,7 +189,6 @@
 	#fileArea{
 		height: 720px; 
 		overflow-y: scroll;
-		padding: 5px;
 	}
 	
 	#fileArea > .files {
@@ -199,7 +198,6 @@
 	}
 	
 	#fileArea > .files > .fileMsg {
-		padding: 10px;
 		width: 135px;
 		height: 135px;
 		text-align: center;
@@ -209,6 +207,7 @@
 		font-size: 14px;
 		word-break: break-all;
 		display: table;
+		margin-bottom: 5px;
 	}
 	
 	#fileArea > .files > .fileMsg > span{
@@ -221,6 +220,7 @@
 	}
 	
 	#fileArea > .files > .imageMsg{
+		padding : 5px;
 		max-width: 135px;
 		max-height: 135px;
 		background-color: #FFF;
@@ -229,8 +229,8 @@
 	}
 	
 	#fileArea > .files > .imageMsg > img{
-		max-width: 130px;
-		max-height: 110px;
+		max-width: 115px;
+		max-height: 115px;
 		vertical-align: middle;
 	}
 

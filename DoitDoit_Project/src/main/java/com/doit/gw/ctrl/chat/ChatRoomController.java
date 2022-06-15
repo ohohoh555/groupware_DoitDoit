@@ -207,7 +207,7 @@ public class ChatRoomController {
     	if(sendChat != null) {
 	    	for(int i = 0; i < sendChat.size(); i++) {
 //	    		if() {
-	    		chatList.add(sendChat.get(i));
+	    			chatList.add(sendChat.get(i));
 //	    		}
 	    	}
     	}

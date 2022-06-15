@@ -301,7 +301,7 @@ public class ChatController {
 			cFv.setFile_chat_type(fileName.substring(fileName.lastIndexOf(".") + 1));
 			cFv.setFile_chat_uuid(UUID.randomUUID().toString());
 			cFv.setFile_uploadpath(WebUtils.getRealPath(req.getSession().getServletContext(),
-					"/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()));
+					"resources/comm/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()));
 			cFv.setRoom_id(room_id);
 			
 			try {
@@ -334,7 +334,7 @@ public class ChatController {
 				if(cFv.getFile_chat_type().equals("png") || cFv.getFile_chat_type().equals("jpg") || cFv.getFile_chat_type().equals("jpeg") || cFv.getFile_chat_type().equals("gif") || cFv.getFile_chat_type().equals("BMP")) {
 					html += "<span class=\"Name\">"+user_name+"</span>";
 	           		html += "<span class=\"imageMsg\">";
-	           		html +=		"<img src=\"./chatFile/" + date.getYear() +"/" 
+	           		html +=		"<img src=\"/DoitDoit_Project/resources/comm/chatFile/" + date.getYear() +"/" 
 	           						+ date.getMonthValue() + "/" + date.getDayOfMonth() + "/" 
 	           						+ cFv.getFile_chat_uuid()+"."+cFv.getFile_chat_type()+"\">";
 	            	html += "</span>";
@@ -372,7 +372,7 @@ public class ChatController {
 	public byte[] fileDonwload(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		logger.info("@ChatController fileDownload {}", path);
 		
-		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/chatFile");
+		String realPath = WebUtils.getRealPath(req.getSession().getServletContext(), "/comm/chatFile");
 		File file = new File(realPath + "/" + path);
 		
 		String uuid = path.substring(path.lastIndexOf("/")+1, path.lastIndexOf("."));
