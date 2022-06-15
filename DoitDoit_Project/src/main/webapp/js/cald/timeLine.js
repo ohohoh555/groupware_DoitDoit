@@ -111,10 +111,11 @@ function change(date){
 function insertAjax() {
 	var cnt = 0;
 	console.log(aa);
-	var st = dateFormat($("#datetimepicker1_2").datetimepicker('getValue'))
-	var start = (new Date($("#datetimepicker1_2").val())).getTime();
-	var end = (new Date($("#datetimepicker2_2").val())).getTime();
+	var st = dateFormat($("#datetimepicker1").datetimepicker('getValue'))
+	var start = (new Date($("#datetimepicker1").val())).getTime();
+	var end = (new Date($("#datetimepicker2").val())).getTime();
 	var cnt = 0;
+	console.log($("#datetimepicker1").val(), end)
 	
 	// 같은 회의실 내에서 예약이 겹치는지 유효성 검사
 	$.each(aa, function(index, val) {
@@ -123,14 +124,18 @@ function insertAjax() {
 		var rgxEnd = new Date(val.end).getTime();
 		
 		// 인당 하나의 예약만 가능
-		if(val.writer == $("#name").val()){
-			cnt++;
-			alert("한사람당 하나의 예약만 가능합니다 .")
-			return;
-		}
-		
+//		if(val.writer == $("#name").val()){
+//			cnt++;
+//			alert("한사람당 하나의 예약만 가능합니다 .")
+//			return;
+//		}
+		console.log(val.writer,$("#name").val())
+		console.log(val.resourceId,$("#res").val())
+		console.log(val.writer != $("#name").val(),val.resourceId == $("#res").val())
 		// 자기 예약을 제외한 예약과 같은 회의실에서 하는 예약인지 검사
-		if(val.writer != $("#name").val() && val.resourceId == $("#resId").val()){
+		if(val.resourceId == $("#res").val()){
+			console.log(start, rgxStart)
+			console.log(end, rgxEnd)
 			if(start>=rgxStart && start<=rgxEnd){
 				cnt++;
 				alert("예약일이 중복되었습니다.")
@@ -141,6 +146,7 @@ function insertAjax() {
 				alert("예약일이 중복되었습니다.")
 				return false
 			}
+			console.log("반복문")
 		}
 	})
 
@@ -173,6 +179,7 @@ function insertAjax() {
 	if (dateVal('datetimepicker1', 'datetimepicker2') == false) {
 		return false;
 	}
+	console.log(dateFormat(new Date))
 	
 	// 예약 시작일이 현재 날짜보다 이전인지 체크
 	if (dateFormat(new Date) > st) {
@@ -235,9 +242,11 @@ function updateContent() {
 		console.log(val)
 		var rgxStart = new Date(val.start).getTime();
 		var rgxEnd = new Date(val.end).getTime();
-		
+		console.log(val.writer,$("#name").val())
+		console.log(val.resourceId,$("#resId").val())
+		console.log(val.writer != $("#name").val(),val.resourceId == $("#resId").val())
 		// 자기 예약을 제외한 예약과 같은 회의실에서 하는 예약인지 검사
-		if(val.writer != $("#modalWriter2").val() && val.resourceId == $("#resId").val()){
+		if(val.resourceId == $("#resId").val()){
 			if(start>=rgxStart && start<=rgxEnd){
 				cnt++;
 				alert("예약일이 중복되었습니다.")
@@ -306,22 +315,21 @@ function updateContent() {
 }
 
 function deleteContent() {
-	var id = $("#id2").val();
-	var end = $("#end").val();
+	var id = $("#id").val();
 	$.ajax({
 		url: "/DoitDoit_Project/cald/deleteAjax.do",
 		type: "post",
-		data: { "resv_id": id, "resv_end": end },
+		data: { "resv_id": id},
 		dataType: "json",
 		success: function(data) {
 			console.log(data);
 			if (data != true) {
-				$("#schedule-detail").modal("hide");
+				$("#schedule-edit").modal("hide");
 				console.log("실패");
 				alert("본인의 예약만 삭제 가능합니다.")
 				return false;
 			} else {
-				$("#schedule-detail").modal("hide");
+				$("#schedule-edit").modal("hide");
 				console.log("성공")
 				alert("예약이 삭제되었습니다.")
 				selectAjax();

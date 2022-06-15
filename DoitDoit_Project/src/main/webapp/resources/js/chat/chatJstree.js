@@ -35,7 +35,7 @@ function treeDo(type){
 
 function treeAjax(getEmp_id){
 	$.ajax({
-		url : "./doJstree.do",
+		url : "/DoitDoit_Project/comm/doJstree.do",
 		type : "post",
 		dataType : "json",
 		data : "emp_id="+getEmp_id,

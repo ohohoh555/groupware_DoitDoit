@@ -198,6 +198,8 @@ function updateDragAjax(start, end, id) {
 	console.log(start);
 	console.log(end);
 	console.log(id);
+	
+	console.log(dateFormat(new Date));
 	$.ajax({
 		url: "/DoitDoit_Project/cald/uadateDragAjax.do",
 		type: "post",
@@ -234,7 +236,7 @@ function updateContent() {
 		content.focus();
 		return false;
 	}
-
+	console.log("데이트타임피커 시간 : ",$("#datetimepicker1_2").val())
 	if ($("#datetimepicker1_2").val() == "" || $("#datetimepicker2_2").val() == "") {
 		alert("시간을 입력해 주세요")
 		return false;
