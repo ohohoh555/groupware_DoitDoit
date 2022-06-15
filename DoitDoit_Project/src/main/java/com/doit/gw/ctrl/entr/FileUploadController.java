@@ -84,7 +84,7 @@ public class FileUploadController {
 			
 			
 			//서버의 물리적인 경로 가져오기
-			String path = WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/");
+			String path = WebUtils.getRealPath(request.getSession().getServletContext(), "/img/storage/");
 			
 			//서버가 꺼졌을때를 위한 백업경로(절대경로)
 			//업로드 되는 날짜를 구해서 백업경로 폴더 자동으로 생성되게끔 처리
@@ -93,7 +93,7 @@ public class FileUploadController {
 			// yyyymm
 			String nowFormat = now.format(formatter); 
 			
-			String back = "/doitBackup/jaryoFile/"+nowFormat+"/";
+			String back = "/var/lib/Doit/jaryoFile/"+nowFormat+"/";
 //			doitBackup/jaryoFile$
 			System.out.println("저장위치 path:"+path);
 			System.out.println("백업위치 back:"+back);
@@ -133,7 +133,7 @@ public class FileUploadController {
 	    	//응답객체를 얻어서 화면에 링크로 다운받을 수 있게끔
 	    	printWriter = response.getWriter();
 	    	//서버에 저장된 내용을 다운로드할 수 있도록 처리
-	    	String fileUrl = "./download.do?uid=" + uid + "&fileName=" + fileName;
+	    	String fileUrl = "download.do?uid=" + uid + "&fileName=" + fileName;
 			
 	    	//업로드시 메시지 출력
 	    	printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
