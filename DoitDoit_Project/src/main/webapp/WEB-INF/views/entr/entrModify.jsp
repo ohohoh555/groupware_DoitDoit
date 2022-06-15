@@ -26,7 +26,7 @@
 					        <input type="hidden" value="${principal.emp_id}" id="emp_id" name="emp_id"> 
 					        <input type="hidden" value="${principal.emp_name}" id="emp_name" name="emp_name">
  			           </sec:authorize> 
- 			           		<input type="hidden" value="${eVo.eboard_content}" id="originContent" >
+ 			           		<textarea id="originContent" readonly style="display: none;">${eVo.eboard_content}</textarea>
  			           		<input type="hidden" name="cgory_no" value="${eVo.cgory_no}">
  			           		<input type="hidden" name="eboard_no" value="${eVo.eboard_no}">
  			           		<input type="hidden" name="cald_id" value="${eVo.cald_id}">
@@ -131,8 +131,9 @@ function cancleModify(){
 function resetOrigin(){
 	var con = confirm("원본글로 복구하시겠습니까?? (작업중인 내용이 모두 사라집니다.)");
 	var originContent=document.getElementById("originContent").value;
+	console.log(originContent);
 	if(con){
-		CKEDITOR.instances.content.setData(originContent);
+		CKEDITOR.instances.eboard_content.setData(originContent);
 	}
 }
 

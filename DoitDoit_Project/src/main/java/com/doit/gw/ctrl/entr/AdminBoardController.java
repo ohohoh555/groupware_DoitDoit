@@ -1,9 +1,9 @@
 package com.doit.gw.ctrl.entr;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +26,12 @@ import com.doit.gw.vo.entr.FileListVo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * @since 2022.06.14
+ * @author 오지혜
+ * 관리자의 게시판관리 기능을 위한 Controller
+ */
+
 @Controller
 @RequestMapping("/admin")
 public class AdminBoardController {
@@ -38,12 +44,21 @@ public class AdminBoardController {
 	@Autowired
 	private IJaryoService jService;
 	
+	
+	/**
+	 * @return 관리자 게시판 관리의 기본화면인 공지게시판 관리로 이동
+	 */
 	@RequestMapping(value = "/entrBoardAdmin.do", method = RequestMethod.GET)
 	public String entrBoardAdmin() {
 		logger.info("@entrBoardAdmin 관리자 게시판관리 이동");
 		return "/admin/entrAdmin";
 	}
 	
+	
+	/**
+	 * 
+	 * @return 공지게시판 관리 화면에서 공지게시글 목록 전체조회
+	 */
 	@RequestMapping(value = "/selEboardAllAdmin.do", method = {RequestMethod.POST})
 	@ResponseBody
 	public List<EntrBoardVo> selEboardAllAdmin() {
@@ -52,6 +67,11 @@ public class AdminBoardController {
 		return data;
 	}
 	
+	/**
+	 * 
+	 * @param map {cgory : "카테고리번호"}
+	 * @return 각 카테고리별 공지게시글 목록 조회
+	 */
 	@RequestMapping(value = "/selEboardCgoryAdmin.do", method = RequestMethod.GET,
 			produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -62,7 +82,12 @@ public class AdminBoardController {
 		return data.toJson(lists);
 	}
 	
-	
+	/**
+	 * 
+	 * @param eboard_no 글번호
+	 * @param model 조회된 게시글
+	 * @return 글번호로 조회된 게시글 상세조회
+	 */
 	@RequestMapping(value = "/OneBoardAdmin.do", method = RequestMethod.GET)
 	public String OneBoardAdmin(String eboard_no, Model model) {
 		logger.info("EntrBoardController OneBoardAdmin 관리자 공지게시글 상세조회 : {}",eboard_no);
@@ -71,6 +96,11 @@ public class AdminBoardController {
 		return "/admin/oneAdmin";
 	}
 	
+	/**
+	 * 
+	 * @param chk 체크박스를 통해서 선택한 글번호 리스트
+	 * @return 숨김여부인 Delflag가 변경된 성공횟수 
+	 */
 	@RequestMapping(value = "/changeEntrDel.do", method = RequestMethod.POST)
 	public String changeDel(@RequestParam ArrayList<String> chk) {
 		logger.info("@changeDel 관리자 게시글 숨김/보임 처리 : {}", chk);
@@ -79,6 +109,11 @@ public class AdminBoardController {
 		return "redirect:./entrBoardAdmin.do";
 	}
 	
+	/**
+	 * 
+	 * @param eboard_no 글번호
+	 * @return 변경된 내용을 확인하기 위해 해당 글의 상세조회로 이동
+	 */
 	@RequestMapping(value = "/changeDelOne.do", method = RequestMethod.GET)
 	public String changeDelOne(String eboard_no) {
 		logger.info("@changeDelOne 관리자 상세조회에서 숨김/보임처리: {}",eboard_no);
@@ -90,6 +125,11 @@ public class AdminBoardController {
 		return "redirect:/OneBoardAdmin.do?eboard_no="+eboard_no;
 	}
 	
+	/**
+	 * 관리자가 상세조회에서 게시글을 완전히 삭제하는 기능
+	 * @param eboard_no 글번호
+	 * @return 게시글 전체조회로 이동
+	 */
 	@RequestMapping(value = "/deletOne.do", method = RequestMethod.GET)
 	public String deletOne(String eboard_no) {
 		logger.info("@deletOne 관리자 상세조회에서 게시글 완전삭제: {}",eboard_no );
@@ -98,12 +138,20 @@ public class AdminBoardController {
 		return "redirect:/entrBoardAdmin.do";
 	}
 	
+	/**
+	 * 관리자의 자료게시판 관리로 이동
+	 * @return 관리자 자료게시판 페이지
+	 */
 	@RequestMapping(value = "/jaryoBoardAdmin.do", method=RequestMethod.GET)
 	public String jaryoBoardAdmin() {
 		logger.info("@jaryoBoardAdmin 관리자 자료게시판 이동");
 		return "admin/jaryoAdmin";
 	}
 	
+	/**
+	 * 관리자의 자료게시글 전체조회
+	 * @return 전체조회된 리스트를 json형태로 넘겨줌
+	 */
 	@RequestMapping(value = "/selJaryoAllAdmin.do", method = RequestMethod.GET,
 					produces = "application/html; charset=UTF-8")
 	@ResponseBody
@@ -114,6 +162,12 @@ public class AdminBoardController {
 		return gson.toJson(jList);
 	}
 	
+	/**
+	 * 선택한 글들의 Delflag를 변경하는 기능 
+	 * @param chk 체크박스를 통해서 선택된 글 번호 
+	 * @param response JSP에 html 태그를 넘겨주기 위한 HttpServletResponse객체
+	 * @throws IOException 
+	 */
 	@RequestMapping(value="/changeJaryoDel.do", method = RequestMethod.POST)
 	public void changeJaryoDel(@RequestParam ArrayList<String> chk, HttpServletResponse response) throws IOException {
 		logger.info("@changeJaryoDel 관리자 자료글 숨김/보임 처리 :{}", chk);
@@ -133,6 +187,12 @@ public class AdminBoardController {
 		return;
 	}
 	
+	/**
+	 * 선택한 글을 완전히 DB에서 삭제하는 기능
+	 * @param chk 체크박스를 통해서 선택한 글 번호 
+	 * @param response JSP에 html 태그를 넘겨주기 위한 HttpServletResponse객체
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/deleteJaryo.do", method = RequestMethod.POST)
 	public void deleteJaryo(@RequestParam ArrayList<String> chk, HttpServletResponse response) throws IOException{
 		logger.info("deleteJaryo 관리자 자료글 삭제 :{}",chk);
