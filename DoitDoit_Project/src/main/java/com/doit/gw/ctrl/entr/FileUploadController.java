@@ -89,11 +89,11 @@ public class FileUploadController {
 			//서버가 꺼졌을때를 위한 백업경로(절대경로)
 			//업로드 되는 날짜를 구해서 백업경로 폴더 자동으로 생성되게끔 처리
 			LocalDate now = LocalDate.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY_MM_");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY\\MM\\");
 			// yyyymm
 			String nowFormat = now.format(formatter); 
 			// /home/ubuntu/doitBackup/jaryoFile/yyyy\mm/dfasf
-			String back = "/"+nowFormat;
+			String back = "/doitBackup/jaryoFile/"+nowFormat;
 //			doitBackup/jaryoFile$
 			System.out.println("저장위치 path:"+path);
 			System.out.println("백업위치 back:"+back);
