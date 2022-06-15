@@ -11,12 +11,12 @@ var empArr;
 // 파일 중복 업로드 방지용 맵을 선언한다.
 //var map = new Map(); // Map.prototype(); 객체는 언제나 함수형태로 생성
 //파일 업로드
-var fd = new FormData();
+var chatFd = new FormData();
 // form 에 데이터 추가 시 동적으로 name 을 주기 위해 사용
 var k = 0;
 
 $(document).ready(function() {
-
+	
 	$(".invite-modal-body").load("./inviteJstree.do");
 	
 	//우연
@@ -33,13 +33,9 @@ $(document).ready(function() {
 	// emp 성함
 	user_name = $("#pr_user_name").val();
 
-	
 	stomp = Stomp.over(sock);
 	stomp.connect({}, function() {
 		console.log("STOMP Connection");
-		
-		//들어 갔을 때 스크롤 밑으로 내리기
-		//$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 		
 		//4. subscribe(path, callback)으로 메세지를 받을 수 있음
 		// 메세지 받기
@@ -81,9 +77,8 @@ $(document).ready(function() {
 				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			};
 			
-			//채팅방 리스트
 			chatList(content.room_id,content.chat_con,content.chat_type);
-			var child = ($("#chatRoom").find("#"+hel.room_id));
+			var child = ($("#chatRoom").find("#"+content.room_id));
 			$(child).find(".read").css("color","#FCFCFC");
 		});
 		
@@ -98,6 +93,8 @@ $(document).ready(function() {
 			console.log(mems);
 			
 			aboutChatRoom(mems);
+			
+			$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 		});
 		
 		roomEnter(room_id,emp_id);
@@ -128,11 +125,13 @@ $(document).ready(function() {
 	            $("#textApp").slideDown();
 	            $("#textApp").delay(3000).slideUp();
          	}else if(hel.type == "chat"){
-            	chatList(hel.room_id,hel.chat_con,hel.chat_type);
+				console.log("알람 울림");
+	
+				chatList(hel.room_id,hel.chat_con,hel.chat_type,hel.roomName);
             	var child = ($("#chatRoom").find("#"+hel.room_id));
             	$(child).find(".read").css("color","red");
             	
-            	$("#textApp").html(hel.chat_con);
+            	$("#textApp").html("<div>"+hel.roomName+"</div>" + hel.chat_con);
             	$("#textApp").slideDown();
             	$("#textApp").delay(6000).slideUp();
 			}
@@ -144,10 +143,6 @@ $(document).ready(function() {
 		stomp.send('/pub/login', {}, JSON.stringify({ emp_id: empN }));
 		
 		stomp.subscribe('/sub/logout',function(){
-			console.log("로그아웃")
-		});
-		
-		stomp.subscribe('/sub/beforeLogout',function(){
 			console.log("로그아웃")
 		});
 		
@@ -177,35 +172,40 @@ $(document).ready(function() {
 	//엔터키
 	$("#chatCon").keydown(function(key){
 		if(key.keyCode == 13){
-      		chatSend();
+      		if(!key.shiftKey){
+				key.preventDefault();
+             	chatSend();
+             	$("#chatCon").empty();
+          	}
    		}
 	});
 	
 	//나갈때 이벤트 발생
 	$(window).on("beforeunload",function(){
-		stomp.send("/pub/logout",{},JSON.stringify({emp_id:$("#empN").val()}))	
+		alert('닫으시겠습니까?');
 		roomOut(room_id, empId);
 		stomp.disconnect();
 	});
 	
+//	$(window).on("unload",function(){
+//		alert('닫으시겠습니까?');
+//	});
+	
 	//drag & drop
-	var objDragAndDrop = $("#dragdrop");
 	// dragenter : 마우스가 대상 객체의 위로 처음 진입할 때 발생함.
-	$(document).on("dragenter", "#dragdrop",
-			function(e) {
-				//브라우저에서 기본으로 제공하는 드래그앤드롭 이벤트를 막아줘야 정상작동
-				e.stopPropagation(); // 브라우저가 해당 이벤트에 대해 수행하는 기본적인 작업을 방지. 예를 들어 파일을 내려놓을 때 새탭으로 파일정보를 보여주는 이벤트를 방지 
-				e.preventDefault(); // 나를 둘러싸고 있는 이벤트의 추가전파 방지
-				$(this).css('border', '1px solid red');
-			});
+	$(document).on("dragenter", "#chat-div-full", function(e) {
+		//브라우저에서 기본으로 제공하는 드래그앤드롭 이벤트를 막아줘야 정상작동
+		e.stopPropagation(); // 브라우저가 해당 이벤트에 대해 수행하는 기본적인 작업을 방지. 예를 들어 파일을 내려놓을 때 새탭으로 파일정보를 보여주는 이벤트를 방지 
+		e.preventDefault(); // 나를 둘러싸고 있는 이벤트의 추가전파 방지
+		$(this).css('border', '1px solid red');
+	});
 	// dragover : 드래그하면서 마우스가 대상 객체의 위에 자리 잡고 있을 때 발생함.
-	$(document).on("dragover", "#dragdrop",
-			function(e) {
-				e.stopPropagation();
-				e.preventDefault();
-			});
+	$(document).on("dragover", "#chat-div-full",function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+	});
 	// drop : 	드래그가 끝나서 드래그하던 객체를 놓는 장소에 위치한 객체에서 발생함.
-	$(document).on("drop", "#dragdrop", function(e) {
+	$(document).on("drop", "#chat-div-full", function(e) {
 		console.log("drop");
 		// 브라우저로 이동되는 이벤트를 방지하고 드랍 이벤트를 우선시 한다.
 		e.preventDefault();
@@ -215,12 +215,12 @@ $(document).ready(function() {
 		console.log("files",files);
 		$(this).css('border', '1px solid black');
 		// DIV에 DROP 이벤트가 발생 했을 때 다음을 호출한다.
-		handleFileUpload(files);
+		chatHandlerFileUpload(files);
 	});
 	
 	//파일  크기 판단
-	function handleFileUpload(files) {
-		fd = new FormData();
+	function chatHandlerFileUpload(files) {
+		chatFd = new FormData();
 		console.log("handle에 ",files);
 		// 파일의 길이만큼 반복하며 formData에 셋팅해준다.
 		var megaByte = 1024*1024;
@@ -233,16 +233,21 @@ $(document).ready(function() {
 				files[i].remove;
 			}else{
 				console.log("append", files[i]);
-				fd.append('file', files[i]);
+				chatFd.append('file', files[i]);
 			}
 		}
-		sendFileToServer(fd);
+		sendFileToServer(chatFd);
 	}
+	
+	$("#chatFile").change(function (){
+		var files = e.originalEvent.dataTransfer.files;
+		console.log(files);
+	});
 	
 	// 알림을 뿌려주는 아작스
 	// 우연
 	$.ajax({
-		url:"./selAlaram.do",
+		url:"/DoitDoit_Project/comm/selAlaram.do",
 		data:{emp_id:$("#empN").val()},
 		type:"post",
 		success:function(tag){
@@ -264,27 +269,70 @@ $(document).ready(function() {
 			})
 			$("#approWindow").append(html);
 		},
-		error:function(){
-			alert("실패")
+		error:function(request, status, error){
+			alert("code:"+request.status+"\n"+"\n"+"error:"+error);
 		}
 	});
-	
-	
-	
 });
 
 function hello(){
+
 		$.ajax({
-			url:"./delAlarm.do",
+			url:"/DoitDoit_Project/comm/delAlarm.do",
 			data:{cald_id:$("#calId").val()},
 			type:"post",
 			success:function(text){
 				console.log("성공여부",text)
 				if(text==true){
-					location.href='./approMain.do';
+					location.href='/DoitDoit_Project/appro/approMain.do';
 				}
-			}
-		});
+		}
+	});
+}
+
+function chatList(roomId,chatCon,type,roomName){
+	console.log("chatList 실행");
+	var child = ($("#chatRoom").find("#"+roomId));
+	console.log("child",$(child).text());
+	var date = new Date();
+	if($(child).text() == ""){
+		console.log
+		var html; 
+		html = "<div id=\""+roomId+"\">";
+		html += 	"<a href=/DoitDoit_Project/comm/chatRoom.do?room_id="+roomId+">";
+		html += 		"<div class=\"roomName\">";
+		html += 			"<div>";
+		html +=					"<span class=\"read\" style=\"color:\"red\"> ● </span>";
+		html += 				"<span style=\"font-size: 10px; color: white;\">"+roomName+"</span>";
+		html += 			"</div>";
+		html += 			"<div>"
+		if(type == "F"){
+			html +=				"<span style=\"color: #FCFCFC;\">파일이 전송 되었습니다.</span>";
+		}else{
+			html +=				"<span style=\"color: #FCFCFC;\">"+chatCon+"</span>";
+		}
+		html +=					"<p><span style=\"color: #EAEAEA;\">"+date.format('yyyy-MM-dd HH:mm:ss')+"</span><p>";
+		html +=				"</div>";
+		html += 		"</div>";	
+		html += 	"</a>";
+		html += 	"<hr>";		
+		html += "</div>";
+		$("#chatRoom").prepend(html);
+	}else{
+		$(child).find(".roomName > div:eq(1) > span:eq(0)").html(chatCon);
+		$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
+		$(child).find(".roomName > div:eq(0) > .read").css("color","#FCFCFC");
+		if(type == "F"){
+			$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
+			$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
+			var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
+			$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
+		}
+		
+		var prependHtml = "<div id=\""+roomId+"\">" + $(child).html() + "</div>";
+		$(child).remove();
+		$("#chatRoom").prepend(prependHtml);
+	}
 }
 
 //우연 시작
@@ -295,22 +343,6 @@ function sendEmp_No(empNo){
    });
 }
 
-function chatList(roomId,chatCon,type){
-	var child = ($("#chatRoom").find("#"+roomId));
-	$(child).find(".roomName > div:eq(1) > span:eq(0)").html(chatCon);
-	var date = new Date();
-	$(child).find(".roomName > div:eq(1) > p > span").text(date.format('yyyy-MM-dd HH:mm:ss'));
-	$(child).find(".roomName > div:eq(0) > .read").css("color","#FCFCFC");
-	if(type == "F"){
-		$(".roomName > div:eq(1) > span:eq(0)>.imageMsg").remove();
-		$(".roomName > div:eq(1) > span:eq(0)>.saveFile").remove();	
-		var msg = "<span class=\"msg\">파일이 전송 되었습니다.</span>";
-		$(child).find(".roomName > div:eq(1) > span:eq(0)").append(msg);
-	}
-	var prependHtml = "<div id=\""+roomId+"\">" + $(child).html() + "</div>";
-	$(child).remove();
-	$("#chatRoom").prepend(prependHtml);
-}
 
 function onSendApprMessage(){
   	console.log(empArr[0])
@@ -405,22 +437,21 @@ function aboutChatRoom(mems){
 }
 
 //ajax로 파일 입력
-function sendFileToServer(fd) {	
+function sendFileToServer(chatFd) {	
 	
-	fd.append("user_name",user_name);
-	fd.append("room_id",room_id);
+	chatFd.append("user_name",user_name);
+	chatFd.append("room_id",room_id);
 	
 	$.ajax({
 		type : "POST",
-		data : fd,
-		url : "./saveChatFile.do",
+		data : chatFd,
+		url : "/DoitDoit_Project/comm/saveChatFile.do",
 		enctype: "multipart/form-data",
 		contentType : false, // default 값은 "application/x-www-form-urlencoded; charset=UTF-8","multipart/form-data"로 전송되도록 false 설정
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
 		cache : false, //ajax 로 통신 중 cache 가 남아서 갱신된 데이터를 받아오지 못할 경우를 대비
 		success : function(map){
 			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: map.type }));
-			fd.remove();
 		},
 		error:function(){
 			alert("파일업로드 실패");
@@ -459,11 +490,8 @@ Date.prototype.format = function (f) {
             case "a/p": return d.getHours() < 12 ? "오전" : "오후"; // 오전/오후 구분
 
             default: return $1;
-
         }
-
     });
-
 };
 
 String.prototype.string = function (len) { var s = '', i = 0; while (i++ < len) { s += this; } return s; };
