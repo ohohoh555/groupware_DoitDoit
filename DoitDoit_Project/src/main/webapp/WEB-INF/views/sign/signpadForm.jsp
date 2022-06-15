@@ -85,7 +85,7 @@
 					window.URL.revokeObjectURL(url);
 				
 					alert("서명 생성 성공!!");
-					location.href='./test.do';
+					location.href='./signMain.do';
 				}
 			}
 		});
