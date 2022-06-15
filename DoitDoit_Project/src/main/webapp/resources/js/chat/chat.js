@@ -16,7 +16,7 @@ var fd = new FormData();
 var k = 0;
 
 $(document).ready(function() {
-
+	
 	$(".invite-modal-body").load("./inviteJstree.do");
 	
 	//우연
@@ -93,6 +93,8 @@ $(document).ready(function() {
 			console.log(mems);
 			
 			aboutChatRoom(mems);
+			
+			$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 		});
 		
 		roomEnter(room_id,emp_id);

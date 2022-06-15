@@ -118,30 +118,31 @@ function btnCreate(){
 		}
 		
 		$.ajax({
-			url : urls,
-			type : "post",
-			dataType : "json",
-			data : data,
-			success : function(result){
-				//생성
-				if(jsTreeType == "create"){
-					stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:result.room_id,html:result.html, emp_id: emp_id, type: "C"}))
-					window.location.href="./chatRoom.do?room_id="+result.room_id;
-					$("#createJsTree").html("");
-				//초대
-				}else{
-					console.log("html",result.html);
-					console.log("memList",result.memList);
-					console.log("room_id",result.room_id);
-					$("#inviteJsTree").html("");
-					stomp.send('/sub/invite/room/' + result.room_id, {}, JSON.stringify({room_id:room_id,html: result.html, memList: result.memList}));
-					stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:room_id,html:result.inviteHtml, emp_id: "0", type: "I"}))
-				}
-			},
-			error : function(request, status, error){
-				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);	
-			}
-		});
+         url : urls,
+         type : "post",
+         dataType : "json",
+         data : data,
+         success : function(result){
+            //생성
+            if(jsTreeType == "create"){
+               stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:result.room_id,html:result.html, emp_id: emp_id, type: "C"}))
+               window.location.href="./chatRoom.do?room_id="+result.room_id;
+               $("#createJsTree").html("");
+            //초대
+            }else{
+               console.log("html",result.html);
+               console.log("memList",result.memList);
+               console.log("room_id",result.room_id);
+               $("#inviteJsTree").html("");
+               stomp.send('/sub/invite/room/' + result.room_id, {}, JSON.stringify({room_id:room_id,html: result.html, memList: result.memList}));
+               stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:room_id,html:result.inviteHtml, emp_id: "0", type: "I"}));
+               $("#iJstree").modal("hide");	
+            }
+         },
+         error : function(request, status, error){
+            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);   
+         }
+      });
 	}
 }
 

@@ -42,7 +42,7 @@
 								<div style="width: 200px; margin:10px auto">
 									<button onclick="btnCreate()" class="btn btn-success">생성</button>
 									<button onclick="btnHide('create')" class="btn">숨김</button>
-						    		<button onclick="btnCancle('create')" class="btn">취소</button>								
+						    		<button onclick="btnCancle('create')" class="btn">초기화</button>								
 								</div>
 							</div>
 						</div>

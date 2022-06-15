@@ -181,7 +181,7 @@ public class ChatRoomController {
     //채팅방 진입시 채팅 내역 조회
     @RequestMapping(value = "/chatRoom.do", method = RequestMethod.GET)
     public String getChatRoom(String room_id, Principal principal, Model model) {
-    	
+    	logger.info("ChatRoomController getChatRoom {}",room_id);
        	String emp_id = principal.getName();
        	
     	List<String> allMember = service.selMyRoomList(emp_id);
