@@ -1,5 +1,4 @@
-# groupware_DoitDoit <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fohohoh555%2Fgroupware_DoitDoit&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=READ&edge_flat=false"/></a>
-
+# groupware_DoitDoit [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fohohoh555%2Fgroupware_DoitDoit&count_bg=%230287D0&title_bg=%23555555&icon=apachecassandra.svg&icon_color=%23E7E7E7&title=READ&edge_flat=true)](https://hits.seeyoufarm.com)
 (디지털컨버전스) 공공데이터 융합 자바/스프링 개발자 양성과정 : Final Project 
 
 ------------
