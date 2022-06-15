@@ -105,5 +105,15 @@
 	<select id="selEmpNfcCheck" parameterType="java.lang.String" resultType="java.lang.Integer">
 		SELECT COUNT(*) FROM EMP WHERE EMP_NFC = #{emp_nfc}
 	</select>
+	
+	<select id="getMaxId" resultType="java.lang.Integer">
+		SELECT MAX(EMP_ID) FROM EMP
+	</select>
+	
+	<!-- 최초 로그인 시 비밀번호/휴대폰번호 등록 -->
+	<update id="updPassPhone" parameterType="java.util.Map">
+		UPDATE EMP SET EMP_PASSWORD = #{emp_password}, 
+		EMP_PHONE = #{emp_phone} WHERE EMP_ID = #{emp_id}
+	</update>
 
 </mapper>

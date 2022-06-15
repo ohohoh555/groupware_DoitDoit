@@ -75,4 +75,20 @@ public class EmpServiceImpl implements IEmpService{
 	public int selEmpNfcCheck(String emp_nfc) {
 		return mapper.selEmpNfcCheck(emp_nfc);
 	}
+	
+	// 서명생성을 위한 id불러오기
+	@Override
+	public int getMaxId() {
+		return mapper.getMaxId();
+	}
+	
+	// 최초 로그인 비밀번호/휴대폰 번호 변경
+	@Override
+	public int updPassPhone(Map<String, Object> map) {
+		logger.info("최초 로그인 비밀번호/휴대폰 번호 변경 전달 받은 값 : " + map);
+		String pass = (String)map.get("emp_password");
+		String rMap = password.encode(pass);
+		map.put("emp_password", rMap);
+		return mapper.updPassPhone(map);
+	}
 }

@@ -64,15 +64,18 @@ public class EmpController {
 		map.put("emp_nfc", vo.getEmp_nfc());
 		logger.info("map 에 담긴 정보" + map);
 		service.insEmp(map);
+		int maxId = service.getMaxId();
+		logger.info("출력된 maxId : " + maxId);
+		
 		//연차 등록
 		annService.insAnnual();
 		//서명이미지 등록
 		SignVo signVo = new SignVo();
-		int emp_id = Integer.parseInt(vo.getEmp_id());
-		signVo.setEmp_id(emp_id);
+		logger.info("1. singVo : " + signVo);
+		signVo.setEmp_id(maxId);
 		signService.insDefaultSign(signVo);
 		
-		return "redirect:/selAllEmp.do";
+		return "redirect:./selAllEmp.do";
 	}
 	
 	@RequestMapping(value = "/selEmpDetail.do", method = RequestMethod.GET)
@@ -110,7 +113,7 @@ public class EmpController {
 		eMap.put("emp_regdate", eVo.getEmp_regdate());
 		eMap.put("emp_address", eVo.getEmp_address());
 		service.upEmp(eMap);
-		return "redirect:/selAllEmp.do";
+		return "redirect:./selAllEmp.do";
 	}
 	
 	@RequestMapping(value = "/nfcCheck.do", method = RequestMethod.POST, produces = "application/text; charset=utf-8;")
@@ -130,5 +133,7 @@ public class EmpController {
 			}
 		}
 	}
+	
+
 	
 }

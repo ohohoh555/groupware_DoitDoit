@@ -17,4 +17,6 @@ public interface IEmpMapper {
 	public String resetPwdCheck(String emp_id);
 	public int upEmp(Map<String, Object> map);
 	public int selEmpNfcCheck(String emp_nfc);
+	public int getMaxId();
+	public int updPassPhone(Map<String, Object> map);
 }
