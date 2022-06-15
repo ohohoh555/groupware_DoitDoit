@@ -192,21 +192,18 @@ $(document).ready(function() {
 //	});
 	
 	//drag & drop
-	var objDragAndDrop = $("#dragdrop");
 	// dragenter : 마우스가 대상 객체의 위로 처음 진입할 때 발생함.
-	$(document).on("dragenter", ".rContent-full",
-			function(e) {
-				//브라우저에서 기본으로 제공하는 드래그앤드롭 이벤트를 막아줘야 정상작동
-				e.stopPropagation(); // 브라우저가 해당 이벤트에 대해 수행하는 기본적인 작업을 방지. 예를 들어 파일을 내려놓을 때 새탭으로 파일정보를 보여주는 이벤트를 방지 
-				e.preventDefault(); // 나를 둘러싸고 있는 이벤트의 추가전파 방지
-				$(this).css('border', '1px solid red');
-			});
+	$(document).on("dragenter", ".rContent-full", function(e) {
+		//브라우저에서 기본으로 제공하는 드래그앤드롭 이벤트를 막아줘야 정상작동
+		e.stopPropagation(); // 브라우저가 해당 이벤트에 대해 수행하는 기본적인 작업을 방지. 예를 들어 파일을 내려놓을 때 새탭으로 파일정보를 보여주는 이벤트를 방지 
+		e.preventDefault(); // 나를 둘러싸고 있는 이벤트의 추가전파 방지
+		$(this).css('border', '1px solid red');
+	});
 	// dragover : 드래그하면서 마우스가 대상 객체의 위에 자리 잡고 있을 때 발생함.
-	$(document).on("dragover", ".rContent-full",
-			function(e) {
-				e.stopPropagation();
-				e.preventDefault();
-			});
+	$(document).on("dragover", ".rContent-full",function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+	});
 	// drop : 	드래그가 끝나서 드래그하던 객체를 놓는 장소에 위치한 객체에서 발생함.
 	$(document).on("drop", ".rContent-full", function(e) {
 		console.log("drop");
@@ -218,11 +215,11 @@ $(document).ready(function() {
 		console.log("files",files);
 		$(this).css('border', '1px solid black');
 		// DIV에 DROP 이벤트가 발생 했을 때 다음을 호출한다.
-		handleFileUpload(files);
+		chatHandlerFileUpload(files);
 	});
 	
 	//파일  크기 판단
-	function handleFileUpload(files) {
+	function chatHandlerFileUpload(files) {
 		chatFd = new FormData();
 		console.log("handle에 ",files);
 		// 파일의 길이만큼 반복하며 formData에 셋팅해준다.
@@ -241,6 +238,11 @@ $(document).ready(function() {
 		}
 		sendFileToServer(chatFd);
 	}
+	
+	$("#chatFile").change(function (){
+		var files = e.originalEvent.dataTransfer.files;
+		console.log(files);
+	});
 	
 	// 알림을 뿌려주는 아작스
 	// 우연
@@ -488,11 +490,8 @@ Date.prototype.format = function (f) {
             case "a/p": return d.getHours() < 12 ? "오전" : "오후"; // 오전/오후 구분
 
             default: return $1;
-
         }
-
     });
-
 };
 
 String.prototype.string = function (len) { var s = '', i = 0; while (i++ < len) { s += this; } return s; };
