@@ -92,7 +92,7 @@ public class FileUploadController {
 			// yyyymm
 			String nowFormat = now.format(formatter); 
 			
-			String back = "/Doit/jaryoFile/"+nowFormat;
+			String back = WebUtils.getRealPath(request.getSession().getServletContext(), "../../../doit/jaryo/")+nowFormat;
 			System.out.println("저장위치 path:"+path);
 			System.out.println("백업위치 back:"+back);
 			
