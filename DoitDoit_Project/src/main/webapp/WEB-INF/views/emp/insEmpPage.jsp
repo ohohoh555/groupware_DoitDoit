@@ -22,7 +22,7 @@ href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
         <main>
             <%@include file="../comm/header.jsp" %>
             <div id="content">
-            		<form id="frmContent" action="./insEmp.do" method="post">
+            		<form id="frmContent" action="/DoitDoit_Project/emp/insEmp.do" method="post">
             			<div id="frmTop">
             				<div id="insProfile">
             					프로필 사진

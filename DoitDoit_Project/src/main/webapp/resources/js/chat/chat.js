@@ -261,8 +261,8 @@ $(document).ready(function() {
 			})
 			$("#approWindow").append(html);
 		},
-		error:function(){
-			alert("실패")
+		error:function(request, status, error){
+			alert("code:"+request.status+"\n"+"\n"+"error:"+error);
 		}
 	});
 });
@@ -270,7 +270,7 @@ $(document).ready(function() {
 function hello(){
 
 		$.ajax({
-			url:"./delAlarm.do",
+			url:"/DoitDoit_Project/comm/delAlarm.do",
 			data:{cald_id:$("#calId").val()},
 			type:"post",
 			success:function(text){
@@ -437,7 +437,7 @@ function sendFileToServer(fd) {
 	$.ajax({
 		type : "POST",
 		data : fd,
-		url : "/DoitDoit_Project/comm/saveFile.do",
+		url : "/DoitDoit_Project/comm/saveChatFile.do",
 		enctype: "multipart/form-data",
 		contentType : false, // default 값은 "application/x-www-form-urlencoded; charset=UTF-8","multipart/form-data"로 전송되도록 false 설정
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임

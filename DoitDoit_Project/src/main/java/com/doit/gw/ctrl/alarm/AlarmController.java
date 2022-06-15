@@ -1,5 +1,6 @@
 package com.doit.gw.ctrl.alarm;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,11 +140,13 @@ public class AlarmController {
 		logger.info("로그인 된 회원 : {}", memList);
 	}
 	
-	@PostMapping(value = "/selAlaram.do")
+//	@PostMapping(value = "/selAlaram.do")
+	@RequestMapping(value = "/selAlaram.do", method = RequestMethod.POST)
 	@ResponseBody
-	public List<EntrBoardVo> selApprAlarm(String emp_id) {
-		List<EntrBoardVo> lists = service.selApprAlarm(emp_id);
-		logger.info("출력된 결재 알림 결과 : {}", lists);
+	public List<EntrBoardVo> selApprAlarm(String emp_id, Principal prin) {
+//		List<EntrBoardVo> lists = service.selApprAlarm(emp_id);
+		List<EntrBoardVo> lists = service.selApprAlarm(prin.getName());
+		logger.info("출력된 결재 알림 결과 여기 맞지? : {}", lists);
 		return lists;
 	}
 	

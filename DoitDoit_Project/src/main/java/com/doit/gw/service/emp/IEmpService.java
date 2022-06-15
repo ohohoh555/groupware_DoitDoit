@@ -13,4 +13,6 @@ public interface IEmpService {
 	public int resetPassword(String emp_id);
 	public int upEmp(Map<String, Object> map);
 	public int selEmpNfcCheck(String emp_nfc);
+	public int getMaxId();
+	public int updPassPhone(Map<String, Object> map);
 }

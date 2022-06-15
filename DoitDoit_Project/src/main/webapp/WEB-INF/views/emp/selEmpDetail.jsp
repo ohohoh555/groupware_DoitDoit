@@ -65,6 +65,8 @@
         		method:"GET",
         		success:function(msg){
         			console.log(msg);
+        			alert("비밀번호가 초기화 되었습니다");
+        			location.href="./selAllEmp.do";
         		},
         		error:function(){
         			

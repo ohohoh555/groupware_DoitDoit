@@ -73,4 +73,15 @@ public class EmpMapperImpl implements IEmpMapper {
 	public int selEmpNfcCheck(String emp_nfc) {
 		return sqlSession.selectOne(NS+"selEmpNfcCheck", emp_nfc);
 	}
+	
+	//서명등록을 위한 id 불러오기
+	@Override
+	public int getMaxId() {
+		return sqlSession.selectOne(NS+"getMaxId");
+	}
+	
+	@Override
+	public int updPassPhone(Map<String, Object> map) {
+		return sqlSession.update(NS+"updPassPhone", map);
+	}
 }
