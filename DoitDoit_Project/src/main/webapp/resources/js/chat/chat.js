@@ -170,7 +170,11 @@ $(document).ready(function() {
 	//엔터키
 	$("#chatCon").keydown(function(key){
 		if(key.keyCode == 13){
-      		chatSend();
+      		if(!key.shiftKey){
+				key.preventDefault();
+             	chatSend();
+             	$("#chatCon").empty();
+          	}
    		}
 	});
 	
@@ -188,7 +192,7 @@ $(document).ready(function() {
 	//drag & drop
 	var objDragAndDrop = $("#dragdrop");
 	// dragenter : 마우스가 대상 객체의 위로 처음 진입할 때 발생함.
-	$(document).on("dragenter", "#dragdrop",
+	$(document).on("dragenter", ".rContent-full",
 			function(e) {
 				//브라우저에서 기본으로 제공하는 드래그앤드롭 이벤트를 막아줘야 정상작동
 				e.stopPropagation(); // 브라우저가 해당 이벤트에 대해 수행하는 기본적인 작업을 방지. 예를 들어 파일을 내려놓을 때 새탭으로 파일정보를 보여주는 이벤트를 방지 
@@ -196,13 +200,13 @@ $(document).ready(function() {
 				$(this).css('border', '1px solid red');
 			});
 	// dragover : 드래그하면서 마우스가 대상 객체의 위에 자리 잡고 있을 때 발생함.
-	$(document).on("dragover", "#dragdrop",
+	$(document).on("dragover", ".rContent-full",
 			function(e) {
 				e.stopPropagation();
 				e.preventDefault();
 			});
 	// drop : 	드래그가 끝나서 드래그하던 객체를 놓는 장소에 위치한 객체에서 발생함.
-	$(document).on("drop", "#dragdrop", function(e) {
+	$(document).on("drop", ".rContent-full", function(e) {
 		console.log("drop");
 		// 브라우저로 이동되는 이벤트를 방지하고 드랍 이벤트를 우선시 한다.
 		e.preventDefault();
@@ -444,7 +448,6 @@ function sendFileToServer(fd) {
 		cache : false, //ajax 로 통신 중 cache 가 남아서 갱신된 데이터를 받아오지 못할 경우를 대비
 		success : function(map){
 			stomp.send('/pub/chat/message', {}, JSON.stringify({ room_id: room_id, html: map.html ,emp_id: emp_id, user_name: user_name, type: map.type }));
-			fd.remove();
 		},
 		error:function(){
 			alert("파일업로드 실패");
