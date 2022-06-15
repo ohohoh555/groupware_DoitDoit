@@ -93,7 +93,7 @@ public class FileUploadController {
 			// yyyymm
 			String nowFormat = now.format(formatter); 
 			
-			String back = "/var/lib/Doit/jaryoFile/"+nowFormat+"/";
+			String back = "/var/lib/Doit/jaryoFile/";
 //			doitBackup/jaryoFile$
 			System.out.println("저장위치 path:"+path);
 			System.out.println("백업위치 back:"+back);
