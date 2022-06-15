@@ -133,7 +133,7 @@ public class FileUploadController {
 	    	//응답객체를 얻어서 화면에 링크로 다운받을 수 있게끔
 	    	printWriter = response.getWriter();
 	    	//서버에 저장된 내용을 다운로드할 수 있도록 처리
-	    	String fileUrl = "download.do?uid=" + uid + "&fileName=" + fileName;
+	    	String fileUrl = "./download.do?uid=" + uid + "&fileName=" + fileName;
 			
 	    	//업로드시 메시지 출력
 	    	printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
