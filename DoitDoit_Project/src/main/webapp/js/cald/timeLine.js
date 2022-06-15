@@ -21,7 +21,7 @@ function selectAjax() {
 				scrollTime: '09:00',
 				aspectRatio: 1.5,
 				headerToolbar: { //헤더에 표시될 툴 바
-					start: 'prev today next', // 1달 전, 1달 후 , 오늘 버튼을 캘린더 상단 왼쪽에 생성
+					start: '', // 1달 전, 1달 후 , 오늘 버튼을 캘린더 상단 왼쪽에 생성
 					center: 'title', // 캘린더의 상단 중앙에 title을 찍음
 					end:'' // 1달 기준으로 보기, 일주일 기준으로 보기, 4일 기준으로 보기
 				},

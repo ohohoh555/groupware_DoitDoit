@@ -10,7 +10,7 @@ function selectAjax(){
 				dataType:"json",
 				success:function(data){
 					console.log(data)
-					console.log(data[0].events)
+//					console.log(data[0].events)
 					var calendarEl = document.getElementById('calendar');
 			        var calendar = new FullCalendar.Calendar(calendarEl, {
 					initialView: 'listWeek',
@@ -30,7 +30,7 @@ function selectAjax(){
 			     });
 				// 달력 초기화시 필수임
 			    calendar.render();
-				
+				$(".fc-header-toolbar").css("display","none");
 				$(".fc-list-empty-cushion").text("이번 주 일정이 없습니다.");
 				
 				},
