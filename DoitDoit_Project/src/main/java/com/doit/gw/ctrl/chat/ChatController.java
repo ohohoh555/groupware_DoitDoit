@@ -148,6 +148,13 @@ public class ChatController {
 	public void chatMessage(@RequestParam Map<String, String> map) throws IOException, ParseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {		
 		logger.info("@ChatController chatMessage() : {}", map);
 		
+		String createid = "NO",createType = "NO";
+		
+		if(map.get("type").equals("C")) {
+			createid = map.get("emp_id");
+			createType = map.get("type");
+		}
+		
 		if (mapChat.get(map.get("room_id")) != null) {
 			listChat = mapChat.get(map.get("room_id"));
 		} else {
@@ -176,10 +183,10 @@ public class ChatController {
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String formatedNow = now.format(formatter);
 				
-		ChatVo vo = new ChatVo(null, map.get("room_id"), map.get("emp_id"), map.get("html"), formatedNow.toString(), map.get("type"));
+		ChatVo vo = new ChatVo(null, map.get("room_id"), (map.get("type").equals("C"))?"0":map.get("emp_id"), map.get("html"), formatedNow.toString(), map.get("type"));
 		listChat.add(vo);
 		mapChat.put(map.get("room_id"), listChat);
 		
@@ -201,43 +208,45 @@ public class ChatController {
 		mapRoomList.put(map.get("room_id"), cjVo);
 		chatRoomController.setMapRoomList(mapRoomList);
 		
-		chatAlarm(vo);
+		chatAlarm(vo, createid, createType);
 	}
 	
-	private void chatAlarm(ChatVo vo) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		logger.info("@ChatController chatAlarm {}", vo);
+	private void chatAlarm(ChatVo vo, String createid, String createType) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		logger.info("@ChatController chatAlarm {} / {} / {}", vo, createid, createType);
 		
-		if(mapMem.get(vo.getRoom_id()) != null) {
+		if(createType.equals("C")) {
+			listMem = new ArrayList<String>();
+			listMem.add(createid);
+			logger.info("없어서 생성 listMem {}", listMem);
+		}else{
 			listMem = mapMem.get(vo.getRoom_id());
+			logger.info("없어서 생성 listMem {}", listMem);			
 		}
 		
 		listRoomAllMem = mapRoomAllMem.get(vo.getRoom_id());
+		logger.info("mapRoomAllMem {}", mapRoomAllMem.get(vo.getRoom_id()));
 		
-		Map<String, Map<String, String>> mapMapRoomIsc = chatRoomController.getMapMapRoomIsc();
+		Map<String, ChatJoinVo> mapRoomList = chatRoomController.getMapRoomList();
 		
+		String roomName = mapRoomList.get(vo.getRoom_id()).getRoom_name();
 		
 		Map<String, String> map = BeanUtils.describe(vo);
 		map.put("type", "chat");
+		map.put("roomName", roomName);
 		
 		logger.info("map의 값은 {}",map);
 		
+		Map<String, Map<String, String>> mapMapRoomIsc = chatRoomController.getMapMapRoomIsc();
 		if(listMem.size() != listRoomAllMem.size()) {
 			for(int i = 0; i < listRoomAllMem.size(); i++) {
-				Map<String, String> mapRoomIsc = mapMapRoomIsc.get(listRoomAllMem.get(i));
-				logger.info("들고온 mapRoomIsc {}", mapRoomIsc);
 				if(!listMem.contains(listRoomAllMem.get(i))) {
-					logger.info("%%%%% 없는 멤버 : {} %%%%%", listRoomAllMem.get(i));
-					
-					//ChatList 처리 중
-					
-					mapRoomIsc.put(vo.getRoom_id(), "false");
-					mapMapRoomIsc.put(vo.getEmp_id(), mapRoomIsc);
-					
+					logger.info("%%%%% 없는 멤버 : {} %%%%%", listRoomAllMem.get(i));			
 					
 					template.convertAndSend("/sub/alarm/" + listRoomAllMem.get(i), map);
 				}else {
-					mapRoomIsc.put(vo.getRoom_id(), "true");
-					mapMapRoomIsc.put(vo.getEmp_id(), mapRoomIsc);
+					Map<String, String> mapRoomIsc = mapMapRoomIsc.get(listRoomAllMem.get(i));
+					mapRoomIsc.put(listRoomAllMem.get(i), "true");
+					mapMapRoomIsc.put(listRoomAllMem.get(i), mapRoomIsc);
 				}
 			}
 		}
@@ -442,8 +451,24 @@ public class ChatController {
 			chatRoomController.getChatRoomList(emp_id);
 			service.updRoomMember(vo);
 		}
+		
+		getOutAtRoom(room_id, emp_id);
 	}
 	
+	//ChatRoomController 단 처리
+	private void getOutAtRoom(String room_id, String emp_id) {
+		Map<String, String> mapIsc = chatRoomController.getMapRoomIsc(emp_id);
+		mapIsc.remove(room_id);
+		
+		Map<String, List<String>> mapMyRoomList = chatRoomController.getMapMyRoomList();
+		List<String> list = mapMyRoomList.get(emp_id);
+		int i = list.indexOf(room_id);
+		list.remove(i);
+		mapMyRoomList.put(emp_id, list);
+		
+		chatRoomController.setMapMyRoomList(mapMyRoomList);
+	}
+
 	public JSONObject jsonParser(String value) throws ParseException  {
 		JSONParser parser = new JSONParser();
 		Object obj = parser.parse(value);

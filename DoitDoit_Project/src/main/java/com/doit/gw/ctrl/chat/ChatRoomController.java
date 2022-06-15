@@ -6,19 +6,17 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,10 +40,7 @@ public class ChatRoomController {
 	
 	@Autowired
 	private IChatService service;
-	
-	@Autowired
-	private SimpMessagingTemplate template;
-	
+		
 	@Autowired
 	private IApproLineService treeService;
 	
@@ -53,8 +48,12 @@ public class ChatRoomController {
 	private ChatController chatController;
 		
 	private static Map<String, ChatJoinVo> mapRoomList;//방 최근 글 리스트
+
+	//                 emp_id	  room_id	   isc
 	private static Map<String, Map<String, String>> mapMapRoomIsc;//내가 읽었는지 안 읽었는지
+	//					emp_id	
 	private static Map<String, List<String>> mapMyRoomList;//내가 소속 되어 있는 방
+//	private Map<String, Map<String, String>> mapMapRoomJoin;//언제 조인 했는가 
 	
 	ChatRoomController(){	
 		mapRoomList = new HashMap<String, ChatJoinVo>();
@@ -86,7 +85,17 @@ public class ChatRoomController {
 	public void setMapMyRoomList(Map<String, List<String>> mapMyRoomList) {
 		this.mapMyRoomList = mapMyRoomList;
 	}
-
+	
+	public Map<String, String> getMapRoomIsc(String emp_id) {
+		Map<String, String> map = mapMapRoomIsc.get(emp_id);
+		return map;
+	}
+	
+	public void setMapRoomIsc(Map<String, String> mapRoomIsc, String emp_id) {
+		mapMapRoomIsc.put(emp_id, mapRoomIsc);
+	}
+	
+	
 	public void getChatRoomList(String empId) {
 		//자신의 채팅방 먼저 조회
   		List<String> list = new ArrayList<String>();
@@ -109,7 +118,8 @@ public class ChatRoomController {
   		if(emptyList.size() > 0) {
 			List<ChatJoinVo> listRoom = service.selRoom(emptyList);
 			for(int k = 0; k < listRoom.size(); k++) {
-				mapRoomList.put(emptyList.get(k), listRoom.get(k));
+				ChatJoinVo vo = listRoom.get(k);
+				mapRoomList.put(vo.getRoom_id(), vo);
 			}
 		}
   		
@@ -127,6 +137,13 @@ public class ChatRoomController {
   			}
   			mapMapRoomIsc.put(empId, mapRoomIsc);
   		}
+  		
+//  		if(mapMapRoomJoin.get(empId) == null) {
+//  		
+//  		}
+  		logger.info("mapRoomList : {}", mapRoomList);
+  		logger.info("mapMapRoomIsc : {}", mapMapRoomIsc);
+  		logger.info("mapMyRoomList : {}", mapMyRoomList);
 	}
 	
 	//채팅방 목록 출력(메인화면)
@@ -137,22 +154,27 @@ public class ChatRoomController {
   		String empId = principal.getName();
   		getChatRoomList(empId);
   		
-  		List<String> list = mapMyRoomList.get(empId);
+  		List<String> list = mapMyRoomList.get(empId);//내 방 목록
   		List<ChatJoinVo> listVo = new ArrayList<ChatJoinVo>();
+  		//방 목록에 저장된 vo
   		
-  		logger.info("list {}",list);
   		for(int i = 0; i < list.size(); i++) {
-  			ChatJoinVo vo = mapRoomList.get(list.get(i));
-  			
   			Map<String, String> map = mapMapRoomIsc.get(empId);
-  			logger.info("map.get(vo.getRoom_id()) {}", map.get(vo.getRoom_id()));
-  			String isc = map.get(vo.getRoom_id());
-  			
-  			vo.setIsc(isc);
-  			
-  			listVo.add(vo);
+  			if(mapRoomList.get(list.get(i)) != null) {
+	  			ChatJoinVo vo = mapRoomList.get(list.get(i));
+	  			
+	  			String isc = map.get(list.get(i));
+	  			
+	  			vo.setIsc(isc);
+	  			
+	  			listVo.add(vo);
+  			}
   		}
-  	  		
+  		
+  		Collections.sort(listVo, new ChatComparator());
+  	  	
+  		logger.info("sort한 상태 {}",listVo);
+  		
   		return listVo;
   	}
 	
@@ -171,6 +193,7 @@ public class ChatRoomController {
     	//들어 왔을 때 읽음 처리
     	Map<String, String> mapRoomIsc = mapMapRoomIsc.get(emp_id);
     	mapRoomIsc.put(room_id, "true");
+    	logger.info("mapRoomIsc {}",mapRoomIsc);
     	mapMapRoomIsc.put(emp_id, mapRoomIsc);
     	
     	Map<String, String> map = new HashMap<String, String>();
@@ -183,7 +206,9 @@ public class ChatRoomController {
     	List<ChatVo> sendChat = ChatController.getListChat(map.get("room_id"));
     	if(sendChat != null) {
 	    	for(int i = 0; i < sendChat.size(); i++) {
+//	    		if() {
 	    		chatList.add(sendChat.get(i));
+//	    		}
 	    	}
     	}
     	
@@ -250,7 +275,7 @@ public class ChatRoomController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/makeRoom.do",method = RequestMethod.POST)
 	@ResponseBody
-	public String makeRoom(String emp_id, @RequestParam List<String> mems, String roomName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, ParseException{
+	public Map<String, String> makeRoom(String emp_id, @RequestParam List<String> mems, String roomName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, ParseException{
 		logger.info("ChatRoomController makeRoom {} / {}", mems, roomName);
 
 		String formatedNow = localDatetime();
@@ -283,15 +308,37 @@ public class ChatRoomController {
 		chat.put("chat_time", formatedNow);
 		chat.put("type", "I");
 		
-		chatController.chatMessage(chat);
-		
-		getChatRoomList(emp_id);
+		ChatJoinVo vo = new ChatJoinVo(room_id, roomName, formatedNow, null, "0", chat.get("html"), "I", null);
+		mapRoomList.put(room_id, vo);
+		logger.info("저장된 mapRoomList {}", mapRoomList);
 		
 		for(int i = 0; i < mems.size(); i++) {
+			addMyRoomList(mems.get(i), room_id);
 			getChatRoomList(mems.get(i));
 		}
 		
-		return "{\"room_id\":\""+room_id+"\"}";
+		return chat;
+	}
+	
+	public void addMyRoomList(String emp_id, String room_id) {
+		List<String> list;
+		if(mapMyRoomList.get(emp_id) != null) {
+			list = mapMyRoomList.get(emp_id);
+		}else {
+			list = new ArrayList<String>();
+		}
+		list.add(room_id);
+		mapMyRoomList.put(emp_id, list);
+		
+		Map<String, String> map;
+		if(mapMapRoomIsc.get(emp_id) != null) {
+			map = mapMapRoomIsc.get(emp_id);
+		}else {
+			map = new HashMap<String, String>();
+		}
+		
+		map.put(room_id, "false");
+		mapMapRoomIsc.put(emp_id, map);
 	}
 	
 	//초대
@@ -374,6 +421,7 @@ public class ChatRoomController {
 		jsons.put("inviteHtml", inviteHtml);
 		
 		for(int i = 0; i < mems.size(); i++) {
+			addMyRoomList(mems.get(i), room_id);
 			getChatRoomList(mems.get(i));
 		}
 		
