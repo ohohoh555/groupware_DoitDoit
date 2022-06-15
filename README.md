@@ -24,11 +24,43 @@
    -  오지혜 (형상관리 담당자, 게시판 관리 시스템 개발) 
 
 #### 4. 사용 기술
+<img src="https://img.shields.io/badge/MyBatis-D6180B?style=flat&logo=#D6180B&logoColor=white">
+<img src="https://img.shields.io/badge/JAVA-FFDD00?style=flat&logo=Buy Me A Coffee&logoColor=white">
+<img src="https://img.shields.io/badge/Spring-6DB33F?style=flat&logo=Spring&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=Spring Security&logoColor=white">
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=white">
 
-<img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
-<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring Security&logoColor=white">
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white">
-<img src="https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=Oracle&logoColor=white">
-<img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jQuery&logoColor=white">
-<img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white">
-<img src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=JSON&logoColor=white">
+<img src="https://img.shields.io/badge/jQuery-0769AD?style=flate&logo=jQuery&logoColor=white">
+<img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat&logo=Bootstrap&logoColor=white">
+<img src="https://img.shields.io/badge/JSON-000000?style=flate&logo=JSON&logoColor=white">
+<img src="https://img.shields.io/badge/Gson-000000?style=flat&logo=JSON&logoColor=white">
+<img src="https://img.shields.io/badge/Jsoup-343A40?style=flat&logo=Forestry&logoColor=white">
+
+#### 5. 사용 API
+<img src="https://img.shields.io/badge/FullCalendar-4285F4?style=flat&logo=Google Calendar&logoColor=white">
+<img src="https://img.shields.io/badge/WebSocket-07C160?style=flat&logo=WeChat&logoColor=white">
+<img src="https://img.shields.io/badge/DateTimePicker-FFD400?style=flat&logo=TV Time&logoColor=white">
+<img src="https://img.shields.io/badge/STOMP-FF4785?style=flat&logo=Storybook&logoColor=white">
+<img src="https://img.shields.io/badge/jsTree-39E09B?style=flat&logo=Gumtree&logoColor=white">
+<img src="https://img.shields.io/badge/HTML Drag and Drop API-E34F26?style=flat&logo=HTML5&logoColor=white">
+<img src="https://img.shields.io/badge/CoolSMS-1A73E8?style=flat&logo=Google Messages&logoColor=white">
+<img src="https://img.shields.io/badge/html2pdf-8CA1AF?style=flat&logo=Read the Docs&logoColor=white">
+<img src="https://img.shields.io/badge/Signature Pad-000000?style=flat&logo=Spring&logoColor=white">
+<img src="https://img.shields.io/badge/Datatables-FAFAFA?style=flat&logo=Telegraph&logoColor=white">
+<img src="https://img.shields.io/badge/Elasticsearch-005571?style=flat&logo=Elasticsearch&logoColor=white">
+<img src="https://img.shields.io/badge/CKEditor 4-0287D0?style=flat&logo=CKEditor 4&logoColor=white">
+
+#### 6. 사용도구 
+<img src="https://img.shields.io/badge/Maven-FFAD00?style=flat&logo=FamPay&logoColor=white">
+<img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=flat&logo=Apache Tomcat&logoColor=white">
+<img src="https://img.shields.io/badge/Eclipse-2C2255?style=flat&logo=Eclipse IDE&logoColor=white">
+<img src="https://img.shields.io/badge/Oracle-F80000?style=flat&logo=Oracle&logoColor=white">
+<img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=Git&logoColor=white">
+
+<img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&logoColor=white">
+<img src="https://img.shields.io/badge/Microsoft PowerPoint-B7472A?style=flat&logo=Microsoft PowerPoint&logoColor=white">
+<img src="https://img.shields.io/badge/Microsoft Word-2B579A?style=flat&logo=Microsoft Word&logoColor=white">
+<img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&logoColor=white">
+<img src="https://img.shields.io/badge/eDrawMax-F16521?style=flat&logo=Etsy&logoColor=white">
+<img src="https://img.shields.io/badge/ERDCloud-3CAFCE?style=flat&logo=Moleculer&logoColor=white">
+<img src="https://img.shields.io/badge/Google Chrome-4285F4?style=flat&logo=Google Chrome&logoColor=white">
