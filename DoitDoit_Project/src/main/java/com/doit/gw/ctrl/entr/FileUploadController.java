@@ -89,10 +89,9 @@ public class FileUploadController {
 			//업로드 되는 날짜를 구해서 백업경로 폴더 자동으로 생성되게끔 처리
 			LocalDate now = LocalDate.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/");
-			// yyyymm
 			String nowFormat = now.format(formatter); 
 			
-			String back = WebUtils.getRealPath(request.getSession().getServletContext(), "../../../doit/jaryo/")+nowFormat;
+			String back = "/var/lib/doit/"+nowFormat;
 			System.out.println("저장위치 path:"+path);
 			System.out.println("백업위치 back:"+back);
 			
