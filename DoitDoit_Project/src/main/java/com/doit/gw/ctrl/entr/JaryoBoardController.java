@@ -34,6 +34,12 @@ import org.springframework.web.util.WebUtils;
 import com.doit.gw.service.entr.IJaryoService;
 import com.doit.gw.vo.entr.FileListVo;
 
+
+/**
+ * @since 2022.06.14 오지혜
+ * @author 오지혜
+ * 사용자의 자료게시판을 위한 Controller
+ */
 @Controller
 @RequestMapping("/jaryo")
 public class JaryoBoardController {
@@ -43,12 +49,20 @@ public class JaryoBoardController {
 	@Autowired
 	private IJaryoService service;
 	
+	/**
+	 * 사용자의 자료게시판 이동
+	 * @return 자료게시판jsp
+	 */
 	@RequestMapping(value = "/jaryoBoard.do", method = RequestMethod.GET)
 	public String jaryoBoard() {
 		logger.info("@jaryoBoard 자료게시판 이동");
 		return "/jaryo/jaryoBoard";
 	}
 	
+	/**
+	 * Delflag가 N인 자료게시글 전체조회
+	 * @return 자료게시글 전체조회
+	 */
 	@RequestMapping(value = "/selJaryoAllUser.do", method = RequestMethod.POST,
 					produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -58,6 +72,15 @@ public class JaryoBoardController {
 		return data;
 	}
 	
+	/**
+	 * 사용자로부터 입력받은 파일들의 정보를 DB에 저장하고 
+	 * 다운로드 가능하게끔 서버에 저장 + 백업을 위해 폴더에 저장하는 기능 
+	 * @param multipartRequest
+	 * @param request
+	 * @param fVo 화면에서 입력받은 파일 정보(파일명, 용량, 유효아이디)
+	 * @return 
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/saveJaryo.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
 	@ResponseBody
 	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, FileListVo fVo) throws IOException {
@@ -139,7 +162,15 @@ public class JaryoBoardController {
 		return "업로드 성공";
 	}
 	
-	
+	/**
+	 * 유효아이디와 파일명을 통해서 서버에 저장된 파일을 다운로드할 수 있는 기능 
+	 * @param uid 유효아이디
+	 * @param fileName 파일명
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/download.do")
 	@ResponseBody
 	public byte[] filedownload(@RequestParam(value="uid") String uid,
@@ -173,7 +204,13 @@ public class JaryoBoardController {
 	}
 	
 	
-	
+	/**
+	 * 사용자의 자료게시글 삭제처리
+	 * 실제 DB 삭제되지 않고 Delflag가 N으로 변경되어 전체조회에서 확인할 수 없게 만듬 
+	 * @param map 선택한 글번호 
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/jaryoDel.do", method = RequestMethod.GET)
 	public void jaryoDel(@RequestParam Map<String, Object>map, HttpServletResponse response) throws IOException {
 		logger.info("@jaryoDel 사용자 자료글 삭제처리 :{}",map);
