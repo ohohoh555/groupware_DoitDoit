@@ -31,35 +31,71 @@
         </form>
     </div>
     
-	<!-- 출퇴근 등록 모달 -->
-	<div class="modal fade" id="work" role="dialog">
-	  <div class="modal-dialog modal-md" style="width: 500px;">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title" style="text-align: center;">출/퇴근 등록</h4>
-	      </div>
-	      <div class="modal-body">
-	        <form action="./annualWork.do" method="post" id="frmAnn">
-	        	<table class="table table-bordered">
-	        		<tr>
-		       			<td style="text-align: center;">
-			      			<input type="password" id="empNfc" name="emp_nfc">
-		       			</td>
-	        		</tr>
-	        	</table>
-	       	</form>
-	      </div>
-	    </div>
-	  </div>
-	</div><!-- 모달 영역 끝 -->    
+<!-- 출퇴근 등록 모달 -->
+   <div class="modal fade" id="workModal" role="dialog">
+     <div class="modal-dialog modal-md" style="width: 500px;">
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal">&times;</button>
+           <h4 class="modal-title" style="text-align: center;">출/퇴근 등록</h4>
+         </div>
+         <div class="modal-body">
+              <table class="table table-bordered">
+                 <tr>
+                      <td style="text-align: center;">
+                        <input type="password" id="empNfc" name="emp_nfc" onkeypress="nfcRead(event)">
+                      </td>
+                 </tr>
+              </table>
+         </div>
+       </div>
+     </div>
+   </div><!-- 모달 영역 끝 -->    
 </body>
 <script type="text/javascript">
 function nfcWork(){
-	$("#work").modal();
-	$("#work").on("shown.bs.modal", function () {
-		$("#empNfc").focus();
-	})
+   $("#empNfc").val("");
+   $("#workModal").modal();
+   $("#workModal").on("shown.bs.modal", function () {
+      $("#empNfc").focus();
+   })
+}
+function nfcRead(e) {
+   if(e.keyCode==13){
+      var emp_nfc = $("#empNfc").val();
+      $.ajax({
+         url:"/DoitDoit_Project/ann/annualWork.do",
+         type:"post",
+         data:{"emp_nfc":emp_nfc},
+         success:function(data){
+            if(data=="문자"){
+               alert("잘못된 nfc 형식입니다.");
+               $("#empNfc").val("");
+            }else if(data=="0"){
+               alert("등록되지 않은 nfc 번호입니다");
+               $("#empNfc").val("");
+            }else if(data=="출근"){
+               alert("출근이 등록되었습니다.");
+               $("#workModal").modal("hide");
+               $("#nfcBtn").prop("disabled", true);
+               $("#nfcBtn").css("background-color", "#bdbdbd");
+               setTimeout(function() {
+                  $("#nfcBtn").prop("disabled", false);
+                  $("#nfcBtn").css("background-color", "#6667AB");
+               }, 1000*60*60);
+            }else {
+               alert("퇴근이 등록되었습니다.");
+               $("#workModal").modal("hide");
+               $("#nfcBtn").prop("disabled", true);
+               $("#nfcBtn").css("background-color", "#bdbdbd");
+               setTimeout(function() {
+                  $("#nfcBtn").prop("disabled", false);
+                  $("#nfcBtn").css("background-color", "#6667AB");
+               }, 1000*60*60);
+            }
+         }
+      });
+   }
 }
 </script>
 </html>

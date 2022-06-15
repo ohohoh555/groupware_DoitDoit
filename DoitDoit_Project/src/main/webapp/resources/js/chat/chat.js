@@ -299,7 +299,7 @@ function hello(){
 			success:function(text){
 				console.log("성공여부",text)
 				if(text==true){
-					location.href='./approMain.do';
+					location.href='/DoitDoit_Project/appro/approMain.do';
 				}
 			}
 		});
@@ -415,7 +415,7 @@ function sendFileToServer(fd) {
 	$.ajax({
 		type : "POST",
 		data : fd,
-		url : "./saveFile.do",
+		url : "/DoitDoit_Project/comm/saveFile.do",
 		enctype: "multipart/form-data",
 		contentType : false, // default 값은 "application/x-www-form-urlencoded; charset=UTF-8","multipart/form-data"로 전송되도록 false 설정
 		processData : false, // 일반적으로 서버에 전달되는 데이터는 query string 형태임
