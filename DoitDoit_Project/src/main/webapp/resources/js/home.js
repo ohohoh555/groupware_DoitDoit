@@ -60,12 +60,9 @@ function chatOn(){
 	if(cnt % 2 == 1){
 		$("#chat").css({top:"375px",transition:"all 0.5s"});	
 	}else{
-		$("#chat").css({top:"25px",transition:"all 0.5s"})
+		$("#chat").css({top:"55px",transition:"all 0.5s"})
 	}
 }
-
-
-
 
 function eboardResent(){
 	console.log(" eboardResent 최근글 작동");

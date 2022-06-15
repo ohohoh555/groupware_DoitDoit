@@ -22,20 +22,20 @@
     	pointer-events: none;
     }
     
-    .fc-daygrid-day-number{
-    	pointer-events: none;
-    }
+/*     .fc-daygrid-day-number{ */
+/*     	pointer-events: none; */
+/*     } */
     
-    .fc-event-main-frame>.fc-event-title-container{
-    	text-overflow: ellipsis;
-    	margin-left: 48px;
-    }
+/*     .fc-event-main-frame>.fc-event-title-container{ */
+/*     	text-overflow: ellipsis; */
+/*     	margin-left: 48px; */
+/*     } */
     
-   .fc-event-main-frame>.fc-event-time{
-   		position: absolute;
-    }
-    .koHolidays>.fc-event-main>.fc-event-main-frame>.fc-event-title-container{
-    	margin-left: 0px;
+/*    .fc-event-main-frame>.fc-event-time{ */
+/*    		position: absolute; */
+/*     } */
+/*     .koHolidays>.fc-event-main>.fc-event-main-frame>.fc-event-title-container{ */
+/*     	margin-left: 0px; */
     }
 </style>
 </head>

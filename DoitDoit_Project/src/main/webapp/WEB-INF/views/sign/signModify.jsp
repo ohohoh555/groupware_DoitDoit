@@ -102,14 +102,14 @@ window.onload = function signList(){
 			var obj = JSON.parse(data);
 	//		console.log(data);
 	//		console.log(obj.images);
-	//		console.log(obj.names);
 			var images = obj.images;
 			var names = obj.names;
-			var empIds = obj.empIds;
+			var empIds = emp_id;
+//			console.log(obj.names);
 			
 			for(let j=0; j< names.length; j++){
 				$("#names").append('<td><input type="hidden" value="'+names[j]+'"></td>');
-				$("#buttons").append('<td style="text-align: center; "><input type="button" id="removebtn" class="btn btn-info -sm" value="삭제"><input type="hidden" value="'+names[j]+'"><input type="hidden" value="'+empIds[j]+'"></td>');
+				$("#buttons").append('<td style="text-align: center; "><input type="button" id="removebtn" class="btn btn-info -sm" value="삭제"><input type="hidden" value="'+names[j]+'"><input type="hidden" value="'+empIds+'"></td>');
 			}
 			for(let i=0; i< images.length; i++){
 				$("#images").append('<td><img style="width: 150px; height: 150px;" src="'+images[i]+'"></td>');

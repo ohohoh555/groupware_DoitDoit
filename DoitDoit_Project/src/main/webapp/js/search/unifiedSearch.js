@@ -22,14 +22,33 @@ function searchAction(){
 function searchEntr(searchWord, op){
 	
 	var jsonData = "";
+	
+
+
 	if(op=='uniTitle'){
-		jsonData = {
-	 			  "query": { "match": { "eboard_title": searchWord } }
-	 	};
+			jsonData = {"query": { 
+								    "bool": { 
+								      "must": [
+								        { "match": { "eboard_delflag":   "N" }},
+								 	    {"wildcard":{"eboard_title":"*"+searchWord+"*"}}
+								      ]
+								    }
+								  }
+								};
+		
+//		jsonData = {
+//	 			  "query": { "match": { "eboard_title": searchWord } }
+//	 	};
 	}else if(op=='uniContent'){
-		jsonData = {
-	 			  "query": { "match": { "eboard_content": searchWord } }
-	 	};
+			jsonData = {"query": { 
+								 "bool": { 
+								 "must": [
+								    { "match": { "eboard_delflag":   "N" }},
+								 	{"wildcard":{"eboard_content":"*"+searchWord+"*"}}
+								]
+							}
+							}
+						};
 	}
 	
 	$("#entrResult").DataTable().destroy();
@@ -96,21 +115,23 @@ function searchAppro(searchWord, op, owner){
 	var jsonData1 = "";
 	
 	if(op=='uniTitle'){
-			jsonData1 = { "query": { 
-							 "bool": { 
-    								  "must": [ { "match": { "emp_id": owner }}],
-  									    "should": [{"match": {"appro_title": searchWord}}]
-				}
-			 }
-		};
+//			jsonData1 = { "query": {  "bool": { "must": [ { "match": { "emp_id": owner }},{"match": {"appro_title": searchWord}} ]}}};
+			jsonData1 = {"query": { 
+							"bool": { 
+							 "must": [{ "match": { "emp_id": owner }},
+								 	   {"wildcard":{"appro_title":"*"+searchWord+"*"}}]
+								}
+							}
+						};
+
 	}else if(op=='uniContent'){
-			jsonData1 = { "query": { 
-							 "bool": { 
-    								  "must": [ { "match": { "emp_id": owner }}],
-  									    "should": [{"match": {"appro_content": searchWord}}]
-				    }
-				  }
-				};
+			jsonData1 = {"query": { 
+							"bool": { 
+							 "must": [{ "match": { "emp_id": owner }},
+								 	   {"wildcard":{"appro_content":"*"+searchWord+"*"}}]
+								}
+							}
+						};
 	}
 
 	
@@ -126,18 +147,18 @@ function searchAppro(searchWord, op, owner){
 		dataType: "JSON", //응답받을 데이터타입
 		contentType: "application/json; charset=UTF-8",
 		success:function(json){
-			console.log(json);
+			console.log("approval 성공",json);
 			var data = json.hits.hits;
 			$("#approCnt").text(json.hits.total.value); //검색된 갯수 표기
 			
-			
 			$("#approResult>tbody").empty();
 			for(var i=0; i<data.length; i++){
+				console.log(data[i]._source.appro_title);
 				html += "<tr>";
 				html += "<td><a href='./selDocDetail.do?emp_id="+data[i]._source.emp_id+"&appro_no="+data[i]._source.appro_no+"'>"+data[i]._source.appro_title+"</a></td>";
 				html += "<td> 등록일&nbsp;:&nbsp;"+data[i]._source.appro_regdate.substring(0,10);
 				html +="<br> 내용&nbsp;:&nbsp;"+data[i]._source.appro_content.replace(reg, "").substring(0, 50) + "...";
-				html+="</td>";
+				html +="</td>";
 				html += "</tr>";
 			}
 			$("#approResult>tbody").append(html);

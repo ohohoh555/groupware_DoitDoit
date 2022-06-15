@@ -1,6 +1,7 @@
 package com.doit.gw.ctrl.entr;
 
 import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,11 +29,24 @@ import org.springframework.web.util.WebUtils;
 
 import com.doit.gw.vo.entr.FileListVo;
 
+/**
+ * @since 2022.06.14 
+ * @author 오지혜
+ * CK Editor에서 파일 업로드/다운로드를 사용할 수 있는 Controller
+ */
 @Controller
+@RequestMapping("/comm")
 public class FileUploadController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	
+	/**
+	 * Ck에디터의 드래그앤드롭 또는 이미지업로드 창을 통한 파일 업로드
+	 * @param request 
+	 * @param response 
+	 * @param upload 
+	 */
 	@RequestMapping(value = "/fileupload.do", method = RequestMethod.POST)
 	public void editorFileUpload(HttpServletRequest request, HttpServletResponse response,
 										@RequestParam MultipartFile upload) {
@@ -89,7 +103,7 @@ public class FileUploadController {
 			//폴더(디렉토리)가 없다면 생성
 			if(!serverPath.exists()) {
 				//만드려는 상위디렉토리가 있어야만 생성가능
-				serverPath.mkdir();  
+				serverPath.mkdirs();  
 			}
 			if(!backPath.exists()) {
 				// 만드려는 상위디렉토리가 없으면 상위도 만들어주고 생성
@@ -140,6 +154,15 @@ public class FileUploadController {
 
 	}
 	
+	/**
+	 * CK 에디터로 서버에 업로드된 파일을 다운로드
+	 * @param uid 유효아이디
+	 * @param fileName 파일명
+	 * @param request
+	 * @param response
+	 * @return 서버에 업로된 파일의 byte
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/download.do")
 	@ResponseBody
 	public byte[] filedownload(@RequestParam(value="uid") String uid,

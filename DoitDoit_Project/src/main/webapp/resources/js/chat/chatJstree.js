@@ -35,7 +35,7 @@ function treeDo(type){
 
 function treeAjax(getEmp_id){
 	$.ajax({
-		url : "./doJstree.do",
+		url : "/DoitDoit_Project/comm/doJstree.do",
 		type : "post",
 		dataType : "json",
 		data : "emp_id="+getEmp_id,
@@ -125,8 +125,7 @@ function btnCreate(){
 			success : function(result){
 				//생성
 				if(jsTreeType == "create"){
-					console.log(result);
-					console.log(result.room_id);
+					stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:result.room_id,html:result.html, emp_id: emp_id, type: "C"}))
 					window.location.href="./chatRoom.do?room_id="+result.room_id;
 					$("#createJsTree").html("");
 				//초대
@@ -135,7 +134,7 @@ function btnCreate(){
 					console.log("memList",result.memList);
 					console.log("room_id",result.room_id);
 					$("#inviteJsTree").html("");
-					stomp.send('/sub/invite/room/' + result.room_id, {}, JSON.stringify({html: result.html, memList: result.memList}));
+					stomp.send('/sub/invite/room/' + result.room_id, {}, JSON.stringify({room_id:room_id,html: result.html, memList: result.memList}));
 					stomp.send('/pub/chat/message', {}, JSON.stringify({room_id:room_id,html:result.inviteHtml, emp_id: "0", type: "I"}))
 				}
 			},

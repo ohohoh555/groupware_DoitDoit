@@ -19,6 +19,11 @@ import com.doit.gw.vo.entr.EntrBoardVo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * 사용자의 공지게시판을 위한 Controller
+ * @author 오지혜
+ * @since 2022.06.14 
+ */
 @Controller
 @RequestMapping("/comm")
 public class EntrBoardController {
@@ -28,7 +33,10 @@ public class EntrBoardController {
 	@Autowired
 	private IEntrService service;
 	
-	
+	/**
+	 *  사용자 로그인하면 첫 홈화면에 뿌려지는 최신글 리스트
+	 * @return 숨김여부가 N인 공지게시글을 최신순으로 3개 조회
+	 */
 	@RequestMapping(value="/resentBoard.do", method = RequestMethod.GET,
 					produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -40,7 +48,11 @@ public class EntrBoardController {
 		return data.toJson(rList);
 	}
 	
-	
+	/**
+	 * 카테고리 중 필독을 제외하고 Delflag가 N인 공지게시글 목록 전체조회 + 필독인 공지게시글 목록 3개 조회
+	 * @param model 
+	 * @return 공지게시판 화면
+	 */
 	@RequestMapping(value="/entrBoard.do", method = RequestMethod.GET)
 	public String entrBoard(Model model) {
 		logger.info("@entrBoard 공지게시판으로 이동");
@@ -53,6 +65,11 @@ public class EntrBoardController {
 		return "/entr/entrBoard";
 	}
 	
+	/**
+	 * 사용자 공지게시판에서 카테고리별 전체조회
+	 * @param map {cgory : 카테고리번호}
+	 * @return
+	 */
 	@RequestMapping(value="/cgoryBoard.do", method = RequestMethod.GET,
 					produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -65,6 +82,10 @@ public class EntrBoardController {
 
 	}
 	
+	/**
+	 * 카테고리 중 필독게시글 전체보기
+	 * @return 필독 게시글 전체조회
+	 */
 	@RequestMapping(value = "/FildocAll.do", method = RequestMethod.GET,
 			produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -74,6 +95,10 @@ public class EntrBoardController {
 		return data;
 	}
 	
+	/**
+	 * 홈화면에서 뿌려지는 Delflag가 N인 필독게시글을 최신순으로 3개 조회
+	 * @return 조회된 필독게시글 3개 리스트
+	 */
 	@RequestMapping(value = "/FildocThree.do", method = RequestMethod.GET,
 					produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -86,6 +111,12 @@ public class EntrBoardController {
 		
 	}
 	
+	/**
+	 * 사용자의 게시글 상세조회
+	 * @param eboard_no 선택된 글번호
+	 * @param model 선택된 글의 상세조회된 내용을 전달하기 위한 model 객체 
+	 * @return 상세조회 페이지
+	 */
 	@RequestMapping(value = "/OneBoard.do", method = RequestMethod.GET)
 	public String OneBoard(String eboard_no, Model model) {
 		logger.info("@OneBoard 공지게시글 상세조회 : {}", eboard_no);
@@ -95,6 +126,12 @@ public class EntrBoardController {
 	}
 	
 
+	/**
+	 * 사용자가 상세조회에서 게시글 삭제처리
+	 * 실제로 DB삭제되지는 않고, Delflag가 Y->N 으로 변경처리되면서 전체조회에서 확인할 수 없게함
+	 * @param eboard_no 글번호
+	 * @return 전체조회로 이동
+	 */
 	@RequestMapping(value = "/delflag.do", method = RequestMethod.GET)
 	public String delflag(String eboard_no) {
 		logger.info("@delflag 사용자 게시글 삭제처리 : {}", eboard_no);
@@ -103,12 +140,21 @@ public class EntrBoardController {
 		return "redirect:./entrBoard.do";
 	}
 	
+	/**
+	 * 사용자의 입력페이지로 이동 
+	 * @return 입력페이지
+	 */
 	@RequestMapping(value = "/insertBoard.do", method = RequestMethod.GET)
 	public String insertBoard() {
 		logger.info("@insertBoard 글쓰기 페이지로 이동");
 		return "/entr/entrInsert";
 	}
 	
+	/**
+	 * 입력페이지에서 입력받은 데이터를 실제 DB에 insert하는 기능 
+	 * @param map 입력받은 값
+	 * @return 전체조회로 이동 
+	 */
 	@RequestMapping(value = "/insertFrm.do", method = RequestMethod.POST)
 	public String insertFrm(/*EntrBoardVo eVo*/ @RequestParam Map<String, Object>map) {
 		logger.info("@insertFrm 새글입력 및 저장 : {}", map);
@@ -129,6 +175,12 @@ public class EntrBoardController {
 		return "redirect:./entrBoard.do";
 	}
 	
+	/**
+	 * 글 수정 페이지로 이동 
+	 * @param eboard_no 글번호 
+	 * @param model 원본글의 상세조회 값을 담을 model객체
+	 * @return 글 수정 페이지
+	 */
 	@RequestMapping(value = "/modifyBoard.do", method = RequestMethod.GET)
 	public String modify(String eboard_no, Model model) {
 		logger.info("@modify 글수정 페이지로 이동 : {}", eboard_no);
@@ -137,6 +189,11 @@ public class EntrBoardController {
 		return "/entr/entrModify";
 	}
 	
+	/**
+	 * 사용자로부터 입력받은 값으로 글을 수정하는 기능 
+	 * @param map 새로 입력받은 값
+	 * @return 수정된 글의 상세조회
+	 */
 	@RequestMapping(value = "/modifyFrm.do", method = RequestMethod.POST)
 	public String modifyFrm(@RequestParam Map<String, Object> map) {
 		logger.info("@modifyFrm 수정된 내용 저장 : {}",map);

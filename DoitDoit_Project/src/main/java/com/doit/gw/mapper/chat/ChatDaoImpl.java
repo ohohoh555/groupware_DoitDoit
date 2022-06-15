@@ -26,10 +26,20 @@ public class ChatDaoImpl implements IChatDao{
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<ChatJoinVo> selRoom(String emp_id) {
-		return sqlSession.selectList(NS+"selRoom", emp_id);
+	public List<ChatJoinVo> selRoom(List<String> roomList) {
+		return sqlSession.selectList(NS+"selRoom", roomList);
+	}
+	
+	@Override
+	public List<Map<String, String>> selRoomIsc(String emp_id) {
+		return sqlSession.selectList(NS+"selectRoomIsc", emp_id);
 	}
 
+	@Override
+	public List<String> selMyRoomList(String emp_id) {
+		return sqlSession.selectList(NS+"selMyRoomList", emp_id);
+	}
+	
 	@Override
 	public List<ChatVo> selChat(Map<String, String> map) {
 		return sqlSession.selectList(NS+"selChat",map);

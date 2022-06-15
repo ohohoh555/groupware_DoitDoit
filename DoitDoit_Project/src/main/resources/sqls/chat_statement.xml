@@ -1,25 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.doit.gw.mapper.chat.ChatDaoImpl">
-	<!-- 자신의 방 목록 -->
-	<select id="selRoom" parameterType="java.lang.String" resultType="ChatJoinVo">
-		SELECT ch.ROOM_ID, ROOM_NAME, CHAT_TIME, CHAT_ID, CHAT_TYPE ,EMP_ID,CHAT_CON, CHAT_TYPE, ISC
-    		FROM CHAT_ROOM cr,
-	        	JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
-	            	COLUMNS (
-	                	IDS VARCHAR(20) PATH '$.id',
-	                	ISC VARCHAR(5) PATH '$.isc'
-	            	)
-	        	) AS jt,
-	        	(SELECT ROOM_ID, EMP_ID ,CHAT_ID ,
-	        			CHAT_TIME , CHAT_TYPE, CHAT_CON,
-	                    ROW_NUMBER () OVER(PARTITION BY ROOM_ID ORDER BY CHAT_TIME DESC) AS mx
-	            	FROM CHAT
-	        	) ch
-    		WHERE IDS = #{emp_id}
-    		AND cr.ROOM_ID = ch.ROOM_ID
-    		AND mx = 1
-    		ORDER BY CHAT_TIME DESC
+	<!-- 방 목록 -->
+	<select id="selRoom" parameterType="java.util.List" resultType="ChatJoinVo">
+		SELECT ch.ROOM_ID, ROOM_NAME, CHAT_TIME, CHAT_ID, CHAT_TYPE ,EMP_ID,CHAT_CON, CHAT_TYPE
+			FROM CHAT_ROOM cr,
+		    	(SELECT ROOM_ID, EMP_ID ,CHAT_ID ,
+		    			CHAT_TIME , CHAT_TYPE, CHAT_CON,
+		                ROW_NUMBER () OVER(PARTITION BY ROOM_ID ORDER BY CHAT_TIME DESC) AS mx
+		        	FROM CHAT
+		    	) ch
+			WHERE cr.ROOM_ID IN 
+			<foreach collection="list" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+			AND cr.ROOM_ID = ch.ROOM_ID
+			AND mx = 1
+			ORDER BY CHAT_TIME DESC
+	</select>
+	
+	<select id="selectRoomIsc" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT cr.ROOM_ID AS ROOM_ID, jt.IDS AS EMP_ID, jt.ISC AS ISC
+			FROM CHAT_ROOM cr,
+				JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
+			    	COLUMNS (
+			        	IDS VARCHAR(20) PATH '$.id',
+			        	ISC VARCHAR(5) PATH '$.isc'
+			    	)
+				) AS jt
+			WHERE jt.IDS = #{emp_id}
+	</select>
+	
+	<select id="selectRoomJoin" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT cr.ROOM_ID AS ROOM_ID, jt.IDS AS EMP_ID, jt.ISC AS ISC
+			FROM CHAT_ROOM cr,
+				JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
+			    	COLUMNS (
+			        	IDS VARCHAR(20) PATH '$.id',
+			        	ISC VARCHAR(5) PATH '$.isc'
+			    	)
+				) AS jt
+			WHERE jt.IDS = #{emp_id}
+	</select>
+	
+	<select id="selMyRoomList" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT ROOM_ID 
+			FROM CHAT_ROOM cr,
+				JSON_TABLE(ROOM_MEM, '$.ROOM[*]'
+			    	COLUMNS (
+			        	IDS VARCHAR(20) PATH '$.id'
+			    	)
+				) AS jt
+			WHERE jt.IDS = #{emp_id}
 	</select>
 	
 	<!-- 채팅 조회 -->
@@ -117,7 +149,7 @@
 			SELECT SEQ_CHAT.NEXTVAL FROM DUAL
 		</selectKey>
 		INSERT INTO CHAT (CHAT_ID,ROOM_ID,EMP_ID,CHAT_CON,CHAT_TIME,CHAT_TYPE) 
-    		VALUES (#{seq},#{room_id},#{emp_id},TO_CLOB(#{chat_con}),TO_DATE(#{chat_time},'YYYYMMDDHH24MISS'),#{chat_type})
+    		VALUES (#{seq},#{room_id},#{emp_id},TO_CLOB(#{chat_con}),TO_DATE(#{chat_time},'YYYY-MM-DD HH24:MI:SS'),#{chat_type})
 	</insert>
 	
 	<!-- 파일 입력 -->

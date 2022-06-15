@@ -24,11 +24,23 @@ public class ChatServiceImpl implements IChatService{
 	private IChatDao dao;
 			
 	@Override
-	public List<ChatJoinVo> selRoom(String emp_id) {
-		logger.info("$$$$$ selRoom {} $$$$$",emp_id);
-		return dao.selRoom(emp_id);
+	public List<ChatJoinVo> selRoom(List<String> roomList) {
+		logger.info("$$$$$ selRoom {} $$$$$", roomList);
+		return dao.selRoom(roomList);
 	}
 
+	@Override
+	public List<Map<String, String>> selRoomIsc(String emp_id) {
+		logger.info("$$$$$ selRoomIsc {} $$$$$", emp_id);
+		return dao.selRoomIsc(emp_id);
+	}
+	
+	@Override
+	public List<String> selMyRoomList(String emp_id) {
+		logger.info("$$$$$ selMyRoomList {} $$$$$", emp_id);
+		return dao.selMyRoomList(emp_id);
+	}
+	
 	@Override
 	public List<ChatVo> selChat(Map<String, String> map) {
 		logger.info("$$$$$ selChat {} $$$$$",map);
@@ -100,6 +112,4 @@ public class ChatServiceImpl implements IChatService{
 			return false;
 		}
 	}
-	
-	
 }

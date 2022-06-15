@@ -34,6 +34,12 @@ import org.springframework.web.util.WebUtils;
 import com.doit.gw.service.entr.IJaryoService;
 import com.doit.gw.vo.entr.FileListVo;
 
+
+/**
+ * @since 2022.06.14 오지혜
+ * @author 오지혜
+ * 사용자의 자료게시판을 위한 Controller
+ */
 @Controller
 @RequestMapping("/jaryo")
 public class JaryoBoardController {
@@ -43,12 +49,20 @@ public class JaryoBoardController {
 	@Autowired
 	private IJaryoService service;
 	
+	/**
+	 * 사용자의 자료게시판 이동
+	 * @return 자료게시판jsp
+	 */
 	@RequestMapping(value = "/jaryoBoard.do", method = RequestMethod.GET)
 	public String jaryoBoard() {
 		logger.info("@jaryoBoard 자료게시판 이동");
 		return "/jaryo/jaryoBoard";
 	}
 	
+	/**
+	 * Delflag가 N인 자료게시글 전체조회
+	 * @return 자료게시글 전체조회
+	 */
 	@RequestMapping(value = "/selJaryoAllUser.do", method = RequestMethod.POST,
 					produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -58,6 +72,15 @@ public class JaryoBoardController {
 		return data;
 	}
 	
+	/**
+	 * 사용자로부터 입력받은 파일들의 정보를 DB에 저장하고 
+	 * 다운로드 가능하게끔 서버에 저장 + 백업을 위해 폴더에 저장하는 기능 
+	 * @param multipartRequest
+	 * @param request
+	 * @param fVo 화면에서 입력받은 파일 정보(파일명, 용량, 유효아이디)
+	 * @return 
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/saveJaryo.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
 	@ResponseBody
 	public String saveFile(MultipartHttpServletRequest multipartRequest, HttpServletRequest request, FileListVo fVo) throws IOException {
@@ -81,7 +104,7 @@ public class JaryoBoardController {
 		File backPath = new File(back);
 		
 		if(!serverPath.exists()) {
-			serverPath.mkdir();
+			serverPath.mkdirs();
 		}
 		if(!backPath.exists()) {
 			backPath.mkdirs();
@@ -139,7 +162,55 @@ public class JaryoBoardController {
 		return "업로드 성공";
 	}
 	
+	/**
+	 * 유효아이디와 파일명을 통해서 서버에 저장된 파일을 다운로드할 수 있는 기능 
+	 * @param uid 유효아이디
+	 * @param fileName 파일명
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/download.do")
+	@ResponseBody
+	public byte[] filedownload(@RequestParam(value="uid") String uid,
+								@RequestParam(value="fileName") String fileName,
+								HttpServletRequest request, HttpServletResponse response) throws IOException {
+		byte[] bytes=null;
+		logger.info("@download : {} {}",  uid, fileName);
+		
+		//서버에 저장된 이미지 경로 
+		String path=WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/") ;
+		String sDirPath = path+uid+"_"+fileName;
+		
+		File file = new File(sDirPath);
+		
+		bytes = FileCopyUtils.copyToByteArray(file);
+		
+		String outputFilename =new String(file.getName().getBytes(), "8859_1");
+		
+		/* 
+		 * Content-disposition : 지정된 파일명을 지정함으로써 더 자세한 파일의 속성을 알려줄 수 있다.
+		 * attachment : 브라우저 인식 파일확장자를 포함하여 모든 확장자의 파일들에 대해, 
+		 * 				다운로드 시 무조건 '파일다운로드' 대화상자가 뜨도록 하는 해더속성
+		 */
+		response.setHeader("Content-Disposition", "attachment; filename=\""+outputFilename+"\"");
+		//우리가 보내려고 하는 파일의 크기만큼 셋팅
+		response.setContentLength(bytes.length); 
+		//MIME타입, octet-stream : 8비트로 된 파일이라는 의미
+		response.setContentType("application/octet-stream");
+
+		return bytes; 
+	}
 	
+	
+	/**
+	 * 사용자의 자료게시글 삭제처리
+	 * 실제 DB 삭제되지 않고 Delflag가 N으로 변경되어 전체조회에서 확인할 수 없게 만듬 
+	 * @param map 선택한 글번호 
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/jaryoDel.do", method = RequestMethod.GET)
 	public void jaryoDel(@RequestParam Map<String, Object>map, HttpServletResponse response) throws IOException {
 		logger.info("@jaryoDel 사용자 자료글 삭제처리 :{}",map);
@@ -177,8 +248,6 @@ public class JaryoBoardController {
 		String path=WebUtils.getRealPath(request.getSession().getServletContext(), "/storage/") ;
 		
 		//http는 한번에 하나의 파일만 다운로드할 수 있음 
-		
-		
 		
 		byte[] bytes = null;
 		String downPath = null;

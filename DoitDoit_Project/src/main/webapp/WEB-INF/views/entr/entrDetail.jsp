@@ -50,7 +50,7 @@
 							</c:if>
 							<tr>
 								<td>내용</td>
-								<td>${entrOne.eboard_content}</td>
+								<td><div style="overflow-y:scroll; height:500px; padding:4px">${entrOne.eboard_content}</div></td>
 							</tr>
 						</tbody>
 					</table>
