@@ -301,7 +301,7 @@ public class ChatController {
 			cFv.setFile_chat_type(fileName.substring(fileName.lastIndexOf(".") + 1));
 			cFv.setFile_chat_uuid(UUID.randomUUID().toString());
 			cFv.setFile_uploadpath(
-					"/tmp/doit/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()+"/");
+					"/var/doit/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()+"/");
 			cFv.setRoom_id(room_id);
 			
 			try {
