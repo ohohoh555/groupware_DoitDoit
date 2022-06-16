@@ -91,7 +91,7 @@ public class FileUploadController {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/");
 			String nowFormat = now.format(formatter); 
 			
-			String back = "/tmp/doit/jaryoFile/"+nowFormat;
+			String back = "/var/doit/jaryoFile/"+nowFormat;
 			System.out.println("저장위치 path:"+path);
 			System.out.println("백업위치 back:"+back);
 			
