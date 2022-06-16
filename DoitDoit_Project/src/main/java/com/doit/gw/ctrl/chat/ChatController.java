@@ -300,8 +300,11 @@ public class ChatController {
 			cFv.setFile_chat_originnm(fileName.substring(0, fileName.lastIndexOf(".")));
 			cFv.setFile_chat_type(fileName.substring(fileName.lastIndexOf(".") + 1));
 			cFv.setFile_chat_uuid(UUID.randomUUID().toString());
-			cFv.setFile_uploadpath(
-					"/var/doit/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()+"/");
+			cFv.setFile_uploadpath(WebUtils.getRealPath(req.getSession().getServletContext(),
+					"resources/comm/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()+"/"));
+			//절대 경로
+			//			cFv.setFile_uploadpath(
+					//"/var/doit/chatFile/" + date.getYear() +"/" + date.getMonthValue() + "/" + date.getDayOfMonth()+"/");
 			cFv.setRoom_id(room_id);
 			
 			try {
