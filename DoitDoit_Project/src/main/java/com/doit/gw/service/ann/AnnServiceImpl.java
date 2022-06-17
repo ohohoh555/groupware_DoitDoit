@@ -147,43 +147,42 @@ public class AnnServiceImpl implements IAnnService {
 		return mapper.updAnnualWorkOut(emp_nfc);
 	}
 
-	@Override
-	public void anuualUse(int appro_line_no) {
-		logger.info("AnnServiceImpl anuualUse 연차 결재시 사용 : {}", appro_line_no);
-		ApproVo vo = mapper.searchAppro(appro_line_no);
-		
-		String content = vo.getAppro_content();
-		String emp_id = String.valueOf(vo.getEmp_id());
-		Document doc = Jsoup.parse(content);
-		Elements td = doc.getElementsByTag("td");
-		
-		String iscAnn = td.get(1).text();
-		
-		if(iscAnn.equals("연차")) {
-			String use_period = td.get(3).text();
-			String use_days = td.get(7).text();
-			String use_date = use_period.substring(0, 10);
-			String use_content = "";
-			String use_work_days = "";		
-			if(use_days.equals("0.5")) {
-				use_content = "반차";
-				use_work_days = "1";
-			}else {
-				use_content = "연차";
-				use_work_days = use_days;
-			}
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("use_content", use_content);
-			map.put("use_days", use_days);
-			map.put("use_period", use_period);
-			map.put("use_date", use_date);
-			map.put("use_work_days", use_work_days);
-			map.put("emp_id", emp_id);
-			
-			int n = mapper.insAnnUse(map);
-			int m = mapper.updAnnualUse(map);
-			logger.info((n+m==2?"연차 결재 승인":""));		
-		}
-	}
-
+	   @Override
+	   public void anuualUse(int appro_line_no) {
+	      logger.info("AnnServiceImpl anuualUse 연차 결재시 사용 : {}", appro_line_no);
+	      ApproVo vo = mapper.searchAppro(appro_line_no);
+	      
+	      String content = vo.getAppro_content();
+	      String emp_id = String.valueOf(vo.getEmp_id());
+	      Document doc = Jsoup.parse(content);
+	      Elements td = doc.getElementsByTag("td");
+	      
+	      String iscAnn = td.get(1).text();
+	      
+	      if(iscAnn.equals("연차")) {
+	         String use_period = td.get(3).text();
+	         String use_days = td.get(7).text();
+	         String use_date = use_period.substring(0, 10);
+	         String use_content = "";
+	         String use_work_days = "";      
+	         if(use_days.equals("0.5")) {
+	            use_content = "반차";
+	            use_work_days = "1";
+	         }else {
+	            use_content = "연차";
+	            use_work_days = use_days;
+	         }
+	         Map<String, Object> map = new HashMap<String, Object>();
+	         map.put("use_content", use_content);
+	         map.put("use_days", use_days);
+	         map.put("use_period", use_period);
+	         map.put("use_date", use_date);
+	         map.put("use_work_days", use_work_days);
+	         map.put("emp_id", emp_id);
+	         
+	         int n = mapper.insAnnUse(map);
+	         int m = mapper.updAnnualUse(map);
+	         logger.info((n+m==2?"연차 결재 승인":""));      
+	      }
+	   }
 }

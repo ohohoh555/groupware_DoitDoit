@@ -361,7 +361,7 @@ public class ApproController {
 			JSONObject tmp = (JSONObject) jArr.get(i);
 			if(tmp.get("EMP_ID").equals(String.valueOf(emp_id)) && length-1 == i) {
 				//연차 승인시 연차 감소
-//				annService.anuualUse(appro_line_no);
+				annService.anuualUse(appro_line_no);
 				//
 				tmp.replace("APPRO_STATUS", "Y");
 				jArr.set(i, tmp);
