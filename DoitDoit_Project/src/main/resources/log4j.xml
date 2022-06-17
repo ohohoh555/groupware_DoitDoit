@@ -15,7 +15,7 @@
 		<param name="File" value="/var/doit/Spring_log/spring_spa.log"/>
 		<param name="DatePattern" value=".yyyy-MM-dd"/>
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
-			<param name="ConversionPattern" value="[%p] %d %c %M - %M%n" />
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
 	
