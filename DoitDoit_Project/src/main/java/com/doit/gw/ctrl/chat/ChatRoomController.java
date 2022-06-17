@@ -390,8 +390,8 @@ public class ChatRoomController {
 			html += 	"<span class=\"memList\"></span>";
 			html +=  	"<span class=\"memList\">"+map.get("EMP_NAME")+"</span>";
 			html += 	"<span class=\"memList memListRank\">"+map.get("RANK_NAME")+"</span>";
-			html += "</div>";
 			html += "<hr>";
+			html += "</div>";
 			
 			if(emp_id.equals(String.valueOf(map.get("EMP_ID")))) {
 				inviteEmp = map.get("EMP_NAME") + " " + map.get("RANK_NAME");
