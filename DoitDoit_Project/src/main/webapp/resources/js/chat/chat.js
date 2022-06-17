@@ -240,9 +240,13 @@ $(document).ready(function() {
 	}
 	
 	$("#chatFile").change(function (){
-		var files = e.originalEvent.dataTransfer.files;
-		console.log(files);
-	});
+         var files = $("#chatFile")[0].files;
+         console.log(files);
+      
+      if(confirm('파일을 전송 하시겠습니까?')){
+         chatHandlerFileUpload(files);      
+      }
+   });
 	
 	// 알림을 뿌려주는 아작스
 	// 우연
