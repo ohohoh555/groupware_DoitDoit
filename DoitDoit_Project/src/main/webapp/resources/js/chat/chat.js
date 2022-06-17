@@ -193,19 +193,19 @@ $(document).ready(function() {
 	
 	//drag & drop
 	// dragenter : 마우스가 대상 객체의 위로 처음 진입할 때 발생함.
-	$(document).on("dragenter", ".rContent-full", function(e) {
+	$(document).on("dragenter", "#chat-div-full", function(e) {
 		//브라우저에서 기본으로 제공하는 드래그앤드롭 이벤트를 막아줘야 정상작동
 		e.stopPropagation(); // 브라우저가 해당 이벤트에 대해 수행하는 기본적인 작업을 방지. 예를 들어 파일을 내려놓을 때 새탭으로 파일정보를 보여주는 이벤트를 방지 
 		e.preventDefault(); // 나를 둘러싸고 있는 이벤트의 추가전파 방지
 		$(this).css('border', '1px solid red');
 	});
 	// dragover : 드래그하면서 마우스가 대상 객체의 위에 자리 잡고 있을 때 발생함.
-	$(document).on("dragover", ".rContent-full",function(e) {
+	$(document).on("dragover", "#chat-div-full",function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 	});
 	// drop : 	드래그가 끝나서 드래그하던 객체를 놓는 장소에 위치한 객체에서 발생함.
-	$(document).on("drop", ".rContent-full", function(e) {
+	$(document).on("drop", "#chat-div-full", function(e) {
 		console.log("drop");
 		// 브라우저로 이동되는 이벤트를 방지하고 드랍 이벤트를 우선시 한다.
 		e.preventDefault();
@@ -240,9 +240,13 @@ $(document).ready(function() {
 	}
 	
 	$("#chatFile").change(function (){
-		var files = e.originalEvent.dataTransfer.files;
-		console.log(files);
-	});
+         var files = $("#chatFile")[0].files;
+         console.log(files);
+      
+      if(confirm('파일을 전송 하시겠습니까?')){
+         chatHandlerFileUpload(files);      
+      }
+   });
 	
 	// 알림을 뿌려주는 아작스
 	// 우연

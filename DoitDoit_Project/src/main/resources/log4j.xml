@@ -10,6 +10,15 @@
 		</layout>
 	</appender>
 	
+		<!-- 파일 Appender -->
+	<appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/var/doit/Spring_log/spring_spa.log"/>
+		<param name="DatePattern" value=".yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
+			<param name="ConversionPattern" value="[%p] %d %c %M - %M%n" />
+		</layout>
+	</appender>
+	
 	<!-- Application Loggers -->
 	<logger name="com.doit.gw">
 		<level value="info" />
@@ -36,6 +45,7 @@
 	<root>
 		<priority value="info" />
 		<appender-ref ref="console" />
+		<appender-ref ref="fileAppender" />
 	</root>
 	
 </log4j:configuration>
