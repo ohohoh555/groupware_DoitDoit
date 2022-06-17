@@ -181,11 +181,11 @@ $(document).ready(function() {
 	});
 	
 	//나갈때 이벤트 발생
-	$(window).on("beforeunload",function(){
-		alert('닫으시겠습니까?');
-		roomOut(room_id, empId);
-		stomp.disconnect();
-	});
+//	$(window).on("beforeunload",function(){
+////		alert('닫으시겠습니까?');
+//		roomOut(room_id, empId);
+//		stomp.disconnect();
+//	});
 	
 //	$(window).on("unload",function(){
 //		alert('닫으시겠습니까?');
