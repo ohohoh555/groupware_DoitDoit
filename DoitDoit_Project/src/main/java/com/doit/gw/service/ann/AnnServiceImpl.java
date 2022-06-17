@@ -158,17 +158,20 @@ public class AnnServiceImpl implements IAnnService {
 	      Elements td = doc.getElementsByTag("td");
 	      
 	      String iscAnn = td.get(1).text();
-	      
+	      logger.info("연차 vo : {}", vo);
 	      if(iscAnn.equals("연차")) {
+	    	  logger.info("연차 if vo : {}", vo);
 	         String use_period = td.get(3).text();
 	         String use_days = td.get(7).text();
 	         String use_date = use_period.substring(0, 10);
 	         String use_content = "";
 	         String use_work_days = "";      
 	         if(use_days.equals("0.5")) {
+	        	 logger.info("연차 if의 if vo : {}", vo);
 	            use_content = "반차";
 	            use_work_days = "1";
 	         }else {
+	        	 logger.info("연차 if의 if의 else vo : {}", vo);
 	            use_content = "연차";
 	            use_work_days = use_days;
 	         }
